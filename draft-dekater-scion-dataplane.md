@@ -227,7 +227,7 @@ SCION emphasizes this separation, as SCION is used exclusively for inter-domain 
 Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. This implies that the endpoint addresses are not required to be globally unique or globally routable, they can be selected independently by the corresponding ASes. This means, for example, that an endpoint identified by a link-local IPv6 address in the source AS can directly communicate with an endpoint identified by a globally routable IPv4 address via SCION. Alternatively, it is possible for two SCION hosts with the same IPv4 address 10.0.0.42 but located in different ASes to communicate with each other via SCION ({{RFC1918}}).
 
 
-#### Intra-Domain Forwarding Process
+### Intra-Domain Forwarding Process
 
 The full forwarding process for a packet transiting an intermediate AS consists of the following steps.
 
@@ -346,7 +346,368 @@ The SCION data plane provides *path authorization*. This property ensures that d
 
 # SCION Header Specification {#header}
 
-abcc
+This section provides a detailed specification of the SCION packet header. SCION also supports extension headers - these are described, too.
+
+
+## SCION Packet Header Format {#format}
+
+The SCION packet header is composed of a common header, an address header, a path header, and an optional extension header, see {{figure-2}} below.
+
+~~~~
++--------------------------------------------------------+
+|                     Common header                      |
+|                                                        |
++--------------------------------------------------------+
+|                       Addresses                        |
+|                                                        |
++--------------------------------------------------------+
+|                          Path                          |
+|                                                        |
++--------------------------------------------------------+
+|                 Extensions (optional)                  |
+|                                                        |
++--------------------------------------------------------+
+~~~~
+{: #figure-2 title="High-level SCION header structure"}
+
+The *common header* contains important meta information like a version number and lengths of the header and payload. In particular, it contains flags that control the format of subsequent headers such as the address and path headers. For more details, see [](#common-header).
+
+The *address header* contains the ISD-, AS-, and endpoint-addresses of source and destination. The type and length of endpoint addresses are variable and can be set independently using flags in the common header. For more details, see [](#address-header).
+
+The *path header* contains the full AS-level forwarding path of the packet. A path type field in the common header specifies the path format used in the path header. For more details, see [](#path-header).
+
+Finally, the optional *extension* header contains a variable number of hop-by-hop and end-to-end options, similar to the extensions in the IPv6 header {{RFC8200}}. For more details, see [](#ext-header).
+
+
+### Header Alignment
+
+The SCION header is aligned to 4 bytes.
+
+
+## SCION Header Structure
+
+### Common Header {#common-header}
+
+The SCION common header has the following packet format:
+
+~~~~
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|Version|  TraffCl      |                FlowID                 |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    NextHdr    |    HdrLen     |          PayloadLen           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    PathType   |DT |DL |ST |SL |              RSV              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-3 title="The SCION common header packet format"}
+
+- `Version`: The version of the SCION common header. Currently, only version "0" is supported.
+- `TrafficClass` (`TraffCl` in the image above): The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. The current use of the `TrafficClass` field for Differentiated Services and Explicit Congestion Notification is specified in {{RFC2474}} and {{RFC3168}}.
+- `FlowID`: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources MUST set this field.
+- `NextHdr`: Encodes the type of the first header after the SCION header. This can be either a SCION extension or a layer-4 protocol such as TCP or UDP. Values of this field respect the Assigned SCION Protocol Numbers (see [](#protnum).
+- `HdrLen`: Specifies the entire length of the SCION header in bytes, i.e., the sum of the lengths of the common header, the address header, and the path header. All SCION header fields are aligned to a multiple of 4 bytes. The SCION header length is computed as `HdrLen` * 4 bytes. The 8 bits of the `HdrLen` field limit the SCION header to a maximum of 255 * 4 = 1020 bytes.
+- `PayloadLen`: Specifies the length of the payload in bytes. The payload includes (SCION) extension headers and the L4 payload. This field is 16 bits long, supporting a maximum payload size of 65'535 bytes.
+- `PathType`: Specifies the type of the SCION path. It is possible to specify up to 256 different types. The format of one path type is independent of all other path types. The currently defined SCION path types are Empty (0), SCION (1), OneHopPath (2), EPIC (3) and COLIBRI (4). This document only specifies the Empty, SCION and OneHopPath path types. The other path types are currently experimental.
+
+| Value | Path Type                      |
+|-------+--------------------------------|
+| 0     | Empty path (`EmptyPath`)       |
+| 1     | SCION (`SCION`)                |
+| 2     | One-hop path (`OneHopPath`)    |
+| 3     | EPIC path (experimental)       |
+| 4     | COLIBRI path (experimental)    |
+{: #table-1 title="Currently defined SCION path types"}
+
+- `DT/DL/ST/SL`: These fields define the endpoint-address type and endpoint-address length for the source and destination endpoint. `DT` and `DL` stand for Destination Type and Destination Length, whereas `ST` and `SL` stand for Source Type and Source Length. The possible endpoint address length values are 4 bytes, 8 bytes, 12 bytes, and 16 bytes. If some address has a length different from the supported values, the next larger size can be used and the address can be padded with zeros. {{table-2}} below lists the currently used values for address length. The "type" identifier is only defined in combination with a specific address length. For example, address type "0" is defined as IPv4 in combination with address length 4, but in combination with address length 16, it stands for IPv6. Per address length, several sub-types are possible. {{table-3}} shows the currently valid allocations of type values to length values.
+
+| DL/SL Value | Address Length |
+|-------------+----------------|
+| 0           | 4 bytes        |
+| 1           | 8 bytes        |
+| 2           | 12 bytes       |
+| 3           | 16 bytes       |
+{: #table-2 title="Address length values"}
+
+
+| Length (bytes) | Type | Type/Length (binary) | Interpretation |
+|----------------+------+----------------------+----------------|
+| 4              | 0    | 0b0000               | IPv4           |
+| 4              | 1    | 0b0100               | Service        |
+| 16             | 0    | 0b1100               | IPv6           |
+| other          |      |                      | Unassigned     |
+{: #table-3 title="Allocations of type values to length values"}
+
+- `RSV`: These bits are currently reserved for future use.
+
+
+
+### Address Header {#address-header}
+
+The SCION address header has the following format:
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            DstISD             |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                             DstAS                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            SrcISD             |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                             SrcAS                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    DstHostAddr (variable Len)                 |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    SrcHostAddr (variable Len)                 |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-4 title="The SCION address header packet format"}
+
+- `DstISD, SrcISD`: The 16-bit ISD identifier of the destination/source.
+- `DstAS, SrcAS`: The 48-bit AS identifier of the destination/source.
+- `DstHostAddr, SrcHostAddr`: Specifies the variable length endpoint address of the destination/source. The accepted type and length are defined in the `DT/DL/ST/SL` fields of the common header.
+
+**Note:** For more information on addressing in SCION, see the introduction of the SCION Control Plane Specification ({{I-D.scion-cp}}).
+
+
+### Path Header {#path-header}
+
+The path header of a SCION packet differs for each SCION path type.
+
+**Note:** The path type is set in the `PathType` field of the SCION common header.
+
+Currently, SCION supports three path types:
+
+- The `Empty` path type (`PathType=0`). For more information, see [](#empty).
+- The `SCION` path type (`PathType=1`). This is the standard path type in SCION. For a detailed description, see [](#scion-path-type).
+- The `OneHopPath` path type (`PathType=2`). For more information, see [](#onehop).
+
+
+#### Empty Path Type {#empty}
+
+The `Empty` path type is used to send traffic within an AS. It has no additional fields, i.e., it consumes 0 bytes on the wire.
+
+One use case of the `Empty` path type lies in the context of link-failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ({{RFC5880}} and {{RFC5881}}). BFD is a protocol intended to detect faults in the bidirectional path between two forwarding engines, with typically very low latency. It operates independently of media, data protocols, and routing protocols. SCION uses the `Empty` path type, together with the [](#onehop), to bootstrap BFD within SCION.
+
+
+#### SCION Path Type {#scion-path-type}
+
+This section specifies the standard `SCION` path type.
+A SCION path has the following layout:
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          PathMetaHdr                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           InfoField                           |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              ...                              |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           InfoField                           |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           HopField                            |
+|                                                               |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           HopField                            |
+|                                                               |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              ...                              |
+|                                                               |
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-5 title="Layout of a standard SCION path"}
+
+
+It consists of a path meta header, up to 3 info fields and up to 64 hop fields.
+
+- The path meta header (`PathMetaHdr`) indicates the currently valid info field and hop field while the packet is traversing the network along the path, as well as the number of hop fields per segment.
+- The number of info fields (`InfoField`) equals the number of path segments that the path contains - there is one info field per path segment. Each info field contains basic information about the corresponding segment, such as a timestamp indicating the creation time. There are also two flags. One specifies whether the segment must be traversed in construction direction, the other whether the first or last hop field in the segment represents a peering hop field.
+- Each hop field (`HopField`) represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. This information is authenticated with a Message Authentication Code MAC to prevent forgery.
+
+The SCION header is created by extracting the required info fields and hop fields from the corresponding path segments. The process of extracting is illustrated in {{figure-6}} below. Note that ASes at the joints of multiple segments are represented by two hop fields. Be aware that these hop fields are not equal! In the hop field that represents the last hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two hop fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
+
+~~~~
+                   +-----------------+
+                   |    ISD Core     |
+  .--.    .--.     |  .--.     .--.  |     .--.    .--.
+ (AS 3)--(AS 4)----|-(AS 1)---(AS 2)-|----(AS 5)--(AS 6)
+  `--'    `--'     |  `--'     `--'  |     `--'    `--'
+                   +-----------------+
+
+ Up-Segment           Core-Segment        Down-Segment
++---------+           +---------+         +---------+
+| +-----+ |           | +-----+ |         | +-----+ |
+| + INF + |--------+  | + INF + |---+     | + INF + |--+
+| +-----+ |        |  | +-----+ |   |     | +-----+ |  |
+| +-----+ |        |  | +-----+ |   |     | +-----+ |  |
+| | HF  | |------+ |  | | HF  | |---+-+   | | HF  | |--+-+
+| +-----+ |      | |  | +-----+ |   | |   | +-----+ |  | |
+| +-----+ |      | |  | +-----+ |   | |   | +-----+ |  | |
+| | HF  | |----+ | |  | | HF  | |---+-+-+ | | HF  | |--+-+-+
+| +-----+ |    | | |  | +-----+ |   | | | | +-----+ |  | | |
+| +-----+ |    | | |  +---------+   | | | | +-----+ |  | | |
+| | HF  | |--+ | | |                | | | | | HF  | |--+-+-+-+
+| +-----+ |  | | | |  +----------+  | | | | +-----+ |  | | | |
++---------+  | | | |  | ++++++++ |  | | | +---------+  | | | |
+             | | | |  | | Meta | |  | | |              | | | |
+             | | | |  | ++++++++ |  | | |              | | | |
+             | | | |  | +------+ |  | | |              | | | |
+             | | | +->| + INF  + |  | | |              | | | |
+             | | |    | +------+ |  | | |              | | | |
+             | | |    | +------+ |  | | |              | | | |
+             | | |    | + INF  + |<-+ | |              | | | |
+             | | |    | +------+ |    | |              | | | |
+             | | |    | +------+ |    | |              | | | |
+             | | |    | + INF  + |<---+-+--------------+ | | |
+             | | |    | +------+ |    | |                | | |
+             | | |    | +------+ |    | |                | | |
+             | | +--->| |  HF  | |    | |                | | |
+             | |      | +------+ |    | |                | | |
+             | |      | +------+ |    | |                | | |
+             | +----->| |  HF  | |    | |                | | |
+             |        | +------+ |    | |                | | |
+             |        | +------+ |    | |                | | |
+             +------->| |  HF  | |    | |                | | |
+                      | +------+ |    | |                | | |
+                      | +------+ |    | |                | | |
+                      | |  HF  | |<---+ |                | | |
+                      | +------+ |      |                | | |
+                      | +------+ |      |                | | |
+     Forwarding Path  | |  HF  | |<-----+                | | |
+                      | +------+ |                       | | |
+                      | +------+ |                       | | |
+                      | |  HF  | |<----------------------+ | |
+                      | +------+ |                         | |
+                      | +------+ |                         | |
+                      | |  HF  | |<------------------------+ |
+                      | +------+ |                           |
+                      | +------+ |                           |
+                      | |  HF  | |<--------------------------+
+                      | +------+ |
+                      +----------+
+~~~~
+{: #figure-6 title="Path construction example"}
+
+
+
+##### Path Meta Header Field {#pathmetahdr}
+
+The 4-byte Path Meta Header field (`PathMetaHdr`) defines meta information about the SCION path that is contained in the path header. It has the following format:
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| C |  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-7 title="SCION path type - Format of the Path Meta Header field"}
+
+
+- `C` (urrINF): Specifies a 2-bits index (0-based) pointing to the current info field for the packet on its way through the network (see [](#offset-calc) below).
+- `CurrHF`: Specifies a 6-bits index (0-based) pointing to the current hop field for the packet on its way through the network (see [](#offset-calc) below). Note that the `CurrHF` index must point to a hop field that is part of the current path segment, as indicated by the `CurrINF` index.
+
+Both indices are used by SCION routers when forwarding data traffic through the network. The SCION routers also increment the indexes if required. For more details, see [](#process-router).
+
+- `Seg{0,1,2}Len`: The number of hop fields in a given segment. Seg{i}Len > 0 implies that segment *i* contains at least one hop field, which means that info field *i* exists. (If Seg{i}Len = 0 then segment *i* is empty, meaning that this path does not include segment *i*, and therefore there is no info field *i*.) The following rules apply:
+
+  - The total number of hop fields in an end-to-end path must equal the sum of all `Seg{0,1,2}Len` contained in this end-to-end path.
+  - It is an error to have Seg{X}Len > 0 AND Seg{Y}Len == 0, where 2 >= *X* > *Y* >= 0. That is, if path segment Y is empty, the following path segment X must also be empty.
+
+- `RSV`: Unused and reserved for future use.
+
+
+##### Path Offset Calculations {#offset-calc}
+
+The path offset calculations are used by the SCION border routers to determine the info field and hop field that are currently valid for the packet on its way through the network.
+
+The following rules apply when calculating the path offsets:
+
+~~~~
+   if Seg2Len > 0: NumINF = 3
+   else if Seg1Len > 0: NumINF = 2
+   else if Seg0Len > 0: NumINF = 1
+   else: invalid
+~~~~
+
+The offsets of the current info field and current hop field (relative to the end of the address header) are now calculated as:
+
+~~~~
+   B = byte
+   InfoFieldOffset = 4B + 8B.CurrINF
+   HopFieldOffset = 4B + 8B.NumINF + 12B.CurrHF
+~~~~
+
+To check that the current hop field is in the segment of the current info field, the `CurrHF` needs to be compared to the `SegLen` fields of the current and preceding info fields.
+
+
+##### Info Field {#inffield}
+
+kjhyxdbc
+
+
+##### Hop Field {#hopfld}
+
+kjhyxdbc
+
+
+#### One-Hop Path Type {#onehop}
+
+kjhyxdbc
+
+
+#### Path Reversal {#reverse}
+
+kjhyxdbc
+
+
+
+## Extension Headers {#ext-header}
+
+cvcxvbc
+
+
+### Format of the SCION Options Headers {#oh-format}
+
+xccxy
+
+
+#### Options Field {#optfld}
+
+nnm
+
+
+
+##### Pad1 Option {#pad1}
+
+Alignment requirement: none.
+
+
+##### PadN Option {#padn}
+
+Alignment requirement: none.
+
+
+## Upper-Layer Protocol Issues
+
+
+### Pseudo Header for Upper-Layer Checksum {#pseudo}
+
+xccxy
+
+
+
 
 
 # Life of a SCION Data Packet
