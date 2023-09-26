@@ -1,6 +1,6 @@
-# TODO - Your title
+# SCION Data Plane
 
-This is the working area for the individual Internet-Draft, "TODO - Your title".
+This is the working area for the individual Internet-Draft, "SCION Data Plane".
 
 * [Editor's Copy](https://scionassociation.github.io/scion-dp_I-D/#go.draft-dekater-scion-dataplane.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-dekater-scion-dataplane)
