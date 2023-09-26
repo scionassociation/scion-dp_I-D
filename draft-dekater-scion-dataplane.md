@@ -709,15 +709,86 @@ xccxy
 
 
 
-
 # Life of a SCION Data Packet
 
 abcc
+
+## Description
+
+cbf
+
+
+## Creating an End-to-End SCION Forwarding Path
+
+vdsvf
+
+## Step-by-Step Explanation
+
+fdbfdbf
+
+
+
 
 
 # Path Authorization {#path-auth}
 
 abcc
+
+
+## Authorizing Segments through Chained MACs {#auth-chained-macs}
+
+abcd
+
+
+### Hop Field MAC Computation {#hf-mac-calc}
+
+abcd
+
+
+#### MAC - Definition {#def-mac}
+
+abcd
+
+
+#### Layout of the Input Data for the MAC Calculation
+
+abcd
+
+
+#### Accumulator Acc - Definition {#def-acc}
+
+abcd
+
+
+### Peering Links {#peerlink}
+
+abcd
+
+
+
+## Path Initialization and Packet Processing {#packet-verif}
+
+abcd
+
+
+### Initialization at Source Endpoint
+
+fdsd
+
+
+### Processing at Routers {#process-router}
+
+abcd
+
+
+#### Steps Ingress Border Router
+
+xfbcbdc
+
+
+#### Steps Egress Border Router
+
+vdsgd
 
 
 
@@ -739,7 +810,14 @@ This document has no IANA actions.
 TODO acknowledge.
 
 
+
 # Assigned SCION Protocol Numbers {#protnum}
 {:numbered="false"}
 
 abcd
+
+## Considerations
+{:numbered="false"}
+
+## Assignment
+{:numbered="false"}
