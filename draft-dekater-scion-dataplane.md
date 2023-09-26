@@ -842,4 +842,3 @@ abcd
 ## Assignment
 {:numbered="false"}
 
-
