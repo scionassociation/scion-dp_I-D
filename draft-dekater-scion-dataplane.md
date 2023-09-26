@@ -1,33 +1,38 @@
 ---
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
+title: "SCION Data Plane"
+abbrev: "SCION DP"
 category: info
+submissiontype: independent
 
 docname: draft-dekater-scion-dataplane-latest
-submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
-number:
-date:
-consensus: true
 v: 3
-# area: AREA
-# workgroup: WG Working Group
-keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+# area: "IRTF"
+# workgroup: "Path Aware Networking RG"
+keyword: Internet-Draft
 venue:
-#  group: WG
-#  type: Working Group
-#  mail: WG@example.com
-#  arch: https://example.com/WG
+#  group: "Path Aware Networking RG"
+#  type: "Research Group"
+#  mail: "panrg@irtf.org"
+#  arch: "https://www.ietf.org/mail-archive/web/panrg/"
   github: "scionassociation/scion-dp_I-D"
   latest: "https://scionassociation.github.io/scion-dp_I-D/draft-dekater-scion-dataplane.html"
 
 author:
- -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: "cdk@scion.org"
+ -   ins: C. de Kater
+     name: Corine de Kater
+     org: SCION Association
+     email: cdk@scion.org
+
+ -   ins: M. Frei
+     name: Matthias Frei
+     org: SCION Association
+     email: matzf@scion.org
+
+ -   ins: N. Rustignoli
+     name: Nicola Rustignoli
+     org: SCION Association
+     email: nic@scion.org
+
 
 normative:
 
