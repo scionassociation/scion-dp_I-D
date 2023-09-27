@@ -1192,27 +1192,158 @@ MAC<sup>Peer</sup><sub>i</sub> = <br> Ck<sup>Peer</sup><sub>i</sub> (`SegID` XOR
 
 ## Path Initialization and Packet Processing {#packet-verif}
 
-abcd
+As is described in [](#format), the path header of the data-plane packets only contains a sequence of info fields and hop fields without any additional data from the corresponding PCBs. Also, the SCION path does not contain any AS numbers (except for the source and destination ASes), and there is no field explicitly defining the type of each segment (up, core, or down). This chapter describes the required steps for the source endpoint and each SCION router to ensure that a data packet only traverses authorized segments. The chapter first specifies the initialization of a path at the source endpoint, followed by the steps that must be performed by the SCION routers when a data-plane packet traverses an AS on its way to the destination.
 
 
 ### Initialization at Source Endpoint
 
-fdsd
+The source endpoint must initialize a path correctly for the SCION routers to be able to verify the hop fields in the data plane. To this end, the source endpoint must perform the following steps:
+
+1. Combine the preferred end-to-end path from the path segments obtained during path lookup.
+2. Extract the info fields and hop fields from the different path segments that together build the end-to-end path to the destination endpoint. Then insert the relevant information from the path segments' info and hop fields into the corresponding `InfoFields` and `Hopfields`, respectively, in the data packet header.
+3. Each 8-byte info field `InfoField` in the packet header contains the updatable `Acc` field as well as a Peering flag `P` and a Construction Direction flag `C` (see also [](#inffield)). As a next step in the path initialization process, the source must correctly set the flags and the `Acc` field of all `InfoFields` included in the path, according to the following rules:
+
+   **Note:** As already stated above, the type of segment is not visible directly in the forwarding path but must be inferred from flags and other information. See also [](#process-router).
+
+   - The Construction Direction flag `C` must be set to "1" whenever the corresponding segment is traversed in construction direction, i.e., for down-path segments and potentially for core-segments. It must be set to "0" for up-path segments and “reversed” core-segments.
+   - The Peering flag `P` must be set to "1" for up- and down-segments if, and only if, the path contains a peering hop field.
+   - The field `Acc` field is an updatable field. It is used to compute the MAC over the current hop field. The value of the field `Acc` field corresponds to the value of the Accumulator Acc<sub>i</sub> for AS<sub>i</sub>.  It is initialized based on the location of the sender in relation to path construction.
+
+   The following `InfoField` settings are possible, based on possible use cases:
+
+   - **Use case 1** <br> The path segment is traversed in construction direction and includes no peering hop field. It starts at the *i*-th AS of the full segment discovered in beaconing. In this case:
+
+     - The Peering flag `P` = "0"
+     - The Construction Direction flag `C` = "1"
+     - The value of the `Acc` = Acc<sub>i</sub>. For more details, see [](#def-acc).
+
+   - **Use case 2** <br> The path segment is traversed in construction direction and includes a peering hop field (which is the first hop field of the segment). It starts at the *i*-th AS of the full segment discovered in beaconing. In this case:
+
+     - The Peering flag `P` = "1"
+     - The Construction Direction flag `C` = "1"
+     - The value of the `Acc` = Acc<sub>i+1</sub>. For more details, see [](#def-acc).
+
+   - **Use case 3** <br> The path segment is traversed against construction direction. The full segment has "n" hops. In this case:
+
+     - The Peering flag `P` = "0" or "1" (depending on whether the last hop field in the up-segment is a peering hop field)
+     - The Construction Direction flag `C` = "0"
+     - The value of the `Acc` = Acc<sub>n-1</sub>. This is because seen from the direction of beaconing, the source endpoint is the last AS in the path segment. For more details, see [](#def-mac) and [](#def-acc).
+
+4. Besides setting the flags and the `Acc` field, the source endpoint must also set the pointers in the `CurrInf` and `CurrHF` fields of the Path Meta Header `PathMetaHdr` (see [](#PathMetaHdr)). As the source endpoint builds the starting point of the forwarding, both pointers must be set to "0".
 
 
 ### Processing at Routers {#process-router}
 
-abcd
+During forwarding, each AS<sub>i</sub> verifies the path contained in the packet header with the help of the current value of the MAC in the current hop field, and the current value of the Accumulator in the `Acc` field of the current info field. Additionally, each AS has to correctly set the value of the Accumulator in the `Acc` field for the next AS to be able to verify its hop field. The exact operations differ based on the location of the AS on the path.
+
+The processing of SCION packets for ASes where a peering link is crossed between path segments is special cased. A path containing a peering link contains exactly two path segments, one against construction direction (up) and one in construction direction (down). On the path segment against construction direction (up), the peering hop field is the last hop of the segment. In construction direction (down), the peering hop field is the first hop of the segment.
+
+The following sections describe the tasks to be performed by the ingress and egress border router of each on-path AS. Each operation is described from the perspective of AS<sub>i</sub>, where i belongs to \[0 ... n-1], and n == the number of ASes in the path segment (counted from the first AS in the beaconing direction).
+
+**Note:** In this context, a border router is called **ingress** border router when it refers to an entrance border router to an AS, as seen from the direction of travel of the SCION packet. So in the context here, the ingress border router is the *(packet) incoming* border router. A border router is called **egress** border router when it refers to an exit border router of an AS, as seen from the direction of travel of the SCION packet. So in this context, the egress border router is the *(packet) leaving* border router.
+
+The following figure provides a simplified representation of the processing at routers both in construction direction and against construction direction.
+
+~~~~
+                              .--.
+                             ( RR )  = Router
+Processing in                 `--'
+construction
+direction
+
+      1. Verify MAC of AS1          1. Verify MAC of AS2
+      2. Update Acc for AS2         2. Update Acc for AS3
+                 |                            |
+>>>--------------o----------------------------o---------------------->>>
+
++-------------+  |           +-------------+  |          +-------------+
+|             |              |             |             |             |
+|           .--. |          .--.         .--. |         .--.           |
+|   AS1    ( RR )o---------( RR )  AS2  ( RR )o--------( RR )  AS3     |
+|           `--' |          `--'         `--' |         `--'           |
+|             |              |             |             |             |
++-------------+  |           +-------------+  |          +-------------+
+
+                 |                            |
+<<<--------------o----------------------------o----------------------<<<
+                 |                            |
+      1. Update Acc for AS1         1. Update Acc for AS2
+      2. Verify MAC of AS1          2. Verify MAC of AS2
+
+                                                      Processing against
+                                                            construction
+                                                               direction
+~~~~
+{: #figure-19 title="A simplified representation of the processing at routers in both directions."}
 
 
 #### Steps Ingress Border Router
 
-xfbcbdc
+This section describes the steps the SCION ingress border router must perform when it receives a SCION packet.
+
+1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field.
+2. Check that the current hop field is not expired and within its validity period.
+3. The next steps depend on the direction of travel and whether this segment includes a peering hop field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current info field. Therefore, check the settings of both flags. The following combinations are possible:
+
+   - The packet traverses the path segment in **construction direction** (`C` = "1" and `P` = "0" or "1"). In this case, proceed with step 4.
+
+   - The packet traverses the path segment **against construction direction**. The following use cases are possible:
+
+     - **Use case 1** <br> The path segment includes **no peering hop field** (`C` = "0" and `P` = "0"). In this case, the ingress border router must take the following step(s):
+
+       - Compute the value of the Accumulator Acc as follows:
+
+         Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
+         where <br>
+         Acc<sub>i+1</sub> = the current value of the field `Acc` in the current info field <br>
+         MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field representing AS<sub>i</sub>
+
+         **Note:** In the case described here the packet travels against direction of beaconing. That is, the packet comes from AS<sub>i+1</sub> and is going to enter AS<sub>i</sub>. This means that the `Acc` field of this incoming packet represents the value of Accumulator Acc<sub>i+1</sub>. However, to compute the MAC<sub>i</sub> for the current AS<sub>i</sub>, we need the value of Accumulator Acc<sub>i</sub> (see [](#def-acc)). Because the border router knows that the formula for Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2] (see also [](#def-acc)), and because the values of Acc<sub>i+1</sub> and MAC<sub>i</sub> are known, the router will be able to recover the value Acc<sub>i</sub> based on the just-mentioned formula for Acc.
+
+       - Replace the current value of the field `Acc` in the current info field with the newly calculated value of Acc.
+       - Compute the MAC<sup>Verify</sup><sub>i</sub> over the hop field of the current AS<sub>i</sub>. For this, use the formula in [](#def-mac), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of the accumulator Acc as just set in the `Acc` field in the current info field.
+       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Verify</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+       - Check whether the current hop field is the last hop field in the path segment. For this, look at the value of the current `SegLen` and other metadata in the path meta header. If yes, increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
+
+     - **Use case 2** <br> The path segment includes a **peering hop field** (`C` = "0" and `P` = "1"), but the current hop is **not** the peering hop, that is, the current hop field is **not** the *last* hop field of the segment, seen from the direction of travel - to check whether this is true, look at the value of the current `SegLen` and other metadata in the path meta header. In this case, the ingress border router must perform the steps previously described for the path segment without peering hop field, however *without* incrementing `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
+
+     - **Use case 3** <br> The path segment includes a **peering hop field** (`C` = "0" and `P` = "1"), and the current hop field *is* the peering hop field. This would be the case if the current hop field is the *last* hop field of the segment, seen from the direction of travel - to find out whether this is true, check the value of the current `SegLen` and other metadata in the path meta header. In this case, the ingress border router must take the following step(s):
+
+       - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i [:2]` in the formula with the value of the accumulator Acc as set in the `Acc` field in the current info field (this is the value of the accumulator Acc as it comes with the packet).
+       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+       - Increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with the next step.
+
+4. Forward the packet to the egress border router (based on the egress interface ID in the current hop field) or to the destination endpoint, if this is the destination AS.
+
+**Note:** For more information on the path meta header, see [](#PathMetaHdr).
 
 
 #### Steps Egress Border Router
 
-vdsgd
+This section describes the steps the SCION egress border router must perform when it receives a SCION packet.
+
+1. Parse the SCION packet.
+2. The next steps depend on the direction of travel and whether this segment includes a peering link. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the currently valid info field. Therefore, first check the settings of both flags. The following use cases are possible:
+
+   - **Use case 1** <br> The packet traverses the path segment in **construction direction**. The path segment either includes **no peering hop field** (`C` = "1" and `P` = "0"), or the path segment does include a **peering hop field** (`C` = "1" and `P` = "1"), but the current hop is **not** the peering hop, that is, the current hop field is **not** the *first* hop field of the segment, seen from the direction of travel. To check whether this is true, look at the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router must take the following step(s):
+
+     - Compute MAC<sup>Verify</sup><sub>i</sub> over the hop field of the current AS<sub>i</sub>. For this, use the formula in [](#def-mac), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of the accumulator Acc as set in the `Acc` field in the current info field.
+     - Check that the just-calculated MAC<sup>Verify</sup><sub>i</sub> matches MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+     - Compute the value of Acc<sub>i+1</sub>. For this, use the formula in [](#def-acc). Replace Acc<sub>i</sub> in the formula with the current value of the accumulator Acc as set in the `Acc` field of the current info field.
+     - Replace the value of the `Acc` field in the current info field with the just-calculated value of Acc<sub>i+1</sub>.
+     - Proceed with step 3.
+
+   - **Use case 2** <br> The packet traverses the path segment in **construction direction**. The path segment includes a **peering hop field** (`C` = "1" and `P` = "1"), and the current hop field *is* the peering hop field. This would be the case if the current hop field is the *first* hop field of the segment, seen from the direction of travel - to find out whether this is true, check the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router must take the following steps:
+
+     - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0 [:2] ... XOR MAC_i [:2]` with the value in the `Acc` field of the current info field.
+     - Check that the MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub> matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine - proceed with step 3. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+
+   - **Use case 3** <br> The packet traverses the path segment **against construction direction** (`C` = "0" and `P` = "0" or "1"). In this case, proceed with the next step, step 3.
+
+3. Increment `CurrHF` in the path meta header.
+4. Forward the packet to the neighbor AS.
+
+**Note:** For more information on the path meta header, see [](#PathMetaHdr).
 
 
 
@@ -1223,7 +1354,7 @@ TODO Security
 
 # IANA Considerations
 
-This document has no IANA actions.
+TODO IANA actions.
 
 
 --- back
@@ -1231,18 +1362,40 @@ This document has no IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
-
+Many thanks go to Jean-Christophe Hugly (SCION Associotion), Juan A. Garcia Prado (ETH Zurich), and Samuel Hitz (Anapaya) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Assigned SCION Protocol Numbers {#protnum}
 {:numbered="false"}
 
-abcd
+This appendix lists the assigned SCION protocol numbers.
+
 
 ## Considerations
 {:numbered="false"}
 
+SCION attempts to take the IANA's assigned Internet protocol numbers into consideration. Widely employed protocols have the same protocol number as the one assigned by IANA. SCION specific protocol numbers start at 200.
+
+The protocol numbers are used in the SCION header to identify the next level protocol.
+
+
 ## Assignment
 {:numbered="false"}
 
+
+| Decimal   | Keyword      | Protocol                                 |
+|-----------+--------------+------------------------------------------|
+| 0-5       |              | Unassigned                               |
+| 6         | TCP/SCION    | Transmission Control Protocol over SCION |
+| 7-16      |              | Unassigned                               |
+| 17        | UDP/SCION    | User Datagram Protocol over SCION        |
+| 18-199    |              | Unassigned                               |
+| 200       | HBH          | SCION Hop-by-Hop Options                 |
+| 201       | E2E          | SCION End-to-End Options                 |
+| 202       | SCMP         | SCION Control Message Protocol           |
+| 203       | BFD/SCION    | BFD over SCION                           |
+| 204-252   |              | Unassigned                               |
+| 253       |              | Use for experimentation and testing      |
+| 254       |              | Use for experimentation and testing      |
+| 255       |              | Reserved                                 |
+{: title="The assigned SCION protocol numbers"}
