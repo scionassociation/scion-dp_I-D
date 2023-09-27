@@ -878,19 +878,19 @@ Any transport or other upper-layer protocol that includes addresses from the SCI
 ~~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ --+
-|            DstISD             |                               |   |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   |
-|                             DstAS                             |   |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   | SCION
-|            SrcISD             |                               |   | address
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   | header
-|                             SrcAS                             |   |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
-|                    DstHostAddr (variable Len)                 |   |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
-|                    SrcHostAddr (variable Len)                 |   |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ --+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
+|            DstISD             |                               |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               + SCION|
+|                             DstAS                             |   ad-|
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ dress|
+|            SrcISD             |                               |  hea-|
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   der|
+|                             SrcAS                             |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+      |
+|                    DstHostAddr (variable Len)                 |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+      |
+|                    SrcHostAddr (variable Len)                 |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
 |                    Upper-Layer Packet Length                  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      zero                     |  Next Header  |
@@ -1056,37 +1056,137 @@ When destination endpoint B wants to respond to source endpoint A, it can just s
 
 # Path Authorization {#path-auth}
 
-abcc
+Path authorization guarantees that data packets always traverse the network along paths segments authorized by all on-path ASes in the control plane. In contrast to the IP-based Internet, where forwarding decisions are made by routers based on locally stored information, SCION routers base their forwarding decisions purely on the forwarding information carried in the packet header and set by endpoints.
+
+SCION uses cryptographic mechanisms to efficiently provide path authorization. The mechanisms are based on *symmetric* cryptography in the form of message-authentication codes (MACs) in the data plane to secure forwarding information encoded in hop fields. This chapter first explains how hop field MACs are computed, then how they are validated as they traverse the network.
 
 
 ## Authorizing Segments through Chained MACs {#auth-chained-macs}
 
-abcd
+When authorizing SCION PCBs and path segments in the control plane and forwarding information in the data plane, an AS authenticates not only its own hop information but also an aggregation of all upstream hops. This section describes how this works.
 
 
 ### Hop Field MAC Computation {#hf-mac-calc}
 
-abcd
+The MAC in the hop fields of a SCION path has two purposes:
+
+- Preventing malicious endpoints from illegally adding, removing, or reordering hops within a path segment created during beaconing in the control plane.
+- Authentication of the information contained in the hop field itself, in particular the `ExpTime`, `ConsIngress`, and `ConsEgress`.
+
+To fulfill the above purposes, the MAC for the hop field of AS<sub>i</sub> includes both the components of the current hop field HF<sub>i</sub> and an aggregation of the path segment identifier and all preceding hop fields/entries in the path segment. The aggregation is a 16-bit XOR-sum of the path segment identifier and the hop field MACs.
+
+When originating a path-segment construction beacon PCB in the **control plane**, a core AS chooses a random 16-bit value as segment identifier `SegID` for the path segment and includes it in the PCB's `Segment Info` component. In the control plane, each AS<sub>i</sub> on the path segment computes the MAC for the current hop HF<sub>i</sub>, based on the value of `SegID` and the MACs of the preceding hop entries. Here, the full XOR-sum is computed explicitly.
+
+For high-speed packet processing in the **data plane**, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC-chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each (of the up to three) path segments in a path, as a separate, updatable accumulator field `Acc`. The routers update the accumulator field `Acc` by adding/subtracting only a single 16-bit value each.
+
+When combining path segments to create a path to the destination endpoint, the source endpoint must also initialize the value of accumulator field `Acc` for each path segment. This must be done such, that the `Acc` field contains the correct XOR-sum of the path segment identifier and preceding hop field MACs expected by the first router that is traversed.
+
+In the following, the computation of the hop field MAC as well as the accumulator field `Acc` is explained.
+
+**Note:** The algorithm used by SCION to compute the hop field MAC is based on the AES-CMAC algorithm, truncated to 48-bits - see also {{RFC4493}}. In principle, the computation of the MAC is an AS-specific choice; only the control service and routers of the AS need to agree on keys, algorithm, and input for the MAC. However, note that we do not provide nor specify any mechanism to coordinate AS-specific choices between the routers and the control services of the AS.
 
 
 #### MAC - Definition {#def-mac}
 
-abcd
+- Consider a path segment with "n" hops, containing ASes AS<sub>0</sub>, ... , AS<sub>n-1</sub>, with forwarding keys K<sub>0</sub>, ... , K<sub>n-1</sub> in this order.
+- AS<sub>0</sub> is the core AS that created the PCB representing the path segment and that added a random initial 16-bit segment identifier `SegID` to the `Segment Info` field of the PCB.
+
+The MAC<sub>i</sub> of the hop field of AS<sub>i</sub> is now calculated based on the following definition:
+
+MAC<sub>i</sub> = <br> Ck<sub>i</sub> (`SegID` XOR MAC<sub>0</sub> \[:2] ... XOR MAC<sub>i-1</sub> \[:2], Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
+
+where
+
+- k<sub>i</sub> = The forwarding key k of the current AS<sub>i</sub>
+- Ck<sub>i</sub> (...) = Checksum C over (...) computed with forwarding key k<sub>i</sub>
+- `SegID` = The random initial 16-bit segment identifier set by the core AS when creating the corresponding PCB
+- XOR = The bitwise "exclusive or" operation
+- MAC<sub>i</sub> \[:2] = The hop field MAC for AS<sub>i</sub>, truncated to 2 bytes
+- Timestamp = The timestamp set by the core AS when creating the corresponding PCB
+- ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub> = The content of the hop field HF<sub>i</sub>
+
+The above definition implies that the current MAC is based on the XOR-sum of the truncated MACs of all preceding hop fields in the path segment as well as the path segment's `SegID`. In other words, the current MAC is *chained* to all preceding MACs.
 
 
 #### Layout of the Input Data for the MAC Calculation
 
-abcd
+{{figure-17}} below shows the layout of the input data to calculate the hop field MAC in the data plane. The input layout represents the 8 bytes of the info field and the first 8 bytes of the hop field, with some fields zeroed out.
+
+Note that the MAC field itself is only 6 bytes long - see also [](#hopfld).
+
+~~~~
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
+|               0               |           Acc                 |   Hop|
+|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| Field|
+|                           Timestamp                           |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| -----+
+|       0       |    ExpTime    |          ConsIngress          |  Info|
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Field|
+|          ConsEgress           |               0               |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
+~~~~
+{: #figure-17 title="Input data to calculate the hop field MAC"}
+
 
 
 #### Accumulator Acc - Definition {#def-acc}
 
-abcd
+The accumulator Acc<sub>i</sub> is an updatable counter introduced in the data plane to reduce overhead caused by MAC-chaining for path authorization. This is achieved by incrementally tracking the XOR-sum of the previous MACs as a separate, updatable accumulator field `Acc`, which is part of the path segment's info field `InfoField` in the packet header (see also [](#inffield)). Routers update this field by adding/subtracting only a single 16-bit value each.
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|r r r r r r P C|      RSV      |             Acc               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           Timestamp                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-18 title="The Info Field of a specific path segment in the packet header, with the updatable accumulator field `Acc`."}
+
+
+This is how it works:
+
+[](#def-mac) defines MAC<sub>i</sub> as follows:
+
+MAC<sub>i</sub> = <br> Ck<sub>i</sub> (`SegID` XOR MAC<sub>0</sub> \[:2] ... XOR MAC<sub>i-1</sub> \[:2], Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
+
+In the data plane, the expression `SegID XOR MAC_0 [:2] ... XOR MAC_i-1 [:2]` is replaced by Acc<sub>i</sub>. This results in the following alternative procedure for the computation of MAC<sub>i</sub> used in the data plane:
+
+MAC<sub>i</sub> = Ck<sub>i</sub> (Acc<sub>i</sub>, Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
+
+During forwarding in the data plane, each AS<sub>i</sub> updates the `Acc` field in the packet header, such, that it contains the correct input value of the Accumulator Acc for the next AS in the path segment to be able to calculate the MAC over its hop field. Note that the correct input value of the `Acc` field depends on the direction of travel.
+
+The value of the accumulator Acc<sub>i+1</sub> is calculated based on the following definition (in the direction of beaconing):
+
+Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2]
+
+- XOR = The bitwise "exclusive or" operation
+- MAC<sub>i</sub> \[:2] = The hop field MAC for the current AS<sub>i</sub>, truncated to 2 bytes
 
 
 ### Peering Links {#peerlink}
 
-abcd
+
+The above described computation of a hop field MAC does not apply to a peering hop field, i.e., to a hop field that allows transiting from a child interface/link to a peering interface/link.
+
+The reason for this is that the MACs of the hop fields "after" the peering hop field (in beaconing direction) are not chained to the MAC of the peering hop field, but to the MAC of the main hop field in the corresponding AS entry. To make this work, the MAC of the peering hop field is also chained to the MAC of the main hop field - this allows to validate the chained MAC for both the peering hop field and the following hop fields, by using the same `Acc` field value.
+
+This results in the following definition for the calculation of the MAC for a peering hop field.
+
+The Control Plane Internet-Draft defines a peering hop field as follows:
+
+hop field<sup>Peer</sup><sub>i</sub> = (ExpTime<sup>Peer</sup><sub>i</sub>, ConsIngress<sup>Peer</sup><sub>i</sub>, ConsEgress<sup>Peer</sup><sub>i</sub>, MAC<sup>Peer</sup><sub>i</sub>)
+
+This definition, the general definition of a hop field MAC and the explanation above leads to the following definition of the MAC for a peering hop field<sup>Peer</sup><sub>i</sub>:
+
+MAC<sup>Peer</sup><sub>i</sub> = <br> Ck<sup>Peer</sup><sub>i</sub> (`SegID` XOR MAC<sub>0</sub> \[:2] ... XOR MAC<sub>i</sub> \[:2], Timestamp, ExpTime<sup>Peer</sup><sub>i</sub>, ConsIngress<sup>Peer</sup><sub>i</sub>, ConsEgress<sup>Peer</sup><sub>i</sub>)
+
+**Note:** The XOR-sum of the MACs in the formula of the peering hop field **also includes** the MAC of the main hop field (whereas for the calculation of the MAC for the main hop field itself only the XOR-sum of the *previous* MACs is used).
+
+**Note:** The Control-Plane Internet-Draft is available here: {{I-D.scion-cp}}.
 
 
 
