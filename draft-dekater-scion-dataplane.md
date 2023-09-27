@@ -601,7 +601,7 @@ The SCION header is created by extracting the required info fields and hop field
 
 
 
-##### Path Meta Header Field {#pathmetahdr}
+##### Path Meta Header Field {#PathMetaHdr}
 
 The 4-byte Path Meta Header field (`PathMetaHdr`) defines meta information about the SCION path that is contained in the path header. It has the following format:
 
@@ -679,33 +679,154 @@ The 8-byte Info Field (`InfoField`) has the following format:
 
 ##### Hop Field {#hopfld}
 
-kjhyxdbc
+The 12-byte Hop Field (``HopField``) has the following format:
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|r r r r r r I E|    ExpTime    |           ConsIngress         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|        ConsEgress             |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                              MAC                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-9 title="SCION path type - Format of the Hop Field"}
+
+
+- `r`: The `r` bits are unused and reserved for future use.
+- `I`: The ConsIngress Router Alert flag. If the ConsIngress Router Alert flag has value "1", the ingress router (in construction direction) will process the L4 payload in the packet. The construction direction is the direction of beaconing.
+- `E`: The ConsEgress Router Alert flag. If the ConsEgress Router Alert flag has value "1", the egress router (in construction direction) will process the L4 payload in the packet.
+
+**Note:** A sender cannot rely on multiple routers retrieving and processing the payload even if it sets multiple router alert flags. This is use-case dependent: In the case of Traceroute informational messages, for example, the router for which the traceroute request is intended will process the request (if the corresponding Router Alert flag is set to "1") and reply to it without further forwarding the request along the path. Use cases that require multiple routers/hops on the path to process a packet should instead rely on a hop-by-hop extension (see [](#ext-header)). For general information on router alerts, see {{RFC2711}}.
+
+- `ExpTime`: Expiry time of a hop field. The field is 1-byte long, thus there are 256 different values available to express an expiration time. The expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the `Timestamp` field (from the corresponding info field), as follows:
+
+  - `Timestamp` + (1 + `ExpTime`) * (24 hours/256)
+
+- `ConsIngress`, `ConsEgress`: The 16-bits ingress/egress interface IDs in construction direction.
+- `MAC`: The 6-byte Message Authentication Code to authenticate the hop field. For details on how this MAC is calculated, see [](#hf-mac-calc).
 
 
 #### One-Hop Path Type {#onehop}
 
-kjhyxdbc
+The one-hop path type `OneHopPath` is currently used to bootstrap beaconing between neighboring ASes. This is necessary, as neighbor ASes do not have a forwarding path yet before beaconing is started.
+
+A one-hop path has exactly one info field and two hop fields with the specialty that the second hop field is not known a priori, but is instead created by the ingress SCION border router of the neighboring AS while processing the one-hop path. Any entity with access to the forwarding key of the source endpoint AS can create a valid info and hop field as described in the sections [](#inffield) and [](#hopfld), respectively.
+
+Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second hop field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to "0", indicating that the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the hop field.
+
+{{figure-10}} below shows the layout of a SCION one-hop path type. There is only a single info field; the appropriate hop field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
+
+- At the source endpoint AS, *CurrHF := 0*.
+- At the destination endpoint AS, *CurrHF := 1*.
+
+~~~~
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           InfoField                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           HopField                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           HopField                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-10 title="Layout of the SCION one-hop path type"}
+
 
 
 #### Path Reversal {#reverse}
 
-kjhyxdbc
+When a destination endpoint receives a SCION packet, it can use the path information in the SCION header for sending the reply packets. For this, the destination endpoint must perform the following steps:
+
+1. Reverse the order of the info fields;
+2. Reverse the order of the hop fields;
+3. For each info field, negate the construction direction flag `C`; do not change the accumulator field `Acc`.
+4. In the `PathMetaHdr` field:
+
+   - Set the `CurrINF` and `CurrHF` to "0".
+   - Reverse the order of the non-zero `SegLen` fields.
+
+   **Note:** For more information on the `PathMetaHdr` field, see [](#PathMetaHdr).
+
+A similar mechanism is possible for on-path routers, for example to send SCION Control Message Protocol (SCMP) messages to the sender of the original packet.
 
 
 
 ## Extension Headers {#ext-header}
 
-cvcxvbc
+This section specifies the SCION extension headers. SCION currently provides two types of extension headers: the Hop-by-Hop (HBH) Options header and the End-to-End (E2E) Options header.
+
+- The Hop-by-Hop Options header is used to carry optional information that may be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The End-to-End Options header is used to carry optional information that may be examined and processed by the sender and/or the receiver of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+
+If both headers are present, the HBH Options header must come before the E2E Options header.
+
+**Note:** The SCION extension headers are defined and used based on and similar to the IPv6 extensions as specified in section 4 of {{RFC8200}}. The SCION Hop-by-Hop Options header and End-to-End Options header resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC) and Destination Options Header (section 4.6), respectively.
 
 
 ### Format of the SCION Options Headers {#oh-format}
 
-xccxy
+The SCION Hop-by-Hop Options and End-to-End Options headers have the following format:
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    NextHdr    |     ExtLen    |            Options            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-11 title="Extension headers: Options header"}
+
+
+- `NextHdr`: Unsigned 8-bit integer. Identifies the type of header immediately following the Hop-by-Hop/End-to-End Options header. Values of this field respect the Assigned SCION Protocol Numbers (see also [](#protnum)).
+- `ExtLen`: Unsigned 8-bit integer. The value of this field is computed as the length of the complete Hop-by-Hop/End-to-End Options header in multiples of 4-bytes minus 1.
+- `Options`: This is a variable-length field. The length of this field must be such that the complete length of the Hop-by-Hop/End-to-End Options header is an integer multiple of 4 bytes. The `Options` field contains one or more Type-Length-Value (TLV) encoded options. For details, see [](#optfld).
+
+The Hop-by-Hop/End-to-End Options header is aligned to 4 bytes.
 
 
 #### Options Field {#optfld}
 
-nnm
+The `Options` field of the Hop-by-Hop Options and the End-to-End Options headers carries a variable number of options that are type-length-value (TLV) encoded. Each TLV-encoded option has the following format:
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    OptType    |  OptDataLen   |            OptData            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                              ...                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-12 title="Options field: TLV-encoded options"}
+
+
+- `OptType`: 8-bit identifier of the type of option. The following option types are assigned to the SCION HBH/E2E Options header:
+
+| Decimal | Option Type                                                                                   |
+|---------+-----------------------------------------------------------------------------------------------|
+| 0       | Pad1 (see [](#pad1))                                                                          |
+| 1       | PadN (see [](#padn))                                                                          |
+| 2       | SCION Packet Authenticator Option. Only used by the End-to-End Options header (experimental). |
+| 253     | Used for experimentation and testing                                                          |
+| 254     | Used for experimentation and testing                                                          |
+| 255     | Reserved                                                                                      |
+{: #table-4 title="Options types of SCION Options header"}
+
+- `OptDataLen`: Unsigned 8-bit integer denoting the length of the `OptData` field of this option in bytes.
+- `OptData`: Variable-length field. Option-type specific data.
+
+The options within a header must be processed strictly in the order they appear in the header. This is to prevent a receiver from, for example, scanning through the header looking for a specific option and processing this option prior to all preceding ones.
+
+Individual options may have specific alignment requirements, to ensure that multibyte values within the `OptData` fields have natural boundaries. The alignment requirement of an option is specified using the notation "xn+y". This means that the `OptType` must appear at an integer multiple of x bytes from the start of the header, plus y bytes. For example:
+
+- `2n`: means any 2-bytes offset from the start of the header.
+- `4n+2`: means any 4-bytes offset from the start of the header, plus 2 bytes.
+
+There are two padding options to align subsequent options and to pad out the containing header to a multiple of 4 bytes in length - for details, see below. All SCION implementations MUST recognize these padding options.
 
 
 
@@ -713,10 +834,38 @@ nnm
 
 Alignment requirement: none.
 
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+
+|       0       |
++-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-13 title="TLV-encoded options - Pad1 option"}
+
+
+**Note:** The format of the Pad1 option is a special case - it does not have length and value fields.
+
+The Pad1 option is used to insert 1 byte of padding into the `Options` field of an extension header. If more than one byte of padding is required, the PadN option should be used, rather than multiple Pad1 options. See the next section for more information on the PadN option.
+
 
 ##### PadN Option {#padn}
 
 Alignment requirement: none.
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       1       |  OptDataLen   |            OptData            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                              ...                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-14 title="TLV-encoded options - PadN option"}
+
+
+The PadN option is used to insert two or more bytes of padding into the `Options` field of an extension header. For N bytes of padding, the `OptDataLen` field contains the value N-2, and the `OptData` consists of N-2 zero-valued bytes.
 
 
 ## Upper-Layer Protocol Issues
@@ -724,7 +873,35 @@ Alignment requirement: none.
 
 ### Pseudo Header for Upper-Layer Checksum {#pseudo}
 
-xccxy
+Any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation should use the following pseudo header:
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ --+
+|            DstISD             |                               |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   |
+|                             DstAS                             |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   | SCION
+|            SrcISD             |                               |   | address
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   | header
+|                             SrcAS                             |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|                    DstHostAddr (variable Len)                 |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|                    SrcHostAddr (variable Len)                 |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ --+
+|                    Upper-Layer Packet Length                  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                      zero                     |  Next Header  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-15 title="Layout of the pseudo header for the upper-layer checksum"}
+
+
+- `DstISD`, `SrcISD`, `DstAS`, `SrcAS`, `DstHostAddr`, `SrcHostAddr`: These values are taken from the SCION address header.
+- `Upper-Layer Packet Length`: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly (e.g., the SCION Control Message Protocol SCMP), use the value from the `PayloadLen` field in the SCION common header, minus the sum of the extension header lengths.
+- `Next Header`: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also [](#protnum)). This field can differ from the `NextHdr` field in the SCION common header, if extensions are present.
 
 
 
