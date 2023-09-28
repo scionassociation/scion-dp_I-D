@@ -23,11 +23,6 @@ author:
      org: SCION Association
      email: cdk@scion.org
 
- -   ins: M. Frei
-     name: Matthias Frei
-     org: SCION Association
-     email: matzf@scion.org
-
  -   ins: N. Rustignoli
      name: Nicola Rustignoli
      org: SCION Association
@@ -59,10 +54,6 @@ normative:
       -
         ins: N. Rustignoli
         name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: M. Frei
-        name: Matthias Frei
         org: SCION Association
 
 informative:
@@ -150,7 +141,7 @@ informative:
 
 This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The responsibility of the **SCION data plane** is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path.
 
-The SCION data plane fundamentally differs from today’s IP-based data plane in that it is *path-aware*: In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. SCION also includes its own protocol to communicate failures to endpoints, the SCION Control Message Protocol (SCMP). This protocol will be described in a separate document, which will follow soon.
+The SCION data plane fundamentally differs from today's IP-based data plane in that it is *path-aware*: In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. SCION also includes its own protocol to communicate failures to endpoints, the SCION Control Message Protocol (SCMP). This protocol will be described in a separate document, which will follow later.
 
 
 --- middle
@@ -1362,7 +1353,7 @@ TODO IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Jean-Christophe Hugly (SCION Associotion), Juan A. Garcia Prado (ETH Zurich), and Samuel Hitz (Anapaya) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Jean-Christophe Hugly (SCION Associotion), and Samuel Hitz (Anapaya) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Assigned SCION Protocol Numbers {#protnum}
