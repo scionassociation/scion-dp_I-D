@@ -1342,7 +1342,83 @@ This section describes the steps that a SCION egress border router must perform 
 
 # Security Considerations
 
-TODO security considerations.
+This section describes the possible security risks and attacks that SCION's data plane may be prone to, and how these may be mitigated. The described risks pertain to either path authorization, meaning that packets are only forwarded along authorized path segments, and other data plane security risks.
+
+**Note:** This section only discusses SCION data plane- and forwarding-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-cp}} includes security considerations that concern the SCION control plane and routing.
+
+
+## Path Authorization
+
+The central property of the SCION path-aware data plane is path authorizatzion. Path authorization guarantees that data packets always traverse the network along paths segments that are authorized in the control plane by all on-path ASes. As described in the previous chapters, ASes achieve path authorization through the hop authenticators (MACs), segment identifiers, and various other checks at border routers. 
+
+This section discusses how an adversary may attempt to violate the path-authorization property and SCION's answer to these attacks. The following attacks are possible:
+
+- [Crafting unauthorized hop fields](#crafting), 
+- [Modifying the validity period of a path segment](#mod-validity), or 
+- [Constructing an unauthorized segment by combining hop fields of different valid segments (path splicing)](#path-splicing).
+
+
+### Crafting Unauthorized Hop Fields {#crafting}
+
+Hop fields are protected with MACs. To be able to misuse and craft unauthorized hop fields, an adversary must therefore either determine the MAC's key or try to break the MAC directly. 
+
+To determine an unknown MAC key, the adversary may perform a brute-force attack. Candidate keys can be validated by checking the MAC contained in sample hop fields. But as SCION uses 128-bit keys by default, such an off-line attack is computationally infeasible in practice. Furthermore, the keys for the MAC computation are short-lived, with a validity period of 24 hours.
+
+However, ASes do not have to apply the algorithm used by SCION to compute the hop field MAC. As a hop field’s MAC is only checked by the AS that created it, ASes are free to choose the MAC schemes they prefer. As a consequence, an AS may use an own MAC scheme including an algorithm that is weak or insecure. In this case, a brute-force attack to determine the MAC's key may succeed. On the other hand, ASes can always quickly switch to a secure algorithm without the need for coordination with other ASes.
+
+As a second method to break a MAC, an adversary might attempt to directly brute-force the MAC itself. This requires an online attack: One packet would need to be sent to verify each guess. For a 6-byte MAC, the adversary would need to try 247 « 140 trillion different MACs to successfully forge the MAC of a single hop field. For each incorrect hop field, the corresponding AS returns an SCMP packet. Even though an adversary can observe whether a hop field has been accepted, each incorrect guess is visible to a monitoring entity and thus the attack can be easily detected.
+
+In both cases, if an online brute-force attack succeeds, the obtained hop field can be reused until its eventual expiration. 
+
+
+### Modifying the Validity Period {#mod-validity}
+
+The metadata for each path segment stored in the info field inside the path in the SCION header (see §5.4 on page 101) includes a timestamp, which is set by the initiator of the PCB. This timestamp cannot be modified by an adversary as it is included in the calculation of the MAC for each hop field. This ensures that the timestamp cannot be set to a later date to extend the validity of the path.
+
+
+### Path Splicing {#path-splicing}
+
+In a path-splicing attack, an adversary (either controlling an AS or an end host) takes valid hop fields of multiple path segments and splices them together to obtain a new valid path. We have already described such attacks in §5.3.2 and used them to motivate SCION’s MAC-chaining mechanism: By including the info field of a segment in the input to each hop field’s MAC computation and keeping track of upstream hop fields via a segment identifier in the info field, it is impossible to combine hop fields of multiple segments.
+
+
+## Other Data Plane Security Risks 
+
+Besides manipulating the routing decisions in the control plane, adversaries can also attempt to influence forwarding in the data plane and thus violate properties P8 and P9. Because the forwarding path selection has already been made in the control plane, an off-path adversary is severely limited in their abilities. The adversary can merely attempt to disrupt the connectivity of the chosen path and force the host to select a new path. As SCMP error messages are authenticated (see §4.7), an adversary cannot simply trigger a path switch this way. Instead, they would need to flood a link on the path with excessive traffic. We discuss such denial-of-service (DoS) attacks in Chapter 11 and concentrate on the case of an on-path adversary in this section.
+
+To differentiate these attacks from path-manipulation attacks in the control plane, we assume a static control plane. This means that path services have a constant set of paths available, and an adversary is restricted to engaging in attacks by receiving, manipulating, and sending data traffic as opposed to sending control messages. We further assume that path services are available— DoS protections of these services will be discussed in Part III.
+
+Adversaries may try to attract or divert traffic from certain points in the network, craft new hop fields and segments, or combine existing ones in order to create new paths to influence the way outgoing data packets are forwarded, to manipulate the routing history of the packet, and to cover up their own actions.
+
+While some of these attacks seem to be quite severe, they are under the strong assumption of an on-path adversary, limiting the possible location of an adversary from 75,000 to a handful of ASes. This is in stark contrast to most attacks considered in protocols such as BGP, where this restriction does not apply. In addition, we will show that the attacks presented here are, if not entirely preventable, at least detectable.
+
+In particular, the SCION Packet Authenticator Option (SPAO) described in §3.3 plays an important role in achieving properties P4 and P9–P11. To briefly recapitulate, SPAO enables the sender to protect the header (and optionally the payload) of a SCION packet with either a MAC or a signature, which can be checked by the receiver. All fields of the header are protected, except for mutable fields. Thus, the destination can verify that the destination-observed path is equal to the intended path. 
+
+Note that an on-path adversary can always simply drop packets. Therefore, we do not consider any attacks that cause packets to be dropped at a later hop on the path.
+
+
+### Modification of Path Header
+
+An on-path adversary can modify the path header of a packet, and replace one or more path segments or parts of segments with different segments. The only restriction is that the path after the adversary needs to follow authorized segments, as the packet would be simply dropped at some point otherwise. The already traversed portion of the current segment and past segments can be modified by the adversary in a completely arbitrary manner (for instance, deleting and adding valid and invalid hop fields).
+
+The adversary is able to transparently revert any changes to the path header on replies by the destination. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M). The new path may not be a valid end-to-end path. However, when B reverses the path and sends a new packet, that packet would reach M, who can then transparently change the invalid path back to the valid path to A. 
+
+Modifications of the path header can be discovered by the destination if the packet is integrity protected (property P11), e.g., by using SPAO. If there are two colluding adversaries on the path, then they can forward the packet between them using a different path than selected by the source: The first on-path attacker changes the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination succeeds. To defend against multiple on-path adversaries and to prevent this attack, an extension providing path validation (property P12) is required, which is presented in §10.1.
+
+
+### Detectability
+
+For all path-header modifications, the ingress interface of the hop field directly after the adversary must identify the link to the adversary as otherwise the interface check would fail (see §5.6.3). This crucial check ensures the weak-detectability property (property P4): An adversary cannot manipulate a packet’s path information to disguise their own presence on the path. While hop fields do not contain globally valid AS identifiers, publicly available segments at path services can be used to map hop fields to AS names, and thus to extract the sequence of ASes that the packet claims to have traversed. This property is considered to be weak, since the receiving host does not know which of the hops on the manipulated path is the adversary, and cannot even tell whether a segment-replacement attack has taken place.
+
+We can guarantee a stronger detectability property by using the SPAO, which provides end-to-end path-integrity protection. Thus, any path splicing or segment replacement will be noticed at the receiving end host. Strong detectability in this sense does not imply the ability to tell which of the nodes were acting maliciously, only that some of them were (Full-fledged fault localization requires substantially more complicated systems [54].)
+
+Note, however, that in case of colluding ASes, the second AS could revert the path modification of the first AS such that the receiving end host could not detect any modification even with the SPAO. Such attacks can be prevented by using the EPIC path type presented in §10.1.
+
+
+### Modification of Address Header
+
+An on-path adversary can modify the source and destination addresses in the address header. In case the destination AS is modified, the future path needs to be modified accordingly; otherwise the packet would simply be dropped by the last AS on the path. 
+
+All these attacks can be detected by the destination when using the SPAO as the source and destination addresses influence the key used for the MAC computation.
 
 
 # IANA Considerations
