@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-12-07T00:00:49.158757+00:00",
+  "timestamp": "2023-12-10T00:00:49.124353+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -50,5 +50,53 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOKYa7785hbfIj",
+      "title": "Update Security Considerations Section",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/1",
+      "state": "OPEN",
+      "author": "cdekater",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-12-07T14:32:44Z",
+      "updatedAt": "2023-12-07T15:10:25Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "073bb9dc17536680feaa5488bb5e1f043ba6a747",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "cdk-security-considerations-dp",
+      "headRefOid": "55e14b7afdeaf81c43eb149fb5c8f5aeb7fc264b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7785phfS-",
+          "commit": {
+            "abbreviatedOid": "55e14b7"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "...assuming typo is fixed.",
+          "createdAt": "2023-12-07T15:09:40Z",
+          "updatedAt": "2023-12-07T15:10:25Z",
+          "comments": [
+            {
+              "originalPosition": 84,
+              "body": "\"tyoes\" -> \"types\"\r\n",
+              "createdAt": "2023-12-07T15:09:40Z",
+              "updatedAt": "2023-12-07T15:10:25Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
