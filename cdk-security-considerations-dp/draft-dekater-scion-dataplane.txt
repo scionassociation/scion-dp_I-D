@@ -2485,10 +2485,9 @@ direction
 7.1.  Normative References
 
    [I-D.scion-cp]
-              de Kater, C., Rustignoli, N., Frei, M., and S. Hitz,
-              "SCION Control Plane", 2023,
-              <https://datatracker.ietf.org/doc/draft-dekater-scion-
-              controlplane/>.
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
+              Plane", 2023, <https://datatracker.ietf.org/doc/draft-
+              dekater-scion-controlplane/>.
 
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
