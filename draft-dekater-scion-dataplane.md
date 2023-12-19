@@ -61,10 +61,6 @@ normative:
         name: Nicola Rustignoli
         org: SCION Association
       -
-        ins: M. Frei
-        name: Matthias Frei
-        org: SCION Association
-      -
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
