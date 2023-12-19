@@ -28,6 +28,11 @@ author:
      org: SCION Association
      email: nic@scion.org
 
+ -   ins: S. Hitz
+     name: Samuel Hitz
+     org: Anapaya Systems
+     email: hitz@anapaya.net
+
 
 normative:
   RFC1122:
@@ -55,6 +60,14 @@ normative:
         ins: N. Rustignoli
         name: Nicola Rustignoli
         org: SCION Association
+      -
+        ins: M. Frei
+        name: Matthias Frei
+        org: SCION Association
+      -
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
 
 informative:
   CHUAT22:
@@ -118,6 +131,10 @@ informative:
         ins: N. Rustignoli
         name: Nicola Rustignoli
         org: SCION Association
+      -
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
   I-D.scion-overview:
     title: SCION Overview
     date: 2023
@@ -1428,7 +1445,9 @@ SCION also provides protection against so-called reflection-based attacks. Here,
 
 # IANA Considerations
 
-TODO IANA considerations.
+SCION is an inter-domain routing architecture, which bases its inter-domain routing on the <ISD, AS> tuple. For more details, see the "Addressing" section of {{I-D.scion-cp}}.
+
+The ISD-AS number is a SCION-specific number. It consists of 64-bits, where the top 16 bits represent the 16-bit global identifier for the ISD, and the bottom 48 bits indicate the AS. Currently, the ISD and AS numbers are allocated by Anapaya, the Swiss-based provider of SCION-based networking software and solutions. However, in the future, the SCION Association will take care of the allocation - we are currently in the process of transferring this task from Anapaya to the Association.
 
 
 --- back
@@ -1436,7 +1455,7 @@ TODO IANA considerations.
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Jean-Christophe Hugly (SCION Association), and Samuel Hitz (Anapaya) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Jean-Christophe Hugly (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Assigned SCION Protocol Numbers {#protnum}
