@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 22 June 2024                                            S. Hitz
+Expires: 23 June 2024                                            S. Hitz
                                                          Anapaya Systems
-                                                        20 December 2023
+                                                        21 December 2023
 
 
                             SCION Data Plane
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 June 2024.
+   This Internet-Draft will expire on 23 June 2024.
 
 Copyright Notice
 
@@ -2627,7 +2627,7 @@ Authors' Addresses
 
    Corine de Kater
    SCION Association
-   Email: cdk@scion.org
+   Email: c_de_kater@gmx.ch
 
 
    Nicola Rustignoli
