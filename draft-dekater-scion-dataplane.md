@@ -21,12 +21,17 @@ author:
  -   ins: C. de Kater
      name: Corine de Kater
      org: SCION Association
-     email: cdk@scion.org
+     email: c_de_kater@gmx.ch
 
  -   ins: N. Rustignoli
      name: Nicola Rustignoli
      org: SCION Association
      email: nic@scion.org
+
+ -   ins: S. Hitz
+     name: Samuel Hitz
+     org: Anapaya Systems
+     email: hitz@anapaya.net
 
 
 normative:
@@ -55,6 +60,10 @@ normative:
         ins: N. Rustignoli
         name: Nicola Rustignoli
         org: SCION Association
+      -
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
 
 informative:
   CHUAT22:
@@ -118,6 +127,10 @@ informative:
         ins: N. Rustignoli
         name: Nicola Rustignoli
         org: SCION Association
+      -
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
   I-D.scion-overview:
     title: SCION Overview
     date: 2023
@@ -1342,12 +1355,93 @@ This section describes the steps that a SCION egress border router must perform 
 
 # Security Considerations
 
-TODO security considerations.
+This section describes the possible security risks and attacks that SCION's data plane may be prone to, and how these attacks may be mitigated. It first discusses security risks that pertain to path authorization, followed by a section on all other data-plane security risks.
+
+**Note:** This section only discusses SCION data plane- and forwarding-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-cp}} includes security considerations that concern the SCION control plane and routing.
+
+
+## Security Risks in Regard to Path Authorization
+
+A central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along paths segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's answers to these attacks. The following attacks are imaginable:
+
+- Crafting unauthorized hop fields (see [](#crafting)),
+- modifying the validity period of a path segment (see [](#mod-validity)), or
+- path splicing, that is, constructing an unauthorized segment by combining hop fields of different valid segments (see [](#path-splicing)).
+
+
+### Crafting Unauthorized Hop Fields {#crafting}
+
+Hop fields are protected with MACs. To be able to craft and misuse unauthorized hop fields, an adversary must therefore either determine the MAC's key or try to break the MAC directly.
+
+To determine an unknown MAC key, the adversary may perform a brute-force attack. Candidate keys can be validated by checking the MAC contained in sample hop fields. But as SCION uses 128-bit keys by default, such an off-line attack is computationally infeasible in practice. Another obstacle to adversaries is the short life of the keys for MAC computation, with a validity period of 24 hours.
+
+However, ASes do not have to apply the algorithm used by SCION to compute the hop field MAC. As a hop field’s MAC is only checked by the AS that created it, ASes are free to choose the MAC schemes they prefer. As a consequence, an AS may use an own MAC scheme including an algorithm that is weak or insecure. In this case, a brute-force attack to determine the MAC's key may succeed. On the other hand, ASes can always quickly switch to a secure algorithm without the need for coordination with other ASes.
+
+As a second method to break a MAC, an adversary might attempt to directly brute-force the MAC itself. This requires an online attack: The adversary needs to send one packet per guess for verification. For a 6-byte MAC, the adversary would need to try 2<sup>47</sup> (~140 trillion) different MACs to successfully forge the MAC of a single hop field. Moreover, for each incorrect hop field, the corresponding AS will return an error message, such as a SCMP packet (SCION Control Message Protocol). As a consequence, each incorrect guess will be visible to a monitoring entity. Thus, the attack can be easily detected.
+
+In all cases, *if* an online brute-force attack succeeds, the obtained hop field can be reused until its eventual expiration.
+
+
+### Modifying the Validity Period {#mod-validity}
+
+The metadata for each path segment in a SCION path is stored in the corresponding SCION packet header. It includes a timestamp, which is set by the initiator of the PCB. The expiry time of the hop fields within a path segment is calculated relative to this timestamp (see also [](#scion-path-type)).
+
+An adversary could try to manipulate the timestamp, in order to modify the validity period of the hop fields within a path segment. However, SCION offers a protection against this kind of attack: As both the timestamp and the expiry time build the input for the calculation of a hop field's MAC, an unauthorized change of the timestamp will invalidate the MAC, and will therefore not pass unnoticed.
+
+
+### Path Splicing {#path-splicing}
+
+In a path-splicing attack, an adversary (either controlling an AS or an endpoint) takes valid hop fields of multiple path segments and splices them together to obtain a new valid path. However, SCION’s MAC-chaining mechanism prevents from this kind of attacks and makes it impossible to combine hop fields of multiple segments. For details, see [](#auth-chained-macs).
+
+
+## Other Data-Plane Security Risks
+
+Besides trying to violate the path authorization property, adversaries can also attempt to manipulate the forwarding process itself. The adversary can be either off- or on-path. Both cases are described here.
+
+
+### On-Path Attacks
+
+In the case of an on-path attack, the attacker sits in the middle of the path between the source endpoint and the destination endpoint and is able to intercept the data packets that are being forwarded. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, thus forcing the packets to travel along paths that may bring the attacker specific advantages. The following subsections provide more details on this kind of on-path data plane attacks.
+
+Also in SCION, an on-path adversary can always simply drop packets. This kind of attack is fundamental and generally cannot be prevented.
+
+**Note:**<br>
+For more information on the SCION path header, see [](#path-header).<br>
+For more information on the SCION address header, see [](#address-header).
+
+
+#### Modification of the Path Header
+
+It is possible for an on-path adversary to modify the SCION path header of a packet, and replace (parts of) path segments with different segments. The only restriction is that the path after the adversary needs to include authorized segments, as otherwise the packet would be simply dropped at some point. But the already traversed portion of the current segment and past segments can be modified by the adversary in a completely arbitrary manner (for instance, deleting and adding valid and invalid hop fields).
+
+On replies by the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M). The new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M, which can then transparently change the invalid path back to the valid path to A.
+
+The destination endpoint may only discover such path header modifications if some kind of packet integrity protection is in place. In this case, the receiving endpoint verifies that a packet, including its path, is the same as the one sent by the source endpoint. However, SCION currently does not provide this type of protection.
+
+Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. To prevent this attack and to defend against multiple on-path adversaries in general, path validation is required (which is currently not supported by SCION).
+
+
+#### Modification of the Address Header
+
+Besides modifying the SCION path header, an on-path adversary can also modify the source and destination addresses in the SCION address header. If an adversary changes the address of the destination endpoint, it needs to modify the "future" path between itself and the new destination accordingly; otherwise the packet would simply be dropped by the last AS on the path.
+
+Modifications of the SCION address header can be discovered by the destination endpoint if the packet is integrity protected (which is currently not supported by SCION).
+
+
+### Off-Path Attacks - Denial of Service
+
+An off-path adversary is located outside of the path between source endpoint and destination endpoint. In SCION, the source endpoint selects the forwarding path in the control plane, and includes it in the header of the data packet to be forwarded. This limits the abilities of an off-path adversary to influence the forwarding in the date plane. The adversary can merely attempt to disrupt the connectivity of the chosen path and force the source endpoint to select a new path. One way to do this is by flooding a link on the path with excessive traffic; that is, performing a volumetric denial of service attack. However, this does not stop the data forwarding: As SCION supports multipath, it is still possible to switch to another, non-congested path. Only in the case of a disruptive last-mile link for which no alternative exists, the data forwarding will be severely frustrated.
+
+SCION also provides protection against so-called reflection-based attacks. Here, the adversary sends high amounts of request packets to a server, but forges the source address of the packets, by replacing its own address with the address of the victim. As servers are unable to distinguish legitimate from spoofed requests, they reply directly to the victim, thus exhausting the connection to the victim. In SCION, however, packets contain the path in their packer header, and response packets are simply returned along this contained path to the actual sender. SCION thus prevents from this kind of DoS attacks.
+
+**Note** that SCION does not protect against two other tyoes of DoS attacks, namely transport protocol attacks and application layer attacks. In the case of a transport protocol attack, the adversary opens a large number of connections in order to exhaust resources on the target server. If an adversary performs an application layer attack, it overloads or crashes the target application with a large volume of or specially crafted application-layer requests, such as HTTP floods. As these attacks take place in the transport layer or application layer, respectively, and not the network layer, they are out of SCION's scope.
 
 
 # IANA Considerations
 
-TODO IANA considerations.
+This document has no IANA actions.
+
+The SCION AS and ISD number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)). This task is currently being transitioned from Anapaya to the SCION Association.
 
 
 --- back
@@ -1355,7 +1449,7 @@ TODO IANA considerations.
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Jean-Christophe Hugly (SCION Association), and Samuel Hitz (Anapaya) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), and Jean-Christophe Hugly (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Assigned SCION Protocol Numbers {#protnum}
