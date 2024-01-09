@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-07T00:00:54.396521+00:00",
+  "timestamp": "2024-01-09T00:01:02.461634+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -47,9 +47,86 @@
       "name": "wontfix",
       "description": "This will not be worked on",
       "color": "ffffff"
+    },
+    {
+      "name": "Prio 1",
+      "description": "",
+      "color": "B60205"
+    },
+    {
+      "name": "Prio 2",
+      "description": "",
+      "color": "FBCA04"
+    },
+    {
+      "name": "Prio 3",
+      "description": "",
+      "color": "0E8A16"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 3,
+      "id": "I_kwDOKYa77857ZMR9",
+      "title": "Language: MAC v.s. MAC",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/3",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "We should only use MAC with one meaning, not with two at the same time\r\n\r\n(Moved from https://github.com/scionassociation/standards/issues/98)\r\n",
+      "createdAt": "2024-01-08T10:54:38Z",
+      "updatedAt": "2024-01-08T10:54:55Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOKYa77857aD1Z",
+      "title": "Write IANA Considerations Section",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/4",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "nicorusti",
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "See [RFC 8126](https://www.rfc-editor.org/rfc/rfc8126.html)\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/100)\r\n",
+      "createdAt": "2024-01-08T13:10:11Z",
+      "updatedAt": "2024-01-08T13:10:11Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOKYa77857aTh_",
+      "title": "Unaddressed Feedback from Reviews",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/5",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "General feedback Eliot: \r\n- [ ] Make sure the references are correct:\r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n- [ ] Make sure MUST/MAY/SHOULD are used correctly (see also [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)): \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", Eliot is not a big fan of it\r\n- [ ] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n\r\nFeedback Juan: \r\n- [ ] Explain\u00a0how to calculate the length in bytes of the `ExtLen` field in the SCION Hop-by-Hop/End-to-End Options header (extension\u00a0header of a SCION path header).\r\n- [ ] Explain why any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation should use a pseudo header.\r\n- [ ] Simplify the \"Life of a packet\" figure, e.g., by removing all the IP addresses and listing them in a table instead, and/or having just numbers/letters as interface IDs.\r\n",
+      "createdAt": "2024-01-08T13:45:04Z",
+      "updatedAt": "2024-01-08T13:45:05Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": [
     {
       "number": 1,
@@ -97,6 +174,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOKYa7785jdf0M",
+      "title": "Disambiguate the use of \"MAC\".",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/2",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses: https://github.com/scionassociation/standards/issues/98\r\nFixes #3 ",
+      "createdAt": "2024-01-08T10:36:53Z",
+      "updatedAt": "2024-01-08T10:55:46Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "073bb9dc17536680feaa5488bb5e1f043ba6a747",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "fix_MAC",
+      "headRefOid": "2d20e1a078c857463c3c1a9ed8b175a448347324",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
