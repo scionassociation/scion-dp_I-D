@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-11T00:00:46.188995+00:00",
+  "timestamp": "2024-01-14T00:00:48.360946+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -102,9 +102,17 @@
       ],
       "body": "See [RFC 8126](https://www.rfc-editor.org/rfc/rfc8126.html)\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/100)\r\n",
       "createdAt": "2024-01-08T13:10:11Z",
-      "updatedAt": "2024-01-08T13:10:11Z",
+      "updatedAt": "2024-01-11T15:44:33Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "NONE",
+          "body": "For the data plane, I think we have the following IANA considerations to address:\r\n- Informational: The fact that we mirror the UDP port space into the SCION/UDP port space; so inherit all assignments and reservations; so no IANA action required to manage the SCION/UDP port space itself.\r\n- The dispatcher/shim SCION/UDP port at 30041, which by virtue of the mirroring needs that the UDP port 30041 be a reserved port.\r\n- The assignment of ISD and AS numbers.\r\n- The registration of Service Numbers (for Service addresses).\r\n- The registration of Transport Protocols over SCION.\r\n\r\nAll other port numbers are supposedly configurable by peer-peer agreement or are AS internal concerns, so I think they do not need any IANA arbitration. However, I would prefer some IETF expert advice on that because I do not know how acceptable it is is to assume agreed-upon ports in the User range without reservation as part of an RFC published protocol.\r\n\r\nRegarding port 30041, it is a dependency of our UDP/IP underlay network. Technically that's not part of the dataplane spec, however, the spec does mention the underlay network and it is rather hypocritical to pretend that it is out of scope. There's no interoperability between two ASes without a common underlay implementation. Nico: should we not add a section to the spec that explicitly describes the current UDP/IP encapsulation as one standard link layer for SCION?\r\n\r\nRegarding the ISD/AS numbers, I am unsure how much IANA needs to be involved, given that we plan for the association to manage the registry. I found RFC 8126 quite obscure on that topic, so I would welcome some IETF input on that too before I start writing the section.\r\n\r\nRegarding a Service Number registry. I am not sure we should rush to define one as there are ongoing discussions to eliminate service resolution. Nevertheless, there would likely be some alternate mechanism to designate \"anycast\r\naddressed\" services so some kind of registry would be needed. Opinions?\r\n\r\nRegarding protocol numbers, we do mention that we attempt to mirror the assigned protocol numbers for IP. I think we must make a clearer statement: inherit and extend the IP assignments, and create our own registry. This would enable a seamless transition if we ever manage to deploy SCION as an IP alternative/extension. What that requires is that the 200-2003 protocols be registered in the IP protocol space as well, to ensure they remain available for such usage.\r\n\r\n",
+          "createdAt": "2024-01-11T13:26:34Z",
+          "updatedAt": "2024-01-11T15:44:33Z"
+        }
+      ]
     },
     {
       "number": 5,
@@ -194,6 +202,32 @@
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "fix_MAC",
       "headRefOid": "2d20e1a078c857463c3c1a9ed8b175a448347324",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOKYa7785j6FWC",
+      "title": "Use \"MUST/SHOULD/MAY\" in more systematic manner",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/6",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Per rfc2119\r\n",
+      "createdAt": "2024-01-12T10:24:30Z",
+      "updatedAt": "2024-01-12T10:24:45Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "073bb9dc17536680feaa5488bb5e1f043ba6a747",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "must_should_may",
+      "headRefOid": "594d174c8384d0601c90498ee4e59c9bcd08bbc2",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
