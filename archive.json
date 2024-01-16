@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-01-14T00:00:48.360946+00:00",
+  "timestamp": "2024-01-16T00:00:48.088069+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -143,7 +143,7 @@
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/1",
       "state": "OPEN",
       "author": "cdekater",
-      "authorAssociation": "COLLABORATOR",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
