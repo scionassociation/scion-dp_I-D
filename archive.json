@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-22T00:00:42.893570+00:00",
+  "timestamp": "2024-02-25T00:00:57.562308+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -239,7 +239,7 @@
       "labels": [],
       "body": "Addresses: https://github.com/scionassociation/standards/issues/98\r\nFixes #3 ",
       "createdAt": "2024-01-08T10:36:53Z",
-      "updatedAt": "2024-01-08T10:55:46Z",
+      "updatedAt": "2024-02-22T16:53:15Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "073bb9dc17536680feaa5488bb5e1f043ba6a747",
@@ -251,7 +251,21 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7785xCEPi",
+          "commit": {
+            "abbreviatedOid": "2d20e1a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2024-02-22T16:53:15Z",
+          "updatedAt": "2024-02-22T16:53:15Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 6,
