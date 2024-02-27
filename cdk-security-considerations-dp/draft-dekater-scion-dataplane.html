@@ -1246,7 +1246,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-security-risks-in-regard-to" class="internal xref">Security Risks in Regard to Path Authorization</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-path-authorization-3" class="internal xref">Path Authorization</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
                     <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-crafting-unauthorized-hop-f" class="internal xref">Crafting Unauthorized Hop Fields</a></p>
@@ -1263,10 +1263,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-other-data-plane-security-r" class="internal xref">Other Data-Plane Security Risks</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.1">
-                    <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-on-path-attacks" class="internal xref">On-Path Attacks</a></p>
+                    <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-on-path-adversary" class="internal xref">On-Path Adversary</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.2">
-                    <p id="section-toc.1-1.5.2.2.2.2.1"><a href="#section-5.2.2" class="auto internal xref">5.2.2</a>.  <a href="#name-off-path-attacks-denial-of-" class="internal xref">Off-Path Attacks - Denial of Service</a></p>
+                    <p id="section-toc.1-1.5.2.2.2.2.1"><a href="#section-5.2.2" class="auto internal xref">5.2.2</a>.  <a href="#name-off-path-attacks-volumetric" class="internal xref">Off-Path Attacks - Volumetric Denial of Service</a></p>
 </li>
                 </ul>
 </li>
@@ -3289,12 +3289,12 @@ MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field represen
       </h2>
 <p id="section-5-1">This section describes the possible security risks and attacks that SCION's data plane may be prone to, and how these attacks may be mitigated. It first discusses security risks that pertain to path authorization, followed by a section on all other data-plane security risks.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2"><strong>Note:</strong> This section only discusses SCION data plane- and forwarding-specific security considerations. For security considerations related to the SCION control-plane PKI, see <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>. <span>[<a href="#I-D.scion-cp" class="cite xref">I-D.scion-cp</a>]</span> includes security considerations that concern the SCION control plane and routing.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<div id="security-risks-in-regard-to-path-authorization">
+<div id="path-authorization-1">
 <section id="section-5.1">
-        <h3 id="name-security-risks-in-regard-to">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-security-risks-in-regard-to" class="section-name selfRef">Security Risks in Regard to Path Authorization</a>
+        <h3 id="name-path-authorization-3">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-path-authorization-3" class="section-name selfRef">Path Authorization</a>
         </h3>
-<p id="section-5.1-1">A central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's answers to these attacks. The following attacks are imaginable:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">A central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's prevention mechanisms to these attacks. The following attacks are imaginable:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1-2.1">
             <p id="section-5.1-2.1.1">Crafting unauthorized hop fields (see <a href="#crafting" class="auto internal xref">Section 5.1.1</a>),<a href="#section-5.1-2.1.1" class="pilcrow">¶</a></p>
@@ -3311,9 +3311,9 @@ MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field represen
           <h4 id="name-crafting-unauthorized-hop-f">
 <a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-crafting-unauthorized-hop-f" class="section-name selfRef">Crafting Unauthorized Hop Fields</a>
           </h4>
-<p id="section-5.1.1-1">Hop fields are protected with MACs. To be able to craft and misuse unauthorized hop fields, an adversary must therefore either determine the MAC's key or crack the underlying MAC algorithm.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-2">To determine an unknown MAC key, the adversary may perform a brute-force attack. Candidate keys can be validated by checking the MAC contained in sample hop fields. But as SCION uses 128-bit keys by default, such an off-line attack is computationally infeasible in practice. Another obstacle to adversaries is the short life of the keys for MAC computation, with a validity period of 24 hours.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-3">However, ASes do not have to apply the algorithm used by SCION to compute the hop field MAC. As a hop field’s MAC is only checked by the AS that created it, ASes are free to choose the MAC schemes they prefer. As a consequence, an AS may use an own MAC scheme including an algorithm that is weak or insecure. In this case, a brute-force attack to determine the MAC's key may succeed. On the other hand, ASes can always quickly switch to a secure algorithm without the need for coordination with other ASes.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-1">Hop fields are protected with MACs, that are computed using a forwarding key shared across SCION routers within each AS. To be able to craft and misuse unauthorized hop fields, an adversary must therefore either obtain the AS forwarding key or crack the underlying MAC algorithm.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-2">To determine an unknown forwarding key, the adversary may perform a brute-force attack. Candidate keys can be validated by checking the MAC contained in sample hop fields. But as SCION uses 128-bit keys by default, such an off-line attack is computationally infeasible in practice. Another obstacle to adversaries is the short life of the keys for MAC computation, with a validity period of 24 hours.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-3">In addition, MAC algorithm can be freely chosen by each ASes, enabling algorithmic agility for MAC computations. Should a certain MAC algorithm be discovered to be weak or insecure, each AS can quickly switch to a secure algorithm without the need for coordination with other ASes.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-4">As a second method to break a MAC, an adversary might attempt to directly brute-force the MAC itself. This requires an online attack: The adversary needs to send one packet per guess for verification. For a 6-byte MAC, the adversary would need to try 2<sup>47</sup> (~140 trillion) different MACs to successfully forge the MAC of a single hop field. Moreover, for each incorrect hop field, the corresponding AS will return an error message, such as a SCMP packet (SCION Control Message Protocol). As a consequence, each incorrect guess will be visible to a monitoring entity. Thus, the attack can be easily detected.<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-5">In all cases, <em>if</em> an online brute-force attack succeeds, the obtained hop field can be reused until its eventual expiration.<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
 </section>
@@ -3342,13 +3342,13 @@ MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field represen
         <h3 id="name-other-data-plane-security-r">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-other-data-plane-security-r" class="section-name selfRef">Other Data-Plane Security Risks</a>
         </h3>
-<p id="section-5.2-1">Besides trying to violate the path authorization property, adversaries can also attempt to manipulate the forwarding process itself. The adversary can be either off- or on-path. Both cases are described here.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<div id="on-path-attacks">
+<p id="section-5.2-1">Besides trying to violate the path authorization property, adversaries can also attempt to manipulate the forwarding process itself to hijack traffic onto a path that is different from the intended forwarding path selected by the source endpoint. The adversary can be either off- or on-path. Both cases are described here.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<div id="on-path-adversary">
 <section id="section-5.2.1">
-          <h4 id="name-on-path-attacks">
-<a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-on-path-attacks" class="section-name selfRef">On-Path Attacks</a>
+          <h4 id="name-on-path-adversary">
+<a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-on-path-adversary" class="section-name selfRef">On-Path Adversary</a>
           </h4>
-<p id="section-5.2.1-1">In the case of an on-path attack, the attacker sits in the middle of the path between the source endpoint and the destination endpoint and is able to intercept the data packets that are being forwarded. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, thus forcing the packets to travel along paths that may bring the attacker specific advantages. The following subsections provide more details on this kind of on-path data plane attacks.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.1-1">When an adversary sits on the path between the source and destination endpoint, it is able to intercept the data packets that are being forwarded. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, thus forcing the packets to travel along paths that may bring the attacker specific advantages. The following subsections provide more details on this kind of on-path data plane attacks.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.2.1-2">Also in SCION, an on-path adversary can always simply drop packets. This kind of attack is fundamental and generally cannot be prevented.<a href="#section-5.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.2.1-3"><strong>Note:</strong><br>
 For more information on the SCION path header, see <a href="#path-header" class="auto internal xref">Section 2.2.3</a>.<br>
@@ -3375,10 +3375,10 @@ For more information on the SCION address header, see <a href="#address-header" 
 </div>
 </section>
 </div>
-<div id="off-path-attacks-denial-of-service">
+<div id="off-path-attacks-volumetric-denial-of-service">
 <section id="section-5.2.2">
-          <h4 id="name-off-path-attacks-denial-of-">
-<a href="#section-5.2.2" class="section-number selfRef">5.2.2. </a><a href="#name-off-path-attacks-denial-of-" class="section-name selfRef">Off-Path Attacks - Denial of Service</a>
+          <h4 id="name-off-path-attacks-volumetric">
+<a href="#section-5.2.2" class="section-number selfRef">5.2.2. </a><a href="#name-off-path-attacks-volumetric" class="section-name selfRef">Off-Path Attacks - Volumetric Denial of Service</a>
           </h4>
 <p id="section-5.2.2-1">An off-path adversary is located outside of the path between source endpoint and destination endpoint. In SCION, the source endpoint selects the forwarding path in the control plane, and includes it in the header of the data packet to be forwarded. This limits the abilities of an off-path adversary to influence the forwarding in the data plane. The adversary can merely attempt to disrupt the connectivity of the chosen path and force the source endpoint to select a new path. One way to do this is by flooding a link on the path with excessive traffic; that is, performing a volumetric denial of service attack. However, this does not stop the data forwarding: As SCION supports multipath, it is still possible to switch to another, non-congested path. Only in the case of a disruptive last-mile link for which no alternative exists, the data forwarding will be severely frustrated.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2.2-2">SCION also provides protection against so-called reflection-based attacks. Here, the adversary sends high amounts of request packets to a server, but forges the source address of the packets by replacing its own address with the address of the victim. As servers are unable to distinguish legitimate from spoofed requests, they reply directly to the victim, thus exhausting the connection to the victim. In SCION, however, packets contain the path in their packer header, and response packets are simply returned along this contained path to the actual sender. SCION thus prevents from this kind of DoS attacks.<a href="#section-5.2.2-2" class="pilcrow">¶</a></p>
