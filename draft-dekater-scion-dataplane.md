@@ -1360,9 +1360,9 @@ This section describes the possible security risks and attacks that SCION's data
 **Note:** This section only discusses SCION data plane- and forwarding-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-cp}} includes security considerations that concern the SCION control plane and routing.
 
 
-## Security Risks in Regard to Path Authorization
+## Path Authorization
 
-A central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's answers to these attacks. The following attacks are imaginable:
+A central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's prevention mechanisms to these attacks. The following attacks are imaginable:
 
 - Crafting unauthorized hop fields (see [](#crafting)),
 - modifying the validity period of a path segment (see [](#mod-validity)), or
@@ -1371,11 +1371,11 @@ A central property of the SCION path-aware data plane is path authorization. Pat
 
 ### Crafting Unauthorized Hop Fields {#crafting}
 
-Hop fields are protected with MACs. To be able to craft and misuse unauthorized hop fields, an adversary must therefore either determine the MAC's key or crack the underlying MAC algorithm.
+Hop fields are protected with MACs, that are computed using a forwarding key shared across SCION routers within each AS. To be able to craft and misuse unauthorized hop fields, an adversary must therefore either obtain the AS forwarding key or crack the underlying MAC algorithm.
 
-To determine an unknown MAC key, the adversary may perform a brute-force attack. Candidate keys can be validated by checking the MAC contained in sample hop fields. But as SCION uses 128-bit keys by default, such an off-line attack is computationally infeasible in practice. Another obstacle to adversaries is the short life of the keys for MAC computation, with a validity period of 24 hours.
+To determine an unknown forwarding key, the adversary may perform a brute-force attack. Candidate keys can be validated by checking the MAC contained in sample hop fields. But as SCION uses 128-bit keys by default, such an off-line attack is computationally infeasible in practice. Another obstacle to adversaries is the short life of the keys for MAC computation, with a validity period of 24 hours.
 
-However, ASes do not have to apply the algorithm used by SCION to compute the hop field MAC. As a hop field’s MAC is only checked by the AS that created it, ASes are free to choose the MAC schemes they prefer. As a consequence, an AS may use an own MAC scheme including an algorithm that is weak or insecure. In this case, a brute-force attack to determine the MAC's key may succeed. On the other hand, ASes can always quickly switch to a secure algorithm without the need for coordination with other ASes.
+In addition, MAC algorithm can be freely chosen by each ASes, enabling algorithmic agility for MAC computations. Should a certain MAC algorithm be discovered to be weak or insecure, each AS can quickly switch to a secure algorithm without the need for coordination with other ASes.
 
 As a second method to break a MAC, an adversary might attempt to directly brute-force the MAC itself. This requires an online attack: The adversary needs to send one packet per guess for verification. For a 6-byte MAC, the adversary would need to try 2<sup>47</sup> (~140 trillion) different MACs to successfully forge the MAC of a single hop field. Moreover, for each incorrect hop field, the corresponding AS will return an error message, such as a SCMP packet (SCION Control Message Protocol). As a consequence, each incorrect guess will be visible to a monitoring entity. Thus, the attack can be easily detected.
 
@@ -1396,12 +1396,12 @@ In a path-splicing attack, an adversary (either controlling an AS or an endpoint
 
 ## Other Data-Plane Security Risks
 
-Besides trying to violate the path authorization property, adversaries can also attempt to manipulate the forwarding process itself. The adversary can be either off- or on-path. Both cases are described here.
+Besides trying to violate the path authorization property, adversaries can also attempt to manipulate the forwarding process itself to hijack traffic onto a path that is different from the intended forwarding path selected by the source endpoint. The adversary can be either off- or on-path. Both cases are described here.
 
 
-### On-Path Attacks
+### On-Path Adversary
 
-In the case of an on-path attack, the attacker sits in the middle of the path between the source endpoint and the destination endpoint and is able to intercept the data packets that are being forwarded. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, thus forcing the packets to travel along paths that may bring the attacker specific advantages. The following subsections provide more details on this kind of on-path data plane attacks.
+When an adversary sits on the path between the source and destination endpoint, it is able to intercept the data packets that are being forwarded. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, thus forcing the packets to travel along paths that may bring the attacker specific advantages. The following subsections provide more details on this kind of on-path data plane attacks.
 
 Also in SCION, an on-path adversary can always simply drop packets. This kind of attack is fundamental and generally cannot be prevented.
 
@@ -1428,7 +1428,7 @@ Besides modifying the SCION path header, an on-path adversary can also modify th
 Modifications of the SCION address header can be discovered by the destination endpoint if the packet is integrity protected (which is currently not supported by SCION).
 
 
-### Off-Path Attacks - Denial of Service
+### Off-Path Attacks - Volumetric Denial of Service
 
 An off-path adversary is located outside of the path between source endpoint and destination endpoint. In SCION, the source endpoint selects the forwarding path in the control plane, and includes it in the header of the data packet to be forwarded. This limits the abilities of an off-path adversary to influence the forwarding in the data plane. The adversary can merely attempt to disrupt the connectivity of the chosen path and force the source endpoint to select a new path. One way to do this is by flooding a link on the path with excessive traffic; that is, performing a volumetric denial of service attack. However, this does not stop the data forwarding: As SCION supports multipath, it is still possible to switch to another, non-congested path. Only in the case of a disruptive last-mile link for which no alternative exists, the data forwarding will be severely frustrated.
 
