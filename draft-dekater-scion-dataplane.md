@@ -1362,7 +1362,7 @@ This section describes the possible security risks and attacks that SCION's data
 
 ## Security Risks in Regard to Path Authorization
 
-A central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along paths segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's answers to these attacks. The following attacks are imaginable:
+A central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's answers to these attacks. The following attacks are imaginable:
 
 - Crafting unauthorized hop fields (see [](#crafting)),
 - modifying the validity period of a path segment (see [](#mod-validity)), or
@@ -1371,7 +1371,7 @@ A central property of the SCION path-aware data plane is path authorization. Pat
 
 ### Crafting Unauthorized Hop Fields {#crafting}
 
-Hop fields are protected with MACs. To be able to craft and misuse unauthorized hop fields, an adversary must therefore either determine the MAC's key or try to break the MAC directly.
+Hop fields are protected with MACs. To be able to craft and misuse unauthorized hop fields, an adversary must therefore either determine the MAC's key or crack the underlying MAC algorithm.
 
 To determine an unknown MAC key, the adversary may perform a brute-force attack. Candidate keys can be validated by checking the MAC contained in sample hop fields. But as SCION uses 128-bit keys by default, such an off-line attack is computationally infeasible in practice. Another obstacle to adversaries is the short life of the keys for MAC computation, with a validity period of 24 hours.
 
@@ -1430,11 +1430,11 @@ Modifications of the SCION address header can be discovered by the destination e
 
 ### Off-Path Attacks - Denial of Service
 
-An off-path adversary is located outside of the path between source endpoint and destination endpoint. In SCION, the source endpoint selects the forwarding path in the control plane, and includes it in the header of the data packet to be forwarded. This limits the abilities of an off-path adversary to influence the forwarding in the date plane. The adversary can merely attempt to disrupt the connectivity of the chosen path and force the source endpoint to select a new path. One way to do this is by flooding a link on the path with excessive traffic; that is, performing a volumetric denial of service attack. However, this does not stop the data forwarding: As SCION supports multipath, it is still possible to switch to another, non-congested path. Only in the case of a disruptive last-mile link for which no alternative exists, the data forwarding will be severely frustrated.
+An off-path adversary is located outside of the path between source endpoint and destination endpoint. In SCION, the source endpoint selects the forwarding path in the control plane, and includes it in the header of the data packet to be forwarded. This limits the abilities of an off-path adversary to influence the forwarding in the data plane. The adversary can merely attempt to disrupt the connectivity of the chosen path and force the source endpoint to select a new path. One way to do this is by flooding a link on the path with excessive traffic; that is, performing a volumetric denial of service attack. However, this does not stop the data forwarding: As SCION supports multipath, it is still possible to switch to another, non-congested path. Only in the case of a disruptive last-mile link for which no alternative exists, the data forwarding will be severely frustrated.
 
-SCION also provides protection against so-called reflection-based attacks. Here, the adversary sends high amounts of request packets to a server, but forges the source address of the packets, by replacing its own address with the address of the victim. As servers are unable to distinguish legitimate from spoofed requests, they reply directly to the victim, thus exhausting the connection to the victim. In SCION, however, packets contain the path in their packer header, and response packets are simply returned along this contained path to the actual sender. SCION thus prevents from this kind of DoS attacks.
+SCION also provides protection against so-called reflection-based attacks. Here, the adversary sends high amounts of request packets to a server, but forges the source address of the packets by replacing its own address with the address of the victim. As servers are unable to distinguish legitimate from spoofed requests, they reply directly to the victim, thus exhausting the connection to the victim. In SCION, however, packets contain the path in their packer header, and response packets are simply returned along this contained path to the actual sender. SCION thus prevents from this kind of DoS attacks.
 
-**Note** that SCION does not protect against two other tyoes of DoS attacks, namely transport protocol attacks and application layer attacks. In the case of a transport protocol attack, the adversary opens a large number of connections in order to exhaust resources on the target server. If an adversary performs an application layer attack, it overloads or crashes the target application with a large volume of or specially crafted application-layer requests, such as HTTP floods. As these attacks take place in the transport layer or application layer, respectively, and not the network layer, they are out of SCION's scope.
+**Note** that SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. In the case of a transport protocol attack, the adversary opens a large number of connections in order to exhaust resources on the target server. If an adversary performs an application layer attack, it overloads or crashes the target application with a large volume of, or specially crafted application-layer requests such as HTTP floods. As these attacks take place in the transport layer or application layer rather than the network layer, they are out of SCION's scope.
 
 
 # IANA Considerations
