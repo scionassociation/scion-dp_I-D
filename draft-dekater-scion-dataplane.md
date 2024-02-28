@@ -1430,7 +1430,7 @@ SCION's path-awareness limits the abilities of an off-path adversary to influenc
 
 SCION also provides protection against so-called reflection-based attacks. Here, the adversary sends high amounts of request packets to a server, but forges the source address of the packets with the address of the victim, triggering the server to send a reply to the victim. In SCION, however, packets contain the path in their packer header, and response packets are simply returned along this contained path to the actual sender. SCION thus prevents from this kind of DoS attacks.
 
-**Note** that SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope. However, the additional information contained in the SCION header enables more targeted filtering, e.g., by ISD, AS or path length. 
+**Note** that SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope. However, the additional information contained in the SCION header enables more targeted filtering, e.g., by ISD, AS or path length.
 
 
 # IANA Considerations
