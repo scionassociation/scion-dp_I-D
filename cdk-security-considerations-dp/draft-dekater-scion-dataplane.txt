@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 30 August 2024                                          S. Hitz
+Expires: 31 August 2024                                          S. Hitz
                                                          Anapaya Systems
-                                                        27 February 2024
+                                                        28 February 2024
 
 
                             SCION Data Plane
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 August 2024.
+   This Internet-Draft will expire on 31 August 2024.
 
 Copyright Notice
 
@@ -2299,10 +2299,10 @@ direction
 
    To determine an unknown forwarding key, the adversary may perform a
    brute-force attack.  Candidate keys can be validated by checking the
-   MAC contained in sample hop fields.  But as SCION uses 128-bit keys
-   by default, such an off-line attack is computationally infeasible in
-   practice.  Another obstacle to adversaries is the short life of the
-   keys for MAC computation, with a validity period of 24 hours.
+   MAC contained in sample hop fields.  Current implementations use
+   128-bit keys by default, so that such an off-line attack is
+   computationally infeasible in practice.  In addition, an AS can
+   optionally rotate its forwarding key.
 
    In addition, MAC algorithm can be freely chosen by each ASes,
    enabling algorithmic agility for MAC computations.  Should a certain
@@ -2315,14 +2315,9 @@ direction
    The adversary needs to send one packet per guess for verification.
    For a 6-byte MAC, the adversary would need to try 2^47 (~140
    trillion) different MACs to successfully forge the MAC of a single
-   hop field.  Moreover, for each incorrect hop field, the corresponding
-   AS will return an error message, such as a SCMP packet (SCION Control
-   Message Protocol).  As a consequence, each incorrect guess will be
-   visible to a monitoring entity.  Thus, the attack can be easily
-   detected.
-
-   In all cases, _if_ an online brute-force attack succeeds, the
-   obtained hop field can be reused until its eventual expiration.
+   hop field.  In the unlikely case that an online brute-force attack
+   succeeds, the obtained hop field can be reused until its eventual
+   expiration.
 
 5.1.2.  Modifying the Validity Period
 
@@ -2334,10 +2329,9 @@ direction
 
    An adversary could try to manipulate the timestamp, in order to
    modify the validity period of the hop fields within a path segment.
-   However, SCION offers a protection against this kind of attack: As
-   both the timestamp and the expiry time build the input for the
-   calculation of a hop field's MAC, an unauthorized change of the
-   timestamp will invalidate the MAC, and will therefore not pass
+   However, as both the timestamp and the expiry time build the input
+   for the calculation of a hop field's MAC, an unauthorized change of
+   the timestamp will invalidate the MAC, and will therefore not pass
    unnoticed.
 
 5.1.3.  Path Splicing
@@ -2351,8 +2345,7 @@ direction
 
 5.2.  Other Data-Plane Security Risks
 
-   Besides trying to violate the path authorization property,
-   adversaries can also attempt to manipulate the forwarding process
+   Adversaries can also attempt to manipulate the forwarding process
    itself to hijack traffic onto a path that is different from the
    intended forwarding path selected by the source endpoint.  The
    adversary can be either off- or on-path.  Both cases are described
@@ -2370,6 +2363,8 @@ direction
 
    Also in SCION, an on-path adversary can always simply drop packets.
    This kind of attack is fundamental and generally cannot be prevented.
+   However, in this case, the endpoint can use SCION's path-awareness to
+   immediately select an alternate path if available.
 
    *Note:*
    For more information on the SCION path header, see Section 2.2.3.
@@ -2378,29 +2373,27 @@ direction
 5.2.1.1.  Modification of the Path Header
 
    It is possible for an on-path adversary to modify the SCION path
-   header of a packet, and replace (parts of) path segments with
-   different segments.  The only restriction is that the path after the
-   adversary needs to include authorized segments, as otherwise the
-   packet would be simply dropped at some point.  But the already
-   traversed portion of the current segment and past segments can be
-   modified by the adversary in a completely arbitrary manner (for
-   instance, deleting and adding valid and invalid hop fields).
+   header of a packet, and replace the remaining part of path segments
+   to the destination with different segments.  Such replaced segments
+   must include authorized segments, as otherwise the packet would be
+   simply dropped at some point.  The already traversed portion of the
+   current segment and past segments can be modified by the adversary in
+   a completely arbitrary manner (for instance, deleting and adding
+   valid and invalid hop fields).  On reply packets from the
+   destination, the adversary can transparently revert the changes to
+   the path header again.  For instance, if an adversary M is an
+   intermediate AS on the path of a packet from A to B, then M can
+   replace the packet’s past path (leading up to, but not including M).
+   The new path may not be a valid end-to-end path.  However, when B
+   reverses the path and sends a reply packet, that packet would go via
+   M, which can then transparently change the invalid path back to the
+   valid path to A.
 
-   On replies by the destination, the adversary can transparently revert
-   the changes to the path header again.  For instance, if an adversary
-   M is an intermediate AS on the path of a packet from A to B, then M
-   can replace the packet’s past path (leading up to, but not including
-   M).  The new path may not be a valid end-to-end path.  However, when
-   B reverses the path and sends a reply packet, that packet would go
-   via M, which can then transparently change the invalid path back to
-   the valid path to A.
-
-   The destination endpoint may only discover such path header
-   modifications if some kind of packet integrity protection is in
-   place.  In this case, the receiving endpoint verifies that a packet,
-   including its path, is the same as the one sent by the source
-   endpoint.  However, SCION currently does not provide this type of
-   protection.
+   Currently, SCION as described in this document does not provide this
+   type of protection.  Endpoints may optionally uses the SCION Packet
+   Authentication Option (SPAO) extension that provides integrity
+   protection for the path header, allowing detection of such attack.
+   This extension is described in [CHUAT22].
 
    Moreover, packet integrity protection is not enough if there are two
    colluding adversaries on the path.  These colluding adversaries can
