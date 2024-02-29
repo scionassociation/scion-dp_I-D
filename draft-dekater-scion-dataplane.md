@@ -49,7 +49,7 @@ normative:
   RFC9473:
   I-D.scion-cp:
     title: SCION Control Plane
-    date: 2023
+    date: 2024
     target: https://datatracker.ietf.org/doc/draft-dekater-scion-controlplane/
     author:
       -
@@ -116,7 +116,7 @@ informative:
         org: SCION Association
   I-D.scion-cppki:
     title: SCION Control-Plane PKI
-    date: 2023
+    date: 2024
     target: https://datatracker.ietf.org/doc/draft-dekater-scion-pki/
     author:
       -
@@ -1384,51 +1384,37 @@ As a second method to break a MAC, an adversary might attempt to directly brute-
 
 The metadata for each path segment in a SCION path is stored in the corresponding SCION packet header. It includes a timestamp, which is set by the initiator of the PCB. The expiry time of the hop fields within a path segment is calculated relative to this timestamp (see also [](#scion-path-type)).
 
-An adversary could try to manipulate the timestamp, in order to modify the validity period of the hop fields within a path segment. However, as both the timestamp and the expiry time build the input for the calculation of a hop field's MAC, an unauthorized change of the timestamp will invalidate the MAC, and will therefore not pass unnoticed.
+An adversary could try to manipulate the timestamp, in order to modify the validity period of the hop fields within a path segment. However, as both the timestamp and the expiry time build the input for the calculation of a hop field's MAC, an unauthorized change of the timestamp will invalidate the MAC, and will therefore be detected and render the hop field unusable for forwarding..
 
 
 ### Path Splicing {#path-splicing}
 
-In a path-splicing attack, an adversary (either controlling an AS or an endpoint) takes valid hop fields of multiple path segments and splices them together to obtain a new valid path. However, SCION’s MAC-chaining mechanism prevents from this kind of attacks and makes it impossible to combine hop fields of multiple segments. For details, see [](#auth-chained-macs).
+In a path-splicing attack, an adversary source endpoint takes valid hop fields of multiple path segments and splices them together to obtain a new unauthorized path. However, SCION’s MAC-chaining mechanism prevents from this kind of attacks. MAC validation for spliced segments would fail at SCION routers and the corresponding packets would be dropped. For details, see [](#auth-chained-macs).
 
 
-## Other Data-Plane Security Risks
+## On-Path Adversary
 
-Adversaries can also attempt to manipulate the forwarding process itself to hijack traffic onto a path that is different from the intended forwarding path selected by the source endpoint. The adversary can be either off- or on-path. Both cases are described here.
+When an adversary sits on the path between the source and destination endpoint, it is able to intercept the data packets that are being forwarded. This would allow the adversary to hijack traffic onto a path that is different from the intended one selected by the source endpoint. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header. The following subsections provide more details on this kind of on-path data plane attacks.
 
-
-### On-Path Adversary
-
-When an adversary sits on the path between the source and destination endpoint, it is able to intercept the data packets that are being forwarded. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, thus forcing the packets to travel along paths that may bring the attacker specific advantages. The following subsections provide more details on this kind of on-path data plane attacks.
-
-Also in SCION, an on-path adversary can always simply drop packets. This kind of attack is fundamental and generally cannot be prevented. However, in this case, the endpoint can use SCION's path-awareness to immediately select an alternate path if available.
-
-**Note:**<br>
-For more information on the SCION path header, see [](#path-header).<br>
-For more information on the SCION address header, see [](#address-header).
+Also in SCION, an on-path adversary can always simply drop the packets. This kind of attack is fundamental and generally cannot be prevented. However, in this case, the endpoint can use SCION's path-awareness to immediately select an alternate path if available.
+TODO: ON path-adversary can also modify the payload or the endpoint address header. We should mention this too, as vanilla SCION does not provide integrity check nor encryption.
 
 
-#### Modification of the Path Header
+### Modification of the Path Header
 
-It is possible for an on-path adversary to modify the SCION path header of a packet, and replace the remaining part of path segments  to the destination with different segments. Such replaced segments must include authorized segments, as otherwise the packet would be simply dropped at some point. The already traversed portion of the current segment and past segments can be modified by the adversary in a completely arbitrary manner (for instance, deleting and adding valid and invalid hop fields). On reply packets from the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M). The new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M, which can then transparently change the invalid path back to the valid path to A.
+It is possible for an on-path adversary to modify the SCION path header of a packet, and replace the remaining part of path segments to the destination with different segments. Such replaced segments must include authorized segments, as otherwise the packet would be simply dropped at some point. The already traversed portion of the current segment and past segments can be modified by the adversary in a completely arbitrary manner (for instance, deleting and adding valid and invalid hop fields). On reply packets from the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M). The new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M, which can then transparently change the invalid path back to the valid path to A.
 
-Currently, SCION as described in this document does not provide this type of protection. Endpoints may optionally uses the SCION Packet Authentication Option (SPAO) extension that provides integrity protection for the path header, allowing detection of such attack. This extension is described in [CHUAT22].
-
-Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. To prevent this attack and to defend against multiple on-path adversaries in general, path validation is required (which is currently not supported by SCION).
+Modifications of the SCION path header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, loosely analogous to the IPSec Authentication Header, exists for SCION but is out of scope for this document. This is described as the SCION Packet Authentication Option (SPAO) in [CHUAT22].
 
 
-#### Modification of the Address Header
-
-Besides modifying the SCION path header, an on-path adversary can also modify the source and destination addresses in the SCION address header. If an adversary changes the address of the destination endpoint, it needs to modify the "future" path between itself and the new destination accordingly; otherwise the packet would simply be dropped by the last AS on the path.
-
-Modifications of the SCION address header can be discovered by the destination endpoint if the packet is integrity protected (which is currently not supported by SCION).
+Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. To prevent this attack and to defend against multiple on-path adversaries in general, proof of transit is required, which is not in scope for this document.
 
 
-### Off-Path Attacks - Volumetric Denial of Service
+## Off-Path Attacks - Volumetric Denial of Service
 
-SCION's path-awareness limits the abilities of an off-path adversary to influence forwarding in the data plane. An adversary can merely attempt to disrupt the connectivity of the chosen path choosen by an endpoint, and force the source endpoint to select a new path. One way to do this is by flooding a link on the path with excessive traffic; that is, performing a volumetric denial of service attack. Should this happen, the endpoint cna switch to another, non-congested path thanks to multipath, as long as any alternative inter-domain path is available.
+SCION's path-awareness limits the abilities of an off-path adversary to influence forwarding in the data plane. An adversary can merely attempt to disrupt the connectivity of the path chosen by an endpoint, and force the source endpoint to select a new path. One way to do this is by flooding a link on the path with excessive traffic; that is, performing a volumetric denial of service attack. Should this happen, the endpoint can switch to another, non-congested path, as long as any alternative inter-domain path is available.
 
-SCION also provides protection against so-called reflection-based attacks. Here, the adversary sends high amounts of request packets to a server, but forges the source address of the packets with the address of the victim, triggering the server to send a reply to the victim. In SCION, however, packets contain the path in their packer header, and response packets are simply returned along this contained path to the actual sender. SCION thus prevents from this kind of DoS attacks.
+SCION also provides protection against so-called reflection-based attacks. Here, the adversary sends high amounts of request packets to a server, but forges the source address of the packets with the address of the victim, triggering the server to send a reply to the victim. In SCION, however, packets contain the path in their packet header, and response packets are simply returned along this contained path to the actual sender. SCION thus prevents from this kind of DoS attacks.
 
 **Note** that SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope. However, the additional information contained in the SCION header enables more targeted filtering, e.g., by ISD, AS or path length.
 
