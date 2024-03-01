@@ -1074,7 +1074,7 @@ When originating a path-segment construction beacon PCB in the **control plane**
 
 For high-speed packet processing in the **data plane**, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC-chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each (of the up to three) path segments in a path, as a separate, updatable accumulator field `Acc`. The routers update the accumulator field `Acc` by adding/subtracting only a single 16-bit value each.
 
-When combining path segments to create a path to the destination endpoint, the source endpoint MUST also initialize the value of accumulator field `Acc` for each path segment. The `Acc` field MUST contains the correct XOR-sum of the path segment identifier and preceding hop field MACs expected by the first router that is traversed.
+When combining path segments to create a path to the destination endpoint, the source endpoint MUST also initialize the value of accumulator field `Acc` for each path segment. The `Acc` field MUST contain the correct XOR-sum of the path segment identifier and preceding hop field MACs expected by the first router that is traversed.
 
 In the following, the computation of the hop field MAC as well as the accumulator field `Acc` is explained.
 
