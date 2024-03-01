@@ -5,7 +5,7 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 30 August 2024                                 27 February 2024
+Expires: 2 September 2024                                   1 March 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 August 2024.
+   This Internet-Draft will expire on 2 September 2024.
 
 Copyright Notice
 
@@ -371,18 +371,18 @@ Table of Contents
    well as one info field with basic information about the segment, such
    as a timestamp.
 
-   Segments cannot be combined arbitrarily.  The source endpoint that
-   constructs a forwarding path must obey the following rules:
+   Segments cannot be combined arbitrarily.  To construct a valid
+   forwarding path, the source endpoint MUST obey the following rules:
 
    *  There can be at most one of each type of segment (up-, core-, and
       down-segment).  Allowing multiple up- or down-segments would
       decrease efficiency and the ability of ASes to enforce path
       policies.
 
-   *  If an up-segment is present, it must be the first segment in the
+   *  If an up-segment is present, it MUST be the first segment in the
       path.
 
-   *  If a down-segment is present, it must be the last segment in the
+   *  If a down-segment is present, it MUST be the last segment in the
       path.
 
    *  If there are two path segments (one up- and one down-segment) that
@@ -393,12 +393,13 @@ Table of Contents
       share a common ancestor AS (in the direction of beaconing), then a
       shortcut via this common ancestor AS is possible.
 
-   *  Additionally, all segments without any peering possibility need to
+   *  Additionally, all segments without any peering possibility MUST
       consist of at least two hop fields.
 
    *Note:* The type of segment is known to the endpoint but is not
-   visible in the path header of data packets.  A SCION router must
-   therefore explicitly verify that these rules were followed correctly.
+   visible in the path header of data packets.  Therefore, a SCION
+   router needs to explicitly verify that these rules were followed
+   correctly.
 
    Besides enabling the enforcement of path policies, the above rules
    also protect the economic interest of ASes, as they prevent building
@@ -535,7 +536,7 @@ Table of Contents
 2.1.  SCION Packet Header Format
 
    The SCION packet header is composed of a common header, an address
-   header, a path header, and an optional extension header, see Figure 2
+   header, a path header, and an OPTIONAL extension header, see Figure 2
    below.
 
    +--------------------------------------------------------+
@@ -548,7 +549,7 @@ Table of Contents
    |                      Path header                       |
    |                                                        |
    +--------------------------------------------------------+
-   |              Extensions header (optional)              |
+   |               Extension header (optional)              |
    |                                                        |
    +--------------------------------------------------------+
 
@@ -812,7 +813,7 @@ Table of Contents
       segment.  Each info field contains basic information about the
       corresponding segment, such as a timestamp indicating the creation
       time.  There are also two flags.  One specifies whether the
-      segment must be traversed in construction direction, the other
+      segment is to be traversed in construction direction, the other
       whether the first or last hop field in the segment represents a
       peering hop field.
 
@@ -916,7 +917,7 @@ Table of Contents
    *  CurrHF: Specifies a 6-bits index (0-based) pointing to the current
       hop field for the packet on its way through the network.  For
       details, see Section 2.2.3.2.2 below.  Note that the CurrHF index
-      must point to a hop field that is part of the current path
+      MUST point to a hop field that is part of the current path
       segment, as indicated by the CurrINF index.
 
    Both indices are used by SCION routers when forwarding data traffic
@@ -930,12 +931,13 @@ Table of Contents
       segment _i_, and therefore there is no info field _i_.) The
       following rules apply:
 
-      -  The total number of hop fields in an end-to-end path must equal
-         the sum of all Seg{0,1,2}Len contained in this end-to-end path.
+      -  The total number of hop fields in an end-to-end path MUST be
+         equal to the sum of all Seg{0,1,2}Len contained in this end-to-
+         end path.
 
       -  It is an error to have Seg{X}Len > 0 AND Seg{Y}Len == 0, where
          2 >= _X_ > _Y_ >= 0.  That is, if path segment Y is empty, the
-         following path segment X must also be empty.
+         following path segment X MUST also be empty.
 
    *  RSV: Unused and reserved for future use.
 
@@ -1038,7 +1040,7 @@ Table of Contents
    intended will process the request (if the corresponding Router Alert
    flag is set to "1") and reply to it without further forwarding the
    request along the path.  Use cases that require multiple routers/hops
-   on the path to process a packet should instead rely on a hop-by-hop
+   on the path to process a packet have to instead rely on a hop-by-hop
    extension (see Section 2.3).  For general information on router
    alerts, see [RFC2711].
 
@@ -1102,7 +1104,7 @@ Table of Contents
 
    When a destination endpoint receives a SCION packet, it can use the
    path information in the SCION header for sending the reply packets.
-   For this, the destination endpoint must perform the following steps:
+   For this, the destination endpoint MUST perform the following steps:
 
    1.  Reverse the order of the info fields;
 
@@ -1142,7 +1144,7 @@ Table of Contents
       identified by value "201" in the NextHdr field of the SCION common
       header (see Section 2.2.1).
 
-   If both headers are present, the HBH Options header must come before
+   If both headers are present, the HBH Options header MUST come before
    the E2E Options header.
 
    *Note:* The SCION extension headers are defined and used based on and
@@ -1177,7 +1179,7 @@ Table of Contents
       Options header in multiples of 4-bytes minus 1.
 
    *  Options: This is a variable-length field.  The length of this
-      field must be such that the complete length of the Hop-by-Hop/End-
+      field MUST be such that the complete length of the Hop-by-Hop/End-
       to-End Options header is an integer multiple of 4 bytes.  The
       Options field contains one or more Type-Length-Value (TLV) encoded
       options.  For details, see Section 2.3.1.1.
@@ -1231,7 +1233,7 @@ Table of Contents
 
    *  OptData: Variable-length field.  Option-type specific data.
 
-   The options within a header must be processed strictly in the order
+   The options within a header MUST be processed strictly in the order
    they appear in the header.  This is to prevent a receiver from, for
    example, scanning through the header looking for a specific option
    and processing this option prior to all preceding ones.
@@ -1239,7 +1241,7 @@ Table of Contents
    Individual options may have specific alignment requirements, to
    ensure that multibyte values within the OptData fields have natural
    boundaries.  The alignment requirement of an option is specified
-   using the notation "xn+y".  This means that the OptType must appear
+   using the notation "xn+y".  This means that the OptType MUST appear
    at an integer multiple of x bytes from the start of the header, plus
    y bytes.  For example:
 
@@ -1270,7 +1272,7 @@ Table of Contents
 
    The Pad1 option is used to insert 1 byte of padding into the Options
    field of an extension header.  If more than one byte of padding is
-   required, the PadN option should be used, rather than multiple Pad1
+   required, the PadN option SHOULD be used, rather than multiple Pad1
    options.  See the next section for more information on the PadN
    option.
 
@@ -1298,7 +1300,7 @@ Table of Contents
 2.4.1.   Pseudo Header for Upper-Layer Checksum
 
    Any transport or other upper-layer protocol that includes addresses
-   from the SCION header in the checksum computation should use the
+   from the SCION header in the checksum computation MUST use the
    following pseudo header:
 
  0                   1                   2                   3
@@ -1702,11 +1704,11 @@ Table of Contents
    by adding/subtracting only a single 16-bit value each.
 
    When combining path segments to create a path to the destination
-   endpoint, the source endpoint must also initialize the value of
-   accumulator field Acc for each path segment.  This must be done such,
-   that the Acc field contains the correct XOR-sum of the path segment
-   identifier and preceding hop field MACs expected by the first router
-   that is traversed.
+   endpoint, the source endpoint MUST also initialize the value of
+   accumulator field Acc for each path segment.  The Acc field MUST
+   contain the correct XOR-sum of the path segment identifier and
+   preceding hop field MACs expected by the first router that is
+   traversed.
 
    In the following, the computation of the hop field MAC as well as the
    accumulator field Acc is explained.
@@ -1888,15 +1890,15 @@ Table of Contents
    required steps for the source endpoint and each SCION router to
    ensure that a data packet only traverses authorized segments.  The
    chapter first specifies the initialization of a path at the source
-   endpoint, followed by the steps that must be performed by the SCION
-   routers when a data-plane packet traverses an AS on its way to the
+   endpoint, followed by the steps that the SCION routers needs to
+   perform when a data-plane packet traverses an AS on its way to the
    destination.
 
 4.2.1.   Initialization at Source Endpoint
 
-   The source endpoint must initialize a path correctly for the SCION
-   routers to be able to verify the hop fields in the data plane.  To
-   this end, the source endpoint must perform the following steps:
+   The source endpoint needs to initialize a path correctly for the
+   SCION routers to be able to verify the hop fields in the data plane.
+   To this end, the source endpoint MUST perform the following steps:
 
    1.  Combine the preferred end-to-end path from the path segments
        obtained during path lookup.
@@ -1911,21 +1913,21 @@ Table of Contents
    3.  Each 8-byte info field InfoField in the packet header contains
        the updatable Acc field as well as a Peering flag P and a
        Construction Direction flag C (see also Section 2.2.3.2.3).  As a
-       next step in the path initialization process, the source must
+       next step in the path initialization process, the source MUST
        correctly set the flags and the Acc field of all InfoFields
        included in the path, according to the following rules:
 
        *Note:* As already stated above, the type of segment is not
-       visible directly in the forwarding path but must be inferred from
+       visible directly in the forwarding path but can be inferred from
        flags and other information.  See also Section 4.2.2.
 
-       *  The Construction Direction flag C must be set to "1" whenever
+       *  The Construction Direction flag C MUST be set to "1" whenever
           the corresponding segment is traversed in construction
           direction, i.e., for down-path segments and potentially for
-          core-segments.  It must be set to "0" for up-path segments and
+          core-segments.  It MUST be set to "0" for up-path segments and
           "reversed" core-segments.
 
-       *  The Peering flag P must be set to "1" for up- and down-
+       *  The Peering flag P MUST be set to "1" for up- and down-
           segments if, and only if, the path contains a peering hop
           field.
 
@@ -1978,10 +1980,10 @@ Table of Contents
              Section 4.1.1.1 and Section 4.1.1.3.
 
    4.  Besides setting the flags and the Acc field, the source endpoint
-       must also set the pointers in the CurrInf and CurrHF fields of
+       MUST also set the pointers in the CurrInf and CurrHF fields of
        the Path Meta Header PathMetaHdr (see Section 2.2.3.2.1).  As the
        source endpoint builds the starting point of the forwarding, both
-       pointers must be set to "0".
+       pointers MUST be set to "0".
 
 4.2.2.   Processing at Routers
 
@@ -2055,7 +2057,7 @@ direction
 4.2.2.1.  Steps Ingress Border Router
 
    This section describes the steps that a SCION ingress border router
-   must perform when it receives a SCION packet.
+   MUST perform when it receives a SCION packet.
 
    1.  Check that the interface through which the packet was received is
        equal to the ingress interface in the current hop field.
@@ -2079,7 +2081,7 @@ direction
 
           -  *Use case 1*
              The path segment includes *no peering hop field* (P = "0").
-             In this case, the ingress border router must take the
+             In this case, the ingress border router MUST take the
              following step(s):
 
              o  Compute the value of the Accumulator Acc as follows:
@@ -2131,14 +2133,14 @@ direction
              The path segment includes a *peering hop field* (P = "1"),
              but the current hop is *not* the peering hop, that is, the
              current hop field is *not* the _last_ hop field of the
-             segment, seen from the direction of travel - to check
-             whether this is true, look at the value of the current
-             SegLen and other metadata in the path meta header.  In this
-             case, the ingress border router must perform the steps
+             segment, seen from the direction of travel - this can be
+             determined by looking at the value of the current SegLen
+             and other metadata in the path meta header.  In this case,
+             the ingress border router needs to perform the steps
              previously described for the path segment without peering
-             hop field.  However, the border router _must not_ increment
-             CurrInf and CurrHF in the path meta header.  Proceed with
-             step 4.
+             hop field.  However, the border router MUST NOT increment
+             CurrInf and MUST NOT increment CurrHF in the path meta
+             header.  Proceed with step 4.
 
           -  *Use case 3*
              The path segment includes a *peering hop field* (P = "1"),
@@ -2147,7 +2149,7 @@ direction
              hop field of the segment, seen from the direction of travel
              - to find out whether this is true, check the value of the
              current SegLen and other metadata in the path meta header.
-             In this case, the ingress border router must take the
+             In this case, the ingress border router MUST take the
              following step(s):
 
              o  Compute MAC^Peer_i.  For this, use the formula in
@@ -2163,7 +2165,7 @@ direction
                 problem" type of SCMP message.
 
              o  Increment both CurrInf and CurrHF in the path meta
-                header.  Proceed with the next step.
+                header.  Proceed with step 4.
 
    4.  Forward the packet to the egress border router (based on the
        egress interface ID in the current hop field) or to the
@@ -2175,7 +2177,7 @@ direction
 4.2.2.2.  Steps Egress Border Router
 
    This section describes the steps that a SCION egress border router
-   must perform when it receives a SCION packet.
+   MUST perform when it receives a SCION packet.
 
    1.  Parse the SCION packet.
 
@@ -2195,7 +2197,7 @@ direction
           _first_ hop field of the segment, seen from the direction of
           travel.  To check whether this is true, look at the value of
           the current SegLen and other metadata in the path meta header.
-          In this case, the egress border router must take the following
+          In this case, the egress border router MUST take the following
           step(s):
 
           -  Compute MAC^Verify_i over the hop field of the current
@@ -2227,7 +2229,7 @@ direction
           field is the _first_ hop field of the segment, seen from the
           direction of travel - to find out whether this is true, check
           the value of the current SegLen and other metadata in the path
-          meta header.  In this case, the egress border router must take
+          meta header.  In this case, the egress border router MUST take
           the following steps:
 
           -  Compute MAC^Peer_i.  For this, use the formula in
