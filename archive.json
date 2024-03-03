@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-29T00:00:51.847107+00:00",
+  "timestamp": "2024-03-03T00:00:39.590710+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -128,9 +128,9 @@
       "labels": [
         "Prio 1"
       ],
-      "body": "General feedback Eliot: \r\n- [ ] Make sure the references are correct:\r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n- [ ] Make sure MUST/MAY/SHOULD are used correctly (see also [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)): \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", Eliot is not a big fan of it\r\n- [ ] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n\r\nFeedback Juan: \r\n- [ ] Explain\u00a0how to calculate the length in bytes of the `ExtLen` field in the SCION Hop-by-Hop/End-to-End Options header (extension\u00a0header of a SCION path header).\r\n- [ ] Explain why any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation should use a pseudo header.\r\n- [ ] Simplify the \"Life of a packet\" figure, e.g., by removing all the IP addresses and listing them in a table instead, and/or having just numbers/letters as interface IDs.\r\n",
+      "body": "General feedback Eliot: \r\n- [ ] Make sure the references are correct:\r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n- [ ] Make sure MUST/MAY/SHOULD are used correctly (see also [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)):\r\n       (partially addressed in #6 )  \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", Eliot is not a big fan of it\r\n- [ ] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n\r\nFeedback Juan: \r\n- [ ] Explain\u00a0how to calculate the length in bytes of the `ExtLen` field in the SCION Hop-by-Hop/End-to-End Options header (extension\u00a0header of a SCION path header).\r\n- [ ] Explain why any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation should use a pseudo header.\r\n- [ ] Simplify the \"Life of a packet\" figure, e.g., by removing all the IP addresses and listing them in a table instead, and/or having just numbers/letters as interface IDs.\r\n",
       "createdAt": "2024-01-08T13:45:04Z",
-      "updatedAt": "2024-01-08T13:45:05Z",
+      "updatedAt": "2024-03-01T14:01:01Z",
       "closedAt": null,
       "comments": []
     }
@@ -148,13 +148,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:32:44Z",
-      "updatedAt": "2024-02-28T18:25:35Z",
+      "updatedAt": "2024-03-01T13:58:46Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "073bb9dc17536680feaa5488bb5e1f043ba6a747",
+      "baseRefOid": "2222b66d7850fee27619305e8c195c6bbaa7abd6",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "cdk-security-considerations-dp",
-      "headRefOid": "9a591f4ba3b7ad8f78d7ea55ceb2f5bc79f07ef7",
+      "headRefOid": "fdfbb7cf89de5bc3e1f52999baf8987ad88dfef8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -424,6 +424,86 @@
               "updatedAt": "2024-02-28T18:25:11Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xvpZ7",
+          "commit": {
+            "abbreviatedOid": "ad1a6f5"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-29T08:59:42Z",
+          "updatedAt": "2024-02-29T08:59:42Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "True. I think the SPAO was left out intentionally. Makes sense to allude to its existence, but maybe it would be good to be a bit more generic.\r\n\r\n> Modifications of the SCION address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, losely analogous to the IPSec Authentication Header, exists for SCION but is out of scope for this document.",
+              "createdAt": "2024-02-29T08:59:42Z",
+              "updatedAt": "2024-02-29T08:59:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xzXjj",
+          "commit": {
+            "abbreviatedOid": "c95c12c"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-29T16:07:07Z",
+          "updatedAt": "2024-02-29T16:07:07Z",
+          "comments": [
+            {
+              "originalPosition": 94,
+              "body": "```suggestion\r\nA central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's prevention mechanisms to these attacks; either an attacker can attempt to create unauthorized hop fields, or they can attempt to create illegitimate paths assembled from authentic individual hop fields.\r\n\r\nThe main protection mechanism here is the hop field MAC ( see ... ), authenticating the hop field content, consisting of ingress/egress interface identifiers, creation and expiration timestamp and, virtually, the preceding hop field MACs in the path segment. \r\nRecall that the MAC is computed using the issuing AS's secret \"forwarding key\" which is shared across the SCION routers and control plane services (only!) within this AS.\r\n\r\n### Forwarding key compromise\r\n\r\nFor the current default MAC algorithm, AES-CMAC truncated to 48 bits, key recovery attacks from (any number of) known plaintext/MAC combinations is computationally infeasible, as far as is publicly known. \r\nIn addition, MAC algorithm can be freely chosen by each ASes, enabling algorithmic agility for MAC computations. Should a MAC algorithm be discovered to be weak or insecure, each AS can quickly switch to a secure algorithm without the need for coordination with other ASes.\r\n\r\nA more realistic risk to the secrecy of the forwarding key is exfiltration from a compromised router or control plane service.\r\nAn AS can optionally rotate its forwarding key at regular intervals to limit the exposure after a temporary device compromise. However, as is perhaps self-evident, such a key rotation scheme cannot mitigate the impact of an undiscovered, permanent compromise of a device.\r\n\r\n### Forging hop field MAC\r\n\r\nAs a second method to break the path authorization is to directly forge a hop field in an online attack, using the router as an oracle to determine the validity of the hop field MAC. The adversary needs to send one packet per guess for verification. For a 6-byte MAC, the adversary would need an expected 2<sup>47</sup> (~140 trillion) tries to successfully forge the MAC of a single hop field.\r\nAs the router only checks MACs during the encoded validity period of the hop field, which is limited by the packet header format to 24 hours, these tries need to occur in a limited time period. This results in a seemingly infeasible number of ~1.6e9 guesses per second.\r\nIn the unlikely case that an online brute-force attack succeeds, the obtained hop field can be used until its inevitable expiration after the just mentioned 24 hour limit.\r\n\r\n```",
+              "createdAt": "2024-02-29T16:07:07Z",
+              "updatedAt": "2024-02-29T16:07:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xzudu",
+          "commit": {
+            "abbreviatedOid": "c95c12c"
+          },
+          "author": "matzf",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-29T16:46:21Z",
+          "updatedAt": "2024-02-29T16:46:21Z",
+          "comments": [
+            {
+              "originalPosition": 126,
+              "body": "```suggestion\r\n## Off-Path Attacks\r\n\r\nSCION's path-awareness limits the abilities of an off-path adversary to influence forwarding in the data plane. Once a packet is \"in flight\", it will follow its set route, no matter what an adversary may do.\r\nAn adversary can attempt to disrupt the connectivity of said path by flooding a link with excessive traffic (see [](#dos) below). After detecting the congestion, the endpoint can switch to another, non-congested path for subsequent packets.\r\nInstead of actually disrupting the network connectivity, an off-path adversary can also attempt to influence the path selection of the endpoint by fraudulently signalling a network interruption with forged SCMP messages. This attack scenario, and protection mechanisms, will be discussed in a separate document on the SCMP.\r\n\r\n## Volumetric Denial of Service Attacks {#dos}\r\n\r\nAn adversary can attempt to disrupt the connectivity of a network path by flooding a link with excessive traffic. In this case, the endpoint can switch to another, non-congested path for subsequent packets.\r\n\r\nSCION provides protection against certain reflection-based DoS attacks. Here, the adversary sends requests to a server with the source address set to the address of the victim. The server will send a reply, typically larger than the request, to the victim. As long as the attacker and the victim are located in different ASes, this can be prevented in SCION. The reply packets are simply returned along reversed path to the actual sender, regardless of the source address information. Thus, the reflected will be forwarded to the attackers AS (where it will be discarded because the destination AS does not match).\r\n\r\nOn the flip side, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with relatively low send rate; the attacker can abuse the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.\r\n\r\n**Note** that SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope. However, the additional information contained in the SCION header enables more targeted filtering, e.g., by ISD, AS or path length.\r\n```",
+              "createdAt": "2024-02-29T16:46:21Z",
+              "updatedAt": "2024-02-29T16:46:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785x6qNB",
+          "commit": {
+            "abbreviatedOid": "ed7d2be"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-01T13:37:57Z",
+          "updatedAt": "2024-03-01T13:37:57Z",
+          "comments": [
+            {
+              "originalPosition": 120,
+              "body": "@matzf We don't talk about this kind of SCMP message, I'd therefore omit this line and keep it for the security considerations of SCMP, once we get there",
+              "createdAt": "2024-03-01T13:37:57Z",
+              "updatedAt": "2024-03-01T13:37:57Z"
+            }
+          ]
         }
       ]
     },
@@ -474,26 +554,42 @@
       "id": "PR_kwDOKYa7785j6FWC",
       "title": "Use \"MUST/SHOULD/MAY\" in more systematic manner",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/6",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Per rfc2119\r\n",
       "createdAt": "2024-01-12T10:24:30Z",
-      "updatedAt": "2024-01-12T10:24:45Z",
+      "updatedAt": "2024-03-01T13:57:55Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "073bb9dc17536680feaa5488bb5e1f043ba6a747",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "must_should_may",
-      "headRefOid": "594d174c8384d0601c90498ee4e59c9bcd08bbc2",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "04fc7cb32f671d64790a91abd8cf46bbfdcfffbc",
+      "closedAt": "2024-03-01T13:57:55Z",
+      "mergedAt": "2024-03-01T13:57:55Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "2222b66d7850fee27619305e8c195c6bbaa7abd6"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7785x6y8e",
+          "commit": {
+            "abbreviatedOid": "04fc7cb"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM\r\n",
+          "createdAt": "2024-03-01T13:57:23Z",
+          "updatedAt": "2024-03-01T13:57:23Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
