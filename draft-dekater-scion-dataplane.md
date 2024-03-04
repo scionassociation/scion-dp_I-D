@@ -1356,9 +1356,7 @@ This section describes the steps that a SCION egress border router MUST perform 
 
 # Security Considerations
 
-This section describes the possible security risks and attacks that SCION's data plane may be prone to, and how these attacks may be mitigated. It first discusses security risks that pertain to path authorization, followed by a section on all other data-plane security risks.
-
-**Note:** This section only discusses SCION data plane- and forwarding-specific security considerations. For security considerations related to the SCION control-plane PKI, see {{I-D.scion-cppki}}. {{I-D.scion-cp}} includes security considerations that concern the SCION control plane and routing.
+This section describes the possible security risks and attacks that SCION's data plane may be prone to, and how these attacks may be mitigated. It first discusses security risks that pertain to path authorization, followed by a section on other forwarding-related security considerations.
 
 
 ## Path Authorization
