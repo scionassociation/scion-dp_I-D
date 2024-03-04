@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 2 September 2024                                        S. Hitz
+Expires: 5 September 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            1 March 2024
+                                                            4 March 2024
 
 
                             SCION Data Plane
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 September 2024.
+   This Internet-Draft will expire on 5 September 2024.
 
 Copyright Notice
 
@@ -2269,14 +2269,8 @@ direction
    This section describes the possible security risks and attacks that
    SCION's data plane may be prone to, and how these attacks may be
    mitigated.  It first discusses security risks that pertain to path
-   authorization, followed by a section on all other data-plane security
-   risks.
-
-   *Note:* This section only discusses SCION data plane- and forwarding-
-   specific security considerations.  For security considerations
-   related to the SCION control-plane PKI, see [I-D.scion-cppki].
-   [I-D.scion-cp] includes security considerations that concern the
-   SCION control plane and routing.
+   authorization, followed by a section on other forwarding-related
+   security considerations.
 
 5.1.  Path Authorization
 
