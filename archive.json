@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-03-03T00:00:39.590710+00:00",
+  "timestamp": "2024-03-05T00:00:43.342471+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -133,32 +133,55 @@
       "updatedAt": "2024-03-01T14:01:01Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOKYa7786BI0h8",
+      "title": "Clarify how chained MACs prevent path splicing",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/7",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "matzf"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 2"
+      ],
+      "body": "When dealing with security considerations #1  , we mention that chained MACs prevent path splicing attacks. This should be better explained, since in the draft we describe how chained MACs work, but not how they prevent path splicing. ",
+      "createdAt": "2024-03-04T11:06:10Z",
+      "updatedAt": "2024-03-04T11:07:35Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
     {
       "number": 1,
       "id": "PR_kwDOKYa7785hbfIj",
-      "title": "Update Security Considerations Section",
+      "title": "Add Security Considerations Section",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/1",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cdekater",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:32:44Z",
-      "updatedAt": "2024-03-01T13:58:46Z",
+      "updatedAt": "2024-03-04T13:42:36Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "2222b66d7850fee27619305e8c195c6bbaa7abd6",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "cdk-security-considerations-dp",
-      "headRefOid": "fdfbb7cf89de5bc3e1f52999baf8987ad88dfef8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "78db4ae551c224ede6472b736fb3e2d769b722d5",
+      "closedAt": "2024-03-04T13:42:35Z",
+      "mergedAt": "2024-03-04T13:42:35Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c"
+      },
       "comments": [],
       "reviews": [
         {
@@ -187,7 +210,7 @@
             "abbreviatedOid": "5a81cae"
           },
           "author": "knmeynell",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-01-18T03:07:11Z",
@@ -431,7 +454,7 @@
             "abbreviatedOid": "ad1a6f5"
           },
           "author": "matzf",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-02-29T08:59:42Z",
@@ -451,7 +474,7 @@
             "abbreviatedOid": "c95c12c"
           },
           "author": "matzf",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-02-29T16:07:07Z",
@@ -471,7 +494,7 @@
             "abbreviatedOid": "c95c12c"
           },
           "author": "matzf",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-02-29T16:46:21Z",
