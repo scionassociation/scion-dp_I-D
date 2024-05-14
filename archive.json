@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-12T00:00:41.029168+00:00",
+  "timestamp": "2024-05-14T00:00:50.529234+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -152,6 +152,54 @@
       "body": "When dealing with security considerations #1  , we mention that chained MACs prevent path splicing attacks. This should be better explained, since in the draft we describe how chained MACs work, but not how they prevent path splicing. ",
       "createdAt": "2024-03-04T11:06:10Z",
       "updatedAt": "2024-03-04T11:07:35Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOKYa7786IuUkR",
+      "title": "Be careful about forward references",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/8",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": ">  SCION also includes its own protocol to communicate failures to endpoints,\r\n   the SCION Control Message Protocol (SCMP).  This protocol will be\r\n   described in a separate document, which will follow later.\r\n\r\nText like this doesn't stand on its own.",
+      "createdAt": "2024-05-13T21:05:25Z",
+      "updatedAt": "2024-05-13T21:05:25Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOKYa7786IuVaP",
+      "title": "editorial: de-emphasisize text",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/9",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "No need for this in the abstract: \\*SCION data plane\\*",
+      "createdAt": "2024-05-13T21:06:52Z",
+      "updatedAt": "2024-05-13T21:06:52Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOKYa7786IuWFf",
+      "title": "notes need removal/editing",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/10",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The following text needs to be reworked as you are not publishing some of these:\r\n\r\n > \\*Note:\\* This is the very first version of the SCION Data Plane\r\n   document.  We are aware that the draft is far from perfect, and hope\r\n   to improve the content in later versions of the document.  To reach\r\n   this goal, any feedback is welcome and much appreciated.  Thanks!\r\n\r\n>  \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-cppki], and [I-D.scion-cp], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.",
+      "createdAt": "2024-05-13T21:08:42Z",
+      "updatedAt": "2024-05-13T21:08:42Z",
       "closedAt": null,
       "comments": []
     }
