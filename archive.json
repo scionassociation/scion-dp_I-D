@@ -1,18 +1,8 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-14T00:00:50.529234+00:00",
+  "timestamp": "2024-05-16T00:00:39.835476+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
-    {
-      "name": "bug",
-      "description": "Something isn't working",
-      "color": "d73a4a"
-    },
-    {
-      "name": "documentation",
-      "description": "Improvements or additions to documentation",
-      "color": "0075ca"
-    },
     {
       "name": "duplicate",
       "description": "This issue or pull request already exists",
@@ -24,29 +14,9 @@
       "color": "a2eeef"
     },
     {
-      "name": "good first issue",
-      "description": "Good for newcomers",
-      "color": "7057ff"
-    },
-    {
-      "name": "help wanted",
-      "description": "Extra attention is needed",
-      "color": "008672"
-    },
-    {
-      "name": "invalid",
-      "description": "This doesn't seem right",
-      "color": "e4e669"
-    },
-    {
       "name": "question",
       "description": "Further information is requested",
       "color": "d876e3"
-    },
-    {
-      "name": "wontfix",
-      "description": "This will not be worked on",
-      "color": "ffffff"
     },
     {
       "name": "Prio 1",
@@ -62,6 +32,21 @@
       "name": "Prio 3",
       "description": "",
       "color": "0E8A16"
+    },
+    {
+      "name": "needs-discussion",
+      "description": "",
+      "color": "fbca04"
+    },
+    {
+      "name": "editorial",
+      "description": "",
+      "color": "9855E2"
+    },
+    {
+      "name": "design",
+      "description": "",
+      "color": "1d76db"
     }
   ],
   "issues": [
@@ -128,9 +113,9 @@
       "labels": [
         "Prio 1"
       ],
-      "body": "General feedback Eliot: \r\n- [ ] Make sure the references are correct:\r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n- [ ] Make sure MUST/MAY/SHOULD are used correctly (see also [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)):\r\n       (partially addressed in #6 )  \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", Eliot is not a big fan of it\r\n- [ ] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n\r\nFeedback Juan: \r\n- [ ] Explain\u00a0how to calculate the length in bytes of the `ExtLen` field in the SCION Hop-by-Hop/End-to-End Options header (extension\u00a0header of a SCION path header).\r\n- [ ] Explain why any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation should use a pseudo header.\r\n- [ ] Simplify the \"Life of a packet\" figure, e.g., by removing all the IP addresses and listing them in a table instead, and/or having just numbers/letters as interface IDs.\r\n",
+      "body": "General feedback Eliot: \r\n- [ ] Make sure the references are correct:\r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n- [x] Make sure MUST/MAY/SHOULD are used correctly (see also [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)):\r\n       (partially addressed in #6 )  \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", Eliot is not a big fan of it\r\n- [ ] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n\r\nFeedback Juan: \r\n- [ ] Explain\u00a0how to calculate the length in bytes of the `ExtLen` field in the SCION Hop-by-Hop/End-to-End Options header (extension\u00a0header of a SCION path header).\r\n- [ ] Explain why any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation should use a pseudo header.\r\n- [ ] Simplify the \"Life of a packet\" figure, e.g., by removing all the IP addresses and listing them in a table instead, and/or having just numbers/letters as interface IDs.\r\n",
       "createdAt": "2024-01-08T13:45:04Z",
-      "updatedAt": "2024-03-01T14:01:01Z",
+      "updatedAt": "2024-05-14T12:16:12Z",
       "closedAt": null,
       "comments": []
     },
@@ -167,7 +152,7 @@
       "labels": [],
       "body": ">  SCION also includes its own protocol to communicate failures to endpoints,\r\n   the SCION Control Message Protocol (SCMP).  This protocol will be\r\n   described in a separate document, which will follow later.\r\n\r\nText like this doesn't stand on its own.",
       "createdAt": "2024-05-13T21:05:25Z",
-      "updatedAt": "2024-05-13T21:05:25Z",
+      "updatedAt": "2024-05-14T12:22:22Z",
       "closedAt": null,
       "comments": []
     },
@@ -180,10 +165,12 @@
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "editorial"
+      ],
       "body": "No need for this in the abstract: \\*SCION data plane\\*",
       "createdAt": "2024-05-13T21:06:52Z",
-      "updatedAt": "2024-05-13T21:06:52Z",
+      "updatedAt": "2024-05-14T12:45:40Z",
       "closedAt": null,
       "comments": []
     },
@@ -202,6 +189,41 @@
       "updatedAt": "2024-05-13T21:08:42Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOKYa7786IwuHV",
+      "title": "Allowed?",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/11",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": " >  \\*Note:\\* The current SCION implementation uses the UDP/IP protocol as\r\n   underlay.  However, the use of other underlay protocols is possible\r\n   and allowed.\r\n\r\nThis last sentence makes it seem like one might never run SCION on its own.  Also, \"allowed\" isn't a word we should see in RFCs.",
+      "createdAt": "2024-05-14T05:54:10Z",
+      "updatedAt": "2024-05-14T05:54:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOKYa7786I_Qxa",
+      "title": "Clarify implications of AS forwarding key compromise",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/12",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement",
+        "question"
+      ],
+      "body": "> From:\tJoel Halpern\r\n> Before that, I would also ask them for the data plane document for an analysis of what the implications are if a key shared by all the SCION routers of an AS is compromised.  It is ahrd to tell if the design assumptions are workable without that. \r\n\r\n We should better clarify this in section 5.1.1.  Forwarding key compromise . ",
+      "createdAt": "2024-05-15T15:53:08Z",
+      "updatedAt": "2024-05-15T15:53:09Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -217,7 +239,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2023-12-07T14:32:44Z",
-      "updatedAt": "2024-03-04T13:42:36Z",
+      "updatedAt": "2024-05-14T14:41:46Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "2222b66d7850fee27619305e8c195c6bbaa7abd6",
@@ -632,7 +654,7 @@
       "labels": [],
       "body": "Per rfc2119\r\n",
       "createdAt": "2024-01-12T10:24:30Z",
-      "updatedAt": "2024-03-01T13:57:55Z",
+      "updatedAt": "2024-05-14T14:41:47Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "073bb9dc17536680feaa5488bb5e1f043ba6a747",
