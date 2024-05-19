@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-16T00:00:39.835476+00:00",
+  "timestamp": "2024-05-19T00:00:36.912168+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -75,7 +75,7 @@
       "id": "I_kwDOKYa77857aD1Z",
       "title": "Write IANA Considerations Section",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -87,15 +87,22 @@
       ],
       "body": "See [RFC 8126](https://www.rfc-editor.org/rfc/rfc8126.html)\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/100)\r\n",
       "createdAt": "2024-01-08T13:10:11Z",
-      "updatedAt": "2024-01-11T15:44:33Z",
-      "closedAt": null,
+      "updatedAt": "2024-05-16T13:26:13Z",
+      "closedAt": "2024-05-16T13:26:12Z",
       "comments": [
         {
           "author": "jiceatscion",
           "authorAssociation": "CONTRIBUTOR",
-          "body": "For the data plane, I think we have the following IANA considerations to address:\r\n- Informational: The fact that we mirror the UDP port space into the SCION/UDP port space; so inherit all assignments and reservations; so no IANA action required to manage the SCION/UDP port space itself.\r\n- The dispatcher/shim SCION/UDP port at 30041, which by virtue of the mirroring needs that the UDP port 30041 be a reserved port.\r\n- The assignment of ISD and AS numbers.\r\n- The registration of Service Numbers (for Service addresses).\r\n- The registration of Transport Protocols over SCION.\r\n\r\nAll other port numbers are supposedly configurable by peer-peer agreement or are AS internal concerns, so I think they do not need any IANA arbitration. However, I would prefer some IETF expert advice on that because I do not know how acceptable it is is to assume agreed-upon ports in the User range without reservation as part of an RFC published protocol.\r\n\r\nRegarding port 30041, it is a dependency of our UDP/IP underlay network. Technically that's not part of the dataplane spec, however, the spec does mention the underlay network and it is rather hypocritical to pretend that it is out of scope. There's no interoperability between two ASes without a common underlay implementation. Nico: should we not add a section to the spec that explicitly describes the current UDP/IP encapsulation as one standard link layer for SCION?\r\n\r\nRegarding the ISD/AS numbers, I am unsure how much IANA needs to be involved, given that we plan for the association to manage the registry. I found RFC 8126 quite obscure on that topic, so I would welcome some IETF input on that too before I start writing the section.\r\n\r\nRegarding a Service Number registry. I am not sure we should rush to define one as there are ongoing discussions to eliminate service resolution. Nevertheless, there would likely be some alternate mechanism to designate \"anycast\r\naddressed\" services so some kind of registry would be needed. Opinions?\r\n\r\nRegarding protocol numbers, we do mention that we attempt to mirror the assigned protocol numbers for IP. I think we must make a clearer statement: inherit and extend the IP assignments, and create our own registry. This would enable a seamless transition if we ever manage to deploy SCION as an IP alternative/extension. What that requires is that the 200-2003 protocols be registered in the IP protocol space as well, to ensure they remain available for such usage.\r\n\r\n",
+          "body": "For the data plane, I think we have the following IANA considerations to address:\r\n- Informational: The fact that we mirror the UDP port space into the SCION/UDP port space; so inherit all assignments and reservations; so no IANA action required to manage the SCION/UDP port space itself.\r\n- The dispatcher/shim SCION/UDP port at 30041, which by virtue of the mirroring needs that the UDP port 30041 be a reserved port.\r\n- The assignment of ISD and AS numbers.\r\n- The registration of Service Numbers (for Service addresses). --> #13 \r\n- The registration of Transport Protocols over SCION.\r\n\r\nAll other port numbers are supposedly configurable by peer-peer agreement or are AS internal concerns, so I think they do not need any IANA arbitration. However, I would prefer some IETF expert advice on that because I do not know how acceptable it is is to assume agreed-upon ports in the User range without reservation as part of an RFC published protocol.\r\n\r\nRegarding port 30041, it is a dependency of our UDP/IP underlay network. Technically that's not part of the dataplane spec, however, the spec does mention the underlay network and it is rather hypocritical to pretend that it is out of scope. There's no interoperability between two ASes without a common underlay implementation. Nico: should we not add a section to the spec that explicitly describes the current UDP/IP encapsulation as one standard link layer for SCION?\r\n\r\nRegarding the ISD/AS numbers, I am unsure how much IANA needs to be involved, given that we plan for the association to manage the registry. I found RFC 8126 quite obscure on that topic, so I would welcome some IETF input on that too before I start writing the section.\r\n\r\nRegarding a Service Number registry. I am not sure we should rush to define one as there are ongoing discussions to eliminate service resolution. Nevertheless, there would likely be some alternate mechanism to designate \"anycast\r\naddressed\" services so some kind of registry would be needed. Opinions?\r\n\r\nRegarding protocol numbers, we do mention that we attempt to mirror the assigned protocol numbers for IP. I think we must make a clearer statement: inherit and extend the IP assignments, and create our own registry. This would enable a seamless transition if we ever manage to deploy SCION as an IP alternative/extension. What that requires is that the 200-2003 protocols be registered in the IP protocol space as well, to ensure they remain available for such usage.\r\n\r\n",
           "createdAt": "2024-01-11T13:26:34Z",
-          "updatedAt": "2024-01-11T15:44:33Z"
+          "updatedAt": "2024-05-16T13:25:39Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "There are no IANA actions, resolving this as the only open point is handled in #13 . ",
+          "createdAt": "2024-05-16T13:26:13Z",
+          "updatedAt": "2024-05-16T13:26:13Z"
         }
       ]
     },
@@ -104,7 +111,7 @@
       "id": "I_kwDOKYa77857aTh_",
       "title": "Unaddressed Feedback from Reviews",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -113,16 +120,16 @@
       "labels": [
         "Prio 1"
       ],
-      "body": "General feedback Eliot: \r\n- [ ] Make sure the references are correct:\r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n- [x] Make sure MUST/MAY/SHOULD are used correctly (see also [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)):\r\n       (partially addressed in #6 )  \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", Eliot is not a big fan of it\r\n- [ ] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n\r\nFeedback Juan: \r\n- [ ] Explain\u00a0how to calculate the length in bytes of the `ExtLen` field in the SCION Hop-by-Hop/End-to-End Options header (extension\u00a0header of a SCION path header).\r\n- [ ] Explain why any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation should use a pseudo header.\r\n- [ ] Simplify the \"Life of a packet\" figure, e.g., by removing all the IP addresses and listing them in a table instead, and/or having just numbers/letters as interface IDs.\r\n",
+      "body": "General feedback Eliot: \r\n- [x] Make sure the references are correct:\r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n- [x] Make sure MUST/MAY/SHOULD are used correctly (see also [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)):\r\n       (partially addressed in #6 )  \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", Eliot is not a big fan of it\r\n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n\r\nFeedback Juan: \r\n- [ ] #14\r\n- [x] ~~Explain why any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation should use a pseudo header.~~ --> Checked IPv6 RFC2460, it dies not explain why. Our section talking about this is very similar to IPv6, and we don't feel need to change this\r\n- [x] ~~Simplify the \"Life of a packet\" figure, e.g., by removing all the IP addresses and listing them in a table instead, and/or having just numbers/letters as interface IDs.~~ Over time we rewrote this section several times and I (@nicorusti ) don't feel this will make it more readable. \r\n",
       "createdAt": "2024-01-08T13:45:04Z",
-      "updatedAt": "2024-05-14T12:16:12Z",
-      "closedAt": null,
+      "updatedAt": "2024-05-16T13:41:02Z",
+      "closedAt": "2024-05-16T13:40:49Z",
       "comments": []
     },
     {
       "number": 7,
       "id": "I_kwDOKYa7786BI0h8",
-      "title": "Clarify how chained MACs prevent path splicing",
+      "title": "Clarify MACs (truncation, path splicing)",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/7",
       "state": "OPEN",
       "author": "nicorusti",
@@ -134,27 +141,48 @@
         "enhancement",
         "Prio 2"
       ],
-      "body": "When dealing with security considerations #1  , we mention that chained MACs prevent path splicing attacks. This should be better explained, since in the draft we describe how chained MACs work, but not how they prevent path splicing. ",
+      "body": "When dealing with security considerations #1  , we mention that chained MACs prevent path splicing attacks. This should be better explained, since in the draft we describe how chained MACs work, but not how they prevent path splicing. \r\n\r\n> From Joel Halpern\r\n> The use of only the lower two bytes of the cryptographic value for chaining seems odd.  If you need a 16 bit value, I would have assumed you would at least fold the entire 6 bit signature into thirds, so all the bits have an impact?\r\n\r\nRight, this depends on the MAC algorithm. Safely truncating requires certain MAC algorithms, e.g. ones that have properties of a pseudorandom function. We should clarify this.\r\n\r\n> Both the PCB authentication and the hop authentication use a mechanism that computes the signature over all previous hops.  This seems odd.  If each hop includes the previous hop, that seems to produce an immutable chain at lower cost.  At the very least, an explanation would seem called for.\r\n\r\nThis is to avoid certain path splicing attacks, we have a brief description in the data plane draft 5.1.3.  Path Splicing, but this can be extended. \r\n\r\nRelates to https://github.com/scionassociation/scion-cp_I-D/issues/23 \r\n",
       "createdAt": "2024-03-04T11:06:10Z",
-      "updatedAt": "2024-03-04T11:07:35Z",
+      "updatedAt": "2024-05-17T16:40:12Z",
       "closedAt": null,
       "comments": []
     },
     {
       "number": 8,
       "id": "I_kwDOKYa7786IuUkR",
-      "title": "Be careful about forward references",
+      "title": "SCMP - Be careful about forward references",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/8",
       "state": "OPEN",
       "author": "elear",
       "authorAssociation": "NONE",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement",
+        "needs-discussion",
+        "design"
+      ],
       "body": ">  SCION also includes its own protocol to communicate failures to endpoints,\r\n   the SCION Control Message Protocol (SCMP).  This protocol will be\r\n   described in a separate document, which will follow later.\r\n\r\nText like this doesn't stand on its own.",
       "createdAt": "2024-05-13T21:05:25Z",
-      "updatedAt": "2024-05-14T12:22:22Z",
+      "updatedAt": "2024-05-16T17:09:07Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "The SCMP  specification is likely not be necessary for a self-contained data plane.  \r\n\r\nIn this draft, there are a few mentions of SCMP that are not necessary for the DP spec:  the text below is just an example and could be deleted: \r\n```\r\n   A similar mechanism is possible for on-path routers, for example to\r\n   send SCION Control Message Protocol (SCMP) messages to the sender of\r\n   the original packet.\r\n  ```\r\n  ```\r\n  The remaining protocols, which do not carry the\r\n      length information directly (e.g., the SCION Control Message\r\n      Protocol SCMP)\r\n  ```\r\n  \r\nThere are 4 mentions of using the SCMP `parameter problem` when MAC verification fails. This  can be useful for debugging. Ig MAC verification fails because of an attack, it does not make sense to send an error message back. This is an optional signal that routers can send, so this could be omitted.\r\n\r\nWe could then only leave the protocol number in table 10.\r\n",
+          "createdAt": "2024-05-16T14:43:59Z",
+          "updatedAt": "2024-05-16T14:43:59Z"
+        },
+        {
+          "author": "elear",
+          "authorAssociation": "NONE",
+          "body": "If SCMP is not important to the work, you can still mention it informationally, but then you must properly reference it. ",
+          "createdAt": "2024-05-16T17:09:06Z",
+          "updatedAt": "2024-05-16T17:09:06Z"
+        }
+      ]
     },
     {
       "number": 9,
@@ -164,31 +192,47 @@
       "state": "OPEN",
       "author": "elear",
       "authorAssociation": "NONE",
-      "assignees": [],
+      "assignees": [
+        "knmeynell"
+      ],
       "labels": [
         "editorial"
       ],
       "body": "No need for this in the abstract: \\*SCION data plane\\*",
       "createdAt": "2024-05-13T21:06:52Z",
-      "updatedAt": "2024-05-14T12:45:40Z",
+      "updatedAt": "2024-05-16T14:04:38Z",
       "closedAt": null,
       "comments": []
     },
     {
       "number": 10,
       "id": "I_kwDOKYa7786IuWFf",
-      "title": "notes need removal/editing",
+      "title": "Extend introduction and remove/edit notes",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/10",
       "state": "OPEN",
       "author": "elear",
       "authorAssociation": "NONE",
-      "assignees": [],
-      "labels": [],
-      "body": "The following text needs to be reworked as you are not publishing some of these:\r\n\r\n > \\*Note:\\* This is the very first version of the SCION Data Plane\r\n   document.  We are aware that the draft is far from perfect, and hope\r\n   to improve the content in later versions of the document.  To reach\r\n   this goal, any feedback is welcome and much appreciated.  Thanks!\r\n\r\n>  \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-cppki], and [I-D.scion-cp], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 1",
+        "editorial"
+      ],
+      "body": "The following text needs to be reworked as you are not publishing some of these:\r\n\r\n > \\*Note:\\* This is the very first version of the SCION Data Plane\r\n   document.  We are aware that the draft is far from perfect, and hope\r\n   to improve the content in later versions of the document.  To reach\r\n   this goal, any feedback is welcome and much appreciated.  Thanks!\r\n\r\n>  \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-cppki], and [I-D.scion-cp], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\n\r\n\r\nAlso, \r\n> From: Ron Bonica\r\n> The problem statement is weak. Before describing forwarding plane details, you need to tell the readers why they should deploy SCION. You say that the design advantages are:\r\n>  - It provides control and transparency over forwarding paths the endpoints.  \u2002\u2002\u2002\u2002\u2002\u2002\u2002\r\n>  -  It simplifies the packet-processing at routers: Instead of having to perform longest-prefix matching on IP addresses, which requires expensive hardware and substantial amounts of energy, a router can simply access the next hop from the packet header, after having verified the authenticity of the hop field's MAC.\r\n\r\n> \u2002\u2002\u2002\u2002\u2002\u2002Is there any benefit in switching, as opposed to routing, at the AS boundary? Yes, routing is expensive. But the router is already there. There is no incremental cost. By contrast, you would have to add a SCION device.\r\n> Is the real motivation to support new settlement models?\r\n\r\n\r\nSame issue in other drafts: \r\n- CPPKI  https://github.com/scionassociation/scion-cppki_I-D/issues/29\r\n- CP        https://github.com/scionassociation/scion-cp_I-D/issues/14",
       "createdAt": "2024-05-13T21:08:42Z",
-      "updatedAt": "2024-05-13T21:08:42Z",
+      "updatedAt": "2024-05-17T15:21:14Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Regarding problem statement, we can reuse some text from the overview draft section 1.2, stressing aspects that mostly pertain tom the data plane: \r\n\r\n- Address needs of organizations or ecosystems exchanging sensitive information, such as financial  institutions, healthcare providers, universities, multinationals,  governments, critical and transportation infrastructure operators, which can not always be addressed by leveraging public Internet\r\n- Providing availability inter-domain (e.g. quick reaction to link failure)\r\n- Avoiding reflection attacks\r\n- Provide visibility to endpoints as a base for trust-enhanched networking\r\n- Simplified routing tables\r\n\r\netc. ",
+          "createdAt": "2024-05-17T14:49:25Z",
+          "updatedAt": "2024-05-17T14:49:25Z"
+        }
+      ]
     },
     {
       "number": 11,
@@ -198,13 +242,25 @@
       "state": "OPEN",
       "author": "elear",
       "authorAssociation": "NONE",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "editorial"
+      ],
       "body": " >  \\*Note:\\* The current SCION implementation uses the UDP/IP protocol as\r\n   underlay.  However, the use of other underlay protocols is possible\r\n   and allowed.\r\n\r\nThis last sentence makes it seem like one might never run SCION on its own.  Also, \"allowed\" isn't a word we should see in RFCs.",
       "createdAt": "2024-05-14T05:54:10Z",
-      "updatedAt": "2024-05-14T05:54:10Z",
+      "updatedAt": "2024-05-16T14:00:21Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "- [ ] check for instances of allowed (on all three drafts) \r\n- [ ] clarify that SCION may be run on L2 directly, so the  SCION spec is underlay-agnostic. Maybe we could use \"lower layer\", then define it in the terminology. \r\n\r\nAlso look at [IPv6 \"link\"](https://datatracker.ietf.org/doc/html/rfc2460#section-2) as inspiration \r\n",
+          "createdAt": "2024-05-16T13:48:54Z",
+          "updatedAt": "2024-05-16T14:00:21Z"
+        }
+      ]
     },
     {
       "number": 12,
@@ -214,14 +270,57 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "matzf"
+      ],
       "labels": [
         "enhancement",
         "question"
       ],
-      "body": "> From:\tJoel Halpern\r\n> Before that, I would also ask them for the data plane document for an analysis of what the implications are if a key shared by all the SCION routers of an AS is compromised.  It is ahrd to tell if the design assumptions are workable without that. \r\n\r\n We should better clarify this in section 5.1.1.  Forwarding key compromise . ",
+      "body": "> From:\tJoel Halpern\r\n> Before that, I would also ask them for the data plane document for an analysis of what the implications are if a key shared by all the SCION routers of an AS is compromised.  It is ahrd to tell if the design assumptions are workable without that. \r\n\r\n We should better clarify this, we don't say what an attacker can do if an attacker gets the AS forwarding key. \r\n Current text is: \r\n ```\r\n5.1.1.  Forwarding key compromise\r\n\r\n   For the current default MAC algorithm, AES-CMAC truncated to 48 bits,\r\n   key recovery attacks from (any number of) known plaintext/MAC\r\n   combinations is computationally infeasible, as far as publicly known.\r\n   In addition, the MAC algorithm can be freely chosen by each AS,\r\n   enabling algorithmic agility for MAC computations.  Should a MAC\r\n   algorithm be discovered to be weak or insecure, each AS can quickly\r\n   switch to a secure algorithm without the need for coordination with\r\n   other ASes.\r\n\r\n   A more realistic risk to the secrecy of the forwarding key is\r\n   exfiltration from a compromised router or control plane service.  An\r\n   AS can optionally rotate its forwarding key at regular intervals to\r\n   limit the exposure after a temporary device compromise.  However, as\r\n   is perhaps self-evident, such a key rotation scheme cannot mitigate\r\n   the impact of an undiscovered, permanent compromise of a device.\r\n   ``` ",
       "createdAt": "2024-05-15T15:53:08Z",
-      "updatedAt": "2024-05-15T15:53:09Z",
+      "updatedAt": "2024-05-16T13:45:33Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOKYa7786JF-Qo",
+      "title": "Clarify service field",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/13",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement",
+        "design"
+      ],
+      "body": "We currently document type service 0b0100, but we don't further document possible values for it. We might need to add another table with potential values for the service field, as defined in [here](https://github.com/scionproto/scion/blob/master/pkg/addr/svc.go)\r\n```\r\n                      Table 2: Address length values\r\n\r\n    +================+======+=======================+================+\r\n    | Length (bytes) | Type |  Type/Length (binary) | Interpretation |\r\n    +================+======+=======================+================+\r\n    | 4              | 0    | 0b0000                | IPv4           |\r\n    +----------------+------+-----------------------+----------------+\r\n    | 4              | 1    | 0b0100                | Service        |\r\n    +----------------+------+-----------------------+----------------+\r\n    | 16             | 0    | 0b1100                | IPv6           |\r\n    +----------------+------+-----------------------+----------------+\r\n    | other          |      |                       | Unassigned     |\r\n    +----------------+------+-----------------------+----------------+\r\n   \r\n  ```\r\n  ",
+      "createdAt": "2024-05-16T10:40:42Z",
+      "updatedAt": "2024-05-16T10:40:42Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOKYa7786JHZbw",
+      "title": "Clarify text on how to calculate the length in bytes of the `ExtLen` field",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/14",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "Explain&nbsp;how to calculate the length in bytes of the ExtLen field in the SCION Hop-by-Hop/End-to-End Options header (extension&nbsp;header of a SCION path header).\r\n```\r\n   *  ExtLen: Unsigned 8-bit integer.  The value of this field is\r\n      computed as the length of the complete Hop-by-Hop/End-to-End\r\n      Options header in multiples of 4-bytes minus 1.\r\n  ```\r\n\r\nReference that this is similar to IPv6. ",
+      "createdAt": "2024-05-16T13:29:46Z",
+      "updatedAt": "2024-05-16T13:31:35Z",
       "closedAt": null,
       "comments": []
     }
