@@ -163,6 +163,8 @@ The SCION data plane fundamentally differs from today's IP-based data plane in t
 
 SCION leverages source-based path selection, where path information is embedded in the packet header - this is called packet-carried forwarding state (PCFS). This section explains how data packets are forwarded through the network, how the SCION inter-domain routing differs from intra-domain routing, and how endpoints can construct end-to-end paths from path segments. It also briefly touches the concept of path authorization, which ensures that data packets always traverse the network along authorized paths.
 
+The data transmission order for SCION is the same as for IPv6 as defined in Introduction of {{RFC8200}}.
+
 **Note:** This is the very first version of the SCION Data Plane document. We are aware that the draft is far from perfect, and hope to improve the content in later versions of the document. To reach this goal, any feedback is welcome and much appreciated. Thanks!
 
 **Note:** It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts {{I-D.scion-overview}}, {{I-D.scion-components}}, {{I-D.scion-cppki}}, and {{I-D.scion-cp}}, as well as in {{CHUAT22}}, especially Chapter 2. A short description of the SCION basic terms and elements can be found in [](#terms) below.
@@ -447,8 +449,16 @@ The SCION common header has the following packet format:
 | other          |      |                      | Unassigned     |
 {: #table-3 title="Allocations of type values to length values"}
 
-- `RSV`: These bits are currently reserved for future use.
+Service is one a few well-known numbers. Current known values are:
 
+| Hexadecinal value | Short Name | Description            |
+|-------------------+------------+------------------------|
+| 0x0001            | DS         | Discovery Service      |
+| 0x0002            | CS         | Control Service        |
+| 0xffff            | None       | Reserved invalid value |
+{: #table-4 title="Known Service values"}
+
+- `RSV`: These bits are currently reserved for future use.
 
 
 ### Address Header {#address-header}
@@ -822,7 +832,7 @@ The `Options` field of the Hop-by-Hop Options and the End-to-End Options headers
 | 253     | Used for experimentation and testing                       |
 | 254     | Used for experimentation and testing                       |
 | 255     | Reserved                                                   |
-{: #table-4 title="Option types of SCION Options header"}
+{: #table-5 title="Option types of SCION Options header"}
 
 - `OptDataLen`: Unsigned 8-bit integer denoting the length of the `OptData` field of this option in bytes.
 - `OptData`: Variable-length field. Option-type specific data.
