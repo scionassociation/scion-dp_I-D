@@ -154,10 +154,10 @@ informative:
 
 This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The responsibility of the **SCION data plane** is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path.
 
-The SCION data plane fundamentally differs from today's IP-based data plane in that it is *path-aware*: In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. SCION also includes its own protocol to communicate failures to endpoints, the SCION Control Message Protocol (SCMP). This protocol will be described in a separate document, which will follow later.
-
+The SCION data plane fundamentally differs from today's IP-based data plane in that it is *path-aware*: In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers.
 
 --- middle
+
 
 # Introduction
 
@@ -204,7 +204,7 @@ SCION leverages source-based path selection, where path information is embedded 
 
 **Path Transparency**: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.
 
-**SCMP**: SCION Control Message Protocol. SCMP is used for signaling connectivity problems, analogous to the Internet Control Message Protocol (ICMP). SCMP provides network diagnostic and error messages.
+**SCMP**: Future SCION Control Message Protocol. SCMP is intended to be analogous to the Internet Control Message Protocol (ICMP).
 
 **Valley Route**: A valley route contains ASes that do not profit economically from traffic on this route. The name comes from the fact that such routes go "down" (following parent-child links) before going "up" (following child-parent links).
 
@@ -757,9 +757,6 @@ When a destination endpoint receives a SCION packet, it can use the path informa
 
    **Note:** For more information on the `PathMetaHdr` field, see [](#PathMetaHdr).
 
-A similar mechanism is possible for on-path routers, for example to send SCION Control Message Protocol (SCMP) messages to the sender of the original packet.
-
-
 
 ## Extension Headers {#ext-header}
 
@@ -908,7 +905,7 @@ Any transport or other upper-layer protocol that includes addresses from the SCI
 
 
 - `DstISD`, `SrcISD`, `DstAS`, `SrcAS`, `DstHostAddr`, `SrcHostAddr`: These values are taken from the SCION address header.
-- `Upper-Layer Packet Length`: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly (e.g., the SCION Control Message Protocol SCMP), use the value from the `PayloadLen` field in the SCION common header, minus the sum of the extension header lengths.
+- `Upper-Layer Packet Length`: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly, use the value from the `PayloadLen` field in the SCION common header, minus the sum of the extension header lengths.
 - `Next Header`: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also [](#protnum)). This field can differ from the `NextHdr` field in the SCION common header, if extensions are present.
 
 
@@ -1309,7 +1306,7 @@ This section describes the steps that a SCION ingress border router MUST perform
 
        - Replace the current value of the field `Acc` in the current info field with the newly calculated value of Acc.
        - Compute the MAC<sup>Verify</sup><sub>i</sub> over the hop field of the current AS<sub>i</sub>. For this, use the formula in [](#def-mac), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of the accumulator Acc as just set in the `Acc` field in the current info field.
-       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Verify</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Verify</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet.
        - Check whether the current hop field is the last hop field in the path segment. For this, look at the value of the current `SegLen` and other metadata in the path meta header. If yes, increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
 
      - **Use case 2** <br> The path segment includes a **peering hop field** (`P` = "1"), but the current hop is **not** the peering hop, that is, the current hop field is **not** the *last* hop field of the segment, seen from the direction of travel - this can be determined by looking at the value of the current `SegLen` and other metadata in the path meta header. In this case, the ingress border router needs to perform the steps previously described for the path segment without peering hop field. However, the border router MUST NOT increment `CurrInf` and MUST NOT increment `CurrHF` in the path meta header. Proceed with step 4.
@@ -1317,7 +1314,7 @@ This section describes the steps that a SCION ingress border router MUST perform
      - **Use case 3** <br> The path segment includes a **peering hop field** (`P` = "1"), and the current hop field *is* the peering hop field. This would be the case if the current hop field is the *last* hop field of the segment, seen from the direction of travel - to find out whether this is true, check the value of the current `SegLen` and other metadata in the path meta header. In this case, the ingress border router MUST take the following step(s):
 
        - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i [:2]` in the formula with the value of the accumulator Acc as set in the `Acc` field in the current info field (this is the value of the accumulator Acc as it comes with the packet).
-       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet.
        - Increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
 
 4. Forward the packet to the egress border router (based on the egress interface ID in the current hop field) or to the destination endpoint, if this is the destination AS.
@@ -1335,7 +1332,7 @@ This section describes the steps that a SCION egress border router MUST perform 
    - **Use case 1** <br> The packet traverses the path segment in **construction direction** (`C` = "1"). The path segment either includes **no peering hop field** (`P` = "0"), or the path segment does include a **peering hop field** (`P` = "1"), but the current hop is **not** the peering hop, that is, the current hop field is **not** the *first* hop field of the segment, seen from the direction of travel. To check whether this is true, look at the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router MUST take the following step(s):
 
      - Compute MAC<sup>Verify</sup><sub>i</sub> over the hop field of the current AS<sub>i</sub>. For this, use the formula in [](#def-mac), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of the accumulator Acc as set in the `Acc` field in the current info field.
-     - Check that the just-calculated MAC<sup>Verify</sup><sub>i</sub> matches MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+     - Check that the just-calculated MAC<sup>Verify</sup><sub>i</sub> matches MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub>. If yes, it is fine. Otherwise, drop the packet.
      - Compute the value of Acc<sub>i+1</sub>. For this, use the formula in [](#def-acc). Replace Acc<sub>i</sub> in the formula with the current value of the accumulator Acc as set in the `Acc` field of the current info field.
      - Replace the value of the `Acc` field in the current info field with the just-calculated value of Acc<sub>i+1</sub>.
      - Proceed with step 3.
@@ -1343,7 +1340,7 @@ This section describes the steps that a SCION egress border router MUST perform 
    - **Use case 2** <br> The packet traverses the path segment in **construction direction** (`C` = "1"). The path segment includes a **peering hop field** (`P` = "1"), and the current hop field *is* the peering hop field. This would be the case if the current hop field is the *first* hop field of the segment, seen from the direction of travel - to find out whether this is true, check the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router MUST take the following steps:
 
      - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0 [:2] ... XOR MAC_i [:2]` with the value in the `Acc` field of the current info field.
-     - Check that the MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub> matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine - proceed with step 3. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+     - Check that the MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub> matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine - proceed with step 3. Otherwise, drop the packet.
 
    - **Use case 3** <br> The packet traverses the path segment **against construction direction** (`C` = "0" and `P` = "0" or "1"). In this case, proceed with the next step, step 3.
 
@@ -1445,24 +1442,25 @@ SCION attempts to take the IANA's assigned Internet protocol numbers into consid
 
 The protocol numbers are used in the SCION header to identify the next level protocol.
 
+SCION reserves a number for a future protocol: the SCION Control Message Protocol (SCMP). Support for this protocol is optional and it has not yet been formally specified. Current practice is documented in [the scion.org SCMP specification document](https://docs.scion.org/en/latest/protocols/scmp.html).
 
 ## Assignment
 {:numbered="false"}
 
 
-| Decimal   | Keyword      | Protocol                                 |
-|-----------+--------------+------------------------------------------|
-| 0-5       |              | Unassigned                               |
-| 6         | TCP/SCION    | Transmission Control Protocol over SCION |
-| 7-16      |              | Unassigned                               |
-| 17        | UDP/SCION    | User Datagram Protocol over SCION        |
-| 18-199    |              | Unassigned                               |
-| 200       | HBH          | SCION Hop-by-Hop Options                 |
-| 201       | E2E          | SCION End-to-End Options                 |
-| 202       | SCMP         | SCION Control Message Protocol           |
-| 203       | BFD/SCION    | BFD over SCION                           |
-| 204-252   |              | Unassigned                               |
-| 253       |              | Use for experimentation and testing      |
-| 254       |              | Use for experimentation and testing      |
-| 255       |              | Reserved                                 |
+| Decimal   | Keyword      | Protocol                                             |
+|-----------+--------------+------------------------------------------------------|
+| 0-5       |              | Unassigned                                           |
+| 6         | TCP/SCION    | Transmission Control Protocol over SCION             |
+| 7-16      |              | Unassigned                                           |
+| 17        | UDP/SCION    | User Datagram Protocol over SCION                    |
+| 18-199    |              | Unassigned                                           |
+| 200       | HBH          | SCION Hop-by-Hop Options                             |
+| 201       | E2E          | SCION End-to-End Options                             |
+| 202       | SCMP         | Reserved for a future SCION Control Message Protocol |
+| 203       | BFD/SCION    | BFD over SCION                                       |
+| 204-252   |              | Unassigned                                           |
+| 253       |              | Use for experimentation and testing                  |
+| 254       |              | Use for experimentation and testing                  |
+| 255       |              | Reserved                                             |
 {: title="The assigned SCION protocol numbers"}
