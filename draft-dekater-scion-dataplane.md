@@ -1442,7 +1442,7 @@ SCION attempts to take the IANA's assigned Internet protocol numbers into consid
 
 The protocol numbers are used in the SCION header to identify the next level protocol.
 
-SCION reserves a number for a future protocol: the SCION Control Message Protocol (SCMP). Support for this protocol is optional and it has not yet been formally specified. Current practice is documented in [the scion.org SCMP specification document](https://docs.scion.org/en/latest/protocols/scmp.html).
+SCION reserves a number for a future protocol: the SCION Control Message Protocol (SCMP). Support for this protocol is optional and it has not yet been formally specified. A work-in-progress specification exists: [the scion.org SCMP specification document](https://docs.scion.org/en/latest/protocols/scmp.html).
 
 ## Assignment
 {:numbered="false"}
