@@ -787,8 +787,8 @@ The SCION Hop-by-Hop Options and End-to-End Options headers have the following f
 
 
 - `NextHdr`: Unsigned 8-bit integer. Identifies the type of header immediately following the Hop-by-Hop/End-to-End Options header. Values of this field respect the Assigned SCION Protocol Numbers (see also [](#protnum)).
-- `ExtLen`: Unsigned 8-bit integer. The value of this field is computed as the length of the complete Hop-by-Hop/End-to-End Options header in multiples of 4-bytes minus 1.
-- `Options`: This is a variable-length field. The length of this field MUST be such that the complete length of the Hop-by-Hop/End-to-End Options header is an integer multiple of 4 bytes. The `Options` field contains one or more Type-Length-Value (TLV) encoded options. For details, see [](#optfld).
+- `ExtLen`: Unsigned 8-bit integer. The value of this field is computed as the length of the header in 4-octet units not including the first 4 octets. That is: `ExtLen = uint8(((options_len + 2) / 4) - 1)` where `options_len + 2` is a multiple of 4.
+- `Options`: This is a variable-length field. The length of this field MUST be such that the complete length of the Hop-by-Hop/End-to-End Options header is an integer multiple of 4 bytes. This can be achieved by using padding-only options. The `Options` field contains one or more Type-Length-Value (TLV) encoded options. For details, see [](#optfld).
 
 The Hop-by-Hop/End-to-End Options header is aligned to 4 bytes.
 
