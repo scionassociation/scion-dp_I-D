@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 22 November 2024                                        S. Hitz
+Expires: 24 November 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                             21 May 2024
+                                                             23 May 2024
 
 
                             SCION Data Plane
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 November 2024.
+   This Internet-Draft will expire on 24 November 2024.
 
 Copyright Notice
 
@@ -2311,8 +2311,8 @@ direction
    the impact of an undiscovered, permanent compromise of a device.
 
    When an AS's forwarding key is compromised, an attacker can forge hop
-   field MACs, undermining path authoriation.  As path segments are only
-   checked for validity and policy compliance during path discovery
+   field MACs, undermining path authorization.  As path segments are
+   only checked for validity and policy compliance during path discovery
    during normal operation, and routers only perform minimal sanity
    checks of hop fields with valid MACs, creating fraudulent hop fields
    with valid MACs allows an attacker to bypass most path segment
