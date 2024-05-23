@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-21T00:00:44.855440+00:00",
+  "timestamp": "2024-05-23T00:00:49.423382+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -782,6 +782,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOKYa7785wFw5P",
+      "title": "Clarify implications of AS forwarding key compromise",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/15",
+      "state": "OPEN",
+      "author": "matzf",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #12",
+      "createdAt": "2024-05-21T14:16:00Z",
+      "updatedAt": "2024-05-21T16:15:02Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "forwarding-key-compromise",
+      "headRefOid": "0e9b6b86342b40b766da43254c2fd34526f35e04",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
