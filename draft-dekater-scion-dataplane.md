@@ -1353,6 +1353,16 @@ This section describes the steps that a SCION egress border router MUST perform 
 **Note:** For more information on the path meta header, see [](#PathMetaHdr).
 
 
+#### Effects of Clock Inaccuracy
+
+Each router along a packet's path verifies the validity of the current hop field by comparing the current time with the hop's expiration time.
+
+This expiration time is calculated as described in [](#hopfld) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; without limits as a segment from the future is still considered valid. A slow clock at origination or a fast clock at a router will yield a shortened time to live; all the way to zero.
+
+The shortest time-to-live is 5 minutes, 37 seconds, and 500 milliseconds ([](#hopfld)). Assuming segments are originated at least once a minute, if the clock difference between the originator of a path and any routers that it refers to does not exceeds 4 minutes and 37 seconds, the published segments remain usable. To that end, a clock accuracy better than 1 minute is more than sufficient.
+
+Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
+
 
 # Security Considerations
 
