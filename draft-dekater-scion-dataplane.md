@@ -681,7 +681,7 @@ The 8-byte Info Field (`InfoField`) has the following format:
 - `C`: Construction direction flag. If the flag has value "1", the hop fields in the segment represented by this info field are arranged in the direction they have been constructed during beaconing.
 - `RSV`: Unused and reserved for future use.
 - `Acc`: This updatable field/counter is required for calculating the MAC in the data plane. `Acc` stands for "Accumulator". For more details, see [](#auth-chained-macs).
-- `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp.
+- `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).
 
 
 
@@ -1288,8 +1288,8 @@ direction
 
 This section describes the steps that a SCION ingress border router MUST perform when it receives a SCION packet.
 
-1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field.
-2. Check that the current hop field is not expired and within its validity period.
+1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field. If not, the router MUST drop the packet.
+2. Check that the current hop field is not expired and not originated in the future (that is, the current info field does have a timestamp in the future). If either is true, the router MUST drop the packet.
 3. The next steps depend on the direction of travel and whether this segment includes a peering hop field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current info field. Therefore, check the settings of both flags. The following combinations are possible:
 
    - The packet traverses the path segment in **construction direction** (`C` = "1" and `P` = "0" or "1"). In this case, proceed with step 4.
@@ -1357,9 +1357,9 @@ This section describes the steps that a SCION egress border router MUST perform 
 
 Each router along a packet's path verifies the validity of the current hop field by comparing the current time with the hop's expiration time.
 
-This expiration time is calculated as described in [](#hopfld) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; without limits as a segment from the future is still considered valid. A slow clock at origination or a fast clock at a router will yield a shortened time to live; all the way to zero.
+This expiration time is calculated as described in [](#hopfld) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; possibly an origination time in the future. A slow clock at origination or a fast clock at a router will yield a shortened time to live; possibly an expiration time in the past.
 
-The shortest time-to-live is 5 minutes, 37 seconds, and 500 milliseconds ([](#hopfld)). Assuming segments are originated at least once a minute, if the clock difference between the originator of a path and any routers that it refers to does not exceeds 4 minutes and 37 seconds, the published segments remain usable. To that end, a clock accuracy better than 1 minute is more than sufficient.
+The shortest time-to-live is 5 minutes, 37 seconds, and 500 milliseconds ([](#hopfld)) and a segment is valid up to that same amount of time prior to its origination timestamp ([](#inffield)). Assuming segments are originated at least once a minute, if the clock difference between the originator of a path and any routers that it refers to does not exceeds 4 minutes and 37 seconds, the shortest-lived segment and the most recent segment are usable. To that end, a clock accuracy better than 1 minute is more than sufficient.
 
 Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
