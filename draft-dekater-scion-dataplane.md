@@ -176,7 +176,7 @@ SCION leverages source-based path selection, where path information is embedded 
 
 **Data Plane**: The data plane (sometimes also referred to as the forwarding plane) is responsible for forwarding data packets that endpoints have injected into the network. After routing information has been disseminated by the control plane, packets are forwarded according to such information by the data plane.
 
-**Endpoint**: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
+**Endpoint**: An endpoint is the start- or the end of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
 
 **Forwarding Key**: A forwarding key is a symmetric key that is shared between the control service (control plane) and the routers (data plane) of an AS. It is used to authenticate hop fields in the end-to-end SCION path. The forwarding key is an AS-local secret and is not shared with other ASes.
 
@@ -185,6 +185,8 @@ SCION leverages source-based path selection, where path information is embedded 
 **Hop Field (HF)**: As they traverse the network, path-segment construction beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of hop fields. In the data plane, hop fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.
 
 **Info Field (INF)**: Each path-segment construction beacon (PCB) contains a single info field, which provides basic information about the PCB. Together with hop fields (HFs), info fields are used to create forwarding paths.
+
+**Interface Identifier (Interface ID)**: A unique (unless 0) number within an AS that designates a network connection to another AS. Each interfaces of an AS is managed by one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress intefaces). Interface ID 0 denotes a connection between a border router and the AS's internal network. Each border router manages an instance of interface 0.
 
 **Isolation Domain (ISD)**: In SCION, autonomous systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g., a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
 
@@ -203,6 +205,8 @@ SCION leverages source-based path selection, where path information is embedded 
 **Path-Segment Construction Beacon (PCB)**: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.
 
 **Path Transparency**: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.
+
+**Peering Link**: A connection between two border routers, of different ASes and possibly different ISDs, that are not Core ASes. A peering link can be seen as a short-cut on a normal path which would otherwise include one or more core ASes. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
 
 **SCMP**: SCION Control Message Protocol. SCMP is used for signaling connectivity problems, analogous to the Internet Control Message Protocol (ICMP). SCMP provides network diagnostic and error messages.
 
@@ -249,6 +253,14 @@ The full forwarding process for a packet transiting an intermediate AS consists 
 
 **Note:** The current SCION implementation uses the UDP/IP protocol as underlay. However, the use of other underlay protocols is possible and allowed.
 
+
+###_Configuration
+
+Border routers need to associate each interface ID with a concrete connections to another AS. The method and information necessary to establish the connection are not specified by this standard. They depend only on the implementation and on the necessary mutual agreement between the administrators of the two ASes. The method by which this information is conveyed to the respective border routers is not specified by this standard. It depends only on the implementation and the choice of each AS administrator. In current practice this is achieved by way of a configuration file, typically but not necessarily, common to all border routers within an AS.
+
+In order to forward traffic to internal endpoints (traffic destined interface 0), border routers need to associate endpoint addresses with concrete host addresses of the internal AS network. The nature of internal host addresses and the translation method are not specified by this standard. They only depend on implementation and the choices of each AS's administrator. In current practice, internal host addresses are IP addresses (V4 or V6), both of which can be used as endpoint addresses in SCION headers; thereby requiring no translation.
+
+In order to forward traffic to service endpoint addresses (`DT/DS` == 0b01) in the [common header](#common-header), a border router needs to translate service numbers into concrete host addresses. The method used to accomplish the translation is not defined by this standard. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file. There are currently only two services addressed in this manner. As a result it is practical to maintain a static mapping in a configuration file. Other methods have been used, including DNS.
 
 ## Path Construction (Segment Combinations) {#construction}
 
