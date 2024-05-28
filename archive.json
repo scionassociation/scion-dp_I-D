@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-26T00:00:36.531835+00:00",
+  "timestamp": "2024-05-28T00:00:39.984821+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -795,7 +795,7 @@
       "labels": [],
       "body": "Fixes #12",
       "createdAt": "2024-05-21T14:16:00Z",
-      "updatedAt": "2024-05-23T08:26:30Z",
+      "updatedAt": "2024-05-27T15:49:09Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
@@ -807,7 +807,28 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858DJD-",
+          "commit": {
+            "abbreviatedOid": "8cbce18"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-27T15:48:26Z",
+          "updatedAt": "2024-05-27T15:49:09Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "> As path segments are only checked for validity and policy compliance during path discovery during normal operation, and routers only perform minimal sanity checks of hop fields with valid MACs, creating fraudulent hop fields with valid MACs allows an attacker to bypass most path segment validity checks.\r\n\r\nSpeaking that one requires breathing exercises. Any way to split it? (yeah, me, the lumper :-) )",
+              "createdAt": "2024-05-27T15:48:26Z",
+              "updatedAt": "2024-05-27T15:49:09Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 16,
@@ -899,13 +920,13 @@
       "labels": [],
       "body": "The reviewr's attention is kindly stirred towards section 4.2.2.3. I am not sure what the standard should say regarding segments from the future. Current code says they're fine.\r\n\r\nAddresses one of the concerns in https://github.com/scionassociation/scion-cp_I-D/issues/18\r\n",
       "createdAt": "2024-05-24T15:18:53Z",
-      "updatedAt": "2024-05-24T15:19:47Z",
+      "updatedAt": "2024-05-27T10:13:03Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "clock_drift",
-      "headRefOid": "6049058f88d4710d9876ad1e42056a18c16f2a16",
+      "headRefOid": "dff4b7c90ef26b497b41353a4f9da053c3d13ee6",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
