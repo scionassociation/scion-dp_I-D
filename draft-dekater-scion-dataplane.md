@@ -254,13 +254,23 @@ The full forwarding process for a packet transiting an intermediate AS consists 
 **Note:** The current SCION implementation uses the UDP/IP protocol as underlay. However, the use of other underlay protocols is possible and allowed.
 
 
-###_Configuration
+### Configuration
 
-Border routers need to associate each interface ID with a concrete connections to another AS. The method and information necessary to establish the connection are not specified by this standard. They depend only on the implementation and on the necessary mutual agreement between the administrators of the two ASes. The method by which this information is conveyed to the respective border routers is not specified by this standard. It depends only on the implementation and the choice of each AS administrator. In current practice this is achieved by way of a configuration file, typically but not necessarily, common to all border routers within an AS.
+Border routers require mappings from SCION  interface IDs to underlay addresses. Such information must be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values must be configured:
 
-In order to forward traffic to internal endpoints (traffic destined interface 0), border routers need to associate endpoint addresses with concrete host addresses of the internal AS network. The nature of internal host addresses and the translation method are not specified by this standard. They only depend on implementation and the choices of each AS's administrator. In current practice, internal host addresses are IP addresses (V4 or V6), both of which can be used as endpoint addresses in SCION headers; thereby requiring no translation.
+- Local interface ID
+- Neighbor type (core, parent, child, peer), depending on link type (see [](#paths-links)). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
+- Neighbor ISD-AS number
+- Neighbor interface underlay address
 
-In order to forward traffic to service endpoint addresses (`DT/DS` == 0b01) in the [common header](#common-header), a border router needs to translate service numbers into concrete host addresses. The method used to accomplish the translation is not defined by this standard. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file. There are currently only two services addressed in this manner. As a result it is practical to maintain a static mapping in a configuration file. Other methods have been used, including DNS.
+In addition, each router must be configured with a list of interface IDs in use within the AS, containing:
+
+- Interface ID
+- "intra-protocol" address of the remote router
+
+In order to forward traffic to internal endpoints (traffic with interface ID 0), border routers need to associate endpoint addresses with concrete host addresses of the internal AS network. The nature of internal host addresses and the translation method are not specified by this document. They only depend on implementation and the choices of each AS's administrator. In current practice, internal host addresses are IP addresses (V6 or V4), both of which can be used as endpoint addresses in SCION headers; thereby requiring no translation.
+
+In order to forward traffic to service endpoint addresses (`DT/DS` == 0b01) in the [common header](#common-header), a border router must translate service numbers into concrete host addresses. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file. There are currently only two services addressed in this manner. As a result it is practical to maintain a static mapping in a configuration file. Other methods have been used, including DNS.
 
 ## Path Construction (Segment Combinations) {#construction}
 
