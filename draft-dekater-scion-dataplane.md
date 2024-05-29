@@ -214,7 +214,7 @@ SCION leverages source-based path selection, where path information is embedded 
 {::boilerplate bcp14-tagged}
 
 
-## Overview
+## Overview
 
 SCION is a path-aware internetworking routing architecture as described in [RFC9217]. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is not concerned with intra-domain forwarding. 
 
