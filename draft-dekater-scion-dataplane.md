@@ -186,7 +186,7 @@ SCION leverages source-based path selection, where path information is embedded 
 
 **Info Field (INF)**: Each path-segment construction beacon (PCB) contains a single info field, which provides basic information about the PCB. Together with hop fields (HFs), info fields are used to create forwarding paths.
 
-**Interface Identifier (Interface ID)**: A unique (unless 0) number within an AS that designates a network connection to another AS. Each interfaces of an AS is managed by one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress intefaces). Interface ID 0 denotes a connection between a border router and the AS's internal network. Each border router manages an instance of interface 0.
+**Interface Identifier (Interface ID)**: 16 bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes. Each interface belongs to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress interfaces). The Interface ID MUST be unique within each AS, with the exception of ID 0 that denotes a connection between a border router and the AS's internal network. Each border router manages an instance of interface 0.
 
 **Isolation Domain (ISD)**: In SCION, autonomous systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g., a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
 
@@ -206,7 +206,7 @@ SCION leverages source-based path selection, where path information is embedded 
 
 **Path Transparency**: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.
 
-**Peering Link**: A connection between two border routers, of different ASes and possibly different ISDs, that are not Core ASes. A peering link can be seen as a short-cut on a normal path which would otherwise include one or more core ASes. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
+**Peering Link**: A link between two SCION border routers of different ASes, where at least one of the two ASes is not core. Two peering ASes may be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
 
 **SCMP**: SCION Control Message Protocol. SCMP is used for signaling connectivity problems, analogous to the Internet Control Message Protocol (ICMP). SCMP provides network diagnostic and error messages.
 
