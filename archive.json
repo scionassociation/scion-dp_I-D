@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-28T00:00:39.984821+00:00",
+  "timestamp": "2024-05-30T00:00:45.967188+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -189,7 +189,7 @@
       "id": "I_kwDOKYa7786IuVaP",
       "title": "editorial: de-emphasisize text",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/9",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [
@@ -200,8 +200,8 @@
       ],
       "body": "No need for this in the abstract: \\*SCION data plane\\*",
       "createdAt": "2024-05-13T21:06:52Z",
-      "updatedAt": "2024-05-16T14:04:38Z",
-      "closedAt": null,
+      "updatedAt": "2024-05-29T12:56:25Z",
+      "closedAt": "2024-05-29T12:56:25Z",
       "comments": []
     },
     {
@@ -239,7 +239,7 @@
       "id": "I_kwDOKYa7786IwuHV",
       "title": "Allowed?",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/11",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [
@@ -250,8 +250,8 @@
       ],
       "body": " >  \\*Note:\\* The current SCION implementation uses the UDP/IP protocol as\r\n   underlay.  However, the use of other underlay protocols is possible\r\n   and allowed.\r\n\r\nThis last sentence makes it seem like one might never run SCION on its own.  Also, \"allowed\" isn't a word we should see in RFCs.",
       "createdAt": "2024-05-14T05:54:10Z",
-      "updatedAt": "2024-05-16T14:00:21Z",
-      "closedAt": null,
+      "updatedAt": "2024-05-29T12:54:22Z",
+      "closedAt": "2024-05-29T12:54:22Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -322,6 +322,42 @@
       "createdAt": "2024-05-16T13:29:46Z",
       "updatedAt": "2024-05-16T13:31:35Z",
       "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOKYa7786KXTYA",
+      "title": "Add component overview",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/20",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-05-28T15:24:57Z",
+      "updatedAt": "2024-05-29T12:33:00Z",
+      "closedAt": "2024-05-29T12:33:00Z",
+      "comments": []
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOKYa7786KeWtU",
+      "title": "Add component overview",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/22",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-05-29T12:33:56Z",
+      "updatedAt": "2024-05-29T12:34:01Z",
+      "closedAt": "2024-05-29T12:34:01Z",
       "comments": []
     }
   ],
@@ -920,19 +956,217 @@
       "labels": [],
       "body": "The reviewr's attention is kindly stirred towards section 4.2.2.3. I am not sure what the standard should say regarding segments from the future. Current code says they're fine.\r\n\r\nAddresses one of the concerns in https://github.com/scionassociation/scion-cp_I-D/issues/18\r\n",
       "createdAt": "2024-05-24T15:18:53Z",
-      "updatedAt": "2024-05-27T10:13:03Z",
+      "updatedAt": "2024-05-28T13:52:27Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "clock_drift",
-      "headRefOid": "dff4b7c90ef26b497b41353a4f9da053c3d13ee6",
+      "headRefOid": "d669e7c4ea8f66b27089daac1de6131ce56c3f01",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858BtPS",
+          "commit": {
+            "abbreviatedOid": "dff4b7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-27T12:31:01Z",
+          "updatedAt": "2024-05-28T08:39:10Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Logic bug:\r\n\"hop field is **not** expired\", \"**not** originated in future\"  -- if either is **true** then drop.\r\nMaybe change to \"if either check fails\".",
+              "createdAt": "2024-05-27T12:31:01Z",
+              "updatedAt": "2024-05-28T08:39:10Z"
+            },
+            {
+              "originalPosition": 30,
+              "body": "\"Assuming segments are originated at least once a minute ...\"\r\n\r\nThis is not entirely accurate. Longer paths take longer to create. With a 1 minute beaconing period, constructing a path segment that traverses N ASes will take up to N minutes.\r\n\r\nWith this in mind, I don't really know how to write this. Perhaps something to the effect of: the expiration time of a path can often not be constrained too tightly, as the path discovery takes a variable amount of time and the usable lifetime of the path is  reduced accordingly. Compared to this effect, even clock drifts in the order of minutes do not pose additional problems.",
+              "createdAt": "2024-05-28T08:26:12Z",
+              "updatedAt": "2024-05-28T08:39:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858JA6j",
+          "commit": {
+            "abbreviatedOid": "dff4b7c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T13:05:45Z",
+          "updatedAt": "2024-05-28T13:05:46Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Done. Rephrased to avoid double negatives.\r\n",
+              "createdAt": "2024-05-28T13:05:45Z",
+              "updatedAt": "2024-05-28T13:05:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858JfDv",
+          "commit": {
+            "abbreviatedOid": "dff4b7c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T13:52:26Z",
+          "updatedAt": "2024-05-28T13:52:27Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Ah yes, that's even more relevant...unfortunately not as clear-cut indeed.\r\n",
+              "createdAt": "2024-05-28T13:52:26Z",
+              "updatedAt": "2024-05-28T13:52:27Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOKYa7785wyhA0",
+      "title": "Add information about configuration. Esp. Interface configuration.",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/21",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses https://github.com/scionassociation/scion-cp_I-D/issues/17\r\n",
+      "createdAt": "2024-05-28T16:45:15Z",
+      "updatedAt": "2024-05-29T18:38:44Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "interface_config",
+      "headRefOid": "5784cffe5f416122b7bf075d6f2b800ace64e378",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858VZ7O",
+          "commit": {
+            "abbreviatedOid": "1c22856"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-29T17:13:06Z",
+          "updatedAt": "2024-05-29T17:36:13Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\n**Interface Identifier (Interface ID)**: 16 bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes. Each interface belongs to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress interfaces). The Interface ID MUST be unique within each AS, with the exception of ID 0 that denotes a connection between a border router and the AS's internal network. Each border router manages an instance of interface 0.\r\n```",
+              "createdAt": "2024-05-29T17:13:06Z",
+              "updatedAt": "2024-05-29T17:36:13Z"
+            },
+            {
+              "originalPosition": 22,
+              "body": "I'd use the same text I proposed for the CP\r\n```suggestion\r\n**Peering Link**: A link between two SCION border routers of different ASes, where at least one of the two ASes is not core. Two peering ASes may be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.\r\n```",
+              "createdAt": "2024-05-29T17:15:00Z",
+              "updatedAt": "2024-05-29T17:36:13Z"
+            },
+            {
+              "originalPosition": 43,
+              "body": "Does that make sense? I tried to separate this in two lists, one for inter-AS neighbors and one for intra-AS SCION routers",
+              "createdAt": "2024-05-29T17:33:02Z",
+              "updatedAt": "2024-05-29T17:36:13Z"
+            },
+            {
+              "originalPosition": 45,
+              "body": "Does this fit better in previous section \u00a0Intra-Domain Forwarding Process ? ",
+              "createdAt": "2024-05-29T17:33:47Z",
+              "updatedAt": "2024-05-29T17:36:13Z"
+            },
+            {
+              "originalPosition": 47,
+              "body": "We don't describe this in this document.. This paragraph will be confusing. Let's discuss if this is needed. \r\n\r\nAlso, we could just mention this mapping has to be configured or supplied out of band.",
+              "createdAt": "2024-05-29T17:36:05Z",
+              "updatedAt": "2024-05-29T17:36:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858V_yX",
+          "commit": {
+            "abbreviatedOid": "5784cff"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T18:35:57Z",
+          "updatedAt": "2024-05-29T18:35:57Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "The phrase \"intra-protocol\" is completely obscure to me. We haven't used that previously, so we might want to make a longer, more explicit phrase. Otherwise, yeah that part probably deserves an explanation, but it might need to be longer.\r\n",
+              "createdAt": "2024-05-29T18:35:57Z",
+              "updatedAt": "2024-05-29T18:35:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858WAFc",
+          "commit": {
+            "abbreviatedOid": "5784cff"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T18:36:43Z",
+          "updatedAt": "2024-05-29T18:36:43Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "I'd rather address the configuration topic in one place.",
+              "createdAt": "2024-05-29T18:36:43Z",
+              "updatedAt": "2024-05-29T18:36:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858WA4d",
+          "commit": {
+            "abbreviatedOid": "5784cff"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T18:38:44Z",
+          "updatedAt": "2024-05-29T18:38:44Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "Well, we, unfortunately do mention the service address type, without explaining it. It is currently the only mechanism to bootstrap scion, so I think we are obligated to explain it.\r\n",
+              "createdAt": "2024-05-29T18:38:44Z",
+              "updatedAt": "2024-05-29T18:38:44Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
