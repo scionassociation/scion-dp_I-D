@@ -250,9 +250,7 @@ The full forwarding process for a packet transiting an intermediate AS consists 
 3. The SCION router maps the egress interface ID in the current hop field of the SCION header to the destination "intra-protocol" address of the egress border router (where "intra-protocol" is the intra-domain forwarding protocol, e.g., MPLS or IP).
 4. The packet is forwarded within the AS by routers and switches based on the "intra-protocol" header.
 5. Upon receiving the packet, the SCION egress router strips off the "intra-protocol" header, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
-
-**Note:** The current SCION implementation uses the UDP/IP protocol as underlay. However, the use of other underlay protocols is possible and allowed.
-
+6. The last SCION router on the path forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
 
 ### Configuration
 
@@ -267,8 +265,6 @@ In addition, each router must be configured with a list of interface IDs in use 
 
 - Interface ID
 - "intra-protocol" address of the remote router
-
-In order to forward traffic to internal endpoints (traffic with interface ID 0), border routers need to associate endpoint addresses with concrete host addresses of the internal AS network. The nature of internal host addresses and the translation method are not specified by this document. They only depend on implementation and the choices of each AS's administrator. In current practice, internal host addresses are IP addresses (V6 or V4), both of which can be used as endpoint addresses in SCION headers; thereby requiring no translation.
 
 In order to forward traffic to service endpoint addresses (`DT/DS` == 0b01) in the [common header](#common-header), a border router must translate service numbers into concrete host addresses. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file. There are currently only two services addressed in this manner. As a result it is practical to maintain a static mapping in a configuration file. Other methods have been used, including DNS.
 
