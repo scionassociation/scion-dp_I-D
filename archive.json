@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-05-30T00:00:45.967188+00:00",
+  "timestamp": "2024-06-02T00:00:39.715344+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -358,6 +358,26 @@
       "createdAt": "2024-05-29T12:33:56Z",
       "updatedAt": "2024-05-29T12:34:01Z",
       "closedAt": "2024-05-29T12:34:01Z",
+      "comments": []
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOKYa7786Kl1sF",
+      "title": "intra-protocol? --> better wording ",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/23",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "Some ideas:\r\n- intra-domain underlay\r\n\r\n\r\nSecond choice:\r\n- intra-domain network protocol\r\n\r\nIf we use a term, we may need to add it to the glossary too.",
+      "createdAt": "2024-05-30T08:27:11Z",
+      "updatedAt": "2024-05-30T09:22:03Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -878,7 +898,7 @@
       "labels": [],
       "body": "Fixes #8 ",
       "createdAt": "2024-05-23T12:25:29Z",
-      "updatedAt": "2024-05-23T13:43:57Z",
+      "updatedAt": "2024-05-31T17:25:14Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
@@ -890,7 +910,34 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858p7X1",
+          "commit": {
+            "abbreviatedOid": "233b80b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-31T17:24:01Z",
+          "updatedAt": "2024-05-31T17:25:14Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "```suggestion\r\n```",
+              "createdAt": "2024-05-31T17:24:01Z",
+              "updatedAt": "2024-05-31T17:25:14Z"
+            },
+            {
+              "originalPosition": 91,
+              "body": "Maybe we could remove this comment and leave it in the table? I think we have the same problem for DrKey somewhere else",
+              "createdAt": "2024-05-31T17:25:01Z",
+              "updatedAt": "2024-05-31T17:25:14Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 17,
@@ -904,7 +951,7 @@
       "labels": [],
       "body": "Fixes #14 ",
       "createdAt": "2024-05-23T13:49:33Z",
-      "updatedAt": "2024-05-23T13:49:42Z",
+      "updatedAt": "2024-05-31T17:20:49Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
@@ -916,7 +963,34 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858p5mV",
+          "commit": {
+            "abbreviatedOid": "4145be3"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-31T17:19:18Z",
+          "updatedAt": "2024-05-31T17:20:49Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\n- `ExtLen`: Unsigned 8-bit integer. Length of the  Hop-by-Hop or End-to-End Options header in 4-octet units, not including the first 4 octets. That is: `ExtLen = uint8(((options_len + 2) / 4) - 1)`, where `options_len + 2` is a multiple of 4.\r\n```\r\n\r\n\r\nI'd try language similar to IPv6 (RFC2460): \r\n```   \r\nHdr Ext Len    8-bit unsigned integer.  Length of the Routing\r\n                   header in 8-octet units, not including the first\r\n                   8 octets.\r\n```\r\n\r\nI don't really understand the formula, and I'd not use `options_len` in there as it seems we are introducing a new field. I'd rather use tomething lile `L` and then on the side say what `L` is (extension header size in bits)",
+              "createdAt": "2024-05-31T17:19:18Z",
+              "updatedAt": "2024-05-31T17:20:49Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "What is a `padding-only` option?  In the draft we describe `Pad1` and `PadN`",
+              "createdAt": "2024-05-31T17:20:37Z",
+              "updatedAt": "2024-05-31T17:20:49Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 18,
@@ -956,7 +1030,7 @@
       "labels": [],
       "body": "The reviewr's attention is kindly stirred towards section 4.2.2.3. I am not sure what the standard should say regarding segments from the future. Current code says they're fine.\r\n\r\nAddresses one of the concerns in https://github.com/scionassociation/scion-cp_I-D/issues/18\r\n",
       "createdAt": "2024-05-24T15:18:53Z",
-      "updatedAt": "2024-05-28T13:52:27Z",
+      "updatedAt": "2024-05-31T16:36:32Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
@@ -1034,6 +1108,32 @@
               "updatedAt": "2024-05-28T13:52:27Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858phRb",
+          "commit": {
+            "abbreviatedOid": "d669e7c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-31T16:24:22Z",
+          "updatedAt": "2024-05-31T16:36:32Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I'd align this text with the CP draft once we finish discussion in https://github.com/scionassociation/scion-cp_I-D/pull/25  ",
+              "createdAt": "2024-05-31T16:24:22Z",
+              "updatedAt": "2024-05-31T16:36:32Z"
+            },
+            {
+              "originalPosition": 35,
+              "body": "I'd also shrink and reword this section, after we finish discussion in the control plane PR, and leave here only aspects that relate to the DP, like: \r\n- there must be lose time sync between routers and CPs (within an AS?) because routers must verify the current HF \r\n\r\nAnd remove parts that relate to CP",
+              "createdAt": "2024-05-31T16:36:28Z",
+              "updatedAt": "2024-05-31T16:36:32Z"
+            }
+          ]
         }
       ]
     },
@@ -1049,13 +1149,13 @@
       "labels": [],
       "body": "Addresses https://github.com/scionassociation/scion-cp_I-D/issues/17\r\n",
       "createdAt": "2024-05-28T16:45:15Z",
-      "updatedAt": "2024-05-29T18:38:44Z",
+      "updatedAt": "2024-05-31T16:55:25Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "interface_config",
-      "headRefOid": "5784cffe5f416122b7bf075d6f2b800ace64e378",
+      "headRefOid": "230d52c291885c80ad9325d49d8f4b8699fda97c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -1163,6 +1263,150 @@
               "body": "Well, we, unfortunately do mention the service address type, without explaining it. It is currently the only mechanism to bootstrap scion, so I think we are obligated to explain it.\r\n",
               "createdAt": "2024-05-29T18:38:44Z",
               "updatedAt": "2024-05-29T18:38:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858cGYf",
+          "commit": {
+            "abbreviatedOid": "5784cff"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T09:21:24Z",
+          "updatedAt": "2024-05-30T09:21:24Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "To be handled in #23 ",
+              "createdAt": "2024-05-30T09:21:24Z",
+              "updatedAt": "2024-05-30T09:21:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858cozL",
+          "commit": {
+            "abbreviatedOid": "d02a253"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T10:27:13Z",
+          "updatedAt": "2024-05-30T10:27:13Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "We actually describe Interface ID 0 in the _One-Hop Path Type_  section. \r\nMaybe we could add a reference?   \r\n\r\nAlso, is interface ID 0 used for the last hop? In the example in _Step-by-Step Explanation_\r\n```\r\n      R4 will then also realize, based on the fields\r\n      CurrHF and SegLen in the SCION header, that the packet has reached\r\n      the last hop in its SCION path.  Therefore, instead of stepping up\r\n      the pointers to the next info or hop field, router R4 inspects the\r\n      SCION destination address and extracts the endpoint address\r\n      192.0.2.7. \r\n ```",
+              "createdAt": "2024-05-30T10:27:13Z",
+              "updatedAt": "2024-05-30T10:27:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858dsUc",
+          "commit": {
+            "abbreviatedOid": "1c22856"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T12:34:35Z",
+          "updatedAt": "2024-05-30T12:34:35Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Rearanged as per our discussion.\r\n",
+              "createdAt": "2024-05-30T12:34:35Z",
+              "updatedAt": "2024-05-30T12:34:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858edud",
+          "commit": {
+            "abbreviatedOid": "230d52c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T13:56:28Z",
+          "updatedAt": "2024-05-30T14:52:39Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "> ID 0 that denotes a connection between a border router and the AS's internal network. Each border router manages an instance of interface 0.\r\n\r\nThe convention to use interface 0 to refer to the AS-internal side of the border router is an implementation detail of our router. I think it suffices to say something like \"Interface ID 0 is reserved for blank/nil values\".\r\n",
+              "createdAt": "2024-05-30T13:56:28Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            },
+            {
+              "originalPosition": 13,
+              "body": "\r\n> We actually describe Interface ID 0 in the One-Hop Path Type section.\r\n\r\nThe One hop path is not very special here; we also use 0 interface in the first/last hop field of normal SCION paths.\r\n\r\n> Also, is interface ID 0 used for the last hop?\r\n\r\nDuring path segment construction, the 0 interface is used in the first/last hop field. BUT in the path-segment-combined dataplane path, the 0 does not always/only occur on the last hop.\r\n- Hops with 0 interface occurs \"in the middle\", at segment cross overs.\r\n- Typically 0 will occur at the end of a down segment, but it's legal to cut off the end of a segment.\r\n- Paths to a parent AS below the core consist of only an up-segment that is cut short. These don't end with 0.",
+              "createdAt": "2024-05-30T14:06:17Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "Just \"Interface ID\" (otherwise reader might wonder if there are different types of interface IDs).",
+              "createdAt": "2024-05-30T14:10:49Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            },
+            {
+              "originalPosition": 46,
+              "body": "Text does not make it quite clear which border routers get which list of values.\r\n\r\nI'm guessing that it means to say that routers that \"implement\"/\"handle\" a particular interface need to know the link type/neighbor ISD-AS/neighbor interface address, while all other routers only need the address of the router that handles the Iface.\r\n\r\nI believe all routers need to know the link type, to validate segment cross over (e.g. cross-over from an peer- to a core- link would be forbidden). Unfortunately, this is not described in the \"processing at routers\" section at all. Notably this _is_ described in the book v2 (5.6.3 processing at routers). \r\nThe neighbor's ISD-AS number is currently not used for much, but possibly it should be used to drop packets with bad source/dest address.\r\n\r\n\r\nMaybe it's easier to combine the two \"lists\". Suggestion:\r\n```\r\nFor each link to a neighbor, these following information needs to be configured for all border routers:\r\n- Interface ID\r\n- Link Type,\r\n- Neighbor ISD-AS number,\r\n- In the case of the border router responsible for this interface: the neighbor interface's underlay address.\r\n- Otherwise: the \"intra-protocol\" address of the border router responsible this interface.\r\n```",
+              "createdAt": "2024-05-30T14:43:43Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            },
+            {
+              "originalPosition": 48,
+              "body": "> (`DT/DS` == 0b01) in the [common header](#common-header)\r\n\r\n\"in the common header\" should be in the parens, no?\r\n-> (`DT/DS` == 0b01 in the common header) ...",
+              "createdAt": "2024-05-30T14:52:28Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858psSi",
+          "commit": {
+            "abbreviatedOid": "d02a253"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-31T16:50:08Z",
+          "updatedAt": "2024-05-31T16:50:08Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Thanks for the explanation! @jiceatscion can you remove mentions of this use of interface ID 0 from the draft? ",
+              "createdAt": "2024-05-31T16:50:08Z",
+              "updatedAt": "2024-05-31T16:50:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858puNv",
+          "commit": {
+            "abbreviatedOid": "230d52c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-31T16:55:25Z",
+          "updatedAt": "2024-05-31T16:55:25Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "> Maybe it's easier to combine the two \"lists\"\r\n\r\nBut routers within the same AS require less parameters. For example, AFAIK no link type or neighbor ISD-AS is needed.  \r\nAlso, is it a requirement that all BRs within an AS see each others as \"neighbors\", in a meshed way? In other words, must each router have all interface ID mappings for its AS (and L3 connectivity to all other routers)? \r\n\r\n",
+              "createdAt": "2024-05-31T16:55:25Z",
+              "updatedAt": "2024-05-31T16:55:25Z"
             }
           ]
         }
