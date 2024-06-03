@@ -149,22 +149,22 @@ informative:
         name: Adrian Perrig
         org: ETH Zuerich
   SCMP:
-    title SCMP Specification
-	date: 2023
-	target: https://docs.scion.org/en/latest/protocols/scmp.html
-	author:
-	  - 
-	    ins: Anapaya
-	    name: Anapaya Systems
-		org: Anapaya Systems
-	  -
-		ins: ETH
-		name: ETH Zuerich
-		org: ETH Zuerich
-	  -
-		ins: SCION
-		name: SCION Association
-		org: SCION Association
+    title: SCMP Documentation
+    date: 2023
+    target: https://docs.scion.org/en/latest/protocols/scmp.html
+    author:
+      -
+        ins: Anapaya
+        name: Anapaya Systems
+        org: Anapaya Systems
+      -
+        ins: ETH
+        name: ETH Zuerich
+        org: ETH Zuerich
+      -
+        ins: SCION
+        name: SCION Association
+        org: SCION Association
 
 --- abstract
 
