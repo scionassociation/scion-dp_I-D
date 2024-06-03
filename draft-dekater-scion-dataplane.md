@@ -1454,27 +1454,27 @@ This appendix lists the assigned SCION protocol numbers.
 
 SCION attempts to take the IANA's assigned Internet protocol numbers into consideration. Widely employed protocols have the same protocol number as the one assigned by IANA. SCION specific protocol numbers start at 200.
 
-The protocol numbers are used in the SCION header to identify the next level protocol.
+The protocol numbers are used in the SCION header to identify the upper layer protocol.
 
-SCION reserves a number for a future protocol: the SCION Control Message Protocol (SCMP). Support for this protocol is optional and it has not yet been formally specified. A work-in-progress specification exists: [SCMP]
+SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is optional. A work-in-progress specification is available at: {{SCMP}}.
 
 ## Assignment
 {:numbered="false"}
 
 
-| Decimal   | Keyword      | Protocol                                             |
-|-----------+--------------+------------------------------------------------------|
-| 0-5       |              | Unassigned                                           |
-| 6         | TCP/SCION    | Transmission Control Protocol over SCION             |
-| 7-16      |              | Unassigned                                           |
-| 17        | UDP/SCION    | User Datagram Protocol over SCION                    |
-| 18-199    |              | Unassigned                                           |
-| 200       | HBH          | SCION Hop-by-Hop Options                             |
-| 201       | E2E          | SCION End-to-End Options                             |
-| 202       | SCMP         | Reserved for a future SCION Control Message Protocol |
-| 203       | BFD/SCION    | BFD over SCION                                       |
-| 204-252   |              | Unassigned                                           |
-| 253       |              | Use for experimentation and testing                  |
-| 254       |              | Use for experimentation and testing                  |
-| 255       |              | Reserved                                             |
+| Decimal   | Keyword      | Protocol                                 |
+|-----------+--------------+------------------------------------------|
+| 0-5       |              | Unassigned                               |
+| 6         | TCP/SCION    | Transmission Control Protocol over SCION |
+| 7-16      |              | Unassigned                               |
+| 17        | UDP/SCION    | User Datagram Protocol over SCION        |
+| 18-199    |              | Unassigned                               |
+| 200       | HBH          | SCION Hop-by-Hop Options                 |
+| 201       | E2E          | SCION End-to-End Options                 |
+| 202       | SCMP         | SCION Control Message Protocol           |
+| 203       | BFD/SCION    | BFD over SCION                           |
+| 204-252   |              | Unassigned                               |
+| 253       |              | Use for experimentation and testing      |
+| 254       |              | Use for experimentation and testing      |
+| 255       |              | Reserved                                 |
 {: title="The assigned SCION protocol numbers"}
