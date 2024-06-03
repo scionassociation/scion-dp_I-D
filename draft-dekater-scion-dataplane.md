@@ -186,7 +186,7 @@ SCION leverages source-based path selection, where path information is embedded 
 
 **Info Field (INF)**: Each path-segment construction beacon (PCB) contains a single info field, which provides basic information about the PCB. Together with hop fields (HFs), info fields are used to create forwarding paths.
 
-**Interface Identifier (Interface ID)**: 16 bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes. Each interface belongs to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress interfaces). The Interface ID MUST be unique within each AS, with the exception of ID 0 that denotes a connection between a border router and the AS's internal network. Each border router manages an instance of interface 0.
+**Interface Identifier (Interface ID)**: 16 bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes. Each interface belongs to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress interfaces). The Interface ID MUST be unique within each AS. Interface ID 0 is not a valid identifier, implementations can use it as the "unspecified" value.
 
 **Isolation Domain (ISD)**: In SCION, autonomous systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g., a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
 
@@ -254,19 +254,15 @@ The full forwarding process for a packet transiting an intermediate AS consists 
 
 ### Configuration
 
-Border routers require mappings from SCION  interface IDs to underlay addresses. Such information must be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values must be configured:
+Border routers require mappings from SCION  interface IDs to underlay addresses. Such information must be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values must be configured. A typical implementation will require:
 
-- Local interface ID
-- Neighbor type (core, parent, child, peer), depending on link type. Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
-- Neighbor ISD-AS number
-- Neighbor interface underlay address
+- Interface ID.
+- Link type (core, parent, child, peer). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
+- Neighbor ISD-AS number.
+- For the router that manages the interface: the neighbor interface underlay address.
+- For the routers that do not manage the interface:  "intra-protocol" address of the router that does.
 
-In addition, each router must be configured with a list of interface IDs in use within the AS, containing:
-
-- Interface ID
-- "intra-protocol" address of the remote router
-
-In order to forward traffic to service endpoint addresses (`DT/DS` == 0b01) in the [common header](#common-header), a border router must translate service numbers into concrete host addresses. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file. There are currently only two services addressed in this manner. As a result it is practical to maintain a static mapping in a configuration file. Other methods have been used, including DNS.
+In order to forward traffic to service endpoint addresses (`DT/DS` == 0b01 in the [common header](#common-header)), a border router must translate service numbers into concrete host addresses. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file. There are currently only two services addressed in this manner. As a result it is practical to maintain a static mapping in a configuration file. Other methods have been used, including DNS.
 
 ## Path Construction (Segment Combinations) {#construction}
 
@@ -741,7 +737,7 @@ The one-hop path type `OneHopPath` is currently used to bootstrap beaconing betw
 
 A one-hop path has exactly one info field and two hop fields with the specialty that the second hop field is not known a priori, but is instead created by the ingress SCION border router of the neighboring AS while processing the one-hop path. Any entity with access to the forwarding key of the source endpoint AS can create a valid info and hop field as described in [](#inffield) and [](#hopfld), respectively.
 
-Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second hop field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to "0", indicating that the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the hop field.
+Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second hop field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to an invalid value, ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the hop field.
 
 {{figure-10}} below shows the layout of a SCION one-hop path type. There is only a single info field; the appropriate hop field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
 
