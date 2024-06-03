@@ -3493,8 +3493,8 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
 <a href="#name-considerations" class="section-name selfRef">Considerations</a>
         </h3>
 <p id="appendix-B.1-1">SCION attempts to take the IANA's assigned Internet protocol numbers into consideration. Widely employed protocols have the same protocol number as the one assigned by IANA. SCION specific protocol numbers start at 200.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
-<p id="appendix-B.1-2">The protocol numbers are used in the SCION header to identify the next level protocol.<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
-<p id="appendix-B.1-3">SCION reserves a number for a future protocol: the SCION Control Message Protocol (SCMP). Support for this protocol is optional and it has not yet been formally specified. A work-in-progress specification exists: <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span><a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-2">The protocol numbers are used in the SCION header to identify the upper layer protocol.<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-3">SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is optional. A work-in-progress specification is available at: <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>.<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="assignment">
@@ -3553,7 +3553,7 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
             <tr>
               <td class="text-left" rowspan="1" colspan="1">202</td>
               <td class="text-left" rowspan="1" colspan="1">SCMP</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved for a future SCION Control Message Protocol</td>
+              <td class="text-left" rowspan="1" colspan="1">SCION Control Message Protocol</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">203</td>

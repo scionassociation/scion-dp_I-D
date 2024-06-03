@@ -2537,12 +2537,11 @@ Assigned SCION Protocol Numbers
    start at 200.
 
    The protocol numbers are used in the SCION header to identify the
-   next level protocol.
+   upper layer protocol.
 
-   SCION reserves a number for a future protocol: the SCION Control
-   Message Protocol (SCMP).  Support for this protocol is optional and
-   it has not yet been formally specified.  A work-in-progress
-   specification exists: [SCMP]
+   SCMP refers to the SCION Control Message Protocol, used for
+   diagnostics and error messages.  Support for this protocol is
+   optional.  A work-in-progress specification is available at: [SCMP].
 
 Assignment
 
@@ -2563,8 +2562,7 @@ Assignment
     +---------+-----------+------------------------------------------+
     | 201     | E2E       | SCION End-to-End Options                 |
     +---------+-----------+------------------------------------------+
-    | 202     | SCMP      | Reserved for a future SCION Control      |
-    |         |           | Message Protocol                         |
+    | 202     | SCMP      | SCION Control Message Protocol           |
     +---------+-----------+------------------------------------------+
     | 203     | BFD/SCION | BFD over SCION                           |
     +---------+-----------+------------------------------------------+
