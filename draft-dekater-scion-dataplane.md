@@ -462,8 +462,6 @@ The SCION common header has the following packet format:
 {: #table-3 title="Allocations of type values to length values"}
 
 - `RSV`: These bits are currently reserved for future use.
-- `Service`: A type of endpoint address that designates a set of destinations. A packet addressed to a service is redirected to any one endpoint that is known to be part of the set.
-
 
 ### Address Header {#address-header}
 
