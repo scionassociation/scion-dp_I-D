@@ -148,7 +148,23 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-
+  SCMP:
+    title SCMP Specification
+	date: 2023
+	target: https://docs.scion.org/en/latest/protocols/scmp.html
+	author:
+	  - 
+	    ins: Anapaya
+	    name: Anapaya Systems
+		org: Anapaya Systems
+	  -
+		ins: ETH
+		name: ETH Zuerich
+		org: ETH Zuerich
+	  -
+		ins: SCION
+		name: SCION Association
+		org: SCION Association
 
 --- abstract
 
@@ -203,8 +219,6 @@ SCION leverages source-based path selection, where path information is embedded 
 **Path-Segment Construction Beacon (PCB)**: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.
 
 **Path Transparency**: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.
-
-**SCMP**: Future SCION Control Message Protocol. SCMP is intended to be analogous to the Internet Control Message Protocol (ICMP).
 
 **Valley Route**: A valley route contains ASes that do not profit economically from traffic on this route. The name comes from the fact that such routes go "down" (following parent-child links) before going "up" (following child-parent links).
 
@@ -1442,7 +1456,7 @@ SCION attempts to take the IANA's assigned Internet protocol numbers into consid
 
 The protocol numbers are used in the SCION header to identify the next level protocol.
 
-SCION reserves a number for a future protocol: the SCION Control Message Protocol (SCMP). Support for this protocol is optional and it has not yet been formally specified. A work-in-progress specification exists: [the scion.org SCMP specification document](https://docs.scion.org/en/latest/protocols/scmp.html).
+SCION reserves a number for a future protocol: the SCION Control Message Protocol (SCMP). Support for this protocol is optional and it has not yet been formally specified. A work-in-progress specification exists: [SCMP]
 
 ## Assignment
 {:numbered="false"}
