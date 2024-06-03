@@ -262,7 +262,7 @@ Border routers require mappings from SCION  interface IDs to underlay addresses.
 - For the router that manages the interface: the neighbor interface underlay address.
 - For the routers that do not manage the interface:  "intra-protocol" address of the router that does.
 
-In order to forward traffic to service endpoint addresses (`DT/DS` == 0b01 in the [common header](#common-header)), a border router must translate service numbers into concrete host addresses. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file. There are currently only two services addressed in this manner. As a result it is practical to maintain a static mapping in a configuration file. Other methods have been used, including DNS.
+In order to forward traffic to a service endpoint addresse (`DT/DS` == 0b01 in the [common header](#common-header)), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
 ## Path Construction (Segment Combinations) {#construction}
 
@@ -462,7 +462,7 @@ The SCION common header has the following packet format:
 {: #table-3 title="Allocations of type values to length values"}
 
 - `RSV`: These bits are currently reserved for future use.
-
+- `Service`: A type of endpoint address that designates a set of destinations. A packet addressed to a service is redirected to any one endpoint that is known to be part of the set.
 
 
 ### Address Header {#address-header}
