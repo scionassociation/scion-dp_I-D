@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 September 2024                                        S. Hitz
+Expires: 5 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                            4 March 2024
+                                                             3 June 2024
 
 
                             SCION Data Plane
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 September 2024.
+   This Internet-Draft will expire on 5 December 2024.
 
 Copyright Notice
 
@@ -1184,13 +1184,16 @@ Table of Contents
       Values of this field respect the Assigned SCION Protocol Numbers
       (see also Appendix "Assigned SCION Protocol Numbers").
 
-   *  ExtLen: Unsigned 8-bit integer.  The value of this field is
-      computed as the length of the complete Hop-by-Hop/End-to-End
-      Options header in multiples of 4-bytes minus 1.
+   *  ExtLen: 8-bit unsigned integer.  The length of the Hop-by-hop or
+      End-to-end options header in 4-octet units, not including the
+      first 4 octets.  That is: ExtLen = uint8(((L + 2) / 4) - 1), where
+      L is the size of the header in bytes, assuming that L + 2 is a
+      multiple of 4.
 
    *  Options: This is a variable-length field.  The length of this
       field MUST be such that the complete length of the Hop-by-Hop/End-
-      to-End Options header is an integer multiple of 4 bytes.  The
+      to-End Options header is an integer multiple of 4 bytes.  This can
+      be achieved by using options of type 0 or 1 (see Table 4) . The
       Options field contains one or more Type-Length-Value (TLV) encoded
       options.  For details, see Section 2.3.1.1.
 
