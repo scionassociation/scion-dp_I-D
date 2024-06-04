@@ -1091,57 +1091,31 @@ When combining path segments to create a path to the destination endpoint, the s
 
 In the following, the computation of the hop field MAC as well as the accumulator field `Acc` is explained.
 
-**Note:** The algorithm used by SCION to compute the hop field MAC is based on the AES-CMAC algorithm, truncated to 48-bits - see also {{RFC4493}}. In principle, the computation of the MAC is an AS-specific choice; only the control service and routers of the AS need to agree on keys, algorithm, and input for the MAC. However, note that we do not provide nor specify any mechanism to coordinate AS-specific choices between the routers and the control services of the AS.
-
-
-#### MAC - Definition {#def-mac}
+#### Hop Field MAC - Definition {#def-mac}
 
 - Consider a path segment with "n" hops, containing ASes AS<sub>0</sub>, ... , AS<sub>n-1</sub>, with forwarding keys K<sub>0</sub>, ... , K<sub>n-1</sub> in this order.
 - AS<sub>0</sub> is the core AS that created the PCB representing the path segment and that added a random initial 16-bit segment identifier `SegID` to the `Segment Info` field of the PCB.
 
-The MAC<sub>i</sub> of the hop field of AS<sub>i</sub> is now calculated based on the following definition:
+The MAC<sub>i</sub> of the hop field of AS<sub>i</sub> is now calculated as:
 
 MAC<sub>i</sub> = <br> Ck<sub>i</sub> (`SegID` XOR MAC<sub>0</sub> \[:2] ... XOR MAC<sub>i-1</sub> \[:2], Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
 
 where
 
 - k<sub>i</sub> = The forwarding key k of the current AS<sub>i</sub>
-- Ck<sub>i</sub> (...) = Checksum C over (...) computed with forwarding key k<sub>i</sub>
+- Ck<sub>i</sub> (...) = Cryptographic checksum C over (...) computed with forwarding key k<sub>i</sub>
 - `SegID` = The random initial 16-bit segment identifier set by the core AS when creating the corresponding PCB
 - XOR = The bitwise "exclusive or" operation
 - MAC<sub>i</sub> \[:2] = The hop field MAC for AS<sub>i</sub>, truncated to 2 bytes
 - Timestamp = The timestamp set by the core AS when creating the corresponding PCB
 - ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub> = The content of the hop field HF<sub>i</sub>
 
-The above definition implies that the current MAC is based on the XOR-sum of the truncated MACs of all preceding hop fields in the path segment as well as the path segment's `SegID`. In other words, the current MAC is *chained* to all preceding MACs.
-
-
-#### Layout of the Input Data for the MAC Calculation
-
-{{figure-17}} below shows the layout of the input data to calculate the hop field MAC in the data plane. The input layout represents the 8 bytes of the info field and the first 8 bytes of the hop field, with some fields zeroed out.
-
-Note that the MAC field itself is only 6 bytes long - see also [](#hopfld).
-
-~~~~
-0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-|               0               |           Acc                 |   Hop|
-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| Field|
-|                           Timestamp                           |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| -----+
-|       0       |    ExpTime    |          ConsIngress          |  Info|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Field|
-|          ConsEgress           |               0               |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-~~~~
-{: #figure-17 title="Input data to calculate the hop field MAC"}
-
+Thus, the current MAC is based on the XOR-sum of the truncated MACs of all preceding hop fields in the path segment as well as the path segment's `SegID`. In other words, the current MAC is *chained* to all preceding MACs.
 
 
 #### Accumulator Acc - Definition {#def-acc}
 
-The accumulator Acc<sub>i</sub> is an updatable counter introduced in the data plane to reduce overhead caused by MAC-chaining for path authorization. This is achieved by incrementally tracking the XOR-sum of the previous MACs as a separate, updatable accumulator field `Acc`, which is part of the path segment's info field `InfoField` in the packet header (see also [](#inffield)). Routers update this field by adding/subtracting only a single 16-bit value each.
+The accumulator Acc<sub>i</sub> is an updatable counter introduced in the data plane to avoid overhead caused by MAC-chaining for path authorization. This is achieved by incrementally tracking the XOR-sum of the previous MACs as a separate, updatable accumulator field `Acc`, which is part of the path segment's info field `InfoField` in the packet header (see also [](#inffield)). Routers update this field by adding/subtracting only a single 16-bit value each.
 
 ~~~~
  0                   1                   2                   3
@@ -1152,7 +1126,7 @@ The accumulator Acc<sub>i</sub> is an updatable counter introduced in the data p
 |                           Timestamp                           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~
-{: #figure-18 title="The Info Field of a specific path segment in the packet header, with the updatable accumulator field `Acc`."}
+{: #figure-17 title="The Info Field of a specific path segment in the packet header, with the updatable accumulator field `Acc`."}
 
 
 This is how it works:
@@ -1173,6 +1147,31 @@ Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2]
 
 - XOR = The bitwise "exclusive or" operation
 - MAC<sub>i</sub> \[:2] = The hop field MAC for the current AS<sub>i</sub>, truncated to 2 bytes
+
+
+#### Default Hop Field MAC Algorithm
+
+The computation of the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
+Control service and router implementations SHOULD support the Default Hop Field MAC algorithm described below. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.
+
+
+The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, computed over the info field and the first 6 bytes of the hop field, with flags and reserved fields zeroed out. The input is padded to 16 bytes. The _first_ 6 bytes of the AES-CMAC output are used as resulting hop field MAC.
+{{figure-18}} below shows the layout of the input data to calculate the hop field MAC.
+
+~~~~
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
+|               0               |           Acc                 |  Info|
+|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| Field|
+|                           Timestamp                           |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| -----+
+|       0       |    ExpTime    |          ConsIngress          |   Hop|
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Field|
+|          ConsEgress           |               0               |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
+~~~~
+{: #figure-18 title="Input data to calculate the hop field MAC for the default hop-field MAC algorithm"}
 
 
 ### Peering Links {#peerlink}
