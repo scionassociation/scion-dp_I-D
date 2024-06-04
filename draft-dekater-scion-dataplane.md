@@ -1115,7 +1115,7 @@ Thus, the current MAC is based on the XOR-sum of the truncated MACs of all prece
 
 #### Accumulator Acc - Definition {#def-acc}
 
-The accumulator Acc<sub>i</sub> is an updatable counter introduced in the data plane to avoid overhead caused by MAC-chaining for path authorization. This is achieved by incrementally tracking the XOR-sum of the previous MACs as a separate, updatable accumulator field `Acc`, which is part of the path segment's info field `InfoField` in the packet header (see also [](#inffield)). Routers update this field by adding/subtracting only a single 16-bit value each.
+The accumulator Acc<sub>i</sub> is an updatable counter introduced in the data plane to avoid the overhead caused by MAC-chaining for path authorization. This is achieved by incrementally tracking the XOR-sum of the previous MACs as a separate, updatable accumulator field `Acc`, which is part of the path segment's info field `InfoField` in the packet header (see also [](#inffield)). Routers update this field by adding/subtracting only a single 16-bit value each.
 
 ~~~~
  0                   1                   2                   3
