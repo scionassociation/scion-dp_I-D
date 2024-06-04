@@ -1769,7 +1769,7 @@ Table of Contents
 4.1.1.2.   Accumulator Acc - Definition
 
    The accumulator Acc_i is an updatable counter introduced in the data
-   plane to avoid overhead caused by MAC-chaining for path
+   plane to avoid the overhead caused by MAC-chaining for path
    authorization.  This is achieved by incrementally tracking the XOR-
    sum of the previous MACs as a separate, updatable accumulator field
    Acc, which is part of the path segment's info field InfoField in the
