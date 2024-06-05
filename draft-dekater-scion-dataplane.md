@@ -449,11 +449,11 @@ The SCION common header has the following packet format:
 | other          |      |                      | Unassigned     |
 {: #table-3 title="Allocations of type values to length values"}
 
-A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint-addresse that is known to be part of the set.
+A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint-addresses that is known to be part of the set.
 
 Current known values are:
 
-| Hexadecinal value | Short Name | Description            |
+| Hexadecimal value | Short Name | Description            |
 |-------------------+------------+------------------------|
 | 0x00000001        | DS         | Discovery Service      |
 | 0x00000002        | CS         | Control Service        |
