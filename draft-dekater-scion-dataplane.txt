@@ -33,10 +33,7 @@ Abstract
    extension headers - these are described, too.  The document then
    shows the life cycle of a SCION packet while traversing the SCION
    Internet.  This is followed by a specification of the SCION path
-   authorization mechanisms and the packet processing at routers.  SCION
-   also includes its own protocol to communicate failures to endpoints,
-   the SCION Control Message Protocol (SCMP).  This protocol will be
-   described in a separate document, which will follow later.
+   authorization mechanisms and the packet processing at routers.
 
 About This Document
 
@@ -266,11 +263,6 @@ Table of Contents
    short-cut on a normal path.  Peering link information is added to
    segment information during the beaconing process and used to shorten
    paths while assembling them from segments.
-
-   *SCMP*: SCION Control Message Protocol.  SCMP is used for signaling
-   connectivity problems, analogous to the Internet Control Message
-   Protocol (ICMP).  SCMP provides network diagnostic and error
-   messages.
 
    *Valley Route*: A valley route contains ASes that do not profit
    economically from traffic on this route.  The name comes from the
@@ -1178,10 +1170,6 @@ Table of Contents
        *Note:* For more information on the PathMetaHdr field, see
        Section 2.2.3.2.1.
 
-   A similar mechanism is possible for on-path routers, for example to
-   send SCION Control Message Protocol (SCMP) messages to the sender of
-   the original packet.
-
 2.3.  Extension Headers
 
    This section specifies the SCION extension headers.  SCION currently
@@ -1392,10 +1380,9 @@ Table of Contents
       the length information explicitly (e.g., UDP).  This information
       is used as the upper-layer packet length in the pseudo header for
       these protocols.  The remaining protocols, which do not carry the
-      length information directly (e.g., the SCION Control Message
-      Protocol SCMP), use the value from the PayloadLen field in the
-      SCION common header, minus the sum of the extension header
-      lengths.
+      length information directly, use the value from the PayloadLen
+      field in the SCION common header, minus the sum of the extension
+      header lengths.
 
    *  Next Header: The protocol identifier associated with the upper-
       layer protocol (e.g., 17 for UDP - see also Appendix "Assigned
@@ -2179,8 +2166,7 @@ direction
 
              o  Check that the MAC_i in the current hop field matches
                 the just-calculated MAC^Verify_i.  If yes, it is fine.
-                Otherwise, drop the packet, and reply with a "parameter
-                problem" type of SCMP message.
+                Otherwise, drop the packet.
 
              o  Check whether the current hop field is the last hop
                 field in the path segment.  For this, look at the value
@@ -2220,8 +2206,7 @@ direction
 
              o  Check that the MAC_i in the current hop field matches
                 the just-calculated MAC^Peer_i.  If yes, it is fine.
-                Otherwise, drop the packet, and reply with a "parameter
-                problem" type of SCMP message.
+                Otherwise, drop the packet.
 
              o  Increment both CurrInf and CurrHF in the path meta
                 header.  Proceed with step 4.
@@ -2267,8 +2252,7 @@ direction
 
           -  Check that the just-calculated MAC^Verify_i matches MAC_i
              in the hop field of the current AS_i.  If yes, it is fine.
-             Otherwise, drop the packet, and reply with a "parameter
-             problem" type of SCMP message.
+             Otherwise, drop the packet.
 
           -  Compute the value of Acc_(i+1).  For this, use the formula
              in Section 4.1.1.3.  Replace Acc_i in the formula with the
@@ -2298,8 +2282,7 @@ direction
 
           -  Check that the MAC_i in the hop field of the current AS_i
              matches the just-calculated MAC^Peer_i.  If yes, it is fine
-             - proceed with step 3.  Otherwise, drop the packet, and
-             reply with a "parameter problem" type of SCMP message.
+             - proceed with step 3.  Otherwise, drop the packet.
 
        *  *Use case 3*
           The packet traverses the path segment *against construction
@@ -2573,6 +2556,9 @@ direction
               Overview", 2023, <https://datatracker.ietf.org/doc/draft-
               dekater-panrg-scion-overview/>.
 
+   [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2023,
+              <https://docs.scion.org/en/latest/protocols/scmp.html>.
+
 Acknowledgments
 
    Many thanks go to Matthias Frei (SCION Association), Juan A.  Garcia
@@ -2597,7 +2583,11 @@ Assigned SCION Protocol Numbers
    start at 200.
 
    The protocol numbers are used in the SCION header to identify the
-   next level protocol.
+   upper layer protocol.
+
+   SCMP refers to the SCION Control Message Protocol, used for
+   diagnostics and error messages.  Support for this protocol is
+   optional.  A work-in-progress specification is available at: [SCMP].
 
 Assignment
 
