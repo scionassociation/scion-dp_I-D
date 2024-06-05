@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 December 2024                                         S. Hitz
+Expires: 7 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             3 June 2024
+                                                             5 June 2024
 
 
                             SCION Data Plane
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2024.
+   This Internet-Draft will expire on 7 December 2024.
 
 Copyright Notice
 
@@ -1133,9 +1133,9 @@ Table of Contents
    Upon receiving a packet containing a one-hop path, the ingress border
    router of the destination AS fills in the ConsIngress field in the
    second hop field of the one-hop path with the ingress interface ID.
-   It sets the ConsEgress field to an invalid value, ensuring the path
-   cannot be used beyond the destination AS.  Then it calculates and
-   appends the appropriate MAC for the hop field.
+   It sets the ConsEgress field to an invalid value (e.g. unspecified
+   value 0), ensuring the path cannot be used beyond the destination AS.
+   Then it calculates and appends the appropriate MAC for the hop field.
 
    Figure 10 below shows the layout of a SCION one-hop path type.  There
    is only a single info field; the appropriate hop field can be
