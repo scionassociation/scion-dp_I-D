@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 December 2024                                         S. Hitz
+Expires: 7 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             3 June 2024
+                                                             5 June 2024
 
 
                             SCION Data Plane
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2024.
+   This Internet-Draft will expire on 7 December 2024.
 
 Copyright Notice
 
@@ -711,12 +711,12 @@ Table of Contents
 
    A service address designates a set of endpoint addresses rather than
    a singular one.  A packet addressed to a service is redirected to any
-   one endpoint-addresse that is known to be part of the set.
+   one endpoint-addresses that is known to be part of the set.
 
    Current known values are:
 
         +===================+============+========================+
-        | Hexadecinal value | Short Name | Description            |
+        | Hexadecimal value | Short Name | Description            |
         +===================+============+========================+
         | 0x00000001        | DS         | Discovery Service      |
         +-------------------+------------+------------------------+
