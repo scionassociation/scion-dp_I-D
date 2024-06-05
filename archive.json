@@ -1,0 +1,1877 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-06-04T00:00:43.377018+00:00",
+  "repo": "scionassociation/scion-dp_I-D",
+  "labels": [
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "Prio 1",
+      "description": "",
+      "color": "B60205"
+    },
+    {
+      "name": "Prio 2",
+      "description": "",
+      "color": "FBCA04"
+    },
+    {
+      "name": "Prio 3",
+      "description": "",
+      "color": "0E8A16"
+    },
+    {
+      "name": "needs-discussion",
+      "description": "",
+      "color": "fbca04"
+    },
+    {
+      "name": "editorial",
+      "description": "",
+      "color": "9855E2"
+    },
+    {
+      "name": "design",
+      "description": "",
+      "color": "1d76db"
+    }
+  ],
+  "issues": [
+    {
+      "number": 3,
+      "id": "I_kwDOKYa77857ZMR9",
+      "title": "Language: MAC v.s. MAC",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/3",
+      "state": "CLOSED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "We should only use MAC with one meaning, not with two at the same time\r\n\r\n(Moved from https://github.com/scionassociation/standards/issues/98)\r\n",
+      "createdAt": "2024-01-08T10:54:38Z",
+      "updatedAt": "2024-02-27T10:33:02Z",
+      "closedAt": "2024-02-27T10:33:02Z",
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOKYa77857aD1Z",
+      "title": "Write IANA Considerations Section",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/4",
+      "state": "CLOSED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "nicorusti",
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "See [RFC 8126](https://www.rfc-editor.org/rfc/rfc8126.html)\r\n\r\n(Copied from https://github.com/scionassociation/standards/issues/100)\r\n",
+      "createdAt": "2024-01-08T13:10:11Z",
+      "updatedAt": "2024-05-16T13:26:13Z",
+      "closedAt": "2024-05-16T13:26:12Z",
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "For the data plane, I think we have the following IANA considerations to address:\r\n- Informational: The fact that we mirror the UDP port space into the SCION/UDP port space; so inherit all assignments and reservations; so no IANA action required to manage the SCION/UDP port space itself.\r\n- The dispatcher/shim SCION/UDP port at 30041, which by virtue of the mirroring needs that the UDP port 30041 be a reserved port.\r\n- The assignment of ISD and AS numbers.\r\n- The registration of Service Numbers (for Service addresses). --> #13 \r\n- The registration of Transport Protocols over SCION.\r\n\r\nAll other port numbers are supposedly configurable by peer-peer agreement or are AS internal concerns, so I think they do not need any IANA arbitration. However, I would prefer some IETF expert advice on that because I do not know how acceptable it is is to assume agreed-upon ports in the User range without reservation as part of an RFC published protocol.\r\n\r\nRegarding port 30041, it is a dependency of our UDP/IP underlay network. Technically that's not part of the dataplane spec, however, the spec does mention the underlay network and it is rather hypocritical to pretend that it is out of scope. There's no interoperability between two ASes without a common underlay implementation. Nico: should we not add a section to the spec that explicitly describes the current UDP/IP encapsulation as one standard link layer for SCION?\r\n\r\nRegarding the ISD/AS numbers, I am unsure how much IANA needs to be involved, given that we plan for the association to manage the registry. I found RFC 8126 quite obscure on that topic, so I would welcome some IETF input on that too before I start writing the section.\r\n\r\nRegarding a Service Number registry. I am not sure we should rush to define one as there are ongoing discussions to eliminate service resolution. Nevertheless, there would likely be some alternate mechanism to designate \"anycast\r\naddressed\" services so some kind of registry would be needed. Opinions?\r\n\r\nRegarding protocol numbers, we do mention that we attempt to mirror the assigned protocol numbers for IP. I think we must make a clearer statement: inherit and extend the IP assignments, and create our own registry. This would enable a seamless transition if we ever manage to deploy SCION as an IP alternative/extension. What that requires is that the 200-2003 protocols be registered in the IP protocol space as well, to ensure they remain available for such usage.\r\n\r\n",
+          "createdAt": "2024-01-11T13:26:34Z",
+          "updatedAt": "2024-05-16T13:25:39Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "There are no IANA actions, resolving this as the only open point is handled in #13 . ",
+          "createdAt": "2024-05-16T13:26:13Z",
+          "updatedAt": "2024-05-16T13:26:13Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOKYa77857aTh_",
+      "title": "Unaddressed Feedback from Reviews",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/5",
+      "state": "CLOSED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "General feedback Eliot: \r\n- [x] Make sure the references are correct:\r\n       - Normative references: Needed for the specification; specification is based on it.\r\n       - Informative references: Provide background/additional information\r\n- [x] Make sure MUST/MAY/SHOULD are used correctly (see also [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)):\r\n       (partially addressed in #6 )  \r\n       - MUST: Without this, the protocol will not work\r\n       - SHOULD: Should do this unless you have a very good reason not to\r\n       - MAY: Try to not use \"MAY\", Eliot is not a big fan of it\r\n- [x] What text can be removed? Be concise. Make sure every word that is there must be there. \r\n\r\nFeedback Juan: \r\n- [x] #14\r\n- [x] ~~Explain why any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation should use a pseudo header.~~ --> Checked IPv6 RFC2460, it dies not explain why. Our section talking about this is very similar to IPv6, and we don't feel need to change this\r\n- [x] ~~Simplify the \"Life of a packet\" figure, e.g., by removing all the IP addresses and listing them in a table instead, and/or having just numbers/letters as interface IDs.~~ Over time we rewrote this section several times and I (@nicorusti ) don't feel this will make it more readable. \r\n",
+      "createdAt": "2024-01-08T13:45:04Z",
+      "updatedAt": "2024-06-03T14:18:30Z",
+      "closedAt": "2024-05-16T13:40:49Z",
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOKYa7786BI0h8",
+      "title": "Clarify MACs (truncation, path splicing)",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/7",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "matzf"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 2"
+      ],
+      "body": "When dealing with security considerations #1  , we mention that chained MACs prevent path splicing attacks. This should be better explained, since in the draft we describe how chained MACs work, but not how they prevent path splicing. \r\n\r\n> From Joel Halpern\r\n> The use of only the lower two bytes of the cryptographic value for chaining seems odd.  If you need a 16 bit value, I would have assumed you would at least fold the entire 6 bit signature into thirds, so all the bits have an impact?\r\n\r\nRight, this depends on the MAC algorithm. Safely truncating requires certain MAC algorithms, e.g. ones that have properties of a pseudorandom function. We should clarify this.\r\n\r\n> Both the PCB authentication and the hop authentication use a mechanism that computes the signature over all previous hops.  This seems odd.  If each hop includes the previous hop, that seems to produce an immutable chain at lower cost.  At the very least, an explanation would seem called for.\r\n\r\nThis is to avoid certain path splicing attacks, we have a brief description in the data plane draft 5.1.3.  Path Splicing, but this can be extended. \r\n\r\nRelates to https://github.com/scionassociation/scion-cp_I-D/issues/23 \r\n",
+      "createdAt": "2024-03-04T11:06:10Z",
+      "updatedAt": "2024-05-17T16:40:12Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOKYa7786IuUkR",
+      "title": "SCMP - Be careful about forward references",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/8",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement",
+        "needs-discussion",
+        "design"
+      ],
+      "body": ">  SCION also includes its own protocol to communicate failures to endpoints,\r\n   the SCION Control Message Protocol (SCMP).  This protocol will be\r\n   described in a separate document, which will follow later.\r\n\r\nText like this doesn't stand on its own.",
+      "createdAt": "2024-05-13T21:05:25Z",
+      "updatedAt": "2024-06-03T15:10:20Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "The SCMP  specification is likely not be necessary for a self-contained data plane.  \r\n\r\nIn this draft, there are a few mentions of SCMP that are not necessary for the DP spec:  the text below is just an example and could be deleted: \r\n```\r\n   A similar mechanism is possible for on-path routers, for example to\r\n   send SCION Control Message Protocol (SCMP) messages to the sender of\r\n   the original packet.\r\n  ```\r\n  ```\r\n  The remaining protocols, which do not carry the\r\n      length information directly (e.g., the SCION Control Message\r\n      Protocol SCMP)\r\n  ```\r\n  \r\nThere are 4 mentions of using the SCMP `parameter problem` when MAC verification fails. This  can be useful for debugging. Ig MAC verification fails because of an attack, it does not make sense to send an error message back. This is an optional signal that routers can send, so this could be omitted.\r\n\r\nWe could then only leave the protocol number in table 10.\r\n",
+          "createdAt": "2024-05-16T14:43:59Z",
+          "updatedAt": "2024-05-16T14:43:59Z"
+        },
+        {
+          "author": "elear",
+          "authorAssociation": "NONE",
+          "body": "If SCMP is not important to the work, you can still mention it informationally, but then you must properly reference it. ",
+          "createdAt": "2024-05-16T17:09:06Z",
+          "updatedAt": "2024-05-16T17:09:06Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Hi @elear , we removed forward references to SCMP, [see change diff](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-dp_I-D/draft-dekater-scion-dataplane.txt&url_2=https://scionassociation.github.io/scion-dp_I-D/no_scmp_spec/draft-dekater-scion-dataplane.txt).  We now mention SCMP at the end of the draft, and we use our developer documentation as a reference: https://docs.scion.org/en/latest/protocols/scmp.html \r\n\r\nDoes that work? \r\n\r\nAn alternative reference would be the SCION book `[CHUAT22]`  section 4.7. \r\n\r\n",
+          "createdAt": "2024-06-03T15:09:58Z",
+          "updatedAt": "2024-06-03T15:10:20Z"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOKYa7786IuVaP",
+      "title": "editorial: de-emphasisize text",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/9",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "No need for this in the abstract: \\*SCION data plane\\*",
+      "createdAt": "2024-05-13T21:06:52Z",
+      "updatedAt": "2024-06-03T07:09:16Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOKYa7786IuWFf",
+      "title": "Extend introduction and remove/edit notes",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/10",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "enhancement",
+        "Prio 1",
+        "editorial"
+      ],
+      "body": "The following text needs to be reworked as you are not publishing some of these:\r\n\r\n > \\*Note:\\* This is the very first version of the SCION Data Plane\r\n   document.  We are aware that the draft is far from perfect, and hope\r\n   to improve the content in later versions of the document.  To reach\r\n   this goal, any feedback is welcome and much appreciated.  Thanks!\r\n\r\n>  \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-cppki], and [I-D.scion-cp], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\n\r\n\r\nAlso, \r\n> From: Ron Bonica\r\n> The problem statement is weak. Before describing forwarding plane details, you need to tell the readers why they should deploy SCION. You say that the design advantages are:\r\n>  - It provides control and transparency over forwarding paths the endpoints.  \u2002\u2002\u2002\u2002\u2002\u2002\u2002\r\n>  -  It simplifies the packet-processing at routers: Instead of having to perform longest-prefix matching on IP addresses, which requires expensive hardware and substantial amounts of energy, a router can simply access the next hop from the packet header, after having verified the authenticity of the hop field's MAC.\r\n\r\n> \u2002\u2002\u2002\u2002\u2002\u2002Is there any benefit in switching, as opposed to routing, at the AS boundary? Yes, routing is expensive. But the router is already there. There is no incremental cost. By contrast, you would have to add a SCION device.\r\n> Is the real motivation to support new settlement models?\r\n\r\n\r\nSame issue in other drafts: \r\n- CPPKI  https://github.com/scionassociation/scion-cppki_I-D/issues/29\r\n- CP        https://github.com/scionassociation/scion-cp_I-D/issues/14",
+      "createdAt": "2024-05-13T21:08:42Z",
+      "updatedAt": "2024-06-03T09:34:25Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Regarding problem statement, we can reuse some text from the overview draft section 1.2, stressing aspects that mostly pertain tom the data plane: \r\n\r\n- Address needs of organizations or ecosystems exchanging sensitive information, such as financial  institutions, healthcare providers, universities, multinationals,  governments, critical and transportation infrastructure operators, which can not always be addressed by leveraging public Internet\r\n- Providing availability inter-domain (e.g. quick reaction to link failure)\r\n- Avoiding reflection attacks\r\n- Provide visibility to endpoints as a base for trust-enhanched networking\r\n- Simplified routing tables\r\n\r\netc. ",
+          "createdAt": "2024-05-17T14:49:25Z",
+          "updatedAt": "2024-05-17T14:49:25Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "\"allowed\" is also used in the CP draft: \r\n\r\n> - The `::` zero-compression feature of IPv6 is NOT allowed. The feature has very limited use in a 48-bit address space and would only add more complexity. ",
+          "createdAt": "2024-06-03T09:34:23Z",
+          "updatedAt": "2024-06-03T09:34:23Z"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOKYa7786IwuHV",
+      "title": "Allowed?",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/11",
+      "state": "OPEN",
+      "author": "elear",
+      "authorAssociation": "NONE",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": " >  \\*Note:\\* The current SCION implementation uses the UDP/IP protocol as\r\n   underlay.  However, the use of other underlay protocols is possible\r\n   and allowed.\r\n\r\nThis last sentence makes it seem like one might never run SCION on its own.  Also, \"allowed\" isn't a word we should see in RFCs.",
+      "createdAt": "2024-05-14T05:54:10Z",
+      "updatedAt": "2024-06-03T07:11:24Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "- [ ] check for instances of allowed (on all three drafts) \r\n- [ ] clarify that SCION may be run on L2 directly, so the  SCION spec is underlay-agnostic. Maybe we could use \"lower layer\", then define it in the terminology. \r\n\r\nAlso look at [IPv6 \"link\"](https://datatracker.ietf.org/doc/html/rfc2460#section-2) as inspiration \r\n",
+          "createdAt": "2024-05-16T13:48:54Z",
+          "updatedAt": "2024-05-16T14:00:21Z"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOKYa7786I_Qxa",
+      "title": "Clarify implications of AS forwarding key compromise",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/12",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "matzf"
+      ],
+      "labels": [
+        "enhancement",
+        "question"
+      ],
+      "body": "> From:\tJoel Halpern\r\n> Before that, I would also ask them for the data plane document for an analysis of what the implications are if a key shared by all the SCION routers of an AS is compromised.  It is ahrd to tell if the design assumptions are workable without that. \r\n\r\n We should better clarify this, we don't say what an attacker can do if an attacker gets the AS forwarding key. \r\n Current text is: \r\n ```\r\n5.1.1.  Forwarding key compromise\r\n\r\n   For the current default MAC algorithm, AES-CMAC truncated to 48 bits,\r\n   key recovery attacks from (any number of) known plaintext/MAC\r\n   combinations is computationally infeasible, as far as publicly known.\r\n   In addition, the MAC algorithm can be freely chosen by each AS,\r\n   enabling algorithmic agility for MAC computations.  Should a MAC\r\n   algorithm be discovered to be weak or insecure, each AS can quickly\r\n   switch to a secure algorithm without the need for coordination with\r\n   other ASes.\r\n\r\n   A more realistic risk to the secrecy of the forwarding key is\r\n   exfiltration from a compromised router or control plane service.  An\r\n   AS can optionally rotate its forwarding key at regular intervals to\r\n   limit the exposure after a temporary device compromise.  However, as\r\n   is perhaps self-evident, such a key rotation scheme cannot mitigate\r\n   the impact of an undiscovered, permanent compromise of a device.\r\n   ``` ",
+      "createdAt": "2024-05-15T15:53:08Z",
+      "updatedAt": "2024-05-16T13:45:33Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOKYa7786JF-Qo",
+      "title": "Clarify service field",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/13",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "enhancement",
+        "needs-discussion",
+        "design"
+      ],
+      "body": "We currently document type service 0b0100, but we don't further document possible values for it. We might need to add another table with potential values for the service field, as defined in [here](https://github.com/scionproto/scion/blob/master/pkg/addr/svc.go)\r\n```\r\n                      Table 2: Address length values\r\n\r\n    +================+======+=======================+================+\r\n    | Length (bytes) | Type |  Type/Length (binary) | Interpretation |\r\n    +================+======+=======================+================+\r\n    | 4              | 0    | 0b0000                | IPv4           |\r\n    +----------------+------+-----------------------+----------------+\r\n    | 4              | 1    | 0b0100                | Service        |\r\n    +----------------+------+-----------------------+----------------+\r\n    | 16             | 0    | 0b1100                | IPv6           |\r\n    +----------------+------+-----------------------+----------------+\r\n    | other          |      |                       | Unassigned     |\r\n    +----------------+------+-----------------------+----------------+\r\n   \r\n  ```\r\n\r\nRelates to https://github.com/scionassociation/scion-cp_I-D/issues/15 \r\n  ",
+      "createdAt": "2024-05-16T10:40:42Z",
+      "updatedAt": "2024-06-03T07:48:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOKYa7786JHZbw",
+      "title": "Clarify text on how to calculate the length in bytes of the `ExtLen` field",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/14",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "Explain&nbsp;how to calculate the length in bytes of the ExtLen field in the SCION Hop-by-Hop/End-to-End Options header (extension&nbsp;header of a SCION path header).\r\n```\r\n   *  ExtLen: Unsigned 8-bit integer.  The value of this field is\r\n      computed as the length of the complete Hop-by-Hop/End-to-End\r\n      Options header in multiples of 4-bytes minus 1.\r\n  ```\r\n\r\nReference that this is similar to IPv6. ",
+      "createdAt": "2024-05-16T13:29:46Z",
+      "updatedAt": "2024-06-03T14:18:29Z",
+      "closedAt": "2024-06-03T14:18:29Z",
+      "comments": []
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOKYa7786KXTYA",
+      "title": "Add component overview",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/20",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-05-28T15:24:57Z",
+      "updatedAt": "2024-05-29T12:33:00Z",
+      "closedAt": "2024-05-29T12:33:00Z",
+      "comments": []
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOKYa7786KeWtU",
+      "title": "Add component overview",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/22",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-05-29T12:33:56Z",
+      "updatedAt": "2024-05-29T12:34:01Z",
+      "closedAt": "2024-05-29T12:34:01Z",
+      "comments": []
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOKYa7786Kl1sF",
+      "title": "intra-protocol? --> better wording ",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/23",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "Some ideas:\r\n- intra-domain underlay\r\n\r\n\r\nSecond choice:\r\n- intra-domain network protocol\r\n\r\nIf we use a term, we may need to add it to the glossary too.",
+      "createdAt": "2024-05-30T08:27:11Z",
+      "updatedAt": "2024-05-30T09:22:03Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 25,
+      "id": "I_kwDOKYa7786K9vbc",
+      "title": "Normative/informative references",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/25",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": " Make sure the references are righttly placed according to [guidelines](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-normative-and-informative-references-20060419/#:~:text=Normative%20references%20specify%20documents%20that,it%20only%20provides%20additional%20information): \r\n- Normative references: Needed for the specification; specification is based on it.\r\n- Informative references: Provide background/additional information\r\n\r\n\r\nPotential changes: \r\n- [ ] I-D.scion-cppki should be normative \r\n- [ ] Several RFCs might be informative\r\n- [ ] Check if other drafts affected",
+      "createdAt": "2024-06-03T15:21:40Z",
+      "updatedAt": "2024-06-03T15:22:56Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOKYa7785hbfIj",
+      "title": "Add Security Considerations Section",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/1",
+      "state": "MERGED",
+      "author": "cdekater",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-12-07T14:32:44Z",
+      "updatedAt": "2024-05-14T14:41:46Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "2222b66d7850fee27619305e8c195c6bbaa7abd6",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "cdk-security-considerations-dp",
+      "headRefOid": "78db4ae551c224ede6472b736fb3e2d769b722d5",
+      "closedAt": "2024-03-04T13:42:35Z",
+      "mergedAt": "2024-03-04T13:42:35Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7785phfS-",
+          "commit": {
+            "abbreviatedOid": "55e14b7"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "...assuming typo is fixed.",
+          "createdAt": "2023-12-07T15:09:40Z",
+          "updatedAt": "2023-12-07T15:10:25Z",
+          "comments": [
+            {
+              "originalPosition": 84,
+              "body": "\"tyoes\" -> \"types\"\r\n",
+              "createdAt": "2023-12-07T15:09:40Z",
+              "updatedAt": "2023-12-07T15:10:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785s_qZH",
+          "commit": {
+            "abbreviatedOid": "5a81cae"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-01-18T03:07:11Z",
+          "updatedAt": "2024-01-18T03:17:16Z",
+          "comments": [
+            {
+              "originalPosition": 54,
+              "body": "```suggestion\r\nA central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's answers to these attacks. The following attacks are imaginable:\r\n```",
+              "createdAt": "2024-01-18T03:07:11Z",
+              "updatedAt": "2024-01-18T03:17:16Z"
+            },
+            {
+              "originalPosition": 63,
+              "body": "Is 'crack' a better work than 'break' here (and further down the text)?",
+              "createdAt": "2024-01-18T03:09:25Z",
+              "updatedAt": "2024-01-18T03:17:16Z"
+            },
+            {
+              "originalPosition": 122,
+              "body": "```suggestion\r\nAn off-path adversary is located outside of the path between source endpoint and destination endpoint. In SCION, the source endpoint selects the forwarding path in the control plane, and includes it in the header of the data packet to be forwarded. This limits the abilities of an off-path adversary to influence the forwarding in the data plane. The adversary can merely attempt to disrupt the connectivity of the chosen path and force the source endpoint to select a new path. One way to do this is by flooding a link on the path with excessive traffic; that is, performing a volumetric denial of service attack. However, this does not stop the data forwarding: As SCION supports multipath, it is still possible to switch to another, non-congested path. Only in the case of a disruptive last-mile link for which no alternative exists, the data forwarding will be severely frustrated.\r\n```",
+              "createdAt": "2024-01-18T03:15:17Z",
+              "updatedAt": "2024-01-18T03:17:16Z"
+            },
+            {
+              "originalPosition": 124,
+              "body": "```suggestion\r\nSCION also provides protection against so-called reflection-based attacks. Here, the adversary sends high amounts of request packets to a server, but forges the source address of the packets by replacing its own address with the address of the victim. As servers are unable to distinguish legitimate from spoofed requests, they reply directly to the victim, thus exhausting the connection to the victim. In SCION, however, packets contain the path in their packer header, and response packets are simply returned along this contained path to the actual sender. SCION thus prevents from this kind of DoS attacks.\r\n```",
+              "createdAt": "2024-01-18T03:15:52Z",
+              "updatedAt": "2024-01-18T03:17:16Z"
+            },
+            {
+              "originalPosition": 126,
+              "body": "```suggestion\r\n**Note** that SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. In the case of a transport protocol attack, the adversary opens a large number of connections in order to exhaust resources on the target server. If an adversary performs an application layer attack, it overloads or crashes the target application with a large volume of, or specially crafted application-layer requests such as HTTP floods. As these attacks take place in the transport layer or application layer rather than the network layer, they are out of SCION's scope.\r\n```",
+              "createdAt": "2024-01-18T03:17:00Z",
+              "updatedAt": "2024-01-18T03:17:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xb9tx",
+          "commit": {
+            "abbreviatedOid": "5a81cae"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-27T10:42:38Z",
+          "updatedAt": "2024-02-27T10:42:38Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "I'd say \"crack the underlying MAC algorithm\"",
+              "createdAt": "2024-02-27T10:42:38Z",
+              "updatedAt": "2024-02-27T10:42:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xb-dF",
+          "commit": {
+            "abbreviatedOid": "5a81cae"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-27T10:44:07Z",
+          "updatedAt": "2024-02-27T10:44:07Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "```suggestion\r\nHop fields are protected with MACs. To be able to craft and misuse unauthorized hop fields, an adversary must therefore either determine the MAC's key or crack the underlying MAC algorithm.\r\n```",
+              "createdAt": "2024-02-27T10:44:07Z",
+              "updatedAt": "2024-02-27T10:44:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xcnYK",
+          "commit": {
+            "abbreviatedOid": "d65f8c5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-27T12:10:17Z",
+          "updatedAt": "2024-02-27T12:10:17Z",
+          "comments": [
+            {
+              "originalPosition": 65,
+              "body": "IN this draft we don't say much about the AS forwarding key. We don't say that the key should be 128 bit, and we also don't explain what the assumptions and threat model is (e.g. that  the key is shared across all routers within an AS). We should clarify this.\r\nAlso, we don't describe how the key is rotated",
+              "createdAt": "2024-02-27T12:10:17Z",
+              "updatedAt": "2024-02-27T12:10:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xc3U0",
+          "commit": {
+            "abbreviatedOid": "d65f8c5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-27T12:42:19Z",
+          "updatedAt": "2024-02-27T12:42:19Z",
+          "comments": [
+            {
+              "originalPosition": 110,
+              "body": "Is this just the wormhole attack, as described in the CP draft?",
+              "createdAt": "2024-02-27T12:42:19Z",
+              "updatedAt": "2024-02-27T12:42:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xc5Fz",
+          "commit": {
+            "abbreviatedOid": "d65f8c5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-27T12:45:47Z",
+          "updatedAt": "2024-02-27T12:45:47Z",
+          "comments": [
+            {
+              "originalPosition": 110,
+              "body": "```suggestion\r\nMoreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. To prevent this attack and to defend against multiple on-path adversaries in general, proof of transit is required (which is offered by an experimental extension).\r\n```",
+              "createdAt": "2024-02-27T12:45:47Z",
+              "updatedAt": "2024-02-27T12:45:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xp7hE",
+          "commit": {
+            "abbreviatedOid": "d65f8c5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-28T17:09:55Z",
+          "updatedAt": "2024-02-28T17:09:55Z",
+          "comments": [
+            {
+              "originalPosition": 65,
+              "body": "Partially clarifies on Slack.  @matzf we still need to clarify whether the current implementation could rotate the key ([as two  keys](https://docs.scion.org/en/latest/manuals/control.html#keys) can be configured at the same time). ",
+              "createdAt": "2024-02-28T17:09:55Z",
+              "updatedAt": "2024-02-28T17:09:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xp9jg",
+          "commit": {
+            "abbreviatedOid": "ad1a6f5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-28T17:14:10Z",
+          "updatedAt": "2024-02-28T17:14:10Z",
+          "comments": [
+            {
+              "originalPosition": 78,
+              "body": "```suggestion\r\nAn adversary could try to manipulate the timestamp, in order to modify the validity period of the hop fields within a path segment. However, SCION offers a protection against this kind of attack: As both the timestamp and the expiry time build the input for the calculation of a hop field's MAC, an unauthorized change of the timestamp will invalidate the MAC, and will therefore be detected and render the hop field unusable for forwarding.\r\n```\r\nCorrect @matzf ?",
+              "createdAt": "2024-02-28T17:14:10Z",
+              "updatedAt": "2024-02-28T17:14:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xqZ1x",
+          "commit": {
+            "abbreviatedOid": "6722117"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-28T18:09:30Z",
+          "updatedAt": "2024-02-28T18:09:31Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "```suggestion\r\nModifications of the SCION address header can be discovered by the destination endpoint if the packet is integrity protected with the SPAO extension. Currently, SCION as described in this document does not provide this type of protection.\r\n```\r\n\r\nSPAO also MACs the endpoint address, right? (Yes, according to [docs](https://docs.scion.org/en/latest/protocols/authenticator-option.html#authenticated-data)).  Also, does it work through NATs?  In principle, I'd say yes, as NAT would map the underlay's IP and not the one in the SCION Address header. Correct?",
+              "createdAt": "2024-02-28T18:09:31Z",
+              "updatedAt": "2024-02-28T18:10:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xqgkQ",
+          "commit": {
+            "abbreviatedOid": "213dc9c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-28T18:24:42Z",
+          "updatedAt": "2024-02-28T18:24:42Z",
+          "comments": [
+            {
+              "originalPosition": 120,
+              "body": "Is this also valid for vanilla SCION? Could the same attack happen if the attacker is in the same AS as the victim? \r\n(So, in this case, the attack surface would be greatly reduced, nut it would only be eliminated with SPAO)? ",
+              "createdAt": "2024-02-28T18:24:42Z",
+              "updatedAt": "2024-02-28T18:24:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xqgsk",
+          "commit": {
+            "abbreviatedOid": "213dc9c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-28T18:25:01Z",
+          "updatedAt": "2024-02-28T18:25:11Z",
+          "comments": [
+            {
+              "originalPosition": 122,
+              "body": "Does the wording sound reasonable?",
+              "createdAt": "2024-02-28T18:25:01Z",
+              "updatedAt": "2024-02-28T18:25:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xvpZ7",
+          "commit": {
+            "abbreviatedOid": "ad1a6f5"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-29T08:59:42Z",
+          "updatedAt": "2024-02-29T08:59:42Z",
+          "comments": [
+            {
+              "originalPosition": 113,
+              "body": "True. I think the SPAO was left out intentionally. Makes sense to allude to its existence, but maybe it would be good to be a bit more generic.\r\n\r\n> Modifications of the SCION address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, losely analogous to the IPSec Authentication Header, exists for SCION but is out of scope for this document.",
+              "createdAt": "2024-02-29T08:59:42Z",
+              "updatedAt": "2024-02-29T08:59:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xzXjj",
+          "commit": {
+            "abbreviatedOid": "c95c12c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-29T16:07:07Z",
+          "updatedAt": "2024-02-29T16:07:07Z",
+          "comments": [
+            {
+              "originalPosition": 94,
+              "body": "```suggestion\r\nA central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's prevention mechanisms to these attacks; either an attacker can attempt to create unauthorized hop fields, or they can attempt to create illegitimate paths assembled from authentic individual hop fields.\r\n\r\nThe main protection mechanism here is the hop field MAC ( see ... ), authenticating the hop field content, consisting of ingress/egress interface identifiers, creation and expiration timestamp and, virtually, the preceding hop field MACs in the path segment. \r\nRecall that the MAC is computed using the issuing AS's secret \"forwarding key\" which is shared across the SCION routers and control plane services (only!) within this AS.\r\n\r\n### Forwarding key compromise\r\n\r\nFor the current default MAC algorithm, AES-CMAC truncated to 48 bits, key recovery attacks from (any number of) known plaintext/MAC combinations is computationally infeasible, as far as is publicly known. \r\nIn addition, MAC algorithm can be freely chosen by each ASes, enabling algorithmic agility for MAC computations. Should a MAC algorithm be discovered to be weak or insecure, each AS can quickly switch to a secure algorithm without the need for coordination with other ASes.\r\n\r\nA more realistic risk to the secrecy of the forwarding key is exfiltration from a compromised router or control plane service.\r\nAn AS can optionally rotate its forwarding key at regular intervals to limit the exposure after a temporary device compromise. However, as is perhaps self-evident, such a key rotation scheme cannot mitigate the impact of an undiscovered, permanent compromise of a device.\r\n\r\n### Forging hop field MAC\r\n\r\nAs a second method to break the path authorization is to directly forge a hop field in an online attack, using the router as an oracle to determine the validity of the hop field MAC. The adversary needs to send one packet per guess for verification. For a 6-byte MAC, the adversary would need an expected 2<sup>47</sup> (~140 trillion) tries to successfully forge the MAC of a single hop field.\r\nAs the router only checks MACs during the encoded validity period of the hop field, which is limited by the packet header format to 24 hours, these tries need to occur in a limited time period. This results in a seemingly infeasible number of ~1.6e9 guesses per second.\r\nIn the unlikely case that an online brute-force attack succeeds, the obtained hop field can be used until its inevitable expiration after the just mentioned 24 hour limit.\r\n\r\n```",
+              "createdAt": "2024-02-29T16:07:07Z",
+              "updatedAt": "2024-02-29T16:07:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785xzudu",
+          "commit": {
+            "abbreviatedOid": "c95c12c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-29T16:46:21Z",
+          "updatedAt": "2024-02-29T16:46:21Z",
+          "comments": [
+            {
+              "originalPosition": 126,
+              "body": "```suggestion\r\n## Off-Path Attacks\r\n\r\nSCION's path-awareness limits the abilities of an off-path adversary to influence forwarding in the data plane. Once a packet is \"in flight\", it will follow its set route, no matter what an adversary may do.\r\nAn adversary can attempt to disrupt the connectivity of said path by flooding a link with excessive traffic (see [](#dos) below). After detecting the congestion, the endpoint can switch to another, non-congested path for subsequent packets.\r\nInstead of actually disrupting the network connectivity, an off-path adversary can also attempt to influence the path selection of the endpoint by fraudulently signalling a network interruption with forged SCMP messages. This attack scenario, and protection mechanisms, will be discussed in a separate document on the SCMP.\r\n\r\n## Volumetric Denial of Service Attacks {#dos}\r\n\r\nAn adversary can attempt to disrupt the connectivity of a network path by flooding a link with excessive traffic. In this case, the endpoint can switch to another, non-congested path for subsequent packets.\r\n\r\nSCION provides protection against certain reflection-based DoS attacks. Here, the adversary sends requests to a server with the source address set to the address of the victim. The server will send a reply, typically larger than the request, to the victim. As long as the attacker and the victim are located in different ASes, this can be prevented in SCION. The reply packets are simply returned along reversed path to the actual sender, regardless of the source address information. Thus, the reflected will be forwarded to the attackers AS (where it will be discarded because the destination AS does not match).\r\n\r\nOn the flip side, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with relatively low send rate; the attacker can abuse the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.\r\n\r\n**Note** that SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope. However, the additional information contained in the SCION header enables more targeted filtering, e.g., by ISD, AS or path length.\r\n```",
+              "createdAt": "2024-02-29T16:46:21Z",
+              "updatedAt": "2024-02-29T16:46:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785x6qNB",
+          "commit": {
+            "abbreviatedOid": "ed7d2be"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-03-01T13:37:57Z",
+          "updatedAt": "2024-03-01T13:37:57Z",
+          "comments": [
+            {
+              "originalPosition": 120,
+              "body": "@matzf We don't talk about this kind of SCMP message, I'd therefore omit this line and keep it for the security considerations of SCMP, once we get there",
+              "createdAt": "2024-03-01T13:37:57Z",
+              "updatedAt": "2024-03-01T13:37:57Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOKYa7785jdf0M",
+      "title": "Disambiguate the use of \"MAC\".",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/2",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses: https://github.com/scionassociation/standards/issues/98\r\nFixes #3 ",
+      "createdAt": "2024-01-08T10:36:53Z",
+      "updatedAt": "2024-02-27T10:33:04Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "073bb9dc17536680feaa5488bb5e1f043ba6a747",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "fix_MAC",
+      "headRefOid": "2d20e1a078c857463c3c1a9ed8b175a448347324",
+      "closedAt": "2024-02-27T10:33:00Z",
+      "mergedAt": "2024-02-27T10:33:00Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "9ce79979aa7c497c5eed816aecb421975614b458"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7785xCEPi",
+          "commit": {
+            "abbreviatedOid": "2d20e1a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2024-02-22T16:53:15Z",
+          "updatedAt": "2024-02-22T16:53:15Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOKYa7785j6FWC",
+      "title": "Use \"MUST/SHOULD/MAY\" in more systematic manner",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/6",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Per rfc2119\r\n",
+      "createdAt": "2024-01-12T10:24:30Z",
+      "updatedAt": "2024-05-14T14:41:47Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "073bb9dc17536680feaa5488bb5e1f043ba6a747",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "must_should_may",
+      "headRefOid": "04fc7cb32f671d64790a91abd8cf46bbfdcfffbc",
+      "closedAt": "2024-03-01T13:57:55Z",
+      "mergedAt": "2024-03-01T13:57:55Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "2222b66d7850fee27619305e8c195c6bbaa7abd6"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7785x6y8e",
+          "commit": {
+            "abbreviatedOid": "04fc7cb"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM\r\n",
+          "createdAt": "2024-03-01T13:57:23Z",
+          "updatedAt": "2024-03-01T13:57:23Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOKYa7785wFw5P",
+      "title": "Clarify implications of AS forwarding key compromise",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/15",
+      "state": "OPEN",
+      "author": "matzf",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #12",
+      "createdAt": "2024-05-21T14:16:00Z",
+      "updatedAt": "2024-06-03T16:37:00Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "forwarding-key-compromise",
+      "headRefOid": "39fbbef1e985f51551c14a25db33f21d951a28f0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858DJD-",
+          "commit": {
+            "abbreviatedOid": "8cbce18"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-27T15:48:26Z",
+          "updatedAt": "2024-05-27T15:49:09Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "> As path segments are only checked for validity and policy compliance during path discovery during normal operation, and routers only perform minimal sanity checks of hop fields with valid MACs, creating fraudulent hop fields with valid MACs allows an attacker to bypass most path segment validity checks.\r\n\r\nSpeaking that one requires breathing exercises. Any way to split it? (yeah, me, the lumper :-) )",
+              "createdAt": "2024-05-27T15:48:26Z",
+              "updatedAt": "2024-05-27T15:49:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xP_b",
+          "commit": {
+            "abbreviatedOid": "8cbce18"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:19:32Z",
+          "updatedAt": "2024-06-03T09:19:32Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Done, but I felt I had to combine the next sentences to make it work.\r\nBetter?",
+              "createdAt": "2024-06-03T09:19:32Z",
+              "updatedAt": "2024-06-03T09:19:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xeGO",
+          "commit": {
+            "abbreviatedOid": "8cbce18"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:45:37Z",
+          "updatedAt": "2024-06-03T09:45:37Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Yes.\r\n",
+              "createdAt": "2024-06-03T09:45:37Z",
+              "updatedAt": "2024-06-03T09:45:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778581akH",
+          "commit": {
+            "abbreviatedOid": "39fbbef"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T16:37:00Z",
+          "updatedAt": "2024-06-03T16:37:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOKYa7785wUwgj",
+      "title": "Remove forward references to SCMP",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/16",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #8 ",
+      "createdAt": "2024-05-23T12:25:29Z",
+      "updatedAt": "2024-06-03T15:02:30Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c3ddf7476160c085a401ee272ef088c60bd7f1c6",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "no_scmp_spec",
+      "headRefOid": "fad1fda5f67c9cf00f4314e7f2dcdb97f6cb7748",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858p7X1",
+          "commit": {
+            "abbreviatedOid": "233b80b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-31T17:24:01Z",
+          "updatedAt": "2024-05-31T17:25:14Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "```suggestion\r\n```",
+              "createdAt": "2024-05-31T17:24:01Z",
+              "updatedAt": "2024-05-31T17:25:14Z"
+            },
+            {
+              "originalPosition": 91,
+              "body": "Maybe we could remove this comment and leave it in the table? I think we have the same problem for DrKey somewhere else",
+              "createdAt": "2024-05-31T17:25:01Z",
+              "updatedAt": "2024-05-31T17:25:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xaNe",
+          "commit": {
+            "abbreviatedOid": "233b80b"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:38:25Z",
+          "updatedAt": "2024-06-03T09:38:25Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "I can't figure what you're suggesting. The review UI seems to say that you want to remove the new text entirely as well as the old text. Is that what you're suggesting?\r\n",
+              "createdAt": "2024-06-03T09:38:25Z",
+              "updatedAt": "2024-06-03T09:38:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xbfv",
+          "commit": {
+            "abbreviatedOid": "233b80b"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:40:48Z",
+          "updatedAt": "2024-06-03T09:40:48Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "I was acting on Eliot's suggestion: mention the protocol informally. If we just leave in the table with no explanation, we *will* get the question \"what is this?\". What is the motivation for your suggestion?\r\n\r\n",
+              "createdAt": "2024-06-03T09:40:48Z",
+              "updatedAt": "2024-06-03T09:40:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858z7e9",
+          "commit": {
+            "abbreviatedOid": "233b80b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T14:09:07Z",
+          "updatedAt": "2024-06-03T14:09:07Z",
+          "comments": [
+            {
+              "originalPosition": 91,
+              "body": "Discussed this directly, we removed this sentence and added later a reference to the dev doc.",
+              "createdAt": "2024-06-03T14:09:07Z",
+              "updatedAt": "2024-06-03T14:09:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778580gYX",
+          "commit": {
+            "abbreviatedOid": "fad1fda"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Looks good, I'll ask Eliot if the reference works, If I don't hear back in a few days I'd berge and just leave the corresponding issue open",
+          "createdAt": "2024-06-03T15:02:30Z",
+          "updatedAt": "2024-06-03T15:02:30Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "PR_kwDOKYa7785wVbJr",
+      "title": "Clarify the computation of ExtLen.",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/17",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #14 ",
+      "createdAt": "2024-05-23T13:49:33Z",
+      "updatedAt": "2024-06-03T14:18:34Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "ext_len_described",
+      "headRefOid": "8b9de4aa07a897885ca99ab92b64ed27a25b1918",
+      "closedAt": "2024-06-03T14:18:28Z",
+      "mergedAt": "2024-06-03T14:18:28Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "c3ddf7476160c085a401ee272ef088c60bd7f1c6"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858p5mV",
+          "commit": {
+            "abbreviatedOid": "4145be3"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-31T17:19:18Z",
+          "updatedAt": "2024-05-31T17:20:49Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\n- `ExtLen`: Unsigned 8-bit integer. Length of the  Hop-by-Hop or End-to-End Options header in 4-octet units, not including the first 4 octets. That is: `ExtLen = uint8(((options_len + 2) / 4) - 1)`, where `options_len + 2` is a multiple of 4.\r\n```\r\n\r\n\r\nI'd try language similar to IPv6 (RFC2460): \r\n```   \r\nHdr Ext Len    8-bit unsigned integer.  Length of the Routing\r\n                   header in 8-octet units, not including the first\r\n                   8 octets.\r\n```\r\n\r\nI don't really understand the formula, and I'd not use `options_len` in there as it seems we are introducing a new field. I'd rather use tomething lile `L` and then on the side say what `L` is (extension header size in bits)",
+              "createdAt": "2024-05-31T17:19:18Z",
+              "updatedAt": "2024-05-31T17:20:49Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "What is a `padding-only` option?  In the draft we describe `Pad1` and `PadN`",
+              "createdAt": "2024-05-31T17:20:37Z",
+              "updatedAt": "2024-05-31T17:20:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xV-Z",
+          "commit": {
+            "abbreviatedOid": "4145be3"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:30:18Z",
+          "updatedAt": "2024-06-03T09:30:19Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "I did use the language of RFC8200 for inspiration... rewrote to be even closer. The formula had to be added in order to answer the question that the reviewer asked: \"how to compute it\". \r\n",
+              "createdAt": "2024-06-03T09:30:19Z",
+              "updatedAt": "2024-06-03T09:30:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xXx9",
+          "commit": {
+            "abbreviatedOid": "4145be3"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:33:43Z",
+          "updatedAt": "2024-06-03T09:33:43Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Rewrote to remove the phrase \"padding-only\" options and link to table-4.\r\n",
+              "createdAt": "2024-06-03T09:33:43Z",
+              "updatedAt": "2024-06-03T09:33:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778580Amp",
+          "commit": {
+            "abbreviatedOid": "8b9de4a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T14:16:51Z",
+          "updatedAt": "2024-06-03T14:16:51Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOKYa7785wWM5i",
+      "title": "Add service field table",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/18",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #13 ",
+      "createdAt": "2024-05-23T15:24:38Z",
+      "updatedAt": "2024-06-03T16:34:30Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "service_field_described",
+      "headRefOid": "486d9613c5c34567e87684cfe72ddbda1de1005b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This specifically addresses: https://github.com/scionassociation/scion-dp_I-D/issues/13. Should we then close it as \"won't fix\"?",
+          "createdAt": "2024-06-03T09:11:07Z",
+          "updatedAt": "2024-06-03T09:11:07Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I added a brief description of what a service address is. That should clarify the reference to it that is in the configuration PR.\r\n\r\n",
+          "createdAt": "2024-06-03T16:34:30Z",
+          "updatedAt": "2024-06-03T16:34:30Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858wRL7",
+          "commit": {
+            "abbreviatedOid": "f67bde8"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Thanks for adding the table. I think we need to have a more comprehensive discussion on service discovery and wether we add this to the draft or not. \r\nThis because in some way,  just adding this extra table will raise more questions..",
+          "createdAt": "2024-06-03T07:47:23Z",
+          "updatedAt": "2024-06-03T07:47:23Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOKYa7785wep0J",
+      "title": "Describe the effects of clock drift.",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/19",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The reviewr's attention is kindly stirred towards section 4.2.2.3. I am not sure what the standard should say regarding segments from the future. Current code says they're fine.\r\n\r\nAddresses one of the concerns in https://github.com/scionassociation/scion-cp_I-D/issues/18\r\n",
+      "createdAt": "2024-05-24T15:18:53Z",
+      "updatedAt": "2024-05-31T16:36:32Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "clock_drift",
+      "headRefOid": "d669e7c4ea8f66b27089daac1de6131ce56c3f01",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858BtPS",
+          "commit": {
+            "abbreviatedOid": "dff4b7c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-27T12:31:01Z",
+          "updatedAt": "2024-05-28T08:39:10Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Logic bug:\r\n\"hop field is **not** expired\", \"**not** originated in future\"  -- if either is **true** then drop.\r\nMaybe change to \"if either check fails\".",
+              "createdAt": "2024-05-27T12:31:01Z",
+              "updatedAt": "2024-05-28T08:39:10Z"
+            },
+            {
+              "originalPosition": 30,
+              "body": "\"Assuming segments are originated at least once a minute ...\"\r\n\r\nThis is not entirely accurate. Longer paths take longer to create. With a 1 minute beaconing period, constructing a path segment that traverses N ASes will take up to N minutes.\r\n\r\nWith this in mind, I don't really know how to write this. Perhaps something to the effect of: the expiration time of a path can often not be constrained too tightly, as the path discovery takes a variable amount of time and the usable lifetime of the path is  reduced accordingly. Compared to this effect, even clock drifts in the order of minutes do not pose additional problems.",
+              "createdAt": "2024-05-28T08:26:12Z",
+              "updatedAt": "2024-05-28T08:39:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858JA6j",
+          "commit": {
+            "abbreviatedOid": "dff4b7c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T13:05:45Z",
+          "updatedAt": "2024-05-28T13:05:46Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Done. Rephrased to avoid double negatives.\r\n",
+              "createdAt": "2024-05-28T13:05:45Z",
+              "updatedAt": "2024-05-28T13:05:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858JfDv",
+          "commit": {
+            "abbreviatedOid": "dff4b7c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-28T13:52:26Z",
+          "updatedAt": "2024-05-28T13:52:27Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Ah yes, that's even more relevant...unfortunately not as clear-cut indeed.\r\n",
+              "createdAt": "2024-05-28T13:52:26Z",
+              "updatedAt": "2024-05-28T13:52:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858phRb",
+          "commit": {
+            "abbreviatedOid": "d669e7c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-31T16:24:22Z",
+          "updatedAt": "2024-05-31T16:36:32Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I'd align this text with the CP draft once we finish discussion in https://github.com/scionassociation/scion-cp_I-D/pull/25  ",
+              "createdAt": "2024-05-31T16:24:22Z",
+              "updatedAt": "2024-05-31T16:36:32Z"
+            },
+            {
+              "originalPosition": 35,
+              "body": "I'd also shrink and reword this section, after we finish discussion in the control plane PR, and leave here only aspects that relate to the DP, like: \r\n- there must be lose time sync between routers and CPs (within an AS?) because routers must verify the current HF \r\n\r\nAnd remove parts that relate to CP",
+              "createdAt": "2024-05-31T16:36:28Z",
+              "updatedAt": "2024-05-31T16:36:32Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOKYa7785wyhA0",
+      "title": "Add information about configuration. Esp. Interface configuration.",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/21",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses https://github.com/scionassociation/scion-cp_I-D/issues/17\r\n",
+      "createdAt": "2024-05-28T16:45:15Z",
+      "updatedAt": "2024-06-03T16:23:53Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "interface_config",
+      "headRefOid": "9f64459c6b7292e24d6bd43b838170dda91f1c00",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858VZ7O",
+          "commit": {
+            "abbreviatedOid": "1c22856"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-05-29T17:13:06Z",
+          "updatedAt": "2024-05-29T17:36:13Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\n**Interface Identifier (Interface ID)**: 16 bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes. Each interface belongs to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress interfaces). The Interface ID MUST be unique within each AS, with the exception of ID 0 that denotes a connection between a border router and the AS's internal network. Each border router manages an instance of interface 0.\r\n```",
+              "createdAt": "2024-05-29T17:13:06Z",
+              "updatedAt": "2024-05-29T17:36:13Z"
+            },
+            {
+              "originalPosition": 22,
+              "body": "I'd use the same text I proposed for the CP\r\n```suggestion\r\n**Peering Link**: A link between two SCION border routers of different ASes, where at least one of the two ASes is not core. Two peering ASes may be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.\r\n```",
+              "createdAt": "2024-05-29T17:15:00Z",
+              "updatedAt": "2024-05-29T17:36:13Z"
+            },
+            {
+              "originalPosition": 43,
+              "body": "Does that make sense? I tried to separate this in two lists, one for inter-AS neighbors and one for intra-AS SCION routers",
+              "createdAt": "2024-05-29T17:33:02Z",
+              "updatedAt": "2024-05-29T17:36:13Z"
+            },
+            {
+              "originalPosition": 45,
+              "body": "Does this fit better in previous section \u00a0Intra-Domain Forwarding Process ? ",
+              "createdAt": "2024-05-29T17:33:47Z",
+              "updatedAt": "2024-05-29T17:36:13Z"
+            },
+            {
+              "originalPosition": 47,
+              "body": "We don't describe this in this document.. This paragraph will be confusing. Let's discuss if this is needed. \r\n\r\nAlso, we could just mention this mapping has to be configured or supplied out of band.",
+              "createdAt": "2024-05-29T17:36:05Z",
+              "updatedAt": "2024-05-29T17:36:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858V_yX",
+          "commit": {
+            "abbreviatedOid": "5784cff"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T18:35:57Z",
+          "updatedAt": "2024-05-29T18:35:57Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "The phrase \"intra-protocol\" is completely obscure to me. We haven't used that previously, so we might want to make a longer, more explicit phrase. Otherwise, yeah that part probably deserves an explanation, but it might need to be longer.\r\n",
+              "createdAt": "2024-05-29T18:35:57Z",
+              "updatedAt": "2024-05-29T18:35:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858WAFc",
+          "commit": {
+            "abbreviatedOid": "5784cff"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T18:36:43Z",
+          "updatedAt": "2024-05-29T18:36:43Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "I'd rather address the configuration topic in one place.",
+              "createdAt": "2024-05-29T18:36:43Z",
+              "updatedAt": "2024-05-29T18:36:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858WA4d",
+          "commit": {
+            "abbreviatedOid": "5784cff"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-29T18:38:44Z",
+          "updatedAt": "2024-05-29T18:38:44Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "Well, we, unfortunately do mention the service address type, without explaining it. It is currently the only mechanism to bootstrap scion, so I think we are obligated to explain it.\r\n",
+              "createdAt": "2024-05-29T18:38:44Z",
+              "updatedAt": "2024-05-29T18:38:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858cGYf",
+          "commit": {
+            "abbreviatedOid": "5784cff"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T09:21:24Z",
+          "updatedAt": "2024-05-30T09:21:24Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "To be handled in #23 ",
+              "createdAt": "2024-05-30T09:21:24Z",
+              "updatedAt": "2024-05-30T09:21:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858cozL",
+          "commit": {
+            "abbreviatedOid": "d02a253"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T10:27:13Z",
+          "updatedAt": "2024-05-30T10:27:13Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "We actually describe Interface ID 0 in the _One-Hop Path Type_  section. \r\nMaybe we could add a reference?   \r\n\r\nAlso, is interface ID 0 used for the last hop? In the example in _Step-by-Step Explanation_\r\n```\r\n      R4 will then also realize, based on the fields\r\n      CurrHF and SegLen in the SCION header, that the packet has reached\r\n      the last hop in its SCION path.  Therefore, instead of stepping up\r\n      the pointers to the next info or hop field, router R4 inspects the\r\n      SCION destination address and extracts the endpoint address\r\n      192.0.2.7. \r\n ```",
+              "createdAt": "2024-05-30T10:27:13Z",
+              "updatedAt": "2024-05-30T10:27:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858dsUc",
+          "commit": {
+            "abbreviatedOid": "1c22856"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T12:34:35Z",
+          "updatedAt": "2024-05-30T12:34:35Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "Rearanged as per our discussion.\r\n",
+              "createdAt": "2024-05-30T12:34:35Z",
+              "updatedAt": "2024-05-30T12:34:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858edud",
+          "commit": {
+            "abbreviatedOid": "230d52c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-30T13:56:28Z",
+          "updatedAt": "2024-05-30T14:52:39Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "> ID 0 that denotes a connection between a border router and the AS's internal network. Each border router manages an instance of interface 0.\r\n\r\nThe convention to use interface 0 to refer to the AS-internal side of the border router is an implementation detail of our router. I think it suffices to say something like \"Interface ID 0 is reserved for blank/nil values\".\r\n",
+              "createdAt": "2024-05-30T13:56:28Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            },
+            {
+              "originalPosition": 13,
+              "body": "\r\n> We actually describe Interface ID 0 in the One-Hop Path Type section.\r\n\r\nThe One hop path is not very special here; we also use 0 interface in the first/last hop field of normal SCION paths.\r\n\r\n> Also, is interface ID 0 used for the last hop?\r\n\r\nDuring path segment construction, the 0 interface is used in the first/last hop field. BUT in the path-segment-combined dataplane path, the 0 does not always/only occur on the last hop.\r\n- Hops with 0 interface occurs \"in the middle\", at segment cross overs.\r\n- Typically 0 will occur at the end of a down segment, but it's legal to cut off the end of a segment.\r\n- Paths to a parent AS below the core consist of only an up-segment that is cut short. These don't end with 0.",
+              "createdAt": "2024-05-30T14:06:17Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "Just \"Interface ID\" (otherwise reader might wonder if there are different types of interface IDs).",
+              "createdAt": "2024-05-30T14:10:49Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            },
+            {
+              "originalPosition": 46,
+              "body": "Text does not make it quite clear which border routers get which list of values.\r\n\r\nI'm guessing that it means to say that routers that \"implement\"/\"handle\" a particular interface need to know the link type/neighbor ISD-AS/neighbor interface address, while all other routers only need the address of the router that handles the Iface.\r\n\r\nI believe all routers need to know the link type, to validate segment cross over (e.g. cross-over from an peer- to a core- link would be forbidden). Unfortunately, this is not described in the \"processing at routers\" section at all. Notably this _is_ described in the book v2 (5.6.3 processing at routers). \r\nThe neighbor's ISD-AS number is currently not used for much, but possibly it should be used to drop packets with bad source/dest address.\r\n\r\n\r\nMaybe it's easier to combine the two \"lists\". Suggestion:\r\n```\r\nFor each link to a neighbor, these following information needs to be configured for all border routers:\r\n- Interface ID\r\n- Link Type,\r\n- Neighbor ISD-AS number,\r\n- In the case of the border router responsible for this interface: the neighbor interface's underlay address.\r\n- Otherwise: the \"intra-protocol\" address of the border router responsible this interface.\r\n```",
+              "createdAt": "2024-05-30T14:43:43Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            },
+            {
+              "originalPosition": 48,
+              "body": "> (`DT/DS` == 0b01) in the [common header](#common-header)\r\n\r\n\"in the common header\" should be in the parens, no?\r\n-> (`DT/DS` == 0b01 in the common header) ...",
+              "createdAt": "2024-05-30T14:52:28Z",
+              "updatedAt": "2024-05-30T14:52:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858psSi",
+          "commit": {
+            "abbreviatedOid": "d02a253"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-31T16:50:08Z",
+          "updatedAt": "2024-05-31T16:50:08Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Thanks for the explanation! @jiceatscion can you remove mentions of this use of interface ID 0 from the draft? ",
+              "createdAt": "2024-05-31T16:50:08Z",
+              "updatedAt": "2024-05-31T16:50:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858puNv",
+          "commit": {
+            "abbreviatedOid": "230d52c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-05-31T16:55:25Z",
+          "updatedAt": "2024-05-31T16:55:25Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "> Maybe it's easier to combine the two \"lists\"\r\n\r\nBut routers within the same AS require less parameters. For example, AFAIK no link type or neighbor ISD-AS is needed.  \r\nAlso, is it a requirement that all BRs within an AS see each others as \"neighbors\", in a meshed way? In other words, must each router have all interface ID mappings for its AS (and L3 connectivity to all other routers)? \r\n\r\n",
+              "createdAt": "2024-05-31T16:55:25Z",
+              "updatedAt": "2024-05-31T16:55:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858w_zQ",
+          "commit": {
+            "abbreviatedOid": "230d52c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T08:51:27Z",
+          "updatedAt": "2024-06-03T08:51:27Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Rewrote the two mentions of interface ID 0. Now it is only a reserved ID not specifically associated with an internal src/dst and available to mean unspecified. For the one-hop path, the egressID needs not be 0; it only needs to be invalid.",
+              "createdAt": "2024-06-03T08:51:27Z",
+              "updatedAt": "2024-06-03T08:51:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xBY5",
+          "commit": {
+            "abbreviatedOid": "230d52c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T08:54:25Z",
+          "updatedAt": "2024-06-03T08:54:25Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "yes. done.\r\n",
+              "createdAt": "2024-06-03T08:54:25Z",
+              "updatedAt": "2024-06-03T08:54:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xGIC",
+          "commit": {
+            "abbreviatedOid": "230d52c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:02:41Z",
+          "updatedAt": "2024-06-03T09:02:41Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "These are implementation details, I would say. That section is an explanation about configuration; in response to a question. It is not actually mandating anything.\r\n\r\nI rewote along the lines proposed my Matthias. We discuss that later.\r\n",
+              "createdAt": "2024-06-03T09:02:41Z",
+              "updatedAt": "2024-06-03T09:02:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xGU3",
+          "commit": {
+            "abbreviatedOid": "230d52c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:03:04Z",
+          "updatedAt": "2024-06-03T09:03:04Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "ping?\r\n",
+              "createdAt": "2024-06-03T09:03:04Z",
+              "updatedAt": "2024-06-03T09:03:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xH9a",
+          "commit": {
+            "abbreviatedOid": "230d52c"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T09:04:48Z",
+          "updatedAt": "2024-06-03T09:04:48Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "> But routers within the same AS require less parameters. For example, AFAIK no link type or neighbor ISD-AS is needed.\r\n\r\nAs I said above, they _do_ need to have the information about the link type.\r\n\r\n>  Also, is it a requirement that all BRs within an AS see each others as \"neighbors\", in a meshed way? In other words, must each router have all interface ID mappings for its AS (and L3 connectivity to all other routers)?\r\n\r\nAlmost. The exact requirement is somewhat more nuanced. For the draft, I think this is good enough.\r\n\r\nJust for the sake of completeness: the model of path segment crossover implicitly assumes that you can transit between any two child interfaces, and between any child and core interface. So, a router responsible for a child or core interface needs to know _at least_ all (other) child interfaces. All other hops (parent-child, core-core, child-peer), are announced explicitly; the corresponding connectivity only needs to exist if the hop is ever announced.",
+              "createdAt": "2024-06-03T09:04:48Z",
+              "updatedAt": "2024-06-03T09:04:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77858xMK-",
+          "commit": {
+            "abbreviatedOid": "ef1f2ba"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T09:12:11Z",
+          "updatedAt": "2024-06-03T09:12:11Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKYa778581R7r",
+          "commit": {
+            "abbreviatedOid": "1c22856"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-03T16:18:40Z",
+          "updatedAt": "2024-06-03T16:18:40Z",
+          "comments": [
+            {
+              "originalPosition": 47,
+              "body": "Tried to provide concise explanation.\r\n",
+              "createdAt": "2024-06-03T16:18:40Z",
+              "updatedAt": "2024-06-03T16:18:41Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOKYa7785xRRQM",
+      "title": "Rewrite introduction",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/24",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses: \r\n- #10 - added introductory section with component overview\r\n- #11 ",
+      "createdAt": "2024-06-03T09:05:17Z",
+      "updatedAt": "2024-06-03T16:12:11Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "overview",
+      "headRefOid": "3a6f5f8ec107b262a17a81f17e858dc76eaf1ab2",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa77858xceg",
+          "commit": {
+            "abbreviatedOid": "3a6f5f8"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Please check references: \r\n- Make sure references and links are correct (Use `{{}}`), that they are added to the reference section. They are also case sensitive\r\n- I'd move I-D.scion-cppki to normative references, it is necessary for implementing the protocol\r\n\r\n",
+          "createdAt": "2024-06-03T09:42:38Z",
+          "updatedAt": "2024-06-03T10:04:18Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "```suggestion\r\n*PKI* - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format [RFC5280]. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See {{I-D.scion-cppki}}\r\n```",
+              "createdAt": "2024-06-03T09:42:38Z",
+              "updatedAt": "2024-06-03T10:04:18Z"
+            },
+            {
+              "originalPosition": 19,
+              "body": "You also need to remove references\r\n```\r\n/Users/nic/repos/scion-dp_I-D/draft-dekater-scion-dataplane.xml(1952): Warning: Unused reference: There seems to be no reference to [I-D.scion-components] in the document\r\n/Users/nic/repos/scion-dp_I-D/draft-dekater-scion-dataplane.xml(1979): Warning: Unused reference: There seems to be no reference to [I-D.scion-overview] in the document\r\n```\r\n",
+              "createdAt": "2024-06-03T09:43:36Z",
+              "updatedAt": "2024-06-03T10:04:18Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "Fix link\r\n```suggestion\r\nSCION is a path-aware internetworking routing architecture as described in {{RFC921}}. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.\r\n```\r\n\r\nAlso, reference is missing for two RFCs, it has to be added under normative references (lines  ~49):  \r\n```\r\n- No link definition for link ID 'rfc9217' found on line 93\r\n- No link definition for link ID 'rfc5280' found on line 105\r\n```\r\n\r\n",
+              "createdAt": "2024-06-03T09:50:08Z",
+              "updatedAt": "2024-06-03T10:04:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778581FNj",
+          "commit": {
+            "abbreviatedOid": "3a6f5f8"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Well done, intro makes a lot of sense. I left some small changes, also there are some typos in references",
+          "createdAt": "2024-06-03T15:57:52Z",
+          "updatedAt": "2024-06-03T16:12:11Z",
+          "comments": [
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\r\n*Security* - to provide higher levels of trust in routing information in order to prevent traffic hijacking, reduce potential for denial-of-service and other attacks. Endpoints can decide the trust roots they wish to rely on, routing information can be unambiguously attributed to an AS, and packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.\r\n```\r\nSlightly adapted wording, as we don't use prefixes. Clarified DoS",
+              "createdAt": "2024-06-03T15:57:52Z",
+              "updatedAt": "2024-06-03T16:12:11Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": "The concept of ISDs relates heavily to both the PKI and the control plane.  Also, ISDs are  described in the glossary entry\"*Isolation Domain (ISD)*:\" \r\n\r\n- How about we shrink this text (perhaps adapting the glossary entity)  and then in this paragrap we only describe the function of the PKI? Alternatively, we could move this text a bit up\r\n\r\n> To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format [RFC5280]. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs.",
+              "createdAt": "2024-06-03T16:11:23Z",
+              "updatedAt": "2024-06-03T16:12:11Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
