@@ -430,7 +430,7 @@ The SCION common header has the following packet format:
 | 4     | COLIBRI path (experimental)    |
 {: #table-1 title="SCION path types"}
 
-- `DT/DL/ST/SL`: These fields define the endpoint-address type and endpoint-address length for the source and destination endpoint. `DT` and `DL` stand for Destination Type and Destination Length, whereas `ST` and `SL` stand for Source Type and Source Length. The possible endpoint address length values are 4 bytes, 8 bytes, 12 bytes, and 16 bytes. If some address has a length different from the supported values, the next larger size can be used and the address can be padded with zeros. {{table-2}} below lists the currently used values for address length. The "type" identifier is only defined in combination with a specific address length. For example, address type "0" is defined as IPv4 in combination with address length 4, but in combination with address length 16, it stands for IPv6. Per address length, several sub-types are possible. {{table-3}} shows the currently valid allocations of type values to length values.
+- `DT/DL/ST/SL`: These fields define the endpoint-address type and endpoint-address length for the source and destination endpoint. `DT` and `DL` stand for Destination Type and Destination Length, whereas `ST` and `SL` stand for Source Type and Source Length. The possible endpoint address length values are 4 bytes, 8 bytes, 12 bytes, and 16 bytes. If some address has a length different from the supported values, the next larger size can be used and the address can be padded with zeros. {{table-2}} below lists the currently used values for address length. The "type" identifier is only defined in combination with a specific address length. For example, address type "0" is defined as IPv4 in combination with address length 4, but in combination with address length 16, it stands for IPv6. Per address length, several sub-types are possible. {{table-3}} shows the currently assigned combinations of lengths and types.
 
 | DL/SL Value | Address Length |
 |-------------+----------------|
@@ -440,25 +440,15 @@ The SCION common header has the following packet format:
 | 3           | 16 bytes       |
 {: #table-2 title="Address length values"}
 
-
-| Length (bytes) | Type | Type/Length (binary) | Interpretation |
-|----------------+------+----------------------+----------------|
-| 4              | 0    | 0b0000               | IPv4           |
-| 4              | 1    | 0b0100               | Service        |
-| 16             | 0    | 0b1100               | IPv6           |
-| other          |      |                      | Unassigned     |
+| Length (bytes) | Type | DT/DL or ST/SL encoding | Conventional Use |
+|----------------+------+-------------------------+------------------|
+| 4              | 0    | 0b0000                  | IPv4             |
+| 4              | 1    | 0b0100                  | Service          |
+| 16             | 0    | 0b0011                  | IPv6             |
+| other          |      |                         | Unassigned       |
 {: #table-3 title="Allocations of type values to length values"}
 
-A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint-addresses that is known to be part of the set.
-
-Current known values are:
-
-| Hexadecimal value | Short Name | Description            |
-|-------------------+------------+------------------------|
-| 0x00000001        | DS         | Discovery Service      |
-| 0x00000002        | CS         | Control Service        |
-| 0x0000ffff        | None       | Reserved invalid value |
-{: #table-4 title="Known Service values"}
+A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint-addresses that is known to be part of the set. {{table-4}} lists the known services.
 
 - `RSV`: These bits are currently reserved for future use.
 
@@ -489,6 +479,29 @@ The SCION address header has the following format:
 - `DstISD, SrcISD`: The 16-bit ISD identifier of the destination/source.
 - `DstAS, SrcAS`: The 48-bit AS identifier of the destination/source.
 - `DstHostAddr, SrcHostAddr`: Specifies the variable length endpoint address of the destination/source. The accepted type and length are defined in the `DT/DL/ST/SL` fields of the common header.
+
+If a service address is implied by the `DT/DL` or `ST/SL` field of the common header, the corresponding address field has the following format:
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Service Number        |              RSV              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-20 title="Service address format"}
+
+- `RSV`: reserved for future use
+
+The currently known services are:
+
+| Hexadecimal value | Short Name | Description            |
+|-------------------+------------+------------------------|
+| 0x0001            | DS         | Discovery Service      |
+| 0x0002            | CS         | Control Service        |
+| 0xFFFF            | None       | Reserved invalid value |
+{: #table-4 title="Known Service values"}
+
 
 **Note:** For more information on addressing in SCION, see the introduction of the SCION Control Plane Specification ({{I-D.scion-cp}}).
 
