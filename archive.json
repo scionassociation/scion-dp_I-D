@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-04T00:00:43.377018+00:00",
+  "timestamp": "2024-06-06T00:00:51.608229+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -141,9 +141,9 @@
         "enhancement",
         "Prio 2"
       ],
-      "body": "When dealing with security considerations #1  , we mention that chained MACs prevent path splicing attacks. This should be better explained, since in the draft we describe how chained MACs work, but not how they prevent path splicing. \r\n\r\n> From Joel Halpern\r\n> The use of only the lower two bytes of the cryptographic value for chaining seems odd.  If you need a 16 bit value, I would have assumed you would at least fold the entire 6 bit signature into thirds, so all the bits have an impact?\r\n\r\nRight, this depends on the MAC algorithm. Safely truncating requires certain MAC algorithms, e.g. ones that have properties of a pseudorandom function. We should clarify this.\r\n\r\n> Both the PCB authentication and the hop authentication use a mechanism that computes the signature over all previous hops.  This seems odd.  If each hop includes the previous hop, that seems to produce an immutable chain at lower cost.  At the very least, an explanation would seem called for.\r\n\r\nThis is to avoid certain path splicing attacks, we have a brief description in the data plane draft 5.1.3.  Path Splicing, but this can be extended. \r\n\r\nRelates to https://github.com/scionassociation/scion-cp_I-D/issues/23 \r\n",
+      "body": "When dealing with security considerations #1  , we mention that chained MACs prevent path splicing attacks. This should be better explained, since in the draft we describe how chained MACs work, but not how they prevent path splicing. \r\n\r\n> From Joel Halpern\r\n> The use of only the lower two bytes of the cryptographic value for chaining seems odd.  If you need a 16 bit value, I would have assumed you would at least fold the entire 6 bit signature into thirds, so all the bits have an impact?\r\n\r\nRight, this depends on the MAC algorithm. Safely truncating requires certain MAC algorithms, e.g. ones that have properties of a pseudorandom function. We should clarify this.\r\n\r\n> Both the PCB authentication and the hop authentication use a mechanism that computes the signature over all previous hops.  This seems odd.  If each hop includes the previous hop, that seems to produce an immutable chain at lower cost.  At the very least, an explanation would seem called for.\r\n\r\nThis is to avoid certain path splicing attacks, we have a brief description in the data plane draft 5.1.3.  Path Splicing, but this can be extended. \r\n\r\n> <jmh>  A path splice would still make the following signature invalid.  But what I had missed is that it would not make the final signature invalid.  And you want validation at packet forwarding time to be fast.  Okay, I see why you are chaining them for the hop signature generation.  I guess for the PCB signature you either chain them at generation or you have to validate each one at PCB validation.  So again, I see why you are doing it this way.  A bit more explanation in the draft would be good.   Thanks.</jmh>\r\n\r\nIssue in CP:  https://github.com/scionassociation/scion-cp_I-D/issues/23 \r\n",
       "createdAt": "2024-03-04T11:06:10Z",
-      "updatedAt": "2024-05-17T16:40:12Z",
+      "updatedAt": "2024-06-04T10:55:17Z",
       "closedAt": null,
       "comments": []
     },
@@ -152,7 +152,7 @@
       "id": "I_kwDOKYa7786IuUkR",
       "title": "SCMP - Be careful about forward references",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/8",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [
@@ -165,8 +165,8 @@
       ],
       "body": ">  SCION also includes its own protocol to communicate failures to endpoints,\r\n   the SCION Control Message Protocol (SCMP).  This protocol will be\r\n   described in a separate document, which will follow later.\r\n\r\nText like this doesn't stand on its own.",
       "createdAt": "2024-05-13T21:05:25Z",
-      "updatedAt": "2024-06-03T15:10:20Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-05T13:27:37Z",
+      "closedAt": "2024-06-05T13:27:37Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -884,7 +884,7 @@
       "labels": [],
       "body": "Fixes #12",
       "createdAt": "2024-05-21T14:16:00Z",
-      "updatedAt": "2024-06-03T16:37:00Z",
+      "updatedAt": "2024-06-05T12:29:19Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
@@ -969,6 +969,32 @@
           "createdAt": "2024-06-03T16:37:00Z",
           "updatedAt": "2024-06-03T16:37:00Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKYa77859HAVO",
+          "commit": {
+            "abbreviatedOid": "39fbbef"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-05T12:25:13Z",
+          "updatedAt": "2024-06-05T12:29:19Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": ">  Recall that path segments are only checked for validity and policy compliance during the path discovery phase, and routers only perform minimal sanity checks of hop fields with valid MACs.\r\n\r\nI find the language here a bit confusing, because hop field MAC validity is checked at forwarding by the DP, and this is more than _ minimal sanity checks_. I'd just mention that as the DP is only verifying MACs in hop fields, a forget MAC allows an attacker to..\r\n",
+              "createdAt": "2024-06-05T12:25:13Z",
+              "updatedAt": "2024-06-05T12:29:19Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "Can we say something more about the consequences of this? Can you hijack traffic or splice a path?\r\n",
+              "createdAt": "2024-06-05T12:29:17Z",
+              "updatedAt": "2024-06-05T12:29:19Z"
+            }
+          ]
         }
       ]
     },
@@ -977,25 +1003,35 @@
       "id": "PR_kwDOKYa7785wUwgj",
       "title": "Remove forward references to SCMP",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/16",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #8 ",
       "createdAt": "2024-05-23T12:25:29Z",
-      "updatedAt": "2024-06-03T15:02:30Z",
+      "updatedAt": "2024-06-05T13:28:01Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "c3ddf7476160c085a401ee272ef088c60bd7f1c6",
+      "baseRefOid": "caf6e97ec459b8c5bf6051468e8468de64075297",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "no_scmp_spec",
-      "headRefOid": "fad1fda5f67c9cf00f4314e7f2dcdb97f6cb7748",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "34d52670d3d82a399eafb22036bf1fcde431f26c",
+      "closedAt": "2024-06-05T13:27:36Z",
+      "mergedAt": "2024-06-05T13:27:36Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "5148614fc232525602790094e3c49f6bdefb30f5"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Eliot gave us a thumbs up for the current reference, merged. ",
+          "createdAt": "2024-06-05T13:27:59Z",
+          "updatedAt": "2024-06-05T13:27:59Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOKYa77858p7X1",
@@ -1218,13 +1254,13 @@
       "labels": [],
       "body": "Fixes #13 ",
       "createdAt": "2024-05-23T15:24:38Z",
-      "updatedAt": "2024-06-03T16:34:30Z",
+      "updatedAt": "2024-06-05T13:17:46Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "service_field_described",
-      "headRefOid": "486d9613c5c34567e87684cfe72ddbda1de1005b",
+      "headRefOid": "0ac3296708e23c2e71c3e806a775f2dd5ba73038",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -1240,9 +1276,9 @@
         {
           "author": "jiceatscion",
           "authorAssociation": "CONTRIBUTOR",
-          "body": "I added a brief description of what a service address is. That should clarify the reference to it that is in the configuration PR.\r\n\r\n",
+          "body": "I added a brief description of what a service address is. That should clarify the reference to it that is in [the configuration PR](https://github.com/scionassociation/scion-cp_I-D/pull/24).\r\n\r\n",
           "createdAt": "2024-06-03T16:34:30Z",
-          "updatedAt": "2024-06-03T16:34:30Z"
+          "updatedAt": "2024-06-05T12:53:23Z"
         }
       ],
       "reviews": [
@@ -1258,6 +1294,32 @@
           "createdAt": "2024-06-03T07:47:23Z",
           "updatedAt": "2024-06-03T07:47:23Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKYa77859HlYJ",
+          "commit": {
+            "abbreviatedOid": "0ac3296"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-06-05T13:13:35Z",
+          "updatedAt": "2024-06-05T13:17:46Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Based on table 3, It seems that an address is a service address if either `DT/DL`=1/0 or if `ST/SL`=1/0. Is source ever used? If not, it should be clearer. Maybe we could just say, before the service address table, that those addresses are for case  `DT/DL`=1/0",
+              "createdAt": "2024-06-05T13:13:35Z",
+              "updatedAt": "2024-06-05T13:17:46Z"
+            },
+            {
+              "originalPosition": 25,
+              "body": "Would it make more sense to place the overall service addresses table one section below, at the end of parargaph `##\u00a0Address Header` ? \r\n\r\nI am saying this because service addresses are special values of `DstHostAddr` when `DT/DL`=1/0, this field is in the address header, not in the common header",
+              "createdAt": "2024-06-05T13:17:41Z",
+              "updatedAt": "2024-06-05T13:17:46Z"
+            }
+          ]
         }
       ]
     },
@@ -1385,24 +1447,26 @@
       "id": "PR_kwDOKYa7785wyhA0",
       "title": "Add information about configuration. Esp. Interface configuration.",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/21",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Addresses https://github.com/scionassociation/scion-cp_I-D/issues/17\r\n",
       "createdAt": "2024-05-28T16:45:15Z",
-      "updatedAt": "2024-06-03T16:23:53Z",
+      "updatedAt": "2024-06-05T08:35:41Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "interface_config",
-      "headRefOid": "9f64459c6b7292e24d6bd43b838170dda91f1c00",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "532842e984102e7be729ad66b90b7519105ab083",
+      "closedAt": "2024-06-05T08:35:38Z",
+      "mergedAt": "2024-06-05T08:35:38Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "caf6e97ec459b8c5bf6051468e8468de64075297"
+      },
       "comments": [],
       "reviews": [
         {
@@ -1785,6 +1849,52 @@
               "updatedAt": "2024-06-03T16:18:41Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa778588mRa",
+          "commit": {
+            "abbreviatedOid": "9f64459"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-04T12:33:48Z",
+          "updatedAt": "2024-06-04T12:33:48Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKYa77859AJjo",
+          "commit": {
+            "abbreviatedOid": "9f64459"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T19:05:01Z",
+          "updatedAt": "2024-06-04T19:05:01Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "```suggestion\r\nUpon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second hop field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the hop field.\r\n```\r\n\r\nHow about we use the same wording as above, where we mention 0: \r\n``` The Interface ID MUST be unique\r\n   within each AS.  Interface ID 0 is not a valid identifier,\r\n   implementations can use it as the \"unspecified\" value.\r\n   ``` \r\n   \r\n   After this, we should be good to finally merge this :) ",
+              "createdAt": "2024-06-04T19:05:01Z",
+              "updatedAt": "2024-06-04T19:09:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859E0dB",
+          "commit": {
+            "abbreviatedOid": "532842e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM\r\n",
+          "createdAt": "2024-06-05T08:35:08Z",
+          "updatedAt": "2024-06-05T08:35:08Z",
+          "comments": []
         }
       ]
     },
@@ -1839,9 +1949,9 @@
             },
             {
               "originalPosition": 14,
-              "body": "Fix link\r\n```suggestion\r\nSCION is a path-aware internetworking routing architecture as described in {{RFC921}}. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.\r\n```\r\n\r\nAlso, reference is missing for two RFCs, it has to be added under normative references (lines  ~49):  \r\n```\r\n- No link definition for link ID 'rfc9217' found on line 93\r\n- No link definition for link ID 'rfc5280' found on line 105\r\n```\r\n\r\n",
+              "body": "Fix link\r\n```suggestion\r\nSCION is a path-aware internetworking routing architecture as described in {{RFC9217}}. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.\r\n```\r\n\r\nAlso, reference is missing for two RFCs, it has to be added under normative references (lines  ~49):  \r\n```\r\n- No link definition for link ID 'rfc9217' found on line 93\r\n- No link definition for link ID 'rfc5280' found on line 105\r\n```\r\n\r\n",
               "createdAt": "2024-06-03T09:50:08Z",
-              "updatedAt": "2024-06-03T10:04:18Z"
+              "updatedAt": "2024-06-05T09:34:50Z"
             }
           ]
         },
@@ -1868,6 +1978,265 @@
               "body": "The concept of ISDs relates heavily to both the PKI and the control plane.  Also, ISDs are  described in the glossary entry\"*Isolation Domain (ISD)*:\" \r\n\r\n- How about we shrink this text (perhaps adapting the glossary entity)  and then in this paragrap we only describe the function of the PKI? Alternatively, we could move this text a bit up\r\n\r\n> To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format [RFC5280]. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs.",
               "createdAt": "2024-06-03T16:11:23Z",
               "updatedAt": "2024-06-03T16:12:11Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOKYa7785xZv6V",
+      "title": "Clarify selection of MAC",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/26",
+      "state": "OPEN",
+      "author": "matzf",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Describe AES-CMAC hop field MAC algorithm as the default which SHOULD be supported.\r\n\r\n- Moved the details of  the default mac algorithm to _after_ the explanation of the accumulator field (as this is used in the mac input).\r\n- Fixed the swapped info field/hop field labels in the figure depicting the MAC input.\r\n\r\nContributes to https://github.com/scionassociation/scion-cp_I-D/issues/23.",
+      "createdAt": "2024-06-04T09:43:57Z",
+      "updatedAt": "2024-06-04T19:23:20Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c3ddf7476160c085a401ee272ef088c60bd7f1c6",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "default-mac-algo",
+      "headRefOid": "9b98bc82d39cc66f734cf093bac5da283d798dbe",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa778587O9O",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-04T09:52:11Z",
+          "updatedAt": "2024-06-04T09:54:00Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "> to avoid overhead caused by\r\n\r\nto avoid the overhead caused by?",
+              "createdAt": "2024-06-04T09:52:12Z",
+              "updatedAt": "2024-06-04T09:54:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778587s99",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-06-04T10:46:31Z",
+          "updatedAt": "2024-06-04T10:49:54Z",
+          "comments": [
+            {
+              "originalPosition": 79,
+              "body": "```suggestion\r\nThe algorithm used to compute the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS MUST agree on the algorithm used.\r\nAll control service and router implementations MUST support the Default Hop Field MAC algorithm described below. Operators may use other algorithms as long as they are supported by all devices in the AS.\r\n```\r\n\r\nOur reviewer Joel suggested use of MUST: \r\n> <jmh>Yes, I get that each AS can in principle use a different algorithm.  Now look at it from the point of view of an implementor.  What algorithm shall I implement?  I am expecting to sell to multiple operators.  I am expecting to need to interoperate with solutions from other vendors.  I have no problem with allowing a range of choices.  But I need something that ensures interoperability.  The usual answer is to say that all implementations must implement and support X, and that operators can use anything they like that their devices support as long as all devices in the AS use the same thing. </jmh>\r\n\r\n\r\nAlso, shoutln't only the algorithm be selectable (but not which fields ar MACed)? I propose a slightly different text to clarify this. I also did a bit of rewording based on Joel's comment",
+              "createdAt": "2024-06-04T10:46:31Z",
+              "updatedAt": "2024-06-04T10:58:23Z"
+            },
+            {
+              "originalPosition": 83,
+              "body": "I would clarify that this data must be used as an input to calculate MAC, regardless of algorithm",
+              "createdAt": "2024-06-04T10:48:59Z",
+              "updatedAt": "2024-06-04T10:49:54Z"
+            },
+            {
+              "originalPosition": 82,
+              "body": "Shall we mention that as MAC is truncated to 6 bits, in order to safely truncate it,  any other MAC algorithms must have properties of a pseudorandom function?  ",
+              "createdAt": "2024-06-04T10:49:50Z",
+              "updatedAt": "2024-06-04T10:49:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785872KK",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T11:04:28Z",
+          "updatedAt": "2024-06-04T11:04:28Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "Shoudln't the input data for MACs be always the same? To this point, isn't it better to leave this section where it was?",
+              "createdAt": "2024-06-04T11:04:28Z",
+              "updatedAt": "2024-06-04T11:04:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778588Mpl",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T11:50:28Z",
+          "updatedAt": "2024-06-04T11:50:28Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "I'll add a paragraph about the requirements for alternative MAC algos: unforgeable, pseudorandom in last two bytes (because of XOR thing), and depend on info field and hop field (ignoring flags).\r\n\r\nThis should constrain the input of the MAC function enough. I would avoid over-specifying the bit pattern layout of the input to alternative MAC algos; who knows, maybe it would make sense to separately compute something over some fields first, then some others, and then combine the output with some other function.",
+              "createdAt": "2024-06-04T11:50:28Z",
+              "updatedAt": "2024-06-04T11:50:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778588MtK",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T11:50:36Z",
+          "updatedAt": "2024-06-04T11:50:36Z",
+          "comments": [
+            {
+              "originalPosition": 82,
+              "body": "The shortening to 6 bytes may be specific to the MAC algo. I think this should be covered by the more generic requirements that I alluded to in the comment above.",
+              "createdAt": "2024-06-04T11:50:36Z",
+              "updatedAt": "2024-06-04T11:50:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778588M1P",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T11:50:47Z",
+          "updatedAt": "2024-06-04T11:50:47Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "See other comment; I'll add generic requirements for alternative MAC algorights. The bit pattern input to alternative MAC algorithms should IMO not be constrained.",
+              "createdAt": "2024-06-04T11:50:47Z",
+              "updatedAt": "2024-06-04T11:52:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778588PFq",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T11:54:43Z",
+          "updatedAt": "2024-06-04T11:54:43Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "Could have sworn I fixed this. Thanks, done!",
+              "createdAt": "2024-06-04T11:54:43Z",
+              "updatedAt": "2024-06-04T11:54:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa778588POF",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T11:54:58Z",
+          "updatedAt": "2024-06-04T11:54:58Z",
+          "comments": [
+            {
+              "originalPosition": 79,
+              "body": "I'm ok with making this a MUST instead of a SHOULD, even if SHOULD still seems perfectly appropriate to me:\r\n\r\n> SHOULD   This word, or the adjective \"RECOMMENDED\", mean that there\r\n>   may exist valid reasons in particular circumstances to ignore a\r\n>   particular item, but the full implications must be understood and\r\n>   carefully weighed before choosing a different course.\r\n\r\n\r\n--\r\n> Also, shoutln't only the algorithm be selectable (but not which fields ar MACed)\r\n\r\nI'll reply to this in another comment.",
+              "createdAt": "2024-06-04T11:54:58Z",
+              "updatedAt": "2024-06-04T11:54:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859AP1z",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T19:20:34Z",
+          "updatedAt": "2024-06-04T19:20:35Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "> I would avoid over-specifying the bit pattern layout of the input to alternative MAC algos; who knows, maybe it would make sense to separately compute something over some fields first, then some others, and then combine the output with some other function.\r\n\r\nI see your point. However, shoudln't we make sure that all these fields are in some way authenticated, so that the overall security properties are maintained? Otherwise you would allow an AS that only authenticates a portion of the fields. Maybe we could slightly reword it to say which fields must be authenticated? ",
+              "createdAt": "2024-06-04T19:20:35Z",
+              "updatedAt": "2024-06-04T19:20:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859AQqZ",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T19:22:35Z",
+          "updatedAt": "2024-06-04T19:22:35Z",
+          "comments": [
+            {
+              "originalPosition": 82,
+              "body": "Ok thanks for the clarification",
+              "createdAt": "2024-06-04T19:22:35Z",
+              "updatedAt": "2024-06-04T19:22:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859AQ9_",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-04T19:23:20Z",
+          "updatedAt": "2024-06-04T19:23:20Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "Ok perfect, but ti would be good to clearly list which fields MUST be authenticated by the MAC.",
+              "createdAt": "2024-06-04T19:23:20Z",
+              "updatedAt": "2024-06-04T19:23:20Z"
             }
           ]
         }
