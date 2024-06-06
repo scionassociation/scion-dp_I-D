@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 December 2024                                         S. Hitz
+Expires: 8 December 2024                                         S. Hitz
                                                          Anapaya Systems
-                                                             3 June 2024
+                                                             6 June 2024
 
 
                             SCION Data Plane
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2024.
+   This Internet-Draft will expire on 8 December 2024.
 
 Copyright Notice
 
@@ -2312,21 +2312,34 @@ direction
 
    When an AS's forwarding key is compromised, an attacker can forge hop
    field MACs, undermining path authorization.  Recall that path
-   segments are only checked for validity and policy compliance during
-   the path discovery phase, and routers only perform minimal sanity
-   checks of hop fields with valid MACs.  Consequently, creating
-   fraudulent hop fields with valid MACs allows an attacker to bypass
-   most path segment validity checks, and to create path segments that
-   violate the AS's local policy and/or general path segment validity
-   requirements.  In particular, an attacker with access to the
-   forwarding key of at least two compromised ASes could create paths
-   that include loops (limited by the maximum number of hop fields of a
-   path).
+   segments are checked for validity and policy compliance during the
+   path discovery phase, and during forwarding, routers only validate
+   the MAC and basic validity of the current the hop field.
+   Consequently, creating fraudulent hop fields with valid MACs allows
+   an attacker to bypass most path segment validity checks, and to
+   create path segments that violate the AS's local policy and/or
+   general path segment validity requirements.  In particular, an
+   attacker could create paths that include loops (limited by the
+   maximum number of hop fields of a path).
+
+   Unless an attacker has access to the forwarding keys of all ASes on
+   the illegitimate path it wants to fabricate, it will need to splice
+   fragments of two legitimate path segments with an illegitimate hop
+   field.  For this, it needs to create a hop field with a MAC that fits
+   into the MAC chain expected by the second path segment fragment.  The
+   only input that the attacker can vary relatively freely is the 8 bit
+   ExpTime, but the resulting MAC needs to match a specific 16 bit Acc
+   value.  While there is a low probability of this working for a
+   specific attempt (1/256), the attack will succeed eventually if the
+   attacker can keep retrying over a longer time period or with many
+   different path segment fragments.
 
    While a forwarding key compromise and the resulting loss of path
    authorization is a serious degradation of SCION's routing security
    properties, this does not affect, for example, access control or data
-   security for the hosts in the affected AS.
+   security for the hosts in the affected AS.  Unauthorized paths are
+   available to the attacker, but the routing of packets from legitimate
+   senders is not affected.
 
 5.1.2.  Forging hop field MAC
 
