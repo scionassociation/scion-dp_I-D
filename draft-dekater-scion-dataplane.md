@@ -149,6 +149,18 @@ informative:
         name: Adrian Perrig
         org: ETH Zuerich
 
+  CRYPTOBOOK:
+    title: A Graduate Course in Applied Cryptography
+    date: 2023
+    target: https://toc.cryptobook.us/
+    author:
+        -
+         ins: D. Boneh
+         name: Dan Boneh
+        -
+         ins: V. Shoup
+         name: Victor Shoup
+
 
 --- abstract
 
@@ -1079,6 +1091,7 @@ When authorizing SCION PCBs and path segments in the control plane and forwardin
 The MAC in the hop fields of a SCION path has two purposes:
 
 - Preventing malicious endpoints from illegally adding, removing, or reordering hops within a path segment created during beaconing in the control plane.
+  In particular, preventing path splicing, i.e. the combination of parts of different valid path segments into a new, unauthorized, path segment.
 - Authentication of the information contained in the hop field itself, in particular the `ExpTime`, `ConsIngress`, and `ConsEgress`.
 
 To fulfill the above purposes, the MAC for the hop field of AS<sub>i</sub> includes both the components of the current hop field HF<sub>i</sub> and an aggregation of the path segment identifier and all preceding hop fields/entries in the path segment. The aggregation is a 16-bit XOR-sum of the path segment identifier and the hop field MACs.
@@ -1088,6 +1101,8 @@ When originating a path-segment construction beacon PCB in the **control plane**
 For high-speed packet processing in the **data plane**, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC-chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each (of the up to three) path segments in a path, as a separate, updatable accumulator field `Acc`. The routers update the accumulator field `Acc` by adding/subtracting only a single 16-bit value each.
 
 When combining path segments to create a path to the destination endpoint, the source endpoint MUST also initialize the value of accumulator field `Acc` for each path segment. The `Acc` field MUST contain the correct XOR-sum of the path segment identifier and preceding hop field MACs expected by the first router that is traversed.
+
+The aggregated 16-bit path segment identifier and preceding MACs prevents the splicing parts of different path segments, unless there is a per-chance collision among compatible path segments in one AS. Path segments are "compatible" for splicing only if they enter the AS from the same ingress interface and have the same origination timestamp. With typical numbers of paths in
 
 In the following, the computation of the hop field MAC as well as the accumulator field `Acc` is explained.
 
@@ -1111,7 +1126,7 @@ where
 - ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub> = The content of the hop field HF<sub>i</sub>
 
 Thus, the current MAC is based on the XOR-sum of the truncated MACs of all preceding hop fields in the path segment as well as the path segment's `SegID`. In other words, the current MAC is *chained* to all preceding MACs.
-
+In order to effectively prevent path-splicing, the cryptographic checksum function used must ensure that the truncation of the MACs is non-degenerate and roughly uniformly distributed (see {{mac-requirements}}).
 
 #### Accumulator Acc - Definition {#def-acc}
 
@@ -1151,9 +1166,8 @@ Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2]
 
 #### Default Hop Field MAC Algorithm
 
-The computation of the hop field MAC is an AS-specific choice. The operator of an AS can freely choose a MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
-Control service and router implementations SHOULD support the Default Hop Field MAC algorithm described below. This document does not specify any further mechanism to coordinate this choice between control services and routers of one AS.
-
+The algorithm used to compute the hop field MAC is an AS-specific choice. The operator of an AS can freely choose any MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
+All control service and router implementations MUST support the Default Hop Field MAC algorithm described below.
 
 The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, computed over the info field and the first 6 bytes of the hop field, with flags and reserved fields zeroed out. The input is padded to 16 bytes. The _first_ 6 bytes of the AES-CMAC output are used as resulting hop field MAC.
 {{figure-18}} below shows the layout of the input data to calculate the hop field MAC.
@@ -1173,6 +1187,20 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
 ~~~~
 {: #figure-18 title="Input data to calculate the hop field MAC for the default hop-field MAC algorithm"}
 
+
+#### Alternative Hop Field MAC Algorithms {#mac-requirements}
+
+For alternative algorithms, the following requirements MUST all be met:
+- The hop field MAC field is computed as a function of the secret forwarding key, the `Acc`, `Timestamp` fields of the info field and the `ExpTime`, `ConsIngress` and `ConsEgress` fields of the hop field.
+  Function is used in the mathematical sense, that is, for any values of these inputs there is exactly one result.
+- The algorithm returns an unforgable 48-bit value.
+  Unforgable specifically means "existentially unforgable under a chosen message attack" ({{CRYPTOBOOK}}). Informally, this means an attacker without access to the secret key has no computationally efficient means to create a valid MAC for some attacker chosen input values, even if it has access to an "oracle" providing a valid MAC for any other input values.
+- The truncation of the result value to the first 2 bytes / 16 bits of the result value:
+    - is not degenerate, i.e. any small change in any input value should have an "avalanche effect" on these bits, and
+    - is roughly uniformly distributed when considering all possible input values.
+
+  This additional requirment is naturally satisfied for MAC algorithms based on typical block ciphers or hash algorithms.
+  It ensures that the MAC chaining via the `Acc` field is not degenerate.
 
 ### Peering Links {#peerlink}
 
@@ -1381,7 +1409,16 @@ In the unlikely case that an online brute-force attack succeeds, the obtained ho
 
 ### Path Splicing {#path-splicing}
 
-In a path-splicing attack, an adversary source endpoint takes valid hop fields of multiple path segments and splices them together to obtain a new unauthorized path. However, SCION’s MAC-chaining mechanism prevents from this kind of attacks. MAC validation for spliced segments would fail at SCION routers and the corresponding packets would be dropped. For details, see [](#auth-chained-macs).
+In a path-splicing attack, an adversary source endpoint takes valid hop fields of multiple path segments and splices them together to obtain a new unauthorized path.
+
+Two candidates path segments for splicing must have at least one AS interface in common as a connection point.
+The path segments must have the same origination timestamp, as this is directly protected by the hop field MAC. This can occur by chance, or if the two candidate path segments were originated as the same segment that then diverged and converged back.
+Finally, the hop field MAC protects the 16-bit aggregation of path segment identifier and preceding MACs. For details, see [](#auth-chained-macs). This MAC chaining prevents splicing even in the case that the AS interface and segment timestamp match.
+
+As the segment identifier and aggregation of preceding MACs is only 16-bits wide, per-chance collision among compatible path segments can occur.
+With typical network sizes and numbers of paths of today, such collisions might occur rarely.
+Successful path splicing access may result in a usable path that violates an ASes path policy, e.g. making a special transit link available to a customer AS that is not billed accordingly, or violate global validity as a spliced path segment could traverses one or multiple links twice.
+A wider security margin against path splicing could be obtained by increasing the width of the segment identifier / `Acc` field, e.g by extending it into the 8-bit reserved field next to it in the info field. Such a change in the protocol would have to be coordinated with all participating entities (control services, routers, end hosts in all ASes).
 
 
 ## On-Path Attacks
