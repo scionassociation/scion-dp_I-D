@@ -1374,10 +1374,13 @@ In addition, the MAC algorithm can be freely chosen by each AS, enabling algorit
 A more realistic risk to the secrecy of the forwarding key is exfiltration from a compromised router or control plane service.
 An AS can optionally rotate its forwarding key at regular intervals to limit the exposure after a temporary device compromise. However, as is perhaps self-evident, such a key rotation scheme cannot mitigate the impact of an undiscovered, permanent compromise of a device.
 
-When an AS's forwarding key is compromised, an attacker can forge hop field MACs, undermining path authorization. Recall that path segments are only checked for validity and policy compliance during the path discovery phase, and routers only perform minimal sanity checks of hop fields with valid MACs. Consequently, creating fraudulent hop fields with valid MACs allows an attacker to bypass most path segment validity checks, and to create path segments that violate the AS's local policy and/or general path segment validity requirements.
-In particular, an attacker with access to the forwarding key of at least two compromised ASes could create paths that include loops (limited by the maximum number of hop fields of a path).
+When an AS's forwarding key is compromised, an attacker can forge hop field MACs, undermining path authorization. Recall that path segments are checked for validity and policy compliance during the path discovery phase, and during forwarding, routers only validate the MAC and basic validity of the current the hop field. Consequently, creating fraudulent hop fields with valid MACs allows an attacker to bypass most path segment validity checks, and to create path segments that violate the AS's local policy and/or general path segment validity requirements.
+In particular, an attacker could create paths that include loops (limited by the maximum number of hop fields of a path).
+
+Unless an attacker has access to the forwarding keys of all ASes on the illegitimate path it wants to fabricate, it will need to splice fragments of two legitimate path segments with an illegitimate hop field. For this, it needs to create a hop field with a MAC that fits into the MAC chain expected by the second path segment fragment. The only input that the attacker can vary relatively freely is the 8 bit ``ExpTime``, but the resulting MAC needs to match a specific 16 bit ``Acc`` value. While there is a low probability of this working for a specific attempt (1/256), the attack will succeed eventually if the attacker can keep retrying over a longer time period or with many different path segment fragments.
 
 While a forwarding key compromise and the resulting loss of path authorization is a serious degradation of SCION's routing security properties, this does not affect, for example, access control or data security for the hosts in the affected AS.
+Unauthorized paths are available to the attacker, but the routing of packets from legitimate senders is not affected.
 
 ### Forging hop field MAC
 
