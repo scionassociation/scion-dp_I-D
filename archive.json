@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-06T00:00:51.608229+00:00",
+  "timestamp": "2024-06-09T00:00:51.912707+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -403,13 +403,16 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "jiceatscion"
+      ],
       "labels": [
+        "Prio 2",
         "editorial"
       ],
       "body": " Make sure the references are righttly placed according to [guidelines](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-normative-and-informative-references-20060419/#:~:text=Normative%20references%20specify%20documents%20that,it%20only%20provides%20additional%20information): \r\n- Normative references: Needed for the specification; specification is based on it.\r\n- Informative references: Provide background/additional information\r\n\r\n\r\nPotential changes: \r\n- [ ] I-D.scion-cppki should be normative \r\n- [ ] Several RFCs might be informative\r\n- [ ] Check if other drafts affected",
       "createdAt": "2024-06-03T15:21:40Z",
-      "updatedAt": "2024-06-03T15:22:56Z",
+      "updatedAt": "2024-06-06T08:26:44Z",
       "closedAt": null,
       "comments": []
     }
@@ -884,13 +887,13 @@
       "labels": [],
       "body": "Fixes #12",
       "createdAt": "2024-05-21T14:16:00Z",
-      "updatedAt": "2024-06-05T12:29:19Z",
+      "updatedAt": "2024-06-06T10:12:54Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "forwarding-key-compromise",
-      "headRefOid": "39fbbef1e985f51551c14a25db33f21d951a28f0",
+      "headRefOid": "8d24f2eb36a344c21ae8dba39146701a50ab8e25",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -993,6 +996,46 @@
               "body": "Can we say something more about the consequences of this? Can you hijack traffic or splice a path?\r\n",
               "createdAt": "2024-06-05T12:29:17Z",
               "updatedAt": "2024-06-05T12:29:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859Qt0L",
+          "commit": {
+            "abbreviatedOid": "39fbbef"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-06T10:09:07Z",
+          "updatedAt": "2024-06-06T10:09:07Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "The structure of the sentence I have adapted. Better?",
+              "createdAt": "2024-06-06T10:09:07Z",
+              "updatedAt": "2024-06-06T10:09:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859QvgN",
+          "commit": {
+            "abbreviatedOid": "39fbbef"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-06T10:12:45Z",
+          "updatedAt": "2024-06-06T10:12:45Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Added another sentence to clarify that this does not affect routing for legitimate senders.\r\n\r\nTrue, the attacker will most likely try to use this to splice parts of path segments, but it turns out this is quite involved because of the MAC chaining. I tried to explain this as short as possible.",
+              "createdAt": "2024-06-06T10:12:45Z",
+              "updatedAt": "2024-06-06T10:12:45Z"
             }
           ]
         }
@@ -1254,13 +1297,13 @@
       "labels": [],
       "body": "Fixes #13 ",
       "createdAt": "2024-05-23T15:24:38Z",
-      "updatedAt": "2024-06-05T13:17:46Z",
+      "updatedAt": "2024-06-06T10:22:15Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "service_field_described",
-      "headRefOid": "0ac3296708e23c2e71c3e806a775f2dd5ba73038",
+      "headRefOid": "e17ce5adb374959f1ef0d0043738819da8a62cc3",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -1318,6 +1361,46 @@
               "body": "Would it make more sense to place the overall service addresses table one section below, at the end of parargaph `##\u00a0Address Header` ? \r\n\r\nI am saying this because service addresses are special values of `DstHostAddr` when `DT/DL`=1/0, this field is in the address header, not in the common header",
               "createdAt": "2024-06-05T13:17:41Z",
               "updatedAt": "2024-06-05T13:17:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859QztF",
+          "commit": {
+            "abbreviatedOid": "0ac3296"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-06T10:21:57Z",
+          "updatedAt": "2024-06-06T10:21:58Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "Made it more obvious that this goes for both src and dst.\r\n",
+              "createdAt": "2024-06-06T10:21:58Z",
+              "updatedAt": "2024-06-06T10:21:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859Qz1u",
+          "commit": {
+            "abbreviatedOid": "0ac3296"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-06T10:22:15Z",
+          "updatedAt": "2024-06-06T10:22:15Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "Done.",
+              "createdAt": "2024-06-06T10:22:15Z",
+              "updatedAt": "2024-06-06T10:22:15Z"
             }
           ]
         }
@@ -1910,7 +1993,7 @@
       "labels": [],
       "body": "Addresses: \r\n- #10 - added introductory section with component overview\r\n- #11 ",
       "createdAt": "2024-06-03T09:05:17Z",
-      "updatedAt": "2024-06-03T16:12:11Z",
+      "updatedAt": "2024-06-06T08:16:41Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
@@ -1986,22 +2069,22 @@
     {
       "number": 26,
       "id": "PR_kwDOKYa7785xZv6V",
-      "title": "Clarify selection of MAC",
+      "title": "Clarify selection of MAC, elaborate on MAC chaining and path splicing",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/26",
       "state": "OPEN",
       "author": "matzf",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Describe AES-CMAC hop field MAC algorithm as the default which SHOULD be supported.\r\n\r\n- Moved the details of  the default mac algorithm to _after_ the explanation of the accumulator field (as this is used in the mac input).\r\n- Fixed the swapped info field/hop field labels in the figure depicting the MAC input.\r\n\r\nContributes to https://github.com/scionassociation/scion-cp_I-D/issues/23.",
+      "body": "Describe AES-CMAC hop field MAC algorithm as the default which MUST be supported.\r\n\r\n- Moved the details of  the default mac algorithm to _after_ the explanation of the accumulator field (as this is used in the mac input).\r\n- Fixed the swapped info field/hop field labels in the figure depicting the MAC input.\r\n- Describe requriements on alternative MAC implementations, in particular about requirements for MAC chaining\r\n- Describe path splicing is prevented\r\n- Describe how path splicing can still happen in security considerations\r\n\r\n\r\n\r\nContributes to https://github.com/scionassociation/scion-cp_I-D/issues/23.\r\nContributes to https://github.com/scionassociation/scion-dp_I-D/issues/7",
       "createdAt": "2024-06-04T09:43:57Z",
-      "updatedAt": "2024-06-04T19:23:20Z",
+      "updatedAt": "2024-06-06T15:01:44Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c3ddf7476160c085a401ee272ef088c60bd7f1c6",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "default-mac-algo",
-      "headRefOid": "9b98bc82d39cc66f734cf093bac5da283d798dbe",
+      "headRefOid": "32b72a0437255ac52568cf285b0a46a985993f79",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -2237,6 +2320,66 @@
               "body": "Ok perfect, but ti would be good to clearly list which fields MUST be authenticated by the MAC.",
               "createdAt": "2024-06-04T19:23:20Z",
               "updatedAt": "2024-06-04T19:23:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859TXuo",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-06T14:54:41Z",
+          "updatedAt": "2024-06-06T14:54:41Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "done.",
+              "createdAt": "2024-06-06T14:54:41Z",
+              "updatedAt": "2024-06-06T14:54:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859TX3U",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-06T14:54:53Z",
+          "updatedAt": "2024-06-06T14:54:53Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "Done.",
+              "createdAt": "2024-06-06T14:54:53Z",
+              "updatedAt": "2024-06-06T14:54:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859TYKM",
+          "commit": {
+            "abbreviatedOid": "ae4103f"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-06T14:55:21Z",
+          "updatedAt": "2024-06-06T14:55:21Z",
+          "comments": [
+            {
+              "originalPosition": 79,
+              "body": "Done (applied most of your suggestion).",
+              "createdAt": "2024-06-06T14:55:21Z",
+              "updatedAt": "2024-06-06T14:55:21Z"
             }
           ]
         }
