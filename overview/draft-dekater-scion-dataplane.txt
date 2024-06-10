@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 2 December 2024                                         S. Hitz
+Expires: 12 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                             31 May 2024
+                                                            10 June 2024
 
 
                             SCION Data Plane
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 December 2024.
+   This Internet-Draft will expire on 12 December 2024.
 
 Copyright Notice
 
@@ -171,20 +171,19 @@ Table of Contents
    the trust roots and provide connectivity to other ISDs.  This is the
    basis of the public key infrastructure which the SCION control plane
    relies upon for the authentication of messages that is used for the
-   SCION control plane.  See [I-D.dekater-scion-pki]
+   SCION control plane.  See [I-D.scion-cppki]
 
    _Control Plane_ - performs inter-domain routing by discovering and
    securely disseminating path information between ASes.  The core ASes
    use Path-segment Construction Beacons (PCBs) to explore intra-ISD
-   paths, or to explore paths across different ISDs.  See [I-D.dekater-
-   scion-controlplane]
+   paths, or to explore paths across different ISDs.  See [I-D.scion-cp]
 
    _Data Plane_ - carries out secure packet forwarding between SCION-
    enabled ASes over paths selected by endpoints.  A SCION border router
    reuses existing intra-domain infrastructure to communicate to other
    SCION routers or SCION endpoints within its AS.
 
-   This document describes the SCION data plane component.
+   This document describes the SCION Data Plane component.
 
 1.1.  Terminology
 
@@ -232,7 +231,7 @@ Table of Contents
    the PCB.  Together with hop fields (HFs), info fields are used to
    create forwarding paths.
 
-   *Isolation Domain (ISD)*: In SCION, autonomous systems (ASes) are
+   *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
    organized into logical groups called isolation domains or ISDs.  Each
    ISD consists of ASes that span an area with a uniform trust
    environment (e.g., a common jurisdiction).  A possible model is for
@@ -2513,6 +2512,12 @@ direction
               AES-CMAC Algorithm", RFC 4493, DOI 10.17487/RFC4493, June
               2006, <https://www.rfc-editor.org/rfc/rfc4493>.
 
+   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
+              Housley, R., and W. Polk, "Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
+              <https://www.rfc-editor.org/rfc/rfc5280>.
+
    [RFC5880]  Katz, D. and D. Ward, "Bidirectional Forwarding Detection
               (BFD)", RFC 5880, DOI 10.17487/RFC5880, June 2010,
               <https://www.rfc-editor.org/rfc/rfc5880>.
@@ -2530,6 +2535,10 @@ direction
               (IPv6) Specification", STD 86, RFC 8200,
               DOI 10.17487/RFC8200, July 2017,
               <https://www.rfc-editor.org/rfc/rfc8200>.
+
+   [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
+              Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
+              <https://www.rfc-editor.org/rfc/rfc9217>.
 
    [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
