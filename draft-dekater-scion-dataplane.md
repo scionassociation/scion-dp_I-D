@@ -42,6 +42,7 @@ normative:
   RFC2711:
   RFC3168:
   RFC4493:
+  RFC5280:
   RFC5880:
   RFC5881:
   RFC8174:
