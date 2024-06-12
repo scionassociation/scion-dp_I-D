@@ -145,11 +145,11 @@ Table of Contents
    presence of adversaries.
 
    _Security_ - to provide higher levels of trust in routing information
-   in order to prevent IP prefix hijacking/leaks, denial-of-service and
-   other attacks.  Endpoints can decide the trust roots they wish to
-   rely on, routing information can be unambiguously attributed to an
-   AS, and packets are only forwarded along authorized path segments.  A
-   particular use case is to enable geofencing.
+   in order to prevent traffic hijacking, reduce potential for denial-
+   of-service and other attacks.  Endpoints can decide the trust roots
+   they wish to rely on, routing information can be unambiguously
+   attributed to an AS, and packets are only forwarded along authorized
+   path segments.  A particular use case is to enable geofencing.
 
    _Scalability_ - to improve the scalability of the inter-domain
    control plane and data plane, avoiding existing limitations related
