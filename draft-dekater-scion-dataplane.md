@@ -284,7 +284,7 @@ Segments cannot be combined arbitrarily. To construct a valid forwarding path, t
 
 Besides enabling the enforcement of path policies, the above rules also protect the economic interest of ASes, as they prevent building "valley paths". A valley path contains ASes that do not profit economically from traffic on this route. The name comes from the fact that such paths go "down" (following parent-child links) before going "up" (following child-parent links).
 
-{{figure-1}} below shows the different allowed segment combinations.
+{{figure-1}} below shows the possible segment combinations.
 
 **Note:** It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).
 
@@ -352,7 +352,7 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 {: #figure-1 title="Illustration of possible path-segment combinations. Each node represents a SCION Autonomous System."}
 
 
-The following path-segment combinations are allowed:
+Possible path-segment combinations:
 
 - **Communication through core ASes**:
 
