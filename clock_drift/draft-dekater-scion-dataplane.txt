@@ -2077,8 +2077,9 @@ direction
        the router MUST drop the packet.
 
    2.  Check if the current hop field is expired or originated in the
-       future (that is, the current info field does have a timestamp in
-       the future).  If either is true, the router MUST drop the packet.
+       future.  That is, the current info field must not have a
+       timestamp in the future, as defined in Section 2.2.3.2.3.  If
+       either is true, the router MUST drop the packet.
 
    3.  The next steps depend on the direction of travel and whether this
        segment includes a peering hop field.  Both features are

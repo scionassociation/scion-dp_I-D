@@ -3156,7 +3156,7 @@ direction
                 <p id="section-4.2.2.1-2.1.1">Check that the interface through which the packet was received is equal to the ingress interface in the current hop field. If not, the router <span class="bcp14">MUST</span> drop the packet.<a href="#section-4.2.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-4.2.2.1-2.2">
-                <p id="section-4.2.2.1-2.2.1">Check if the current hop field is expired or originated in the future (that is, the current info field does have a timestamp in the future). If either is true, the router <span class="bcp14">MUST</span> drop the packet.<a href="#section-4.2.2.1-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-4.2.2.1-2.2.1">Check if the current hop field is expired or originated in the future. That is, the current info field must not have a timestamp in the future, as defined in <a href="#inffield" class="auto internal xref">Section 2.2.3.2.3</a>. If either is true, the router <span class="bcp14">MUST</span> drop the packet.<a href="#section-4.2.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-4.2.2.1-2.3">
                 <p id="section-4.2.2.1-2.3.1">The next steps depend on the direction of travel and whether this segment includes a peering hop field. Both features are indicated by the settings of the Construction Direction flag <code>C</code> and the Peering flag <code>P</code> in the current info field. Therefore, check the settings of both flags. The following combinations are possible:<a href="#section-4.2.2.1-2.3.1" class="pilcrow">¶</a></p>
