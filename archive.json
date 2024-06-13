@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-11T00:00:36.022887+00:00",
+  "timestamp": "2024-06-13T00:00:47.860551+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1993,18 +1993,26 @@
       "labels": [],
       "body": "Addresses: \r\n- #10 - added introductory section with component overview\r\n- #11 ",
       "createdAt": "2024-06-03T09:05:17Z",
-      "updatedAt": "2024-06-10T16:10:03Z",
+      "updatedAt": "2024-06-12T08:08:28Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "baseRefOid": "5148614fc232525602790094e3c49f6bdefb30f5",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "overview",
-      "headRefOid": "f6a9daca6352fd31bb98a38fcae014eebe2bfd5c",
+      "headRefOid": "d87ad338f454b2c82d2c723da40c76c33f3d686f",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "```\r\n/Users/nic/repos/scion-dp_I-D/draft-dekater-scion-dataplane.xml(1982): Warning: Unused reference: There seems to be no reference to [I-D.scion-components] in the document\r\n/Users/nic/repos/scion-dp_I-D/draft-dekater-scion-dataplane.xml(2009): Warning: Unused reference: There seems to be no reference to [I-D.scion-overview] in the document\r\n```",
+          "createdAt": "2024-06-12T07:17:47Z",
+          "updatedAt": "2024-06-12T07:17:47Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOKYa77858xceg",
