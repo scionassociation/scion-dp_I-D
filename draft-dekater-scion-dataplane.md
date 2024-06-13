@@ -1289,7 +1289,7 @@ direction
 This section describes the steps that a SCION ingress border router MUST perform when it receives a SCION packet.
 
 1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field. If not, the router MUST drop the packet.
-2. Check if the current hop field is expired or originated in the future (that is, the current info field does have a timestamp in the future). If either is true, the router MUST drop the packet.
+2. Check if the current hop field is expired or originated in the future. That is, the current info field must not have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 3. The next steps depend on the direction of travel and whether this segment includes a peering hop field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current info field. Therefore, check the settings of both flags. The following combinations are possible:
 
    - The packet traverses the path segment in **construction direction** (`C` = "1" and `P` = "0" or "1"). In this case, proceed with step 4.
