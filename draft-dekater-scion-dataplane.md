@@ -103,19 +103,6 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  I-D.scion-components:
-    title: SCION Components Analysis
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/
-    author:
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
   I-D.scion-cppki:
     title: SCION Control-Plane PKI
     date: 2024
@@ -133,23 +120,6 @@ informative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
-  I-D.scion-overview:
-    title: SCION Overview
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/
-    author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: A. Perrig
-        name: Adrian Perrig
-        org: ETH Zuerich
   SCMP:
     title: SCMP Documentation
     date: 2023
