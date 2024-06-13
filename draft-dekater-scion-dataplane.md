@@ -1355,15 +1355,16 @@ This section describes the steps that a SCION egress border router MUST perform 
 
 #### Effects of Clock Inaccuracy
 
-Each router along a packet's path verifies the validity of the current hop field by comparing the current time with the hop's expiration time.
+A PCB originated by a given control service is used to make dataplane paths. The hops of these paths are then validated by every router along that path. A segment's originating control service and the routers that the segment refers to all have different clocks. Their differences affect the validation process:
 
-This expiration time is calculated as described in [](#hopfld) on the basis of the segment's timestamp. That timestamp is assigned by the host that originates the segment. A fast clock at origination or a slow clock at a router will yield a lengthened time-to-live; possibly an origination time in the future. A slow clock at origination or a fast clock at a router will yield a shortened time to live; possibly an expiration time in the past.
+* A fast clock at origination or a slow clock at validation will yield a lengthened expiration time for hops, and possibly an origination time in the future.
+* A slow clock at origination or a fast clock at validation will yield a shortened expiration time for hops, and possibly an expiration time in the past.
 
-By default, segments are propagated once a minute. A segment is registered by the last AS of that segment, therefore up to N minutes after origination, where N is the length of the segment. As a result, a segment must have a time-to-live of at least N minutes to be of any use. N being the length of the segment. On the other hand, a very recent segment, which clocks offset could make appear from the future, ages by 1 minute per hop before being used, thereby reducing the impact of clock drift in that respect.
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may become available for path construction up to N intervals (so typically N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfld)) would render useless any path segment longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time. The norm is 6 hours.
 
-The unit of a segments time-to-live is 5 minutes and 37 seconds (and 500 ms), or the equivalent of 5 hops. Given the above constraints, it is unreasonable to create a segment with a short time-to-live, while each additional time-to-live unit adds more than 5 minutes. As a result, a clock drift of up to 1 minute can be safely neglected.
+In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
-Each administrator of a SCION router or core control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
+Each administrator of a SCION control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
 
 # Security Considerations
