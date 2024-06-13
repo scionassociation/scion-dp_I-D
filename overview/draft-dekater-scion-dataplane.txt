@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 14 December 2024                                        S. Hitz
+Expires: 15 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            12 June 2024
+                                                            13 June 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 December 2024.
+   This Internet-Draft will expire on 15 December 2024.
 
 Copyright Notice
 
@@ -2587,20 +2587,10 @@ direction
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
 
-   [I-D.scion-components]
-              Rustignoli, N. and C. de Kater, "SCION Components
-              Analysis", 2023, <https://datatracker.ietf.org/doc/draft-
-              rustignoli-panrg-scion-components/>.
-
    [I-D.scion-cppki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
               Plane PKI", 2024, <https://datatracker.ietf.org/doc/draft-
               dekater-scion-pki/>.
-
-   [I-D.scion-overview]
-              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
-              Overview", 2023, <https://datatracker.ietf.org/doc/draft-
-              dekater-panrg-scion-overview/>.
 
    [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2023,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
