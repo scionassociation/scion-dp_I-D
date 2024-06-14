@@ -836,19 +836,19 @@ Table of Contents
 
    *  RSV: reserved for future use
 
-   The currently known services are:
+   The currently known service numbers are:
 
-        +===================+============+========================+
-        | Hexadecimal value | Short Name | Description            |
-        +===================+============+========================+
-        | 0x0001            | DS         | Discovery Service      |
-        +-------------------+------------+------------------------+
-        | 0x0002            | CS         | Control Service        |
-        +-------------------+------------+------------------------+
-        | 0xFFFF            | None       | Reserved invalid value |
-        +-------------------+------------+------------------------+
+      +======================+============+========================+
+      | Service Number (hex) | Short Name | Description            |
+      +======================+============+========================+
+      | 0x0001               | DS         | Discovery Service      |
+      +----------------------+------------+------------------------+
+      | 0x0002               | CS         | Control Service        |
+      +----------------------+------------+------------------------+
+      | 0xFFFF               | None       | Reserved invalid value |
+      +----------------------+------------+------------------------+
 
-                       Table 4: Known Service values
+                      Table 4: Known Service Numbers
 
    *Note:* For more information on addressing in SCION, see the
    introduction of the SCION Control Plane Specification
