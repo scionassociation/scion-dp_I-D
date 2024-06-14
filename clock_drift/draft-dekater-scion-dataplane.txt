@@ -1131,8 +1131,8 @@ Table of Contents
    extension (see Section 2.3).  For general information on router
    alerts, see [RFC2711].
 
-   *  ExpTime: Expiry time of a hop field.  The field is 1-byte long,
-      thus there are 256 different values available to express an
+   *  ExpTime: Expiration time of a hop field.  The field is 1-byte
+      long, thus there are 256 different values available to express an
       expiration time.  The expiration time specified in this field is
       relative.  An absolute expiration time in seconds is computed in
       combination with the Timestamp field (from the corresponding info
