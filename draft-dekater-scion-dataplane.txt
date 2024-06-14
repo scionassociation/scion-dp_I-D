@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 15 December 2024                                        S. Hitz
+Expires: 16 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            13 June 2024
+                                                            14 June 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 December 2024.
+   This Internet-Draft will expire on 16 December 2024.
 
 Copyright Notice
 
@@ -135,6 +135,9 @@ Table of Contents
    trustworthy path properties.  SCION is an inter-domain network
    architecture and is therefore not concerned with intra-domain
    forwarding.
+
+   The data transmission order for SCION is the same as for IPv6 as
+   defined in Introduction of [RFC8200].
 
    SCION has been developed with the following goals:
 
@@ -749,8 +752,8 @@ Table of Contents
       For example, address type "0" is defined as IPv4 in combination
       with address length 4, but in combination with address length 16,
       it stands for IPv6.  Per address length, several sub-types are
-      possible.  Table 3 shows the currently valid allocations of type
-      values to length values.
+      possible.  Table 3 shows the currently assigned combinations of
+      lengths and types.
 
                      +=============+================+
                      | DL/SL Value | Address Length |
@@ -766,19 +769,25 @@ Table of Contents
 
                       Table 2: Address length values
 
-    +================+======+=======================+================+
-    | Length (bytes) | Type |  Type/Length (binary) | Interpretation |
-    +================+======+=======================+================+
-    | 4              | 0    | 0b0000                | IPv4           |
-    +----------------+------+-----------------------+----------------+
-    | 4              | 1    | 0b0100                | Service        |
-    +----------------+------+-----------------------+----------------+
-    | 16             | 0    | 0b1100                | IPv6           |
-    +----------------+------+-----------------------+----------------+
-    | other          |      |                       | Unassigned     |
-    +----------------+------+-----------------------+----------------+
+    +================+======+=========================+==============+
+    | Length (bytes) | Type | DT/DL or ST/SL encoding | Conventional |
+    |                |      |                         | Use          |
+    +================+======+=========================+==============+
+    | 4              | 0    | 0b0000                  | IPv4         |
+    +----------------+------+-------------------------+--------------+
+    | 4              | 1    | 0b0100                  | Service      |
+    +----------------+------+-------------------------+--------------+
+    | 16             | 0    | 0b0011                  | IPv6         |
+    +----------------+------+-------------------------+--------------+
+    | other          |      |                         | Unassigned   |
+    +----------------+------+-------------------------+--------------+
 
            Table 3: Allocations of type values to length values
+
+   A service address designates a set of endpoint addresses rather than
+   a singular one.  A packet addressed to a service is redirected to any
+   one endpoint-addresses that is known to be part of the set.  Table 4
+   lists the known services.
 
    *  RSV: These bits are currently reserved for future use.
 
@@ -812,6 +821,34 @@ Table of Contents
    *  DstHostAddr, SrcHostAddr: Specifies the variable length endpoint
       address of the destination/source.  The accepted type and length
       are defined in the DT/DL/ST/SL fields of the common header.
+
+   If a service address is implied by the DT/DL or ST/SL field of the
+   common header, the corresponding address field has the following
+   format:
+
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |         Service Number        |              RSV              |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+                      Figure 5: Service address format
+
+   *  RSV: reserved for future use
+
+   The currently known service numbers are:
+
+      +======================+============+========================+
+      | Service Number (hex) | Short Name | Description            |
+      +======================+============+========================+
+      | 0x0001               | DS         | Discovery Service      |
+      +----------------------+------------+------------------------+
+      | 0x0002               | CS         | Control Service        |
+      +----------------------+------------+------------------------+
+      | 0xFFFF               | None       | Reserved invalid value |
+      +----------------------+------------+------------------------+
+
+                      Table 4: Known Service Numbers
 
    *Note:* For more information on addressing in SCION, see the
    introduction of the SCION Control Plane Specification
@@ -882,7 +919,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 5: Layout of a standard SCION path
+                 Figure 6: Layout of a standard SCION path
 
    It consists of a path meta header, up to 3 info fields and up to 64
    hop fields.
@@ -908,7 +945,7 @@ Table of Contents
 
    The SCION header is created by extracting the required info fields
    and hop fields from the corresponding path segments.  The process of
-   extracting is illustrated in Figure 6 below.  Note that ASes at the
+   extracting is illustrated in Figure 7 below.  Note that ASes at the
    joints of multiple segments are represented by two hop fields.  Be
    aware that these hop fields are not equal!  In the hop field that
    represents the last hop in the first segment (seen in the direction
@@ -978,7 +1015,7 @@ Table of Contents
                          | +------+ |
                          +----------+
 
-                    Figure 6: Path construction example
+                    Figure 7: Path construction example
 
 2.2.3.2.1.   Path Meta Header Field
 
@@ -992,7 +1029,7 @@ Table of Contents
    | C |  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-      Figure 7: SCION path type - Format of the Path Meta Header field
+      Figure 8: SCION path type - Format of the Path Meta Header field
 
    *  C (urrINF): Specifies a 2-bits index (0-based) pointing to the
       current info field for the packet on its way through the network.
@@ -1061,7 +1098,7 @@ Table of Contents
    |                           Timestamp                           |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            Figure 8: SCION path type - Format of the Info Field
+            Figure 9: SCION path type - Format of the Info Field
 
    *  r: The r bits are unused and reserved for future use.
 
@@ -1104,7 +1141,7 @@ Table of Contents
    |                              MAC                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            Figure 9: SCION path type - Format of the Hop Field
+            Figure 10: SCION path type - Format of the Hop Field
 
    *  r: The r bits are unused and reserved for future use.
 
@@ -1165,7 +1202,7 @@ Table of Contents
    value 0), ensuring the path cannot be used beyond the destination AS.
    Then it calculates and appends the appropriate MAC for the hop field.
 
-   Figure 10 below shows the layout of a SCION one-hop path type.  There
+   Figure 11 below shows the layout of a SCION one-hop path type.  There
    is only a single info field; the appropriate hop field can be
    processed by a border router based on the source and destination
    address.  In this context, the following rules apply:
@@ -1182,7 +1219,7 @@ Table of Contents
    |                           HopField                            |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-              Figure 10: Layout of the SCION one-hop path type
+              Figure 11: Layout of the SCION one-hop path type
 
 2.2.3.4.  Path Reversal
 
@@ -1247,7 +1284,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 11: Extension headers: Options header
+                Figure 12: Extension headers: Options header
 
    *  NextHdr: Unsigned 8-bit integer.  Identifies the type of header
       immediately following the Hop-by-Hop/End-to-End Options header.
@@ -1284,7 +1321,7 @@ Table of Contents
    |                              ...                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-               Figure 12: Options field: TLV-encoded options
+               Figure 13: Options field: TLV-encoded options
 
    *  OptType: 8-bit identifier of the type of option.  The following
       option types are assigned to the SCION HBH/E2E Options header:
@@ -1309,7 +1346,7 @@ Table of Contents
              | 255     | Reserved                           |
              +---------+------------------------------------+
 
-              Table 4: Option types of SCION Options header
+              Table 5: Option types of SCION Options header
 
    *  OptDataLen: Unsigned 8-bit integer denoting the length of the
       OptData field of this option in bytes.
@@ -1348,7 +1385,7 @@ Table of Contents
    |       0       |
    +-+-+-+-+-+-+-+-+
 
-                Figure 13: TLV-encoded options - Pad1 option
+                Figure 14: TLV-encoded options - Pad1 option
 
    *Note:* The format of the Pad1 option is a special case - it does not
    have length and value fields.
@@ -1371,7 +1408,7 @@ Table of Contents
    |                              ...                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 14: TLV-encoded options - PadN option
+                Figure 15: TLV-encoded options - PadN option
 
    The PadN option is used to insert two or more bytes of padding into
    the Options field of an extension header.  For N bytes of padding,
@@ -1406,7 +1443,7 @@ Table of Contents
 |                      zero                     |  Next Header  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
- Figure 15: Layout of the pseudo header for the upper-layer checksum
+ Figure 16: Layout of the pseudo header for the upper-layer checksum
 
    *  DstISD, SrcISD, DstAS, SrcAS, DstHostAddr, SrcHostAddr: These
       values are taken from the SCION address header.
@@ -1473,11 +1510,11 @@ Table of Contents
    |                    |                +--------------------+
    +--------------------+
 
-        Figure 16: Sample topology to illustrate the life cycle of a
+        Figure 17: Sample topology to illustrate the life cycle of a
        SCION packet.  AS 1 is the core AS of ISD 1, and AS 2 and AS 3
                         are non-core ASes of ISD 1.
 
-   Based on the network topology in Figure 16 above, this example shows
+   Based on the network topology in Figure 17 above, this example shows
    the path of a SCION packet sent from source endpoint A to destination
    endpoint B, and how it will be processed by each router on the path.
    This is done by means of simplified snapshots of the packet header
@@ -1527,7 +1564,7 @@ Table of Contents
 3.3.   Step-by-Step Explanation
 
    This section explains the packet header modifications at each router,
-   based on the network topology in Figure 16 above.  Each step includes
+   based on the network topology in Figure 17 above.  Each step includes
    a table that represents a simplified snapshot of the packet header at
    the end of this specific step.  Regarding the notation used in the
    figure/tables, each SRC and DST entry should be read as router (or
@@ -1580,7 +1617,7 @@ Table of Contents
         | Link layer | SRC=A, DST=R1                             |
         +------------+-------------------------------------------+
 
-                    Table 5: Snapshot header - step 1
+                    Table 6: Snapshot header - step 1
 
    *  _Step 2_
       *R1->R2*: Router R1 inspects the SCION header and considers the
@@ -1615,7 +1652,7 @@ Table of Contents
         | Link layer | SRC=R1, DST=R2                            |
         +------------+-------------------------------------------+
 
-                    Table 6: Snapshot header - step 2
+                    Table 7: Snapshot header - step 2
 
    *  _Step 3_
       *R2->R3*: When receiving the packet, router R2 of core AS 1 checks
@@ -1652,7 +1689,7 @@ Table of Contents
         | Link layer | SRC=R2, DST=R3                            |
         +------------+-------------------------------------------+
 
-                    Table 7: Snapshot header - step 3
+                    Table 8: Snapshot header - step 3
 
    *  _Step 4_
       *R3->R4*: Router R3 inspects the current hop field in the SCION
@@ -1682,7 +1719,7 @@ Table of Contents
         | Link layer | SRC=R3, DST=R4                            |
         +------------+-------------------------------------------+
 
-                    Table 8: Snapshot header - step 4
+                    Table 9: Snapshot header - step 4
 
    *  _Step 5_
       *R4->B*: SCION router R4 first checks whether the packet has been
@@ -1719,7 +1756,7 @@ Table of Contents
         | Link layer | SRC=R4, DST=B                             |
         +------------+-------------------------------------------+
 
-                    Table 9: Snapshot header - step 5
+                    Table 10: Snapshot header - step 5
 
    When destination endpoint B wants to respond to source endpoint A, it
    can just swap the source and destination addresses in the SCION
@@ -1847,7 +1884,7 @@ Table of Contents
 
 4.1.1.2.   Layout of the Input Data for the MAC Calculation
 
-   Figure 17 below shows the layout of the input data to calculate the
+   Figure 18 below shows the layout of the input data to calculate the
    hop field MAC in the data plane.  The input layout represents the 8
    bytes of the info field and the first 8 bytes of the hop field, with
    some fields zeroed out.
@@ -1867,7 +1904,7 @@ Table of Contents
 |          ConsEgress           |               0               |      |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
 
-         Figure 17: Input data to calculate the hop field MAC
+         Figure 18: Input data to calculate the hop field MAC
 
 4.1.1.3.   Accumulator Acc - Definition
 
@@ -1887,7 +1924,7 @@ Table of Contents
    |                           Timestamp                           |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-        Figure 18: The Info Field of a specific path segment in the
+        Figure 19: The Info Field of a specific path segment in the
          packet header, with the updatable accumulator field `Acc`.
 
    This is how it works:
@@ -2133,7 +2170,7 @@ direction
                                                             construction
                                                                direction
 
-     Figure 19: A simplified representation of the processing at
+     Figure 20: A simplified representation of the processing at
                      routers in both directions.
 
 4.2.2.1.  Steps Ingress Border Router
@@ -2657,7 +2694,7 @@ Assignment
     | 255     |           | Reserved                                 |
     +---------+-----------+------------------------------------------+
 
-              Table 10: The assigned SCION protocol numbers
+              Table 11: The assigned SCION protocol numbers
 
 Authors' Addresses
 
