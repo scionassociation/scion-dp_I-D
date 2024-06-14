@@ -509,14 +509,14 @@ If a service address is implied by the `DT/DL` or `ST/SL` field of the common he
 
 - `RSV`: reserved for future use
 
-The currently known services are:
+The currently known service numbers are:
 
-| Hexadecimal value | Short Name | Description            |
+| Service Number (hex) | Short Name | Description            |
 |-------------------+------------+------------------------|
 | 0x0001            | DS         | Discovery Service      |
 | 0x0002            | CS         | Control Service        |
 | 0xFFFF            | None       | Reserved invalid value |
-{: #table-4 title="Known Service values"}
+{: #table-4 title="Known Service Numbers"}
 
 
 **Note:** For more information on addressing in SCION, see the introduction of the SCION Control Plane Specification ({{I-D.scion-cp}}).
