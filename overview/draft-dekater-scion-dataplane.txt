@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 15 December 2024                                        S. Hitz
+Expires: 16 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            13 June 2024
+                                                            14 June 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 December 2024.
+   This Internet-Draft will expire on 16 December 2024.
 
 Copyright Notice
 
@@ -2514,6 +2514,11 @@ direction
               Plane", 2024, <https://datatracker.ietf.org/doc/draft-
               dekater-scion-controlplane/>.
 
+   [I-D.scion-cppki]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
+              Plane PKI", 2024, <https://datatracker.ietf.org/doc/draft-
+              dekater-scion-pki/>.
+
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
               DOI 10.17487/RFC1122, October 1989,
@@ -2586,11 +2591,6 @@ direction
               Mueller, P., and A. Perrig, "The Complete Guide to SCION",
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
-
-   [I-D.scion-cppki]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
-              Plane PKI", 2024, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-pki/>.
 
    [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2023,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
