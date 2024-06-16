@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-13T00:00:47.860551+00:00",
+  "timestamp": "2024-06-16T00:00:38.373804+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -264,15 +264,29 @@
       ],
       "body": " >  \\*Note:\\* The current SCION implementation uses the UDP/IP protocol as\r\n   underlay.  However, the use of other underlay protocols is possible\r\n   and allowed.\r\n\r\nThis last sentence makes it seem like one might never run SCION on its own.  Also, \"allowed\" isn't a word we should see in RFCs.",
       "createdAt": "2024-05-14T05:54:10Z",
-      "updatedAt": "2024-06-03T07:11:24Z",
+      "updatedAt": "2024-06-13T16:21:08Z",
       "closedAt": null,
       "comments": [
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "- [ ] check for instances of allowed (on all three drafts) \r\n- [ ] clarify that SCION may be run on L2 directly, so the  SCION spec is underlay-agnostic. Maybe we could use \"lower layer\", then define it in the terminology. \r\n\r\nAlso look at [IPv6 \"link\"](https://datatracker.ietf.org/doc/html/rfc2460#section-2) as inspiration \r\n",
+          "body": "- [ ] check for instances of allowed (on all three drafts) \r\n- [x] clarify that SCION may be run on L2 directly, so the  SCION spec is underlay-agnostic. Maybe we could use \"lower layer\", then define it in the terminology. \r\n\r\nAlso look at [IPv6 \"link\"](https://datatracker.ietf.org/doc/html/rfc2460#section-2) as inspiration \r\n",
           "createdAt": "2024-05-16T13:48:54Z",
-          "updatedAt": "2024-05-16T14:00:21Z"
+          "updatedAt": "2024-06-13T16:06:08Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This is more complicated than at first sight at the remaining usage of 'allowed' relates to ISD voting rather directly to how the protocol is implemented. There are also numerous references to 'disallow' and 'disallowed' which would also need to be changed. ",
+          "createdAt": "2024-06-13T16:17:49Z",
+          "updatedAt": "2024-06-13T16:17:49Z"
+        },
+        {
+          "author": "elear",
+          "authorAssociation": "NONE",
+          "body": "Other cases of allowed and disallowed absolutely should be addressed.  In this case we're talking about the nature of the data link.  Why is that the concern beyond even the router, much less the AS or ISD?",
+          "createdAt": "2024-06-13T16:21:07Z",
+          "updatedAt": "2024-06-13T16:21:07Z"
         }
       ]
     },
@@ -302,7 +316,7 @@
       "id": "I_kwDOKYa7786JF-Qo",
       "title": "Clarify service field",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/13",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -315,8 +329,8 @@
       ],
       "body": "We currently document type service 0b0100, but we don't further document possible values for it. We might need to add another table with potential values for the service field, as defined in [here](https://github.com/scionproto/scion/blob/master/pkg/addr/svc.go)\r\n```\r\n                      Table 2: Address length values\r\n\r\n    +================+======+=======================+================+\r\n    | Length (bytes) | Type |  Type/Length (binary) | Interpretation |\r\n    +================+======+=======================+================+\r\n    | 4              | 0    | 0b0000                | IPv4           |\r\n    +----------------+------+-----------------------+----------------+\r\n    | 4              | 1    | 0b0100                | Service        |\r\n    +----------------+------+-----------------------+----------------+\r\n    | 16             | 0    | 0b1100                | IPv6           |\r\n    +----------------+------+-----------------------+----------------+\r\n    | other          |      |                       | Unassigned     |\r\n    +----------------+------+-----------------------+----------------+\r\n   \r\n  ```\r\n\r\nRelates to https://github.com/scionassociation/scion-cp_I-D/issues/15 \r\n  ",
       "createdAt": "2024-05-16T10:40:42Z",
-      "updatedAt": "2024-06-03T07:48:30Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-14T10:56:28Z",
+      "closedAt": "2024-06-14T10:56:28Z",
       "comments": []
     },
     {
@@ -887,7 +901,7 @@
       "labels": [],
       "body": "Fixes #12",
       "createdAt": "2024-05-21T14:16:00Z",
-      "updatedAt": "2024-06-06T10:12:54Z",
+      "updatedAt": "2024-06-14T20:04:07Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
@@ -1290,24 +1304,26 @@
       "id": "PR_kwDOKYa7785wWM5i",
       "title": "Add service field table",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/18",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #13 ",
       "createdAt": "2024-05-23T15:24:38Z",
-      "updatedAt": "2024-06-06T10:22:15Z",
+      "updatedAt": "2024-06-14T10:56:35Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "baseRefOid": "f0339351505e6f802f9d80b7d426e4d1cce552e0",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "service_field_described",
-      "headRefOid": "e17ce5adb374959f1ef0d0043738819da8a62cc3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "f1cfee758fa6bc586307364aa7e3333ec3ae9e52",
+      "closedAt": "2024-06-14T10:56:27Z",
+      "mergedAt": "2024-06-14T10:56:27Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "40776bce81f139e0c5a8763219085237889bc116"
+      },
       "comments": [
         {
           "author": "jiceatscion",
@@ -1403,6 +1419,51 @@
               "updatedAt": "2024-06-06T10:22:15Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa77859PkTC",
+          "commit": {
+            "abbreviatedOid": "d40c914"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-06T08:31:17Z",
+          "updatedAt": "2024-06-14T10:53:21Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "Check bits in this table and possibly improve description",
+              "createdAt": "2024-06-06T08:31:17Z",
+              "updatedAt": "2024-06-14T10:53:21Z"
+            },
+            {
+              "originalPosition": 10,
+              "body": "Resolved",
+              "createdAt": "2024-06-13T07:55:27Z",
+              "updatedAt": "2024-06-14T10:53:21Z"
+            },
+            {
+              "originalPosition": 66,
+              "body": "```suggestion\r\nThe currently known service numbers are:\r\n\r\n| Service Number (Hex) | Short Name | Description            |\r\n|-------------------+------------+------------------------|\r\n| 0x0001            | DS         | Discovery Service      |\r\n| 0x0002            | CS         | Control Service        |\r\n| 0xFFFF            | None       | Reserved invalid value |\r\n{: #table-4 title=\"Known Service Numbers\"}\r\n```",
+              "createdAt": "2024-06-13T08:00:45Z",
+              "updatedAt": "2024-06-14T10:54:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-P73W",
+          "commit": {
+            "abbreviatedOid": "f1cfee7"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM\r\n",
+          "createdAt": "2024-06-14T10:56:05Z",
+          "updatedAt": "2024-06-14T10:56:05Z",
+          "comments": []
         }
       ]
     },
@@ -1418,13 +1479,13 @@
       "labels": [],
       "body": "The reviewr's attention is kindly stirred towards section 4.2.2.3. I am not sure what the standard should say regarding segments from the future. Current code says they're fine.\r\n\r\nAddresses one of the concerns in https://github.com/scionassociation/scion-cp_I-D/issues/18\r\n",
       "createdAt": "2024-05-24T15:18:53Z",
-      "updatedAt": "2024-05-31T16:36:32Z",
+      "updatedAt": "2024-06-14T19:53:35Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
+      "baseRefOid": "f0339351505e6f802f9d80b7d426e4d1cce552e0",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "clock_drift",
-      "headRefOid": "d669e7c4ea8f66b27089daac1de6131ce56c3f01",
+      "headRefOid": "c6d2a5a7a8ac1529ed3c89fc724f47eee2bab355",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -1520,6 +1581,72 @@
               "body": "I'd also shrink and reword this section, after we finish discussion in the control plane PR, and leave here only aspects that relate to the DP, like: \r\n- there must be lose time sync between routers and CPs (within an AS?) because routers must verify the current HF \r\n\r\nAnd remove parts that relate to CP",
               "createdAt": "2024-05-31T16:36:28Z",
               "updatedAt": "2024-05-31T16:36:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-FL15",
+          "commit": {
+            "abbreviatedOid": "d669e7c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-13T09:37:21Z",
+          "updatedAt": "2024-06-13T09:37:21Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "done.",
+              "createdAt": "2024-06-13T09:37:21Z",
+              "updatedAt": "2024-06-13T09:37:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-P5J_",
+          "commit": {
+            "abbreviatedOid": "bd471ee"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-14T10:49:27Z",
+          "updatedAt": "2024-06-14T10:49:27Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "done\r\n",
+              "createdAt": "2024-06-14T10:49:27Z",
+              "updatedAt": "2024-06-14T10:49:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-Tt1C",
+          "commit": {
+            "abbreviatedOid": "6f31fc1"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "I propose a couple small changes. If you agree, please accept them and then feel free to merge.",
+          "createdAt": "2024-06-14T19:26:51Z",
+          "updatedAt": "2024-06-14T19:53:35Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "```suggestion\r\nA PCB originated by a given control service is used to construct data plane paths. Specifically, the timestamp in the Info Field and the expiry time of hop fields are used for hop field MAC computation, see [](#hf-mac-calc), which is used to validate paths at each on-path SCION router. A segment's originating control service and the routers that the segment refers to all have different clocks. Their differences affect the validation process:\r\n```\r\n\r\nI propose some rewording to make the dependencies  a bit clear",
+              "createdAt": "2024-06-14T19:26:51Z",
+              "updatedAt": "2024-06-14T19:53:35Z"
+            },
+            {
+              "originalPosition": 35,
+              "body": "```suggestion\r\nEach administrator of SCION control services and routers is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.\r\n```\r\nWe should include routers too",
+              "createdAt": "2024-06-14T19:52:41Z",
+              "updatedAt": "2024-06-14T19:53:35Z"
             }
           ]
         }
@@ -1986,24 +2113,26 @@
       "id": "PR_kwDOKYa7785xRRQM",
       "title": "Rewrite introduction",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/24",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Addresses: \r\n- #10 - added introductory section with component overview\r\n- #11 ",
       "createdAt": "2024-06-03T09:05:17Z",
-      "updatedAt": "2024-06-12T08:08:28Z",
+      "updatedAt": "2024-06-13T16:04:18Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "5148614fc232525602790094e3c49f6bdefb30f5",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "overview",
-      "headRefOid": "d87ad338f454b2c82d2c723da40c76c33f3d686f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "6d4030afc7c2e694475448d525a0db3f7259baa6",
+      "closedAt": "2024-06-13T16:03:52Z",
+      "mergedAt": "2024-06-13T16:03:52Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "f0339351505e6f802f9d80b7d426e4d1cce552e0"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -2071,6 +2200,19 @@
               "updatedAt": "2024-06-03T16:12:11Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-IyjW",
+          "commit": {
+            "abbreviatedOid": "6d4030a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-13T16:03:40Z",
+          "updatedAt": "2024-06-13T16:03:40Z",
+          "comments": []
         }
       ]
     },
@@ -2086,7 +2228,7 @@
       "labels": [],
       "body": "Describe AES-CMAC hop field MAC algorithm as the default which MUST be supported.\r\n\r\n- Moved the details of  the default mac algorithm to _after_ the explanation of the accumulator field (as this is used in the mac input).\r\n- Fixed the swapped info field/hop field labels in the figure depicting the MAC input.\r\n- Describe requriements on alternative MAC implementations, in particular about requirements for MAC chaining\r\n- Describe path splicing is prevented\r\n- Describe how path splicing can still happen in security considerations\r\n\r\n\r\n\r\nContributes to https://github.com/scionassociation/scion-cp_I-D/issues/23.\r\nContributes to https://github.com/scionassociation/scion-dp_I-D/issues/7",
       "createdAt": "2024-06-04T09:43:57Z",
-      "updatedAt": "2024-06-06T15:01:44Z",
+      "updatedAt": "2024-06-13T09:11:23Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c3ddf7476160c085a401ee272ef088c60bd7f1c6",
@@ -2390,6 +2532,112 @@
               "updatedAt": "2024-06-06T14:55:21Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-DaDJ",
+          "commit": {
+            "abbreviatedOid": "32b72a0"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-13T06:29:30Z",
+          "updatedAt": "2024-06-13T06:29:31Z",
+          "comments": [
+            {
+              "originalPosition": 163,
+              "body": "```suggestion\r\n```\r\nI'd not describe potential changes to the protocol, I don't think this is within the scope of the draft",
+              "createdAt": "2024-06-13T06:29:30Z",
+              "updatedAt": "2024-06-13T06:29:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-E9eg",
+          "commit": {
+            "abbreviatedOid": "32b72a0"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-13T09:11:23Z",
+          "updatedAt": "2024-06-13T09:11:23Z",
+          "comments": [
+            {
+              "originalPosition": 163,
+              "body": "@matzf let us know if you hear any feedback on this",
+              "createdAt": "2024-06-13T09:11:23Z",
+              "updatedAt": "2024-06-13T09:11:24Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOKYa7785yYu_2",
+      "title": "remove allowed",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/27",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #11 ",
+      "createdAt": "2024-06-13T16:27:16Z",
+      "updatedAt": "2024-06-14T10:45:58Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "f0339351505e6f802f9d80b7d426e4d1cce552e0",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "overview",
+      "headRefOid": "41ce8b341ae3c35a9d0f1371ab8797df2f23898f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7785-JEkQ",
+          "commit": {
+            "abbreviatedOid": "941e2e6"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-13T16:40:20Z",
+          "updatedAt": "2024-06-13T16:40:38Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "\"possible\" doesn't really convey the effect of other choices. After all one can totall craft incorrect packets. How about \"valid\"? That's what the router does, after all: it \"validates\" the path.\r\n\r\n",
+              "createdAt": "2024-06-13T16:40:21Z",
+              "updatedAt": "2024-06-13T16:40:38Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "ditto",
+              "createdAt": "2024-06-13T16:40:30Z",
+              "updatedAt": "2024-06-13T16:40:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-P30z",
+          "commit": {
+            "abbreviatedOid": "41ce8b3"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-14T10:45:58Z",
+          "updatedAt": "2024-06-14T10:45:58Z",
+          "comments": []
         }
       ]
     }
