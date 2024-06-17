@@ -35,12 +35,6 @@ author:
 
 
 normative:
-  RFC2474:
-  RFC3168:
-  RFC5280:
-  RFC5880:
-  RFC5881:
-  RFC8200:
   I-D.scion-cp:
     title: SCION Control Plane
     date: 2024
@@ -75,14 +69,14 @@ normative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
+  RFC2474:
+  RFC3168:
+  RFC5280:
+  RFC5880:
+  RFC5881:
+  RFC8200:
 
 informative:
-  RFC1122:
-  RFC1918:
-  RFC2711:
-  RFC4493:
-  RFC9217:
-  RFC9473:
   CHUAT22:
     title: "The Complete Guide to SCION"
     date: 2022
@@ -118,6 +112,12 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
+  RFC1122:
+  RFC1918:
+  RFC2711:
+  RFC4493:
+  RFC9217:
+  RFC9473:
   SCMP:
     title: SCMP Documentation
     date: 2023
