@@ -1376,7 +1376,7 @@ This bias comes in addition to a structural delay: PCBs are propagated at a conf
 
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
-Each administrator of a SCION control service is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
+Each administrator of SCION control services and routers is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
 
 # Security Considerations
