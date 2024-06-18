@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-16T00:00:38.373804+00:00",
+  "timestamp": "2024-06-18T00:00:44.694631+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -424,9 +424,9 @@
         "Prio 2",
         "editorial"
       ],
-      "body": " Make sure the references are righttly placed according to [guidelines](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-normative-and-informative-references-20060419/#:~:text=Normative%20references%20specify%20documents%20that,it%20only%20provides%20additional%20information): \r\n- Normative references: Needed for the specification; specification is based on it.\r\n- Informative references: Provide background/additional information\r\n\r\n\r\nPotential changes: \r\n- [ ] I-D.scion-cppki should be normative \r\n- [ ] Several RFCs might be informative\r\n- [ ] Check if other drafts affected",
+      "body": " Make sure the references are righttly placed according to [guidelines](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-normative-and-informative-references-20060419/#:~:text=Normative%20references%20specify%20documents%20that,it%20only%20provides%20additional%20information): \r\n- Normative references: Needed for the specification; specification is based on it.\r\n- Informative references: Provide background/additional information\r\n\r\n\r\nPotential changes: \r\n- [ ] I-D.scion-cppki should be normative \r\n- [ ] Several RFCs might be informative\r\n- [x] Check if other drafts affected",
       "createdAt": "2024-06-03T15:21:40Z",
-      "updatedAt": "2024-06-06T08:26:44Z",
+      "updatedAt": "2024-06-17T08:33:10Z",
       "closedAt": null,
       "comments": []
     }
@@ -2637,6 +2637,46 @@
           "body": "",
           "createdAt": "2024-06-14T10:45:58Z",
           "updatedAt": "2024-06-14T10:45:58Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOKYa7785yqKBs",
+      "title": "Move informative references to the informative section and normative to normative.",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/28",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #25 ",
+      "createdAt": "2024-06-17T08:11:15Z",
+      "updatedAt": "2024-06-17T13:23:42Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "40776bce81f139e0c5a8763219085237889bc116",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "normative_informative",
+      "headRefOid": "897b690884064e3f048202a4e850b7f6402776eb",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7785-iO1v",
+          "commit": {
+            "abbreviatedOid": "897b690"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-17T13:23:42Z",
+          "updatedAt": "2024-06-17T13:23:42Z",
           "comments": []
         }
       ]
