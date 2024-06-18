@@ -1367,7 +1367,7 @@ This section describes the steps that a SCION egress border router MUST perform 
 
 #### Effects of Clock Inaccuracy
 
-A PCB originated by a given control service is used to make dataplane paths. The hops of these paths are then validated by every router along that path. A segment's originating control service and the routers that the segment refers to all have different clocks. Their differences affect the validation process:
+A PCB originated by a given control service is used to construct data plane paths. Specifically, the timestamp in the Info Field and the expiry time of hop fields are used for hop field MAC computation, see [](#hf-mac-calc), which is used to validate paths at each on-path SCION router. A segment's originating control service and the routers that the segment refers to all have different clocks. Their differences affect the validation process:
 
 * A fast clock at origination or a slow clock at validation will yield a lengthened expiration time for hops, and possibly an origination time in the future.
 * A slow clock at origination or a fast clock at validation will yield a shortened expiration time for hops, and possibly an expiration time in the past.
