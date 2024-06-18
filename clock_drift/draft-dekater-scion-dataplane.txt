@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 16 December 2024                                        S. Hitz
+Expires: 20 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            14 June 2024
+                                                            18 June 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 December 2024.
+   This Internet-Draft will expire on 20 December 2024.
 
 Copyright Notice
 
@@ -2340,11 +2340,13 @@ direction
 
 4.2.2.3.  Effects of Clock Inaccuracy
 
-   A PCB originated by a given control service is used to make dataplane
-   paths.  The hops of these paths are then validated by every router
-   along that path.  A segment's originating control service and the
-   routers that the segment refers to all have different clocks.  Their
-   differences affect the validation process:
+   A PCB originated by a given control service is used to construct data
+   plane paths.  Specifically, the timestamp in the Info Field and the
+   expiry time of hop fields are used for hop field MAC computation, see
+   Section 4.1.1, which is used to validate paths at each on-path SCION
+   router.  A segment's originating control service and the routers that
+   the segment refers to all have different clocks.  Their differences
+   affect the validation process:
 
    *  A fast clock at origination or a slow clock at validation will
       yield a lengthened expiration time for hops, and possibly an
@@ -2367,9 +2369,9 @@ direction
    In comparison to these time scales, clock offsets in the order of
    minutes are immaterial.
 
-   Each administrator of a SCION control service is responsible for
-   maintaining sufficient clock accuracy.  No particular method is
-   assumed by this specification.
+   Each administrator of SCION control services and routers is
+   responsible for maintaining sufficient clock accuracy.  No particular
+   method is assumed by this specification.
 
 5.  Security Considerations
 
