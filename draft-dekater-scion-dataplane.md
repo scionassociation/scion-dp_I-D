@@ -71,6 +71,7 @@ normative:
         org: Anapaya Systems
   RFC2474:
   RFC3168:
+  RFC4493:
   RFC5280:
   RFC5880:
   RFC5881:
@@ -115,7 +116,6 @@ informative:
   RFC1122:
   RFC1918:
   RFC2711:
-  RFC4493:
   RFC9217:
   RFC9473:
   SCMP:
