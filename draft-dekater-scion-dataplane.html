@@ -1480,9 +1480,9 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         </ul>
 <p id="section-1.4-4"><strong>Note:</strong> The type of segment is known to the endpoint but is not visible in the path header of data packets. Therefore, a SCION router needs to explicitly verify that these rules were followed correctly.<a href="#section-1.4-4" class="pilcrow">¶</a></p>
 <p id="section-1.4-5">Besides enabling the enforcement of path policies, the above rules also protect the economic interest of ASes, as they prevent building "valley paths". A valley path contains ASes that do not profit economically from traffic on this route. The name comes from the fact that such paths go "down" (following parent-child links) before going "up" (following child-parent links).<a href="#section-1.4-5" class="pilcrow">¶</a></p>
-<p id="section-1.4-6"><a href="#_figure-1" class="auto internal xref">Figure 1</a> below shows the different allowed segment combinations.<a href="#section-1.4-6" class="pilcrow">¶</a></p>
+<p id="section-1.4-6"><a href="#_figure-1" class="auto internal xref">Figure 1</a> below shows valid segment combinations.<a href="#section-1.4-6" class="pilcrow">¶</a></p>
 <p id="section-1.4-7"><strong>Note:</strong> It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).<a href="#section-1.4-7" class="pilcrow">¶</a></p>
-<span id="name-illustration-of-possible-pa"></span><div id="_figure-1">
+<span id="name-illustration-of-valid-path-"></span><div id="_figure-1">
 <figure id="figure-1">
           <div class="alignLeft art-text artwork" id="section-1.4-8.1">
 <pre>
@@ -1548,10 +1548,10 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </pre>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-illustration-of-possible-pa" class="selfRef">Illustration of possible path-segment combinations. Each node represents a SCION Autonomous System.</a>
+<a href="#name-illustration-of-valid-path-" class="selfRef">Illustration of valid path-segment combinations. Each node represents a SCION Autonomous System.</a>
           </figcaption></figure>
 </div>
-<p id="section-1.4-9">The following path-segment combinations are allowed:<a href="#section-1.4-9" class="pilcrow">¶</a></p>
+<p id="section-1.4-9">Valid path-segment combinations:<a href="#section-1.4-9" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.4-10.1">
             <p id="section-1.4-10.1.1"><strong>Communication through core ASes</strong>:<a href="#section-1.4-10.1.1" class="pilcrow">¶</a></p>
