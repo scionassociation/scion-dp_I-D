@@ -35,18 +35,6 @@ author:
 
 
 normative:
-  RFC1122:
-  RFC1918:
-  RFC2119:
-  RFC2474:
-  RFC2711:
-  RFC3168:
-  RFC4493:
-  RFC5880:
-  RFC5881:
-  RFC8174:
-  RFC8200:
-  RFC9473:
   I-D.scion-cp:
     title: SCION Control Plane
     date: 2024
@@ -64,6 +52,29 @@ normative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
+  I-D.scion-cppki:
+    title: SCION Control-Plane PKI
+    date: 2024
+    target: https://datatracker.ietf.org/doc/draft-dekater-scion-pki/
+    author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
+      -
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
+  RFC2474:
+  RFC3168:
+  RFC5280:
+  RFC5880:
+  RFC5881:
+  RFC8200:
 
 informative:
   CHUAT22:
@@ -101,54 +112,29 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  I-D.scion-components:
-    title: SCION Components Analysis
+  RFC1122:
+  RFC1918:
+  RFC2711:
+  RFC4493:
+  RFC9217:
+  RFC9473:
+  SCMP:
+    title: SCMP Documentation
     date: 2023
-    target: https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/
+    target: https://docs.scion.org/en/latest/protocols/scmp.html
     author:
       -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-  I-D.scion-cppki:
-    title: SCION Control-Plane PKI
-    date: 2024
-    target: https://datatracker.ietf.org/doc/draft-dekater-scion-pki/
-    author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: S. Hitz
-        name: Samuel Hitz
+        ins: Anapaya
+        name: Anapaya Systems
         org: Anapaya Systems
-  I-D.scion-overview:
-    title: SCION Overview
-    date: 2023
-    target: https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/
-    author:
       -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: A. Perrig
-        name: Adrian Perrig
+        ins: ETH
+        name: ETH Zuerich
         org: ETH Zuerich
-
+      -
+        ins: SCION
+        name: SCION Association
+        org: SCION Association
   CRYPTOBOOK:
     title: A Graduate Course in Applied Cryptography
     date: 2023
@@ -164,20 +150,36 @@ informative:
 
 --- abstract
 
-This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The responsibility of the **SCION data plane** is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path.
+This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION data plane is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path.
 
-The SCION data plane fundamentally differs from today's IP-based data plane in that it is *path-aware*: In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. SCION also includes its own protocol to communicate failures to endpoints, the SCION Control Message Protocol (SCMP). This protocol will be described in a separate document, which will follow later.
-
+The SCION data plane fundamentally differs from today's IP-based data plane in that it is *path-aware*: In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers.
 
 --- middle
 
+
 # Introduction
 
-SCION leverages source-based path selection, where path information is embedded in the packet header - this is called packet-carried forwarding state (PCFS). This section explains how data packets are forwarded through the network, how the SCION inter-domain routing differs from intra-domain routing, and how endpoints can construct end-to-end paths from path segments. It also briefly touches the concept of path authorization, which ensures that data packets always traverse the network along authorized paths.
+SCION is a path-aware internetworking routing architecture as described in {{RFC9217}}. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.
 
-**Note:** This is the very first version of the SCION Data Plane document. We are aware that the draft is far from perfect, and hope to improve the content in later versions of the document. To reach this goal, any feedback is welcome and much appreciated. Thanks!
+The data transmission order for SCION is the same as for IPv6 as defined in Introduction of {{RFC8200}}.
 
-**Note:** It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts {{I-D.scion-overview}}, {{I-D.scion-components}}, {{I-D.scion-cppki}}, and {{I-D.scion-cp}}, as well as in {{CHUAT22}}, especially Chapter 2. A short description of the SCION basic terms and elements can be found in [](#terms) below.
+SCION has been developed with the following goals:
+
+*Availability* - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.
+
+*Security* - to provide higher levels of trust in routing information in order to prevent traffic hijacking, reduce potential for denial-of-service and other attacks. Endpoints can decide the trust roots they wish to rely on, routing information can be unambiguously attributed to an AS, and packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
+
+*Scalability* - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.
+
+SCION relies on three main components:
+
+*PKI* - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called *Isolation Domains (ISDs)*. All ASes in an ISD agree on a set of trust roots called the *Trust Root Configuration (TRC)* which is a collection of signed root certificates in X.509 v3 format {{RFC5280}}. The ISD is governed by a set of *core ASes* which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See {{I-D.scion-cppki}}
+
+*Control Plane* - performs inter-domain routing by discovering and securely disseminating path information between ASes. The core ASes use Path-segment Construction Beacons (PCBs) to explore intra-ISD paths, or to explore paths across different ISDs. See {{I-D.scion-cp}}
+
+*Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS.
+
+This document describes the SCION Data Plane component.
 
 
 ## Terminology {#terms}
@@ -188,7 +190,7 @@ SCION leverages source-based path selection, where path information is embedded 
 
 **Data Plane**: The data plane (sometimes also referred to as the forwarding plane) is responsible for forwarding data packets that endpoints have injected into the network. After routing information has been disseminated by the control plane, packets are forwarded according to such information by the data plane.
 
-**Endpoint**: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
+**Endpoint**: An endpoint is the start- or the end of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}}, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
 
 **Forwarding Key**: A forwarding key is a symmetric key that is shared between the control service (control plane) and the routers (data plane) of an AS. It is used to authenticate hop fields in the end-to-end SCION path. The forwarding key is an AS-local secret and is not shared with other ASes.
 
@@ -198,7 +200,9 @@ SCION leverages source-based path selection, where path information is embedded 
 
 **Info Field (INF)**: Each path-segment construction beacon (PCB) contains a single info field, which provides basic information about the PCB. Together with hop fields (HFs), info fields are used to create forwarding paths.
 
-**Isolation Domain (ISD)**: In SCION, autonomous systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g., a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
+**Interface Identifier (Interface ID)**: 16 bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes. Each interface belongs to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress interfaces). The Interface ID MUST be unique within each AS. Interface ID 0 is not a valid identifier, implementations can use it as the "unspecified" value.
+
+**Isolation Domain (ISD)**: In SCION, Autonomous Systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g., a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
 
 **Leaf AS**: An AS at the "edge" of an ISD, with no other downstream ASes.
 
@@ -216,7 +220,7 @@ SCION leverages source-based path selection, where path information is embedded 
 
 **Path Transparency**: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.
 
-**SCMP**: SCION Control Message Protocol. SCMP is used for signaling connectivity problems, analogous to the Internet Control Message Protocol (ICMP). SCMP provides network diagnostic and error messages.
+**Peering Link**: A link between two SCION border routers of different ASes, where at least one of the two ASes is not core. Two peering ASes may be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
 
 **Valley Route**: A valley route contains ASes that do not profit economically from traffic on this route. The name comes from the fact that such routes go "down" (following parent-child links) before going "up" (following child-parent links).
 
@@ -226,9 +230,9 @@ SCION leverages source-based path selection, where path information is embedded 
 {::boilerplate bcp14-tagged}
 
 
-## Overview
+## Overview
 
-The SCION data plane forwards inter-domain packets between ASes. SCION routers are normally deployed at the edge of an AS, and peer with neighbor SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header. This path information consists of a sequence of hop fields (HFs). Each hop field corresponds to an AS on the path, and it includes an ingress- as well as an egress interface ID, which univocally identify the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.
+The SCION data plane forwards inter-domain packets between SCION-enabled ASes. SCION routers are normally deployed at the edge of an AS, and peer with neighbor SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header. This path information consists of a sequence of hop fields (HFs). Each hop field corresponds to an AS on the path, and it includes an ingress- as well as an egress interface ID, which univocally identify the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.
 
 This concept allows SCION routers to forward packets to a neighbor AS without inspecting the destination address and also without consulting an inter-domain forwarding table. Intra-domain forwarding and routing are based on existing mechanisms (e.g., IP). A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. The last SCION router at the destination AS therefore uses the destination address to forward the packet to the appropriate local endpoint.
 
@@ -258,8 +262,21 @@ The full forwarding process for a packet transiting an intermediate AS consists 
 3. The SCION router maps the egress interface ID in the current hop field of the SCION header to the destination "intra-protocol" address of the egress border router (where "intra-protocol" is the intra-domain forwarding protocol, e.g., MPLS or IP).
 4. The packet is forwarded within the AS by routers and switches based on the "intra-protocol" header.
 5. Upon receiving the packet, the SCION egress router strips off the "intra-protocol" header, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
+6. The last SCION router on the path forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
 
-**Note:** The current SCION implementation uses the UDP/IP protocol as underlay. However, the use of other underlay protocols is possible and allowed.
+### Configuration
+
+Border routers require mappings from SCION  interface IDs to underlay addresses. Such information must be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values must be configured. A typical implementation will require:
+
+- Interface ID.
+- Link type (core, parent, child, peer). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
+- Neighbor ISD-AS number.
+- For the router that manages the interface: the neighbor interface underlay address.
+- For the routers that do not manage the interface:  "intra-protocol" address of the router that does.
+
+In order to forward traffic to a service endpoint addresse (`DT/DS` == 0b01 in the [common header](#common-header)), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
+
+**Note:** The current SCION implementation runs over the UDP/IP protocol. However, the use of other lower layers protocols is possible.
 
 
 ## Path Construction (Segment Combinations) {#construction}
@@ -279,7 +296,7 @@ Segments cannot be combined arbitrarily. To construct a valid forwarding path, t
 
 Besides enabling the enforcement of path policies, the above rules also protect the economic interest of ASes, as they prevent building "valley paths". A valley path contains ASes that do not profit economically from traffic on this route. The name comes from the fact that such paths go "down" (following parent-child links) before going "up" (following child-parent links).
 
-{{figure-1}} below shows the different allowed segment combinations.
+{{figure-1}} below shows valid segment combinations.
 
 **Note:** It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).
 
@@ -344,10 +361,10 @@ Besides enabling the enforcement of path policies, the above rules also protect 
  +->( * )     ( * )<-+  +>( * )   ( * )<+    ( * )     ( * )  +-> ( * )
      `-'       `-'         `-'     `-'        `-'       `-'        `-'
 ~~~~
-{: #figure-1 title="Illustration of possible path-segment combinations. Each node represents a SCION Autonomous System."}
+{: #figure-1 title="Illustration of valid path-segment combinations. Each node represents a SCION Autonomous System."}
 
 
-The following path-segment combinations are allowed:
+Valid path-segment combinations:
 
 - **Communication through core ASes**:
 
@@ -440,7 +457,7 @@ The SCION common header has the following packet format:
 | 4     | COLIBRI path (experimental)    |
 {: #table-1 title="SCION path types"}
 
-- `DT/DL/ST/SL`: These fields define the endpoint-address type and endpoint-address length for the source and destination endpoint. `DT` and `DL` stand for Destination Type and Destination Length, whereas `ST` and `SL` stand for Source Type and Source Length. The possible endpoint address length values are 4 bytes, 8 bytes, 12 bytes, and 16 bytes. If some address has a length different from the supported values, the next larger size can be used and the address can be padded with zeros. {{table-2}} below lists the currently used values for address length. The "type" identifier is only defined in combination with a specific address length. For example, address type "0" is defined as IPv4 in combination with address length 4, but in combination with address length 16, it stands for IPv6. Per address length, several sub-types are possible. {{table-3}} shows the currently valid allocations of type values to length values.
+- `DT/DL/ST/SL`: These fields define the endpoint-address type and endpoint-address length for the source and destination endpoint. `DT` and `DL` stand for Destination Type and Destination Length, whereas `ST` and `SL` stand for Source Type and Source Length. The possible endpoint address length values are 4 bytes, 8 bytes, 12 bytes, and 16 bytes. If some address has a length different from the supported values, the next larger size can be used and the address can be padded with zeros. {{table-2}} below lists the currently used values for address length. The "type" identifier is only defined in combination with a specific address length. For example, address type "0" is defined as IPv4 in combination with address length 4, but in combination with address length 16, it stands for IPv6. Per address length, several sub-types are possible. {{table-3}} shows the currently assigned combinations of lengths and types.
 
 | DL/SL Value | Address Length |
 |-------------+----------------|
@@ -450,18 +467,17 @@ The SCION common header has the following packet format:
 | 3           | 16 bytes       |
 {: #table-2 title="Address length values"}
 
-
-| Length (bytes) | Type | Type/Length (binary) | Interpretation |
-|----------------+------+----------------------+----------------|
-| 4              | 0    | 0b0000               | IPv4           |
-| 4              | 1    | 0b0100               | Service        |
-| 16             | 0    | 0b1100               | IPv6           |
-| other          |      |                      | Unassigned     |
+| Length (bytes) | Type | DT/DL or ST/SL encoding | Conventional Use |
+|----------------+------+-------------------------+------------------|
+| 4              | 0    | 0b0000                  | IPv4             |
+| 4              | 1    | 0b0100                  | Service          |
+| 16             | 0    | 0b0011                  | IPv6             |
+| other          |      |                         | Unassigned       |
 {: #table-3 title="Allocations of type values to length values"}
 
+A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint-addresses that is known to be part of the set. {{table-4}} lists the known services.
+
 - `RSV`: These bits are currently reserved for future use.
-
-
 
 ### Address Header {#address-header}
 
@@ -489,6 +505,29 @@ The SCION address header has the following format:
 - `DstISD, SrcISD`: The 16-bit ISD identifier of the destination/source.
 - `DstAS, SrcAS`: The 48-bit AS identifier of the destination/source.
 - `DstHostAddr, SrcHostAddr`: Specifies the variable length endpoint address of the destination/source. The accepted type and length are defined in the `DT/DL/ST/SL` fields of the common header.
+
+If a service address is implied by the `DT/DL` or `ST/SL` field of the common header, the corresponding address field has the following format:
+
+~~~~
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Service Number        |              RSV              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~~
+{: #figure-20 title="Service address format"}
+
+- `RSV`: reserved for future use
+
+The currently known service numbers are:
+
+| Service Number (hex) | Short Name | Description            |
+|-------------------+------------+------------------------|
+| 0x0001            | DS         | Discovery Service      |
+| 0x0002            | CS         | Control Service        |
+| 0xFFFF            | None       | Reserved invalid value |
+{: #table-4 title="Known Service Numbers"}
+
 
 **Note:** For more information on addressing in SCION, see the introduction of the SCION Control Plane Specification ({{I-D.scion-cp}}).
 
@@ -693,7 +732,7 @@ The 8-byte Info Field (`InfoField`) has the following format:
 - `C`: Construction direction flag. If the flag has value "1", the hop fields in the segment represented by this info field are arranged in the direction they have been constructed during beaconing.
 - `RSV`: Unused and reserved for future use.
 - `Acc`: This updatable field/counter is required for calculating the MAC in the data plane. `Acc` stands for "Accumulator". For more details, see [](#auth-chained-macs).
-- `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp.
+- `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).
 
 
 
@@ -721,7 +760,7 @@ The 12-byte Hop Field (``HopField``) has the following format:
 
 **Note:** A sender cannot rely on multiple routers retrieving and processing the payload even if it sets multiple router alert flags. This is use-case dependent: In the case of Traceroute informational messages, for example, the router for which the traceroute request is intended will process the request (if the corresponding Router Alert flag is set to "1") and reply to it without further forwarding the request along the path. Use cases that require multiple routers/hops on the path to process a packet have to instead rely on a hop-by-hop extension (see [](#ext-header)). For general information on router alerts, see {{RFC2711}}.
 
-- `ExpTime`: Expiry time of a hop field. The field is 1-byte long, thus there are 256 different values available to express an expiration time. The expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the `Timestamp` field (from the corresponding info field), as follows:
+- `ExpTime`: Expiration time of a hop field. The field is 1-byte long, thus there are 256 different values available to express an expiration time. The expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the `Timestamp` field (from the corresponding info field), as follows:
 
   - `Timestamp` + (1 + `ExpTime`) * (24 hours/256)
 
@@ -735,7 +774,7 @@ The one-hop path type `OneHopPath` is currently used to bootstrap beaconing betw
 
 A one-hop path has exactly one info field and two hop fields with the specialty that the second hop field is not known a priori, but is instead created by the ingress SCION border router of the neighboring AS while processing the one-hop path. Any entity with access to the forwarding key of the source endpoint AS can create a valid info and hop field as described in [](#inffield) and [](#hopfld), respectively.
 
-Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second hop field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to "0", indicating that the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the hop field.
+Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second hop field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the hop field.
 
 {{figure-10}} below shows the layout of a SCION one-hop path type. There is only a single info field; the appropriate hop field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
 
@@ -768,9 +807,6 @@ When a destination endpoint receives a SCION packet, it can use the path informa
    - Reverse the order of the non-zero `SegLen` fields.
 
    **Note:** For more information on the `PathMetaHdr` field, see [](#PathMetaHdr).
-
-A similar mechanism is possible for on-path routers, for example to send SCION Control Message Protocol (SCMP) messages to the sender of the original packet.
-
 
 
 ## Extension Headers {#ext-header}
@@ -834,7 +870,7 @@ The `Options` field of the Hop-by-Hop Options and the End-to-End Options headers
 | 253     | Used for experimentation and testing                       |
 | 254     | Used for experimentation and testing                       |
 | 255     | Reserved                                                   |
-{: #table-4 title="Option types of SCION Options header"}
+{: #table-5 title="Option types of SCION Options header"}
 
 - `OptDataLen`: Unsigned 8-bit integer denoting the length of the `OptData` field of this option in bytes.
 - `OptData`: Variable-length field. Option-type specific data.
@@ -920,7 +956,7 @@ Any transport or other upper-layer protocol that includes addresses from the SCI
 
 
 - `DstISD`, `SrcISD`, `DstAS`, `SrcAS`, `DstHostAddr`, `SrcHostAddr`: These values are taken from the SCION address header.
-- `Upper-Layer Packet Length`: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly (e.g., the SCION Control Message Protocol SCMP), use the value from the `PayloadLen` field in the SCION common header, minus the sum of the extension header lengths.
+- `Upper-Layer Packet Length`: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly, use the value from the `PayloadLen` field in the SCION common header, minus the sum of the extension header lengths.
 - `Next Header`: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also [](#protnum)). This field can differ from the `NextHdr` field in the SCION common header, if extensions are present.
 
 
@@ -1315,8 +1351,8 @@ direction
 
 This section describes the steps that a SCION ingress border router MUST perform when it receives a SCION packet.
 
-1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field.
-2. Check that the current hop field is not expired and within its validity period.
+1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field. If not, the router MUST drop the packet.
+2. Check if the current hop field is expired or originated in the future. That is, the current info field must not have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 3. The next steps depend on the direction of travel and whether this segment includes a peering hop field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current info field. Therefore, check the settings of both flags. The following combinations are possible:
 
    - The packet traverses the path segment in **construction direction** (`C` = "1" and `P` = "0" or "1"). In this case, proceed with step 4.
@@ -1336,7 +1372,7 @@ This section describes the steps that a SCION ingress border router MUST perform
 
        - Replace the current value of the field `Acc` in the current info field with the newly calculated value of Acc.
        - Compute the MAC<sup>Verify</sup><sub>i</sub> over the hop field of the current AS<sub>i</sub>. For this, use the formula in [](#def-mac), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of the accumulator Acc as just set in the `Acc` field in the current info field.
-       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Verify</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Verify</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet.
        - Check whether the current hop field is the last hop field in the path segment. For this, look at the value of the current `SegLen` and other metadata in the path meta header. If yes, increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
 
      - **Use case 2** <br> The path segment includes a **peering hop field** (`P` = "1"), but the current hop is **not** the peering hop, that is, the current hop field is **not** the *last* hop field of the segment, seen from the direction of travel - this can be determined by looking at the value of the current `SegLen` and other metadata in the path meta header. In this case, the ingress border router needs to perform the steps previously described for the path segment without peering hop field. However, the border router MUST NOT increment `CurrInf` and MUST NOT increment `CurrHF` in the path meta header. Proceed with step 4.
@@ -1344,7 +1380,7 @@ This section describes the steps that a SCION ingress border router MUST perform
      - **Use case 3** <br> The path segment includes a **peering hop field** (`P` = "1"), and the current hop field *is* the peering hop field. This would be the case if the current hop field is the *last* hop field of the segment, seen from the direction of travel - to find out whether this is true, check the value of the current `SegLen` and other metadata in the path meta header. In this case, the ingress border router MUST take the following step(s):
 
        - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i [:2]` in the formula with the value of the accumulator Acc as set in the `Acc` field in the current info field (this is the value of the accumulator Acc as it comes with the packet).
-       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+       - Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet.
        - Increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
 
 4. Forward the packet to the egress border router (based on the egress interface ID in the current hop field) or to the destination endpoint, if this is the destination AS.
@@ -1362,7 +1398,7 @@ This section describes the steps that a SCION egress border router MUST perform 
    - **Use case 1** <br> The packet traverses the path segment in **construction direction** (`C` = "1"). The path segment either includes **no peering hop field** (`P` = "0"), or the path segment does include a **peering hop field** (`P` = "1"), but the current hop is **not** the peering hop, that is, the current hop field is **not** the *first* hop field of the segment, seen from the direction of travel. To check whether this is true, look at the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router MUST take the following step(s):
 
      - Compute MAC<sup>Verify</sup><sub>i</sub> over the hop field of the current AS<sub>i</sub>. For this, use the formula in [](#def-mac), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of the accumulator Acc as set in the `Acc` field in the current info field.
-     - Check that the just-calculated MAC<sup>Verify</sup><sub>i</sub> matches MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+     - Check that the just-calculated MAC<sup>Verify</sup><sub>i</sub> matches MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub>. If yes, it is fine. Otherwise, drop the packet.
      - Compute the value of Acc<sub>i+1</sub>. For this, use the formula in [](#def-acc). Replace Acc<sub>i</sub> in the formula with the current value of the accumulator Acc as set in the `Acc` field of the current info field.
      - Replace the value of the `Acc` field in the current info field with the just-calculated value of Acc<sub>i+1</sub>.
      - Proceed with step 3.
@@ -1370,7 +1406,7 @@ This section describes the steps that a SCION egress border router MUST perform 
    - **Use case 2** <br> The packet traverses the path segment in **construction direction** (`C` = "1"). The path segment includes a **peering hop field** (`P` = "1"), and the current hop field *is* the peering hop field. This would be the case if the current hop field is the *first* hop field of the segment, seen from the direction of travel - to find out whether this is true, check the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router MUST take the following steps:
 
      - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0 [:2] ... XOR MAC_i [:2]` with the value in the `Acc` field of the current info field.
-     - Check that the MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub> matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine - proceed with step 3. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.
+     - Check that the MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub> matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine - proceed with step 3. Otherwise, drop the packet.
 
    - **Use case 3** <br> The packet traverses the path segment **against construction direction** (`C` = "0" and `P` = "0" or "1"). In this case, proceed with the next step, step 3.
 
@@ -1379,6 +1415,19 @@ This section describes the steps that a SCION egress border router MUST perform 
 
 **Note:** For more information on the path meta header, see [](#PathMetaHdr).
 
+
+#### Effects of Clock Inaccuracy
+
+A PCB originated by a given control service is used to construct data plane paths. Specifically, the timestamp in the Info Field and the expiry time of hop fields are used for hop field MAC computation, see [](#hf-mac-calc), which is used to validate paths at each on-path SCION router. A segment's originating control service and the routers that the segment refers to all have different clocks. Their differences affect the validation process:
+
+* A fast clock at origination or a slow clock at validation will yield a lengthened expiration time for hops, and possibly an origination time in the future.
+* A slow clock at origination or a fast clock at validation will yield a shortened expiration time for hops, and possibly an expiration time in the past.
+
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may become available for path construction up to N intervals (so typically N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfld)) would render useless any path segment longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time. The norm is 6 hours.
+
+In comparison to these time scales, clock offsets in the order of minutes are immaterial.
+
+Each administrator of SCION control services and routers is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
 
 # Security Considerations
@@ -1479,8 +1528,9 @@ This appendix lists the assigned SCION protocol numbers.
 
 SCION attempts to take the IANA's assigned Internet protocol numbers into consideration. Widely employed protocols have the same protocol number as the one assigned by IANA. SCION specific protocol numbers start at 200.
 
-The protocol numbers are used in the SCION header to identify the next level protocol.
+The protocol numbers are used in the SCION header to identify the upper layer protocol.
 
+SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is optional. A work-in-progress specification is available at: {{SCMP}}.
 
 ## Assignment
 {:numbered="false"}
