@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 16 December 2024                                        S. Hitz
+Expires: 21 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            14 June 2024
+                                                            19 June 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 December 2024.
+   This Internet-Draft will expire on 21 December 2024.
 
 Copyright Notice
 
@@ -492,7 +492,7 @@ Table of Contents
    fact that such paths go "down" (following parent-child links) before
    going "up" (following child-parent links).
 
-   Figure 1 below shows the possible segment combinations.
+   Figure 1 below shows valid segment combinations.
 
    *Note:* It is assumed that the source and destination endpoints are
    in different ASes (as endpoints from the same AS use an empty
@@ -558,10 +558,10 @@ Table of Contents
   +->( * )     ( * )<-+  +>( * )   ( * )<+    ( * )     ( * )  +-> ( * )
       `-'       `-'         `-'     `-'        `-'       `-'        `-'
 
-     Figure 1: Illustration of possible path-segment combinations.
-            Each node represents a SCION Autonomous System.
+ Figure 1: Illustration of valid path-segment combinations.  Each node
+                 represents a SCION Autonomous System.
 
-   Possible path-segment combinations:
+   Valid path-segment combinations:
 
    *  *Communication through core ASes*:
 
