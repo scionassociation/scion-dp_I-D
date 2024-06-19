@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 16 December 2024                                        S. Hitz
+Expires: 21 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            14 June 2024
+                                                            19 June 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 December 2024.
+   This Internet-Draft will expire on 21 December 2024.
 
 Copyright Notice
 
@@ -2551,15 +2551,10 @@ direction
               Plane", 2024, <https://datatracker.ietf.org/doc/draft-
               dekater-scion-controlplane/>.
 
-   [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
-              Communication Layers", STD 3, RFC 1122,
-              DOI 10.17487/RFC1122, October 1989,
-              <https://www.rfc-editor.org/rfc/rfc1122>.
-
-   [RFC1918]  Rekhter, Y., Moskowitz, B., Karrenberg, D., de Groot, G.
-              J., and E. Lear, "Address Allocation for Private
-              Internets", BCP 5, RFC 1918, DOI 10.17487/RFC1918,
-              February 1996, <https://www.rfc-editor.org/rfc/rfc1918>.
+   [I-D.scion-cppki]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
+              Plane PKI", 2024, <https://datatracker.ietf.org/doc/draft-
+              dekater-scion-pki/>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2572,18 +2567,10 @@ direction
               DOI 10.17487/RFC2474, December 1998,
               <https://www.rfc-editor.org/rfc/rfc2474>.
 
-   [RFC2711]  Partridge, C. and A. Jackson, "IPv6 Router Alert Option",
-              RFC 2711, DOI 10.17487/RFC2711, October 1999,
-              <https://www.rfc-editor.org/rfc/rfc2711>.
-
    [RFC3168]  Ramakrishnan, K., Floyd, S., and D. Black, "The Addition
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
               <https://www.rfc-editor.org/rfc/rfc3168>.
-
-   [RFC4493]  Song, JH., Poovendran, R., Lee, J., and T. Iwata, "The
-              AES-CMAC Algorithm", RFC 4493, DOI 10.17487/RFC4493, June
-              2006, <https://www.rfc-editor.org/rfc/rfc4493>.
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
@@ -2609,14 +2596,6 @@ direction
               DOI 10.17487/RFC8200, July 2017,
               <https://www.rfc-editor.org/rfc/rfc8200>.
 
-   [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
-              Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
-              <https://www.rfc-editor.org/rfc/rfc9217>.
-
-   [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
-              Properties", RFC 9473, DOI 10.17487/RFC9473, September
-              2023, <https://www.rfc-editor.org/rfc/rfc9473>.
-
 7.2.  Informative References
 
    [CHUAT22]  Chuat, L., Legner, M., Basin, D., Hausheer, D., Hitz, S.,
@@ -2624,10 +2603,31 @@ direction
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
 
-   [I-D.scion-cppki]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
-              Plane PKI", 2024, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-pki/>.
+   [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
+              Communication Layers", STD 3, RFC 1122,
+              DOI 10.17487/RFC1122, October 1989,
+              <https://www.rfc-editor.org/rfc/rfc1122>.
+
+   [RFC1918]  Rekhter, Y., Moskowitz, B., Karrenberg, D., de Groot, G.
+              J., and E. Lear, "Address Allocation for Private
+              Internets", BCP 5, RFC 1918, DOI 10.17487/RFC1918,
+              February 1996, <https://www.rfc-editor.org/rfc/rfc1918>.
+
+   [RFC2711]  Partridge, C. and A. Jackson, "IPv6 Router Alert Option",
+              RFC 2711, DOI 10.17487/RFC2711, October 1999,
+              <https://www.rfc-editor.org/rfc/rfc2711>.
+
+   [RFC4493]  Song, JH., Poovendran, R., Lee, J., and T. Iwata, "The
+              AES-CMAC Algorithm", RFC 4493, DOI 10.17487/RFC4493, June
+              2006, <https://www.rfc-editor.org/rfc/rfc4493>.
+
+   [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
+              Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
+              <https://www.rfc-editor.org/rfc/rfc9217>.
+
+   [RFC9473]  Enghardt, R. and C. Krähenbühl, "A Vocabulary of Path
+              Properties", RFC 9473, DOI 10.17487/RFC9473, September
+              2023, <https://www.rfc-editor.org/rfc/rfc9473>.
 
    [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2023,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
