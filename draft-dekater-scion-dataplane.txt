@@ -495,7 +495,7 @@ Table of Contents
    fact that such paths go "down" (following parent-child links) before
    going "up" (following child-parent links).
 
-   Figure 1 below shows the different allowed segment combinations.
+   Figure 1 below shows valid segment combinations.
 
    *Note:* It is assumed that the source and destination endpoints are
    in different ASes (as endpoints from the same AS use an empty
@@ -561,10 +561,10 @@ Table of Contents
   +->( * )     ( * )<-+  +>( * )   ( * )<+    ( * )     ( * )  +-> ( * )
       `-'       `-'         `-'     `-'        `-'       `-'        `-'
 
-     Figure 1: Illustration of possible path-segment combinations.
-            Each node represents a SCION Autonomous System.
+ Figure 1: Illustration of valid path-segment combinations.  Each node
+                 represents a SCION Autonomous System.
 
-   The following path-segment combinations are allowed:
+   Valid path-segment combinations:
 
    *  *Communication through core ASes*:
 
