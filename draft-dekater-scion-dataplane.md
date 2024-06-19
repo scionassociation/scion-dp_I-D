@@ -720,7 +720,7 @@ The 8-byte Info Field (`InfoField`) has the following format:
 - `C`: Construction direction flag. If the flag has value "1", the hop fields in the segment represented by this info field are arranged in the direction they have been constructed during beaconing.
 - `RSV`: Unused and reserved for future use.
 - `Acc`: This updatable field/counter is required for calculating the MAC in the data plane. `Acc` stands for "Accumulator". For more details, see [](#auth-chained-macs).
-- `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp.
+- `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).
 
 
 
@@ -748,7 +748,7 @@ The 12-byte Hop Field (``HopField``) has the following format:
 
 **Note:** A sender cannot rely on multiple routers retrieving and processing the payload even if it sets multiple router alert flags. This is use-case dependent: In the case of Traceroute informational messages, for example, the router for which the traceroute request is intended will process the request (if the corresponding Router Alert flag is set to "1") and reply to it without further forwarding the request along the path. Use cases that require multiple routers/hops on the path to process a packet have to instead rely on a hop-by-hop extension (see [](#ext-header)). For general information on router alerts, see {{RFC2711}}.
 
-- `ExpTime`: Expiry time of a hop field. The field is 1-byte long, thus there are 256 different values available to express an expiration time. The expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the `Timestamp` field (from the corresponding info field), as follows:
+- `ExpTime`: Expiration time of a hop field. The field is 1-byte long, thus there are 256 different values available to express an expiration time. The expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the `Timestamp` field (from the corresponding info field), as follows:
 
   - `Timestamp` + (1 + `ExpTime`) * (24 hours/256)
 
@@ -1324,8 +1324,8 @@ direction
 
 This section describes the steps that a SCION ingress border router MUST perform when it receives a SCION packet.
 
-1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field.
-2. Check that the current hop field is not expired and within its validity period.
+1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field. If not, the router MUST drop the packet.
+2. Check if the current hop field is expired or originated in the future. That is, the current info field must not have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 3. The next steps depend on the direction of travel and whether this segment includes a peering hop field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current info field. Therefore, check the settings of both flags. The following combinations are possible:
 
    - The packet traverses the path segment in **construction direction** (`C` = "1" and `P` = "0" or "1"). In this case, proceed with step 4.
@@ -1388,6 +1388,19 @@ This section describes the steps that a SCION egress border router MUST perform 
 
 **Note:** For more information on the path meta header, see [](#PathMetaHdr).
 
+
+#### Effects of Clock Inaccuracy
+
+A PCB originated by a given control service is used to construct data plane paths. Specifically, the timestamp in the Info Field and the expiry time of hop fields are used for hop field MAC computation, see [](#hf-mac-calc), which is used to validate paths at each on-path SCION router. A segment's originating control service and the routers that the segment refers to all have different clocks. Their differences affect the validation process:
+
+* A fast clock at origination or a slow clock at validation will yield a lengthened expiration time for hops, and possibly an origination time in the future.
+* A slow clock at origination or a fast clock at validation will yield a shortened expiration time for hops, and possibly an expiration time in the past.
+
+This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may become available for path construction up to N intervals (so typically N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfld)) would render useless any path segment longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time. The norm is 6 hours.
+
+In comparison to these time scales, clock offsets in the order of minutes are immaterial.
+
+Each administrator of SCION control services and routers is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.
 
 
 # Security Considerations
