@@ -35,20 +35,6 @@ author:
 
 
 normative:
-  RFC1122:
-  RFC1918:
-  RFC2119:
-  RFC2474:
-  RFC2711:
-  RFC3168:
-  RFC4493:
-  RFC5280:
-  RFC5880:
-  RFC5881:
-  RFC8174:
-  RFC8200:
-  RFC9217:
-  RFC9473:
   I-D.scion-cp:
     title: SCION Control Plane
     date: 2024
@@ -66,6 +52,29 @@ normative:
         ins: S. Hitz
         name: Samuel Hitz
         org: Anapaya Systems
+  I-D.scion-cppki:
+    title: SCION Control-Plane PKI
+    date: 2024
+    target: https://datatracker.ietf.org/doc/draft-dekater-scion-pki/
+    author:
+      -
+        ins: C. de Kater
+        name: Corine de Kater
+        org: SCION Association
+      -
+        ins: N. Rustignoli
+        name: Nicola Rustignoli
+        org: SCION Association
+      -
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
+  RFC2474:
+  RFC3168:
+  RFC5280:
+  RFC5880:
+  RFC5881:
+  RFC8200:
 
 informative:
   CHUAT22:
@@ -103,23 +112,12 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  I-D.scion-cppki:
-    title: SCION Control-Plane PKI
-    date: 2024
-    target: https://datatracker.ietf.org/doc/draft-dekater-scion-pki/
-    author:
-      -
-        ins: C. de Kater
-        name: Corine de Kater
-        org: SCION Association
-      -
-        ins: N. Rustignoli
-        name: Nicola Rustignoli
-        org: SCION Association
-      -
-        ins: S. Hitz
-        name: Samuel Hitz
-        org: Anapaya Systems
+  RFC1122:
+  RFC1918:
+  RFC2711:
+  RFC4493:
+  RFC9217:
+  RFC9473:
   SCMP:
     title: SCMP Documentation
     date: 2023
