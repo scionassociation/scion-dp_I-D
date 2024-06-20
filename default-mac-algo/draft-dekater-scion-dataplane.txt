@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 21 December 2024                                        S. Hitz
+Expires: 22 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            19 June 2024
+                                                            20 June 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 December 2024.
+   This Internet-Draft will expire on 22 December 2024.
 
 Copyright Notice
 
@@ -1836,10 +1836,8 @@ Table of Contents
 
    The aggregated 16-bit path segment identifier and preceding MACs
    prevents the splicing parts of different path segments, unless there
-   is a per-chance collision among compatible path segments in one AS.
-   Path segments are "compatible" for splicing only if they enter the AS
-   from the same ingress interface and have the same origination
-   timestamp.  With typical numbers of paths in
+   is a per-chance collision of the Acc value among compatible path
+   segments in on AS.  See Section 5.1.3 for more details.
 
    In the following, the computation of the hop field MAC as well as the
    accumulator field Acc is explained.
