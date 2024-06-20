@@ -1138,7 +1138,7 @@ For high-speed packet processing in the **data plane**, computing even cheap ope
 
 When combining path segments to create a path to the destination endpoint, the source endpoint MUST also initialize the value of accumulator field `Acc` for each path segment. The `Acc` field MUST contain the correct XOR-sum of the path segment identifier and preceding hop field MACs expected by the first router that is traversed.
 
-The aggregated 16-bit path segment identifier and preceding MACs prevents the splicing parts of different path segments, unless there is a per-chance collision among compatible path segments in one AS. Path segments are "compatible" for splicing only if they enter the AS from the same ingress interface and have the same origination timestamp. With typical numbers of paths in
+The aggregated 16-bit path segment identifier and preceding MACs prevents the splicing parts of different path segments, unless there is a per-chance collision of the `Acc` value among compatible path segments in on AS. See {{path-splicing}} for more details.
 
 In the following, the computation of the hop field MAC as well as the accumulator field `Acc` is explained.
 
