@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-20T00:00:47.430615+00:00",
+  "timestamp": "2024-06-23T00:00:50.044449+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -253,7 +253,7 @@
       "id": "I_kwDOKYa7786IwuHV",
       "title": "Allowed?",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/11",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [
@@ -264,8 +264,8 @@
       ],
       "body": " >  \\*Note:\\* The current SCION implementation uses the UDP/IP protocol as\r\n   underlay.  However, the use of other underlay protocols is possible\r\n   and allowed.\r\n\r\nThis last sentence makes it seem like one might never run SCION on its own.  Also, \"allowed\" isn't a word we should see in RFCs.",
       "createdAt": "2024-05-14T05:54:10Z",
-      "updatedAt": "2024-06-19T20:43:02Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-21T16:07:50Z",
+      "closedAt": "2024-06-21T16:07:50Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -295,7 +295,7 @@
       "id": "I_kwDOKYa7786I_Qxa",
       "title": "Clarify implications of AS forwarding key compromise",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/12",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -307,8 +307,8 @@
       ],
       "body": "> From:\tJoel Halpern\r\n> Before that, I would also ask them for the data plane document for an analysis of what the implications are if a key shared by all the SCION routers of an AS is compromised.  It is ahrd to tell if the design assumptions are workable without that. \r\n\r\n We should better clarify this, we don't say what an attacker can do if an attacker gets the AS forwarding key. \r\n Current text is: \r\n ```\r\n5.1.1.  Forwarding key compromise\r\n\r\n   For the current default MAC algorithm, AES-CMAC truncated to 48 bits,\r\n   key recovery attacks from (any number of) known plaintext/MAC\r\n   combinations is computationally infeasible, as far as publicly known.\r\n   In addition, the MAC algorithm can be freely chosen by each AS,\r\n   enabling algorithmic agility for MAC computations.  Should a MAC\r\n   algorithm be discovered to be weak or insecure, each AS can quickly\r\n   switch to a secure algorithm without the need for coordination with\r\n   other ASes.\r\n\r\n   A more realistic risk to the secrecy of the forwarding key is\r\n   exfiltration from a compromised router or control plane service.  An\r\n   AS can optionally rotate its forwarding key at regular intervals to\r\n   limit the exposure after a temporary device compromise.  However, as\r\n   is perhaps self-evident, such a key rotation scheme cannot mitigate\r\n   the impact of an undiscovered, permanent compromise of a device.\r\n   ``` ",
       "createdAt": "2024-05-15T15:53:08Z",
-      "updatedAt": "2024-05-16T13:45:33Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-21T15:38:10Z",
+      "closedAt": "2024-06-21T15:38:10Z",
       "comments": []
     },
     {
@@ -414,7 +414,7 @@
       "id": "I_kwDOKYa7786K9vbc",
       "title": "Normative/informative references",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/25",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -424,17 +424,17 @@
         "Prio 2",
         "editorial"
       ],
-      "body": " Make sure the references are righttly placed according to [guidelines](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-normative-and-informative-references-20060419/#:~:text=Normative%20references%20specify%20documents%20that,it%20only%20provides%20additional%20information): \r\n- Normative references: Needed for the specification; specification is based on it.\r\n- Informative references: Provide background/additional information\r\n\r\n\r\nPotential changes: \r\n- [x] I-D.scion-cppki should be normative \r\n- [ ] Several RFCs might be informative\r\n- [x] Check if other drafts affected",
+      "body": " Make sure the references are righttly placed according to [guidelines](https://datatracker.ietf.org/doc/statement-iesg-iesg-statement-normative-and-informative-references-20060419/#:~:text=Normative%20references%20specify%20documents%20that,it%20only%20provides%20additional%20information): \r\n- Normative references: Needed for the specification; specification is based on it.\r\n- Informative references: Provide background/additional information\r\n\r\n\r\nPotential changes: \r\n- [x] I-D.scion-cppki should be normative \r\n- [x] Several RFCs might be informative\r\n- [x] Check if other drafts affected\r\n\r\nRelated issues: \r\nCP https://github.com/scionassociation/scion-cp_I-D/issues/40\r\nPKI: https://github.com/scionassociation/scion-cppki_I-D/issues/32",
       "createdAt": "2024-06-03T15:21:40Z",
-      "updatedAt": "2024-06-19T21:11:00Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-21T15:41:07Z",
+      "closedAt": "2024-06-21T15:41:06Z",
       "comments": [
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "Regarding #28, \r\n\r\n- [x] RFC4493 \"AES-CMAC Algorithm\"  I think it should be normative (as we recently mentioned it must be supported in #26 )\r\n- [ ]  RFC9473\"A Vocabulary of Path  Properties\" should be normative as we use their definition for Endpoint\r\n\r\nAlso, keeping open as this also needs to be resolved in other drafts\r\n\r\n\r\n",
+          "body": "Regarding #28, \r\n\r\n- [x] RFC4493 \"AES-CMAC Algorithm\"  I think it should be normative (as we recently mentioned it must be supported in #26 )\r\n- [ ]  ~RFC9473\"A Vocabulary of Path  Properties\" should be normative as we use their definition for Endpoint~\r\n\r\nAlso, keeping open as this also needs to be resolved in other drafts\r\n\r\n\r\n",
           "createdAt": "2024-06-19T21:04:33Z",
-          "updatedAt": "2024-06-19T21:11:00Z"
+          "updatedAt": "2024-06-20T08:11:20Z"
         }
       ]
     }
@@ -902,24 +902,26 @@
       "id": "PR_kwDOKYa7785wFw5P",
       "title": "Clarify implications of AS forwarding key compromise",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/15",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "matzf",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #12",
       "createdAt": "2024-05-21T14:16:00Z",
-      "updatedAt": "2024-06-14T20:04:07Z",
+      "updatedAt": "2024-06-21T15:38:12Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "84fd87bdc6eeef1dc1a044fab9d05b002c944e8c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "forwarding-key-compromise",
       "headRefOid": "8d24f2eb36a344c21ae8dba39146701a50ab8e25",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-06-21T15:38:09Z",
+      "mergedAt": "2024-06-21T15:38:09Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "7c8e09ae02dd99f7ae7e368e7cc98775818d2fbb"
+      },
       "comments": [],
       "reviews": [
         {
@@ -1060,6 +1062,19 @@
               "updatedAt": "2024-06-06T10:12:45Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785_IeoI",
+          "commit": {
+            "abbreviatedOid": "8d24f2e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Sorry for the delay, thank you for your changes, looks good! ",
+          "createdAt": "2024-06-21T15:37:58Z",
+          "updatedAt": "2024-06-21T15:37:58Z",
+          "comments": []
         }
       ]
     },
@@ -2251,13 +2266,13 @@
       "labels": [],
       "body": "Describe AES-CMAC hop field MAC algorithm as the default which MUST be supported.\r\n\r\n- Moved the details of  the default mac algorithm to _after_ the explanation of the accumulator field (as this is used in the mac input).\r\n- Fixed the swapped info field/hop field labels in the figure depicting the MAC input.\r\n- Describe requriements on alternative MAC implementations, in particular about requirements for MAC chaining\r\n- Describe path splicing is prevented\r\n- Describe how path splicing can still happen in security considerations\r\n\r\n\r\n\r\nContributes to https://github.com/scionassociation/scion-cp_I-D/issues/23.\r\nContributes to https://github.com/scionassociation/scion-dp_I-D/issues/7",
       "createdAt": "2024-06-04T09:43:57Z",
-      "updatedAt": "2024-06-19T21:21:01Z",
+      "updatedAt": "2024-06-21T15:29:40Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "b2bef202896afc48dc1a6395cdcdf2d1ebffc919",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "default-mac-algo",
-      "headRefOid": "7d94ca56304b6822c3e9f843c05ac4816df5d8c7",
+      "headRefOid": "9b992eb13843cf91a7535d7a6499965fdb66fb0f",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -2613,6 +2628,58 @@
               "body": ">  With typical numbers of paths in \r\n\r\nSome part of the sentence is missing? And perhaps, as we attempt to discuss the implications of this in #path-splicing, maybe we could also add a reference to `#path-splicing`?",
               "createdAt": "2024-06-19T21:21:01Z",
               "updatedAt": "2024-06-19T21:28:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-7r4w",
+          "commit": {
+            "abbreviatedOid": "7d94ca5"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-20T06:57:40Z",
+          "updatedAt": "2024-06-20T06:57:40Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Ah good catch. I had started to write the analysis on path splicing here. Shortened, and replaced it with a reference to the security analysis.",
+              "createdAt": "2024-06-20T06:57:40Z",
+              "updatedAt": "2024-06-20T06:57:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785-5zAq",
+          "commit": {
+            "abbreviatedOid": "9b992eb"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Hi @matzf, I propose some text on path splicing, if that works for you, then we could finally merge this.. If not, let's briefly discuss Monday ",
+          "createdAt": "2024-06-19T21:55:35Z",
+          "updatedAt": "2024-06-21T15:29:40Z",
+          "comments": [
+            {
+              "originalPosition": 179,
+              "body": "> global validity \r\n\r\nWhat do you mean exactly? the MAC? \r\n\r\n> A wider security margin against path splicing could be obtained by increasing the width of the segment identifier \r\n\r\nAs far as I understand, the probability of collisions decreases exponentially with the length of this field,  maybe we could mention this? \r\n\r\n> Such a change in the protocol would have to be coordinated with all participating entities (control services, routers, end hosts in all ASes).\r\n\r\nIN this document we specify that the field is 16 bits.. I'd not mention here what is needed to change the field length too in detail.  ",
+              "createdAt": "2024-06-19T21:55:35Z",
+              "updatedAt": "2024-06-21T15:29:40Z"
+            },
+            {
+              "originalPosition": 179,
+              "body": "Some clarifications following our discussion today: \r\n- An attacker cannot make anyone else use this path, It does not affect routing for others\r\n- To create a loop, you'd need two splices at the same time, and this is highly unlikely",
+              "createdAt": "2024-06-20T08:39:29Z",
+              "updatedAt": "2024-06-21T15:29:40Z"
+            },
+            {
+              "originalPosition": 179,
+              "body": "```suggestion\r\nSuccessful path splicing would allow an attacker to briefly use a path that violates an ASes path policy, e.g. making a special transit link available to a customer AS that is not billed accordingly, or violate global validity as a spliced path segment could traverses one or multiple links twice. Loops are excluded as they would require two simultaneous splices.\r\nA wider security margin against path splicing could be obtained by increasing the width of the segment identifier / `Acc` field, e.g. by extending it into the 8-bit reserved field next to it in the info field.\r\n```\r\nProposing an alternative text: \r\n* CLarify that the attacker would use the splice \r\n* Mention that loops would require two simultaneous splices\r\n* Remove discussion about what is needed to change header. I also propose some text to describe loops. ",
+              "createdAt": "2024-06-21T15:28:42Z",
+              "updatedAt": "2024-06-21T15:29:40Z"
             }
           ]
         }
