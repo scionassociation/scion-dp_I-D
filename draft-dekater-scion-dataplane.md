@@ -1474,8 +1474,8 @@ Finally, the hop field MAC protects the 16-bit aggregation of path segment ident
 
 As the segment identifier and aggregation of preceding MACs is only 16-bits wide, per-chance collision among compatible path segments can occur.
 With typical network sizes and numbers of paths of today, such collisions might occur rarely.
-Successful path splicing access may result in a usable path that violates an ASes path policy, e.g. making a special transit link available to a customer AS that is not billed accordingly, or violate global validity as a spliced path segment could traverses one or multiple links twice.
-A wider security margin against path splicing could be obtained by increasing the width of the segment identifier / `Acc` field, e.g by extending it into the 8-bit reserved field next to it in the info field. Such a change in the protocol would have to be coordinated with all participating entities (control services, routers, end hosts in all ASes).
+Successful path splicing would allow an attacker to briefly use a path that violates an ASes path policy, e.g. making a special transit link available to a customer AS that is not billed accordingly, or violate general path segment validity requirements. In particular, a spliced path segment could traverse one or multiple links twice. However, creating a loop traversing a link an arbitrary number of times would involve multiple path splices and therefore multiple random collisions happening simultaneously, which is exceedingly unlikely.
+A wider security margin against path splicing could be obtained by increasing the width of the segment identifier / `Acc` field, e.g. by extending it into the 8-bit reserved field next to it in the info field.
 
 
 ## On-Path Attacks
