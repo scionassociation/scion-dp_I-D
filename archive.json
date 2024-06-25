@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-23T00:00:50.044449+00:00",
+  "timestamp": "2024-06-25T00:00:38.432127+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -2266,13 +2266,13 @@
       "labels": [],
       "body": "Describe AES-CMAC hop field MAC algorithm as the default which MUST be supported.\r\n\r\n- Moved the details of  the default mac algorithm to _after_ the explanation of the accumulator field (as this is used in the mac input).\r\n- Fixed the swapped info field/hop field labels in the figure depicting the MAC input.\r\n- Describe requriements on alternative MAC implementations, in particular about requirements for MAC chaining\r\n- Describe path splicing is prevented\r\n- Describe how path splicing can still happen in security considerations\r\n\r\n\r\n\r\nContributes to https://github.com/scionassociation/scion-cp_I-D/issues/23.\r\nContributes to https://github.com/scionassociation/scion-dp_I-D/issues/7",
       "createdAt": "2024-06-04T09:43:57Z",
-      "updatedAt": "2024-06-21T15:29:40Z",
+      "updatedAt": "2024-06-24T07:59:24Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "b2bef202896afc48dc1a6395cdcdf2d1ebffc919",
+      "baseRefOid": "7c8e09ae02dd99f7ae7e368e7cc98775818d2fbb",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "default-mac-algo",
-      "headRefOid": "9b992eb13843cf91a7535d7a6499965fdb66fb0f",
+      "headRefOid": "22b897f22095746b0fb8c941136aeb2cf66f81bb",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -2680,6 +2680,46 @@
               "body": "```suggestion\r\nSuccessful path splicing would allow an attacker to briefly use a path that violates an ASes path policy, e.g. making a special transit link available to a customer AS that is not billed accordingly, or violate global validity as a spliced path segment could traverses one or multiple links twice. Loops are excluded as they would require two simultaneous splices.\r\nA wider security margin against path splicing could be obtained by increasing the width of the segment identifier / `Acc` field, e.g. by extending it into the 8-bit reserved field next to it in the info field.\r\n```\r\nProposing an alternative text: \r\n* CLarify that the attacker would use the splice \r\n* Mention that loops would require two simultaneous splices\r\n* Remove discussion about what is needed to change header. I also propose some text to describe loops. ",
               "createdAt": "2024-06-21T15:28:42Z",
               "updatedAt": "2024-06-21T15:29:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785_QQjk",
+          "commit": {
+            "abbreviatedOid": "7d94ca5"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-24T07:59:18Z",
+          "updatedAt": "2024-06-24T07:59:18Z",
+          "comments": [
+            {
+              "originalPosition": 179,
+              "body": "Done",
+              "createdAt": "2024-06-24T07:59:18Z",
+              "updatedAt": "2024-06-24T07:59:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7785_QQmm",
+          "commit": {
+            "abbreviatedOid": "9b992eb"
+          },
+          "author": "matzf",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-06-24T07:59:24Z",
+          "updatedAt": "2024-06-24T07:59:24Z",
+          "comments": [
+            {
+              "originalPosition": 179,
+              "body": "Done",
+              "createdAt": "2024-06-24T07:59:24Z",
+              "updatedAt": "2024-06-24T07:59:24Z"
             }
           ]
         }
