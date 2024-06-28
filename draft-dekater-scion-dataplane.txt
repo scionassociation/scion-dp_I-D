@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 23 December 2024                                        S. Hitz
+Expires: 30 December 2024                                        S. Hitz
                                                          Anapaya Systems
-                                                            21 June 2024
+                                                            28 June 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 December 2024.
+   This Internet-Draft will expire on 30 December 2024.
 
 Copyright Notice
 
@@ -1797,7 +1797,9 @@ Table of Contents
 
    *  Preventing malicious endpoints from illegally adding, removing, or
       reordering hops within a path segment created during beaconing in
-      the control plane.
+      the control plane.  In particular, preventing path splicing, i.e.
+      the combination of parts of different valid path segments into a
+      new, unauthorized, path segment.
 
    *  Authentication of the information contained in the hop field
       itself, in particular the ExpTime, ConsIngress, and ConsEgress.
@@ -1832,19 +1834,15 @@ Table of Contents
    preceding hop field MACs expected by the first router that is
    traversed.
 
+   The aggregated 16-bit path segment identifier and preceding MACs
+   prevents the splicing parts of different path segments, unless there
+   is a per-chance collision of the Acc value among compatible path
+   segments in on AS.  See Section 5.1.3 for more details.
+
    In the following, the computation of the hop field MAC as well as the
    accumulator field Acc is explained.
 
-   *Note:* The algorithm used by SCION to compute the hop field MAC is
-   based on the AES-CMAC algorithm, truncated to 48-bits - see also
-   [RFC4493].  In principle, the computation of the MAC is an AS-
-   specific choice; only the control service and routers of the AS need
-   to agree on keys, algorithm, and input for the MAC.  However, note
-   that we do not provide nor specify any mechanism to coordinate AS-
-   specific choices between the routers and the control services of the
-   AS.
-
-4.1.1.1.   MAC - Definition
+4.1.1.1.   Hop Field MAC - Definition
 
    *  Consider a path segment with "n" hops, containing ASes AS_0, ... ,
       AS_(n-1), with forwarding keys K_0, ... , K_(n-1) in this order.
@@ -1853,8 +1851,7 @@ Table of Contents
       segment and that added a random initial 16-bit segment identifier
       SegID to the Segment Info field of the PCB.
 
-   The MAC_i of the hop field of AS_i is now calculated based on the
-   following definition:
+   The MAC_i of the hop field of AS_i is now calculated as:
 
    MAC_i =
    Ck_i (SegID XOR MAC_0 [:2] ... XOR MAC_(i-1) [:2], Timestamp,
@@ -1864,8 +1861,8 @@ Table of Contents
 
    *  k_i = The forwarding key k of the current AS_i
 
-   *  Ck_i (...) = Checksum C over (...) computed with forwarding key
-      k_i
+   *  Ck_i (...) = Cryptographic checksum C over (...) computed with
+      forwarding key k_i
 
    *  SegID = The random initial 16-bit segment identifier set by the
       core AS when creating the corresponding PCB
@@ -1880,39 +1877,18 @@ Table of Contents
    *  ExpTime_i, ConsIngress_i, ConsEgress_i = The content of the hop
       field HF_i
 
-   The above definition implies that the current MAC is based on the
-   XOR-sum of the truncated MACs of all preceding hop fields in the path
-   segment as well as the path segment's SegID.  In other words, the
-   current MAC is _chained_ to all preceding MACs.
+   Thus, the current MAC is based on the XOR-sum of the truncated MACs
+   of all preceding hop fields in the path segment as well as the path
+   segment's SegID.  In other words, the current MAC is _chained_ to all
+   preceding MACs.  In order to effectively prevent path-splicing, the
+   cryptographic checksum function used must ensure that the truncation
+   of the MACs is non-degenerate and roughly uniformly distributed (see
+   Section 4.1.1.4).
 
-4.1.1.2.   Layout of the Input Data for the MAC Calculation
-
-   Figure 18 below shows the layout of the input data to calculate the
-   hop field MAC in the data plane.  The input layout represents the 8
-   bytes of the info field and the first 8 bytes of the hop field, with
-   some fields zeroed out.
-
-   Note that the MAC field itself is only 6 bytes long - see also
-   Section 2.2.3.2.4.
-
-0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-|               0               |           Acc                 |   Hop|
-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| Field|
-|                           Timestamp                           |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| -----+
-|       0       |    ExpTime    |          ConsIngress          |  Info|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Field|
-|          ConsEgress           |               0               |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-
-         Figure 18: Input data to calculate the hop field MAC
-
-4.1.1.3.   Accumulator Acc - Definition
+4.1.1.2.   Accumulator Acc - Definition
 
    The accumulator Acc_i is an updatable counter introduced in the data
-   plane to reduce overhead caused by MAC-chaining for path
+   plane to avoid the overhead caused by MAC-chaining for path
    authorization.  This is achieved by incrementally tracking the XOR-
    sum of the previous MACs as a separate, updatable accumulator field
    Acc, which is part of the path segment's info field InfoField in the
@@ -1927,7 +1903,7 @@ Table of Contents
    |                           Timestamp                           |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-        Figure 19: The Info Field of a specific path segment in the
+        Figure 18: The Info Field of a specific path segment in the
          packet header, with the updatable accumulator field `Acc`.
 
    This is how it works:
@@ -1961,6 +1937,61 @@ Table of Contents
 
    *  MAC_i [:2] = The hop field MAC for the current AS_i, truncated to
       2 bytes
+
+4.1.1.3.   Default Hop Field MAC Algorithm
+
+   The algorithm used to compute the hop field MAC is an AS-specific
+   choice.  The operator of an AS can freely choose any MAC algorithm
+   without outside coordination.  However, the control service and
+   routers of the AS do need to agree on the algorithm used.  All
+   control service and router implementations MUST support the Default
+   Hop Field MAC algorithm described below.
+
+   The default MAC algorithm is AES-CMAC ([RFC4493]) truncated to
+   48-bits, computed over the info field and the first 6 bytes of the
+   hop field, with flags and reserved fields zeroed out.  The input is
+   padded to 16 bytes.  The _first_ 6 bytes of the AES-CMAC output are
+   used as resulting hop field MAC.  Figure 19 below shows the layout of
+   the input data to calculate the hop field MAC.
+
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
+|               0               |           Acc                 |  Info|
+|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| Field|
+|                           Timestamp                           |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| -----+
+|       0       |    ExpTime    |          ConsIngress          |   Hop|
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Field|
+|          ConsEgress           |               0               |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
+
+     Figure 19: Input data to calculate the hop field MAC for the
+                   default hop-field MAC algorithm
+
+4.1.1.4.  Alternative Hop Field MAC Algorithms
+
+   For alternative algorithms, the following requirements MUST all be
+   met: - The hop field MAC field is computed as a function of the
+   secret forwarding key, the Acc, Timestamp fields of the info field
+   and the ExpTime, ConsIngress and ConsEgress fields of the hop field.
+   Function is used in the mathematical sense, that is, for any values
+   of these inputs there is exactly one result. - The algorithm returns
+   an unforgable 48-bit value.  Unforgable specifically means
+   "existentially unforgable under a chosen message attack"
+   ([CRYPTOBOOK]).  Informally, this means an attacker without access to
+   the secret key has no computationally efficient means to create a
+   valid MAC for some attacker chosen input values, even if it has
+   access to an "oracle" providing a valid MAC for any other input
+   values. - The truncation of the result value to the first 2 bytes /
+   16 bits of the result value: - is not degenerate, i.e. any small
+   change in any input value should have an "avalanche effect" on these
+   bits, and - is roughly uniformly distributed when considering all
+   possible input values.
+
+   This additional requirment is naturally satisfied for MAC algorithms
+   based on typical block ciphers or hash algorithms.  It ensures that
+   the MAC chaining via the Acc field is not degenerate.
 
 4.1.2.   Peering Links
 
@@ -2072,7 +2103,7 @@ Table of Contents
           -  The Construction Direction flag C = "1"
 
           -  The value of the Acc = Acc_i.  For more details, see
-             Section 4.1.1.3.
+             Section 4.1.1.2.
 
        *  *Use case 2*
           The path segment is traversed in construction direction and
@@ -2085,7 +2116,7 @@ Table of Contents
           -  The Construction Direction flag C = "1"
 
           -  The value of the Acc = Acc_(i+1).  For more details, see
-             Section 4.1.1.3.
+             Section 4.1.1.2.
 
        *  *Use case 3*
           The path segment is traversed against construction direction.
@@ -2099,7 +2130,7 @@ Table of Contents
           -  The value of the Acc = Acc_(n-1).  This is because seen
              from the direction of beaconing, the source endpoint is the
              last AS in the path segment.  For more details, see
-             Section 4.1.1.1 and Section 4.1.1.3.
+             Section 4.1.1.1 and Section 4.1.1.2.
 
    4.  Besides setting the flags and the Acc field, the source endpoint
        MUST also set the pointers in the CurrInf and CurrHF fields of
@@ -2224,10 +2255,10 @@ direction
                 means that the Acc field of this incoming packet
                 represents the value of Accumulator Acc_(i+1).  However,
                 to compute the MAC_i for the current AS_i, we need the
-                value of Accumulator Acc_i (see Section 4.1.1.3).
+                value of Accumulator Acc_i (see Section 4.1.1.2).
                 Because the border router knows that the formula for
                 Acc_(i+1) = Acc_i XOR MAC_i [:2] (see also
-                Section 4.1.1.3), and because the values of Acc_(i+1)
+                Section 4.1.1.2), and because the values of Acc_(i+1)
                 and MAC_i are known, the router will be able to recover
                 the value Acc_i based on the just-mentioned formula for
                 Acc.
@@ -2334,7 +2365,7 @@ direction
              Otherwise, drop the packet.
 
           -  Compute the value of Acc_(i+1).  For this, use the formula
-             in Section 4.1.1.3.  Replace Acc_i in the formula with the
+             in Section 4.1.1.2.  Replace Acc_i in the formula with the
              current value of the accumulator Acc as set in the Acc
              field of the current info field.
 
@@ -2507,10 +2538,33 @@ direction
 
    In a path-splicing attack, an adversary source endpoint takes valid
    hop fields of multiple path segments and splices them together to
-   obtain a new unauthorized path.  However, SCION’s MAC-chaining
-   mechanism prevents from this kind of attacks.  MAC validation for
-   spliced segments would fail at SCION routers and the corresponding
-   packets would be dropped.  For details, see Section 4.1.
+   obtain a new unauthorized path.
+
+   Two candidates path segments for splicing must have at least one AS
+   interface in common as a connection point.  The path segments must
+   have the same origination timestamp, as this is directly protected by
+   the hop field MAC.  This can occur by chance, or if the two candidate
+   path segments were originated as the same segment that then diverged
+   and converged back.  Finally, the hop field MAC protects the 16-bit
+   aggregation of path segment identifier and preceding MACs.  For
+   details, see Section 4.1.  This MAC chaining prevents splicing even
+   in the case that the AS interface and segment timestamp match.
+
+   As the segment identifier and aggregation of preceding MACs is only
+   16-bits wide, per-chance collision among compatible path segments can
+   occur.  With typical network sizes and numbers of paths of today,
+   such collisions might occur rarely.  Successful path splicing would
+   allow an attacker to briefly use a path that violates an ASes path
+   policy, e.g. making a special transit link available to a customer AS
+   that is not billed accordingly, or violate general path segment
+   validity requirements.  In particular, a spliced path segment could
+   traverse one or multiple links twice.  However, creating a loop
+   traversing a link an arbitrary number of times would involve multiple
+   path splices and therefore multiple random collisions happening
+   simultaneously, which is exceedingly unlikely.  A wider security
+   margin against path splicing could be obtained by increasing the
+   width of the segment identifier / Acc field, e.g. by extending it
+   into the 8-bit reserved field next to it in the info field.
 
 5.2.   On-Path Attacks
 
@@ -2644,6 +2698,10 @@ direction
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
               <https://www.rfc-editor.org/rfc/rfc3168>.
 
+   [RFC4493]  Song, JH., Poovendran, R., Lee, J., and T. Iwata, "The
+              AES-CMAC Algorithm", RFC 4493, DOI 10.17487/RFC4493, June
+              2006, <https://www.rfc-editor.org/rfc/rfc4493>.
+
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
               Infrastructure Certificate and Certificate Revocation List
@@ -2675,6 +2733,10 @@ direction
               ISBN 978-3-031-05287-3, 2022,
               <https://doi.org/10.1007/978-3-031-05288-0>.
 
+   [CRYPTOBOOK]
+              Boneh, D. and V. Shoup, "A Graduate Course in Applied
+              Cryptography", 2023, <https://toc.cryptobook.us/>.
+
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
               DOI 10.17487/RFC1122, October 1989,
@@ -2688,10 +2750,6 @@ direction
    [RFC2711]  Partridge, C. and A. Jackson, "IPv6 Router Alert Option",
               RFC 2711, DOI 10.17487/RFC2711, October 1999,
               <https://www.rfc-editor.org/rfc/rfc2711>.
-
-   [RFC4493]  Song, JH., Poovendran, R., Lee, J., and T. Iwata, "The
-              AES-CMAC Algorithm", RFC 4493, DOI 10.17487/RFC4493, June
-              2006, <https://www.rfc-editor.org/rfc/rfc4493>.
 
    [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
               Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
