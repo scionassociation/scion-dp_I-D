@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-27T00:00:37.526330+00:00",
+  "timestamp": "2024-06-30T00:00:39.486601+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -131,7 +131,7 @@
       "id": "I_kwDOKYa7786BI0h8",
       "title": "Clarify MACs (truncation, path splicing)",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/7",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -143,8 +143,8 @@
       ],
       "body": "When dealing with security considerations #1  , we mention that chained MACs prevent path splicing attacks. This should be better explained, since in the draft we describe how chained MACs work, but not how they prevent path splicing. \r\n\r\n> From Joel Halpern\r\n> The use of only the lower two bytes of the cryptographic value for chaining seems odd.  If you need a 16 bit value, I would have assumed you would at least fold the entire 6 bit signature into thirds, so all the bits have an impact?\r\n\r\nRight, this depends on the MAC algorithm. Safely truncating requires certain MAC algorithms, e.g. ones that have properties of a pseudorandom function. We should clarify this.\r\n\r\n> Both the PCB authentication and the hop authentication use a mechanism that computes the signature over all previous hops.  This seems odd.  If each hop includes the previous hop, that seems to produce an immutable chain at lower cost.  At the very least, an explanation would seem called for.\r\n\r\nThis is to avoid certain path splicing attacks, we have a brief description in the data plane draft 5.1.3.  Path Splicing, but this can be extended. \r\n\r\n> <jmh>  A path splice would still make the following signature invalid.  But what I had missed is that it would not make the final signature invalid.  And you want validation at packet forwarding time to be fast.  Okay, I see why you are chaining them for the hop signature generation.  I guess for the PCB signature you either chain them at generation or you have to validate each one at PCB validation.  So again, I see why you are doing it this way.  A bit more explanation in the draft would be good.   Thanks.</jmh>\r\n\r\nIssue in CP:  https://github.com/scionassociation/scion-cp_I-D/issues/23 \r\n",
       "createdAt": "2024-03-04T11:06:10Z",
-      "updatedAt": "2024-06-04T10:55:17Z",
-      "closedAt": null,
+      "updatedAt": "2024-06-28T07:11:19Z",
+      "closedAt": "2024-06-28T07:11:19Z",
       "comments": []
     },
     {
@@ -2259,24 +2259,26 @@
       "id": "PR_kwDOKYa7785xZv6V",
       "title": "Clarify selection of MAC, elaborate on MAC chaining and path splicing",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/26",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "matzf",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Describe AES-CMAC hop field MAC algorithm as the default which MUST be supported.\r\n\r\n- Moved the details of  the default mac algorithm to _after_ the explanation of the accumulator field (as this is used in the mac input).\r\n- Fixed the swapped info field/hop field labels in the figure depicting the MAC input.\r\n- Describe requriements on alternative MAC implementations, in particular about requirements for MAC chaining\r\n- Describe path splicing is prevented\r\n- Describe how path splicing can still happen in security considerations\r\n\r\n\r\n\r\nContributes to https://github.com/scionassociation/scion-cp_I-D/issues/23.\r\nContributes to https://github.com/scionassociation/scion-dp_I-D/issues/7",
       "createdAt": "2024-06-04T09:43:57Z",
-      "updatedAt": "2024-06-24T07:59:24Z",
+      "updatedAt": "2024-06-28T07:04:30Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "7c8e09ae02dd99f7ae7e368e7cc98775818d2fbb",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "default-mac-algo",
       "headRefOid": "22b897f22095746b0fb8c941136aeb2cf66f81bb",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-06-28T07:04:23Z",
+      "mergedAt": "2024-06-28T07:04:23Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "a059acf11afc3a5a349578035d5a24bbd7887edb"
+      },
       "comments": [],
       "reviews": [
         {
