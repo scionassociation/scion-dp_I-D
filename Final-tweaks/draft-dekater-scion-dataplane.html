@@ -9,26 +9,25 @@
 <meta content="Nicola Rustignoli" name="author">
 <meta content="Samuel Hitz" name="author">
 <meta content="
-       This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The responsibility of the  SCION data plane  is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path. 
-       The SCION data plane fundamentally differs from today's IP-based data plane in that it is  path-aware : In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. SCION also includes its own protocol to communicate failures to endpoints, the SCION Control Message Protocol (SCMP). This protocol will be described in a separate document, which will follow later. 
+       This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION data plane is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path. 
+       The SCION data plane fundamentally differs from today's IP-based data plane in that it is  path-aware : In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. 
     " name="description">
-<meta content="xml2rfc 3.21.0" name="generator">
+<meta content="xml2rfc 3.22.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-dekater-scion-dataplane-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.21.0
-    Python 3.11.9
+  xml2rfc 3.22.0
+    Python 3.12.3
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
-    Jinja2 3.1.2
-    lxml 4.9.3
-    platformdirs 4.2.1
+    Jinja2 3.1.4
+    lxml 4.9.4
+    platformdirs 4.2.2
     pycountry 22.3.5
     PyYAML 6.0.1
-    requests 2.31.0
-    setuptools 68.2.2
-    six 1.16.0
+    requests 2.32.3
+    setuptools 69.5.1
     wcwidth 0.2.13
 -->
 <link href="draft-dekater-scion-dataplane.xml" rel="alternate" type="application/rfc+xml">
@@ -1028,11 +1027,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCION DP</td>
-<td class="right">June 2024</td>
+<td class="right">July 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 5 December 2024</td>
+<td class="center">Expires 5 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-06-03" class="published">3 June 2024</time>
+<time datetime="2024-07-04" class="published">4 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-12-05">5 December 2024</time></dd>
+<dd class="expires"><time datetime="2025-01-05">5 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1071,8 +1070,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">SCION Data Plane</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The responsibility of the <strong>SCION data plane</strong> is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">The SCION data plane fundamentally differs from today's IP-based data plane in that it is <em>path-aware</em>: In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. SCION also includes its own protocol to communicate failures to endpoints, the SCION Control Message Protocol (SCMP). This protocol will be described in a separate document, which will follow later.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION data plane is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">The SCION data plane fundamentally differs from today's IP-based data plane in that it is <em>path-aware</em>: In SCION, interdomain forwarding directives are embedded in the packet header. This document first provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers - these are described, too. The document then shows the life cycle of a SCION packet while traversing the SCION Internet. This is followed by a specification of the SCION path authorization mechanisms and the packet processing at routers.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1104,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 December 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1147,6 +1146,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3.2.2">
                     <p id="section-toc.1-1.1.2.3.2.2.1"><a href="#section-1.3.2" class="auto internal xref">1.3.2</a>.  <a href="#name-intra-domain-forwarding-pro" class="internal xref">Intra-Domain Forwarding Process</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3.2.3">
+                    <p id="section-toc.1-1.1.2.3.2.3.1"><a href="#section-1.3.3" class="auto internal xref">1.3.3</a>.  <a href="#name-configuration" class="internal xref">Configuration</a></p>
 </li>
                 </ul>
 </li>
@@ -1315,9 +1317,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">SCION leverages source-based path selection, where path information is embedded in the packet header - this is called packet-carried forwarding state (PCFS). This section explains how data packets are forwarded through the network, how the SCION inter-domain routing differs from intra-domain routing, and how endpoints can construct end-to-end paths from path segments. It also briefly touches the concept of path authorization, which ensures that data packets always traverse the network along authorized paths.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2"><strong>Note:</strong> This is the very first version of the SCION Data Plane document. We are aware that the draft is far from perfect, and hope to improve the content in later versions of the document. To reach this goal, any feedback is welcome and much appreciated. Thanks!<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3"><strong>Note:</strong> It is assumed that readers of this draft are familiar with the basic concepts of the SCION next-generation inter-domain network architecture. If not, please find more detailed information in the IETF Internet Drafts <span>[<a href="#I-D.scion-overview" class="cite xref">I-D.scion-overview</a>]</span>, <span>[<a href="#I-D.scion-components" class="cite xref">I-D.scion-components</a>]</span>, <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span>, and <span>[<a href="#I-D.scion-cp" class="cite xref">I-D.scion-cp</a>]</span>, as well as in <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span>, especially Chapter 2. A short description of the SCION basic terms and elements can be found in <a href="#terms" class="auto internal xref">Section 1.1</a> below.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-1">SCION is a path-aware internetworking routing architecture as described in <span>[<a href="#RFC9217" class="cite xref">RFC9217</a>]</span>. It allows endpoints and applications to select paths across the network to use for traffic, based on trustworthy path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The data transmission order for SCION is the same as for IPv6 as defined in Introduction of <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">SCION has been developed with the following goals:<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4"><em>Availability</em> - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5"><em>Security</em> - to provide higher levels of trust in routing information in order to prevent traffic hijacking, reduce potential for denial-of-service and other attacks. Endpoints can decide the trust roots they wish to rely on, routing information can be unambiguously attributed to an AS, and packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6"><em>Scalability</em> - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">SCION relies on three main components:<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8"><em>PKI</em> - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called <em>Isolation Domains (ISDs)</em>. All ASes in an ISD agree on a set of trust roots called the <em>Trust Root Configuration (TRC)</em> which is a collection of signed root certificates in X.509 v3 format <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>. The ISD is governed by a set of <em>core ASes</em> which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION control plane relies upon for the authentication of messages that is used for the SCION control plane. See <span>[<a href="#I-D.scion-cppki" class="cite xref">I-D.scion-cppki</a>]</span><a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-9"><em>Control Plane</em> - performs inter-domain routing by discovering and securely disseminating path information between ASes. The core ASes use Path-segment Construction Beacons (PCBs) to explore intra-ISD paths, or to explore paths across different ISDs. See <span>[<a href="#I-D.scion-cp" class="cite xref">I-D.scion-cp</a>]</span><a href="#section-1-9" class="pilcrow">¶</a></p>
+<p id="section-1-10"><em>Data Plane</em> - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS.<a href="#section-1-10" class="pilcrow">¶</a></p>
+<p id="section-1-11">This document describes the SCION Data Plane component.<a href="#section-1-11" class="pilcrow">¶</a></p>
 <div id="terms">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -1326,22 +1336,23 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1-1"><strong>Autonomous System (AS)</strong>: An autonomous system is a network under a common administrative control. For example, the network of an Internet service provider, company, or university can constitute an AS.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.1-2"><strong>Core AS</strong>: Each SCION isolation domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path-discovery and -construction process (in SCION called "beaconing").<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1-3"><strong>Data Plane</strong>: The data plane (sometimes also referred to as the forwarding plane) is responsible for forwarding data packets that endpoints have injected into the network. After routing information has been disseminated by the control plane, packets are forwarded according to such information by the data plane.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
-<p id="section-1.1-4"><strong>Endpoint</strong>: An endpoint is the start- or the endpoint of a SCION path. For example, an endpoint can be a host as defined in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in <span>[<a href="#RFC9473" class="cite xref">RFC9473</a>]</span>.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
+<p id="section-1.1-4"><strong>Endpoint</strong>: An endpoint is the start- or the end of a SCION path. For example, an endpoint can be a host as defined in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span>, or a gateway bridging a SCION and an IP domain. This definition is based on the definition in <span>[<a href="#RFC9473" class="cite xref">RFC9473</a>]</span>.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
 <p id="section-1.1-5"><strong>Forwarding Key</strong>: A forwarding key is a symmetric key that is shared between the control service (control plane) and the routers (data plane) of an AS. It is used to authenticate hop fields in the end-to-end SCION path. The forwarding key is an AS-local secret and is not shared with other ASes.<a href="#section-1.1-5" class="pilcrow">¶</a></p>
 <p id="section-1.1-6"><strong>Forwarding Path</strong>: A forwarding path is a complete end-to-end path between two SCION hosts, which is used to transmit packets in the data plane and can be created with a combination of up to three path segments (an up-segment, a core-segment, and a down-segment).<a href="#section-1.1-6" class="pilcrow">¶</a></p>
 <p id="section-1.1-7"><strong>Hop Field (HF)</strong>: As they traverse the network, path-segment construction beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of hop fields. In the data plane, hop fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.<a href="#section-1.1-7" class="pilcrow">¶</a></p>
 <p id="section-1.1-8"><strong>Info Field (INF)</strong>: Each path-segment construction beacon (PCB) contains a single info field, which provides basic information about the PCB. Together with hop fields (HFs), info fields are used to create forwarding paths.<a href="#section-1.1-8" class="pilcrow">¶</a></p>
-<p id="section-1.1-9"><strong>Isolation Domain (ISD)</strong>: In SCION, autonomous systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g., a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.<a href="#section-1.1-9" class="pilcrow">¶</a></p>
-<p id="section-1.1-10"><strong>Leaf AS</strong>: An AS at the "edge" of an ISD, with no other downstream ASes.<a href="#section-1.1-10" class="pilcrow">¶</a></p>
-<p id="section-1.1-11"><strong>MAC</strong>: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.<a href="#section-1.1-11" class="pilcrow">¶</a></p>
-<p id="section-1.1-12"><strong>Packet-Carried Forwarding State (PCFS)</strong>: Rather than relying on inter-domain forwarding tables, SCION data packets contain all the necessary, cryptographically-protected path information. This property is referred to as packet-carried forwarding state.<a href="#section-1.1-12" class="pilcrow">¶</a></p>
-<p id="section-1.1-13"><strong>Path Authorization</strong>: A requirement for the data plane is that endpoints can only use paths that were constructed and authorized by ASes in the control plane. This property is called path authorization. The goal of path authorization is to prevent endpoints from crafting hop fields (HFs) themselves, modifying HFs in authorized path segments, or combining HFs of different path segments.<a href="#section-1.1-13" class="pilcrow">¶</a></p>
-<p id="section-1.1-14"><strong>Path Control</strong>: Path control is a property of a network architecture that gives endpoints the ability to select how their packets travel through the network. Path control is stronger than path transparency.<a href="#section-1.1-14" class="pilcrow">¶</a></p>
-<p id="section-1.1-15"><strong>Path Segment</strong>: Path segments are derived from path-segment construction beacons (PCBs). A path segment can be (1) an up-segment (i.e., a path between a non-core AS and a core AS in the same ISD), (2) a down-segment (i.e., the same as an up-segment, but in the opposite direction), or (3) a core-segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.<a href="#section-1.1-15" class="pilcrow">¶</a></p>
-<p id="section-1.1-16"><strong>Path-Segment Construction Beacon (PCB)</strong>: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.<a href="#section-1.1-16" class="pilcrow">¶</a></p>
-<p id="section-1.1-17"><strong>Path Transparency</strong>: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.<a href="#section-1.1-17" class="pilcrow">¶</a></p>
-<p id="section-1.1-18"><strong>SCMP</strong>: SCION Control Message Protocol. SCMP is used for signaling connectivity problems, analogous to the Internet Control Message Protocol (ICMP). SCMP provides network diagnostic and error messages.<a href="#section-1.1-18" class="pilcrow">¶</a></p>
-<p id="section-1.1-19"><strong>Valley Route</strong>: A valley route contains ASes that do not profit economically from traffic on this route. The name comes from the fact that such routes go "down" (following parent-child links) before going "up" (following child-parent links).<a href="#section-1.1-19" class="pilcrow">¶</a></p>
+<p id="section-1.1-9"><strong>Interface Identifier (Interface ID)</strong>: 16 bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes. Each interface belongs to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress interfaces). The Interface ID <span class="bcp14">MUST</span> be unique within each AS. Interface ID 0 is not a valid identifier, implementations can use it as the "unspecified" value.<a href="#section-1.1-9" class="pilcrow">¶</a></p>
+<p id="section-1.1-10"><strong>Isolation Domain (ISD)</strong>: In SCION, Autonomous Systems (ASes) are organized into logical groups called isolation domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g., a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.<a href="#section-1.1-10" class="pilcrow">¶</a></p>
+<p id="section-1.1-11"><strong>Leaf AS</strong>: An AS at the "edge" of an ISD, with no other downstream ASes.<a href="#section-1.1-11" class="pilcrow">¶</a></p>
+<p id="section-1.1-12"><strong>MAC</strong>: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.<a href="#section-1.1-12" class="pilcrow">¶</a></p>
+<p id="section-1.1-13"><strong>Packet-Carried Forwarding State (PCFS)</strong>: Rather than relying on inter-domain forwarding tables, SCION data packets contain all the necessary, cryptographically-protected path information. This property is referred to as packet-carried forwarding state.<a href="#section-1.1-13" class="pilcrow">¶</a></p>
+<p id="section-1.1-14"><strong>Path Authorization</strong>: A requirement for the data plane is that endpoints can only use paths that were constructed and authorized by ASes in the control plane. This property is called path authorization. The goal of path authorization is to prevent endpoints from crafting hop fields (HFs) themselves, modifying HFs in authorized path segments, or combining HFs of different path segments.<a href="#section-1.1-14" class="pilcrow">¶</a></p>
+<p id="section-1.1-15"><strong>Path Control</strong>: Path control is a property of a network architecture that gives endpoints the ability to select how their packets travel through the network. Path control is stronger than path transparency.<a href="#section-1.1-15" class="pilcrow">¶</a></p>
+<p id="section-1.1-16"><strong>Path Segment</strong>: Path segments are derived from path-segment construction beacons (PCBs). A path segment can be (1) an up-segment (i.e., a path between a non-core AS and a core AS in the same ISD), (2) a down-segment (i.e., the same as an up-segment, but in the opposite direction), or (3) a core-segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.<a href="#section-1.1-16" class="pilcrow">¶</a></p>
+<p id="section-1.1-17"><strong>Path-Segment Construction Beacon (PCB)</strong>: Core ASes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.<a href="#section-1.1-17" class="pilcrow">¶</a></p>
+<p id="section-1.1-18"><strong>Path Transparency</strong>: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.<a href="#section-1.1-18" class="pilcrow">¶</a></p>
+<p id="section-1.1-19"><strong>Peering Link</strong>: A link between two SCION border routers of different ASes, where at least one of the two ASes is not core. Two peering ASes may be in different ISDs. A peering link can be seen as a short-cut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.<a href="#section-1.1-19" class="pilcrow">¶</a></p>
+<p id="section-1.1-20"><strong>Valley Route</strong>: A valley route contains ASes that do not profit economically from traffic on this route. The name comes from the fact that such routes go "down" (following parent-child links) before going "up" (following child-parent links).<a href="#section-1.1-20" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1360,7 +1371,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         <h3 id="name-overview">
 <a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
         </h3>
-<p id="section-1.3-1">The SCION data plane forwards inter-domain packets between ASes. SCION routers are normally deployed at the edge of an AS, and peer with neighbor SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header. This path information consists of a sequence of hop fields (HFs). Each hop field corresponds to an AS on the path, and it includes an ingress- as well as an egress interface ID, which univocally identify the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-1">The SCION data plane forwards inter-domain packets between SCION-enabled ASes. SCION routers are normally deployed at the edge of an AS, and peer with neighbor SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header. This path information consists of a sequence of hop fields (HFs). Each hop field corresponds to an AS on the path, and it includes an ingress- as well as an egress interface ID, which univocally identify the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
 <p id="section-1.3-2">This concept allows SCION routers to forward packets to a neighbor AS without inspecting the destination address and also without consulting an inter-domain forwarding table. Intra-domain forwarding and routing are based on existing mechanisms (e.g., IP). A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. The last SCION router at the destination AS therefore uses the destination address to forward the packet to the appropriate local endpoint.<a href="#section-1.3-2" class="pilcrow">¶</a></p>
 <p id="section-1.3-3">This SCION design choice has the following advantages:<a href="#section-1.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1396,16 +1407,45 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               <p id="section-1.3.2-3.2.1">The SCION router parses, validates, and authenticates the SCION header.<a href="#section-1.3.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-1.3.2-3.3">
-              <p id="section-1.3.2-3.3.1">The SCION router maps the egress interface ID in the current hop field of the SCION header to the destination "intra-protocol" address of the egress border router (where "intra-protocol" is the intra-domain forwarding protocol, e.g., MPLS or IP).<a href="#section-1.3.2-3.3.1" class="pilcrow">¶</a></p>
+              <p id="section-1.3.2-3.3.1">The SCION router maps the egress interface ID in the current hop field of the SCION header to the destination address of the intra-domain protocol (e.g. MPLS or IP) on the egress border router.<a href="#section-1.3.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-1.3.2-3.4">
-              <p id="section-1.3.2-3.4.1">The packet is forwarded within the AS by routers and switches based on the "intra-protocol" header.<a href="#section-1.3.2-3.4.1" class="pilcrow">¶</a></p>
+              <p id="section-1.3.2-3.4.1">The packet is forwarded within the AS by routers and switches based on the header of the intra-domain protocol.<a href="#section-1.3.2-3.4.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-1.3.2-3.5">
-              <p id="section-1.3.2-3.5.1">Upon receiving the packet, the SCION egress router strips off the "intra-protocol" header, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.<a href="#section-1.3.2-3.5.1" class="pilcrow">¶</a></p>
+              <p id="section-1.3.2-3.5.1">Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.<a href="#section-1.3.2-3.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li id="section-1.3.2-3.6">
+              <p id="section-1.3.2-3.6.1">The last SCION router on the path forwards the packet to the packet's destination endpoint indicated by the field <code>DstHostAddr</code> of <span><a href="#address-header" class="internal xref">the Address Header</a> (<a href="#address-header" class="auto internal xref">Section 2.2.2</a>)</span>.<a href="#section-1.3.2-3.6.1" class="pilcrow">¶</a></p>
 </li>
           </ol>
-<p id="section-1.3.2-4"><strong>Note:</strong> The current SCION implementation uses the UDP/IP protocol as underlay. However, the use of other underlay protocols is possible and allowed.<a href="#section-1.3.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="configuration">
+<section id="section-1.3.3">
+          <h4 id="name-configuration">
+<a href="#section-1.3.3" class="section-number selfRef">1.3.3. </a><a href="#name-configuration" class="section-name selfRef">Configuration</a>
+          </h4>
+<p id="section-1.3.3-1">Border routers require mappings from SCION  interface IDs to underlay addresses. Such information must be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values must be configured. A typical implementation will require:<a href="#section-1.3.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.3.3-2.1">
+              <p id="section-1.3.3-2.1.1">Interface ID.<a href="#section-1.3.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-1.3.3-2.2">
+              <p id="section-1.3.3-2.2.1">Link type (core, parent, child, peer). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.<a href="#section-1.3.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-1.3.3-2.3">
+              <p id="section-1.3.3-2.3.1">Neighbor ISD-AS number.<a href="#section-1.3.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-1.3.3-2.4">
+              <p id="section-1.3.3-2.4.1">For the router that manages the interface: the neighbor interface underlay address.<a href="#section-1.3.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-1.3.3-2.5">
+              <p id="section-1.3.3-2.5.1">For the routers that do not manage the interface:  the address of the intra-domain protocol on the router that does.<a href="#section-1.3.3-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-1.3.3-3">In order to forward traffic to a service endpoint addresse (<code>DT/DS</code> == 0b01 in the <span><a href="#common-header" class="internal xref">common header</a> (<a href="#common-header" class="auto internal xref">Section 2.2.1</a>)</span>), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.<a href="#section-1.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-1.3.3-4"><strong>Note:</strong> The current SCION implementation runs over the UDP/IP protocol. However, the use of other lower layers protocols is possible.<a href="#section-1.3.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1439,9 +1479,9 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         </ul>
 <p id="section-1.4-4"><strong>Note:</strong> The type of segment is known to the endpoint but is not visible in the path header of data packets. Therefore, a SCION router needs to explicitly verify that these rules were followed correctly.<a href="#section-1.4-4" class="pilcrow">¶</a></p>
 <p id="section-1.4-5">Besides enabling the enforcement of path policies, the above rules also protect the economic interest of ASes, as they prevent building "valley paths". A valley path contains ASes that do not profit economically from traffic on this route. The name comes from the fact that such paths go "down" (following parent-child links) before going "up" (following child-parent links).<a href="#section-1.4-5" class="pilcrow">¶</a></p>
-<p id="section-1.4-6"><a href="#_figure-1" class="auto internal xref">Figure 1</a> below shows the different allowed segment combinations.<a href="#section-1.4-6" class="pilcrow">¶</a></p>
+<p id="section-1.4-6"><a href="#_figure-1" class="auto internal xref">Figure 1</a> below shows valid segment combinations.<a href="#section-1.4-6" class="pilcrow">¶</a></p>
 <p id="section-1.4-7"><strong>Note:</strong> It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).<a href="#section-1.4-7" class="pilcrow">¶</a></p>
-<span id="name-illustration-of-possible-pa"></span><div id="_figure-1">
+<span id="name-illustration-of-valid-path-"></span><div id="_figure-1">
 <figure id="figure-1">
           <div class="alignLeft art-text artwork" id="section-1.4-8.1">
 <pre>
@@ -1507,10 +1547,10 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </pre>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-illustration-of-possible-pa" class="selfRef">Illustration of possible path-segment combinations. Each node represents a SCION Autonomous System.</a>
+<a href="#name-illustration-of-valid-path-" class="selfRef">Illustration of valid path-segment combinations. Each node represents a SCION Autonomous System.</a>
           </figcaption></figure>
 </div>
-<p id="section-1.4-9">The following path-segment combinations are allowed:<a href="#section-1.4-9" class="pilcrow">¶</a></p>
+<p id="section-1.4-9">Valid path-segment combinations:<a href="#section-1.4-9" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.4-10.1">
             <p id="section-1.4-10.1.1"><strong>Communication through core ASes</strong>:<a href="#section-1.4-10.1.1" class="pilcrow">¶</a></p>
@@ -1685,7 +1725,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </div>
 <ul class="normal">
 <li class="normal" id="section-2.2.1-5.1">
-              <p id="section-2.2.1-5.1.1"><code>DT/DL/ST/SL</code>: These fields define the endpoint-address type and endpoint-address length for the source and destination endpoint. <code>DT</code> and <code>DL</code> stand for Destination Type and Destination Length, whereas <code>ST</code> and <code>SL</code> stand for Source Type and Source Length. The possible endpoint address length values are 4 bytes, 8 bytes, 12 bytes, and 16 bytes. If some address has a length different from the supported values, the next larger size can be used and the address can be padded with zeros. <a href="#_table-2" class="auto internal xref">Table 2</a> below lists the currently used values for address length. The "type" identifier is only defined in combination with a specific address length. For example, address type "0" is defined as IPv4 in combination with address length 4, but in combination with address length 16, it stands for IPv6. Per address length, several sub-types are possible. <a href="#_table-3" class="auto internal xref">Table 3</a> shows the currently valid allocations of type values to length values.<a href="#section-2.2.1-5.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-5.1.1"><code>DT/DL/ST/SL</code>: These fields define the endpoint-address type and endpoint-address length for the source and destination endpoint. <code>DT</code> and <code>DL</code> stand for Destination Type and Destination Length, whereas <code>ST</code> and <code>SL</code> stand for Source Type and Source Length. The possible endpoint address length values are 4 bytes, 8 bytes, 12 bytes, and 16 bytes. If some address has a length different from the supported values, the next larger size can be used and the address can be padded with zeros. <a href="#_table-2" class="auto internal xref">Table 2</a> below lists the currently used values for address length. The "type" identifier is only defined in combination with a specific address length. For example, address type "0" is defined as IPv4 in combination with address length 4, but in combination with address length 16, it stands for IPv6. Per address length, several sub-types are possible. <a href="#_table-3" class="auto internal xref">Table 3</a> shows the currently assigned combinations of lengths and types.<a href="#section-2.2.1-5.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <span id="name-address-length-values"></span><div id="_table-2">
@@ -1730,8 +1770,8 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               <tr>
                 <th class="text-left" rowspan="1" colspan="1">Length (bytes)</th>
                 <th class="text-left" rowspan="1" colspan="1">Type</th>
-                <th class="text-left" rowspan="1" colspan="1"> Type/Length (binary)</th>
-                <th class="text-left" rowspan="1" colspan="1">Interpretation</th>
+                <th class="text-left" rowspan="1" colspan="1">DT/DL or ST/SL encoding</th>
+                <th class="text-left" rowspan="1" colspan="1">Conventional Use</th>
               </tr>
             </thead>
             <tbody>
@@ -1750,7 +1790,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               <tr>
                 <td class="text-left" rowspan="1" colspan="1">16</td>
                 <td class="text-left" rowspan="1" colspan="1">0</td>
-                <td class="text-left" rowspan="1" colspan="1">0b1100</td>
+                <td class="text-left" rowspan="1" colspan="1">0b0011</td>
                 <td class="text-left" rowspan="1" colspan="1">IPv6</td>
               </tr>
               <tr>
@@ -1762,9 +1802,10 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             </tbody>
           </table>
 </div>
+<p id="section-2.2.1-8">A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint-addresses that is known to be part of the set. <a href="#_table-4" class="auto internal xref">Table 4</a> lists the known services.<a href="#section-2.2.1-8" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.2.1-8.1">
-              <p id="section-2.2.1-8.1.1"><code>RSV</code>: These bits are currently reserved for future use.<a href="#section-2.2.1-8.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.2.1-9.1">
+              <p id="section-2.2.1-9.1.1"><code>RSV</code>: These bits are currently reserved for future use.<a href="#section-2.2.1-9.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1811,7 +1852,61 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               <p id="section-2.2.2-3.3.1"><code>DstHostAddr, SrcHostAddr</code>: Specifies the variable length endpoint address of the destination/source. The accepted type and length are defined in the <code>DT/DL/ST/SL</code> fields of the common header.<a href="#section-2.2.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.2-4"><strong>Note:</strong> For more information on addressing in SCION, see the introduction of the SCION Control Plane Specification (<span>[<a href="#I-D.scion-cp" class="cite xref">I-D.scion-cp</a>]</span>).<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-4">If a service address is implied by the <code>DT/DL</code> or <code>ST/SL</code> field of the common header, the corresponding address field has the following format:<a href="#section-2.2.2-4" class="pilcrow">¶</a></p>
+<span id="name-service-address-format"></span><div id="_figure-20">
+<figure id="figure-5">
+            <div class="alignLeft art-text artwork" id="section-2.2.2-5.1">
+<pre>
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Service Number        |              RSV              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</pre>
+</div>
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<a href="#name-service-address-format" class="selfRef">Service address format</a>
+            </figcaption></figure>
+</div>
+<ul class="normal">
+<li class="normal" id="section-2.2.2-6.1">
+              <p id="section-2.2.2-6.1.1"><code>RSV</code>: reserved for future use<a href="#section-2.2.2-6.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-2.2.2-7">The currently known service numbers are:<a href="#section-2.2.2-7" class="pilcrow">¶</a></p>
+<span id="name-known-service-numbers"></span><div id="_table-4">
+<table class="center" id="table-4">
+            <caption>
+<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#name-known-service-numbers" class="selfRef">Known Service Numbers</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Service Number (hex)</th>
+                <th class="text-left" rowspan="1" colspan="1">Short Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">0x0001</td>
+                <td class="text-left" rowspan="1" colspan="1">DS</td>
+                <td class="text-left" rowspan="1" colspan="1">Discovery Service</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">0x0002</td>
+                <td class="text-left" rowspan="1" colspan="1">CS</td>
+                <td class="text-left" rowspan="1" colspan="1">Control Service</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">0xFFFF</td>
+                <td class="text-left" rowspan="1" colspan="1">None</td>
+                <td class="text-left" rowspan="1" colspan="1">Reserved invalid value</td>
+              </tr>
+            </tbody>
+          </table>
+</div>
+<p id="section-2.2.2-9"><strong>Note:</strong> For more information on addressing in SCION, see the introduction of the SCION Control Plane Specification (<span>[<a href="#I-D.scion-cp" class="cite xref">I-D.scion-cp</a>]</span>).<a href="#section-2.2.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="path-header">
@@ -1850,7 +1945,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-2.2.3.2-1">This section specifies the standard <code>SCION</code> path type.
 A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcrow">¶</a></p>
 <span id="name-layout-of-a-standard-scion-"></span><div id="_figure-5">
-<figure id="figure-5">
+<figure id="figure-6">
               <div class="alignLeft art-text artwork" id="section-2.2.3.2-2.1">
 <pre>
  0                   1                   2                   3
@@ -1881,7 +1976,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
 <a href="#name-layout-of-a-standard-scion-" class="selfRef">Layout of a standard SCION path</a>
               </figcaption></figure>
 </div>
@@ -1897,9 +1992,9 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
                 <p id="section-2.2.3.2-4.3.1">Each hop field (<code>HopField</code>) represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. This information is authenticated with a Message Authentication Code (MAC) to prevent forgery.<a href="#section-2.2.3.2-4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-2.2.3.2-5">The SCION header is created by extracting the required info fields and hop fields from the corresponding path segments. The process of extracting is illustrated in <a href="#_figure-6" class="auto internal xref">Figure 6</a> below. Note that ASes at the joints of multiple segments are represented by two hop fields. Be aware that these hop fields are not equal! In the hop field that represents the last hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two hop fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.<a href="#section-2.2.3.2-5" class="pilcrow">¶</a></p>
+<p id="section-2.2.3.2-5">The SCION header is created by extracting the required info fields and hop fields from the corresponding path segments. The process of extracting is illustrated in <a href="#_figure-6" class="auto internal xref">Figure 7</a> below. Note that ASes at the joints of multiple segments are represented by two hop fields. Be aware that these hop fields are not equal! In the hop field that represents the last hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two hop fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.<a href="#section-2.2.3.2-5" class="pilcrow">¶</a></p>
 <span id="name-path-construction-example"></span><div id="_figure-6">
-<figure id="figure-6">
+<figure id="figure-7">
               <div class="alignLeft art-text artwork" id="section-2.2.3.2-6.1">
 <pre>
                    +-----------------+
@@ -1962,7 +2057,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
                       +----------+
 </pre>
 </div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
 <a href="#name-path-construction-example" class="selfRef">Path construction example</a>
               </figcaption></figure>
 </div>
@@ -1973,7 +2068,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
               </h6>
 <p id="section-2.2.3.2.1-1">The 4-byte Path Meta Header field (<code>PathMetaHdr</code>) defines meta information about the SCION path that is contained in the path header. It has the following format:<a href="#section-2.2.3.2.1-1" class="pilcrow">¶</a></p>
 <span id="name-scion-path-type-format-of-t"></span><div id="_figure-7">
-<figure id="figure-7">
+<figure id="figure-8">
                 <div class="alignLeft art-text artwork" id="section-2.2.3.2.1-2.1">
 <pre>
  0                   1                   2                   3
@@ -1983,7 +2078,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
 <a href="#name-scion-path-type-format-of-t" class="selfRef">SCION path type - Format of the Path Meta Header field</a>
                 </figcaption></figure>
 </div>
@@ -2047,7 +2142,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
               </h6>
 <p id="section-2.2.3.2.3-1">The 8-byte Info Field (<code>InfoField</code>) has the following format:<a href="#section-2.2.3.2.3-1" class="pilcrow">¶</a></p>
 <span id="name-scion-path-type-format-of-th"></span><div id="_figure-8">
-<figure id="figure-8">
+<figure id="figure-9">
                 <div class="alignLeft art-text artwork" id="section-2.2.3.2.3-2.1">
 <pre>
  0                   1                   2                   3
@@ -2059,7 +2154,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-scion-path-type-format-of-th" class="selfRef">SCION path type - Format of the Info Field</a>
                 </figcaption></figure>
 </div>
@@ -2080,7 +2175,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
                   <p id="section-2.2.3.2.3-3.5.1"><code>Acc</code>: This updatable field/counter is required for calculating the MAC in the data plane. <code>Acc</code> stands for "Accumulator". For more details, see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>.<a href="#section-2.2.3.2.3-3.5.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.3.2.3-3.6">
-                  <p id="section-2.2.3.2.3-3.6.1"><code>Timestamp</code>: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp.<a href="#section-2.2.3.2.3-3.6.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.3.2.3-3.6.1"><code>Timestamp</code>: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).<a href="#section-2.2.3.2.3-3.6.1" class="pilcrow">¶</a></p>
 </li>
               </ul>
 </section>
@@ -2092,7 +2187,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
               </h6>
 <p id="section-2.2.3.2.4-1">The 12-byte Hop Field (<code>HopField</code>) has the following format:<a href="#section-2.2.3.2.4-1" class="pilcrow">¶</a></p>
 <span id="name-scion-path-type-format-of-the"></span><div id="_figure-9">
-<figure id="figure-9">
+<figure id="figure-10">
                 <div class="alignLeft art-text artwork" id="section-2.2.3.2.4-2.1">
 <pre>
  0                   1                   2                   3
@@ -2106,7 +2201,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
 <a href="#name-scion-path-type-format-of-the" class="selfRef">SCION path type - Format of the Hop Field</a>
                 </figcaption></figure>
 </div>
@@ -2124,7 +2219,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 <p id="section-2.2.3.2.4-4"><strong>Note:</strong> A sender cannot rely on multiple routers retrieving and processing the payload even if it sets multiple router alert flags. This is use-case dependent: In the case of Traceroute informational messages, for example, the router for which the traceroute request is intended will process the request (if the corresponding Router Alert flag is set to "1") and reply to it without further forwarding the request along the path. Use cases that require multiple routers/hops on the path to process a packet have to instead rely on a hop-by-hop extension (see <a href="#ext-header" class="auto internal xref">Section 2.3</a>). For general information on router alerts, see <span>[<a href="#RFC2711" class="cite xref">RFC2711</a>]</span>.<a href="#section-2.2.3.2.4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.3.2.4-5.1">
-                  <p id="section-2.2.3.2.4-5.1.1"><code>ExpTime</code>: Expiry time of a hop field. The field is 1-byte long, thus there are 256 different values available to express an expiration time. The expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the <code>Timestamp</code> field (from the corresponding info field), as follows:<a href="#section-2.2.3.2.4-5.1.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.3.2.4-5.1.1"><code>ExpTime</code>: Expiration time of a hop field. The field is 1-byte long, thus there are 256 different values available to express an expiration time. The expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the <code>Timestamp</code> field (from the corresponding info field), as follows:<a href="#section-2.2.3.2.4-5.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.3.2.4-5.1.2.1">
                       <p id="section-2.2.3.2.4-5.1.2.1.1"><code>Timestamp</code> + (1 + <code>ExpTime</code>) * (24 hours/256)<a href="#section-2.2.3.2.4-5.1.2.1.1" class="pilcrow">¶</a></p>
@@ -2149,8 +2244,8 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
             </h5>
 <p id="section-2.2.3.3-1">The one-hop path type <code>OneHopPath</code> is currently used to bootstrap beaconing between neighboring ASes. This is necessary, as neighbor ASes do not have a forwarding path yet before beaconing is started.<a href="#section-2.2.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.2.3.3-2">A one-hop path has exactly one info field and two hop fields with the specialty that the second hop field is not known a priori, but is instead created by the ingress SCION border router of the neighboring AS while processing the one-hop path. Any entity with access to the forwarding key of the source endpoint AS can create a valid info and hop field as described in <a href="#inffield" class="auto internal xref">Section 2.2.3.2.3</a> and <a href="#hopfld" class="auto internal xref">Section 2.2.3.2.4</a>, respectively.<a href="#section-2.2.3.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.2.3.3-3">Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the <code>ConsIngress</code> field in the second hop field of the one-hop path with the ingress interface ID. It sets the <code>ConsEgress</code> field to "0", indicating that the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the hop field.<a href="#section-2.2.3.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.2.3.3-4"><a href="#_figure-10" class="auto internal xref">Figure 10</a> below shows the layout of a SCION one-hop path type. There is only a single info field; the appropriate hop field can be processed by a border router based on the source and destination address. In this context, the following rules apply:<a href="#section-2.2.3.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.2.3.3-3">Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the <code>ConsIngress</code> field in the second hop field of the one-hop path with the ingress interface ID. It sets the <code>ConsEgress</code> field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the hop field.<a href="#section-2.2.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.2.3.3-4"><a href="#_figure-10" class="auto internal xref">Figure 11</a> below shows the layout of a SCION one-hop path type. There is only a single info field; the appropriate hop field can be processed by a border router based on the source and destination address. In this context, the following rules apply:<a href="#section-2.2.3.3-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.3.3-5.1">
                 <p id="section-2.2.3.3-5.1.1">At the source endpoint AS, <em>CurrHF := 0</em>.<a href="#section-2.2.3.3-5.1.1" class="pilcrow">¶</a></p>
@@ -2160,7 +2255,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 </li>
             </ul>
 <span id="name-layout-of-the-scion-one-hop"></span><div id="_figure-10">
-<figure id="figure-10">
+<figure id="figure-11">
               <div class="alignLeft art-text artwork" id="section-2.2.3.3-6.1">
 <pre>
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -2172,7 +2267,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
 <a href="#name-layout-of-the-scion-one-hop" class="selfRef">Layout of the SCION one-hop path type</a>
               </figcaption></figure>
 </div>
@@ -2208,7 +2303,6 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 <strong>Note:</strong> For more information on the <code>PathMetaHdr</code> field, see <a href="#PathMetaHdr" class="auto internal xref">Section 2.2.3.2.1</a>.<a href="#section-2.2.3.4-2.4.3" class="pilcrow">¶</a></p>
 </li>
             </ol>
-<p id="section-2.2.3.4-3">A similar mechanism is possible for on-path routers, for example to send SCION Control Message Protocol (SCMP) messages to the sender of the original packet.<a href="#section-2.2.3.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2238,7 +2332,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
           </h4>
 <p id="section-2.3.1-1">The SCION Hop-by-Hop Options and End-to-End Options headers have the following format:<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <span id="name-extension-headers-options-h"></span><div id="_figure-11">
-<figure id="figure-11">
+<figure id="figure-12">
             <div class="alignLeft art-text artwork" id="section-2.3.1-2.1">
 <pre>
  0                   1                   2                   3
@@ -2250,7 +2344,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
 <a href="#name-extension-headers-options-h" class="selfRef">Extension headers: Options header</a>
             </figcaption></figure>
 </div>
@@ -2273,7 +2367,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
             </h5>
 <p id="section-2.3.1.1-1">The <code>Options</code> field of the Hop-by-Hop Options and the End-to-End Options headers carries a variable number of options that are type-length-value (TLV) encoded. Each TLV-encoded option has the following format:<a href="#section-2.3.1.1-1" class="pilcrow">¶</a></p>
 <span id="name-options-field-tlv-encoded-o"></span><div id="_figure-12">
-<figure id="figure-12">
+<figure id="figure-13">
               <div class="alignLeft art-text artwork" id="section-2.3.1.1-2.1">
 <pre>
  0                   1                   2                   3
@@ -2285,7 +2379,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
 <a href="#name-options-field-tlv-encoded-o" class="selfRef">Options field: TLV-encoded options</a>
               </figcaption></figure>
 </div>
@@ -2294,10 +2388,10 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
                 <p id="section-2.3.1.1-3.1.1"><code>OptType</code>: 8-bit identifier of the type of option. The following option types are assigned to the SCION HBH/E2E Options header:<a href="#section-2.3.1.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<span id="name-option-types-of-scion-optio"></span><div id="_table-4">
-<table class="center" id="table-4">
+<span id="name-option-types-of-scion-optio"></span><div id="_table-5">
+<table class="center" id="table-5">
               <caption>
-<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#table-5" class="selfRef">Table 5</a>:
 <a href="#name-option-types-of-scion-optio" class="selfRef">Option types of SCION Options header</a>
               </caption>
 <thead>
@@ -2360,7 +2454,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
               </h6>
 <p id="section-2.3.1.1.1-1">Alignment requirement: none.<a href="#section-2.3.1.1.1-1" class="pilcrow">¶</a></p>
 <span id="name-tlv-encoded-options-pad1-op"></span><div id="_figure-13">
-<figure id="figure-13">
+<figure id="figure-14">
                 <div class="alignLeft art-text artwork" id="section-2.3.1.1.1-2.1">
 <pre>
  0                   1                   2                   3
@@ -2370,7 +2464,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
 <a href="#name-tlv-encoded-options-pad1-op" class="selfRef">TLV-encoded options - Pad1 option</a>
                 </figcaption></figure>
 </div>
@@ -2385,7 +2479,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
               </h6>
 <p id="section-2.3.1.1.2-1">Alignment requirement: none.<a href="#section-2.3.1.1.2-1" class="pilcrow">¶</a></p>
 <span id="name-tlv-encoded-options-padn-op"></span><div id="_figure-14">
-<figure id="figure-14">
+<figure id="figure-15">
                 <div class="alignLeft art-text artwork" id="section-2.3.1.1.2-2.1">
 <pre>
  0                   1                   2                   3
@@ -2397,7 +2491,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
 <a href="#name-tlv-encoded-options-padn-op" class="selfRef">TLV-encoded options - PadN option</a>
                 </figcaption></figure>
 </div>
@@ -2422,7 +2516,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
           </h4>
 <p id="section-2.4.1-1">Any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation <span class="bcp14">MUST</span> use the following pseudo header:<a href="#section-2.4.1-1" class="pilcrow">¶</a></p>
 <span id="name-layout-of-the-pseudo-header"></span><div id="_figure-15">
-<figure id="figure-15">
+<figure id="figure-16">
             <div class="alignLeft art-text artwork" id="section-2.4.1-2.1">
 <pre>
  0                   1                   2                   3
@@ -2446,7 +2540,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </pre>
 </div>
-<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
+<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
 <a href="#name-layout-of-the-pseudo-header" class="selfRef">Layout of the pseudo header for the upper-layer checksum</a>
             </figcaption></figure>
 </div>
@@ -2455,7 +2549,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
               <p id="section-2.4.1-3.1.1"><code>DstISD</code>, <code>SrcISD</code>, <code>DstAS</code>, <code>SrcAS</code>, <code>DstHostAddr</code>, <code>SrcHostAddr</code>: These values are taken from the SCION address header.<a href="#section-2.4.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.4.1-3.2">
-              <p id="section-2.4.1-3.2.1"><code>Upper-Layer Packet Length</code>: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly (e.g., the SCION Control Message Protocol SCMP), use the value from the <code>PayloadLen</code> field in the SCION common header, minus the sum of the extension header lengths.<a href="#section-2.4.1-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.4.1-3.2.1"><code>Upper-Layer Packet Length</code>: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly, use the value from the <code>PayloadLen</code> field in the SCION common header, minus the sum of the extension header lengths.<a href="#section-2.4.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.4.1-3.3">
               <p id="section-2.4.1-3.3.1"><code>Next Header</code>: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also <a href="#protnum" class="auto internal xref">Appendix "Assigned SCION Protocol Numbers"</a>). This field can differ from the <code>NextHdr</code> field in the SCION common header, if extensions are present.<a href="#section-2.4.1-3.3.1" class="pilcrow">¶</a></p>
@@ -2480,7 +2574,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-description" class="section-name selfRef">Description</a>
         </h3>
 <span id="name-sample-topology-to-illustra"></span><div id="_figure-16">
-<figure id="figure-16">
+<figure id="figure-17">
           <div class="alignLeft art-text artwork" id="section-3.1-1.1">
 <pre>
                     +--------------------+
@@ -2512,11 +2606,11 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 +--------------------+
 </pre>
 </div>
-<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
 <a href="#name-sample-topology-to-illustra" class="selfRef">Sample topology to illustrate the life cycle of a SCION packet. AS 1 is the core AS of ISD 1, and AS 2 and AS 3 are non-core ASes of ISD 1.</a>
           </figcaption></figure>
 </div>
-<p id="section-3.1-2">Based on the network topology in <a href="#_figure-16" class="auto internal xref">Figure 16</a> above, this example shows the path of a SCION packet sent from source endpoint A to destination endpoint B, and how it will be processed by each router on the path. This is done by means of simplified snapshots of the packet header after each such processing step. These snapshots, which are depicted in tables, show the most relevant information of the header, i.e., the SCION path and IP encapsulation for local communication.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">Based on the network topology in <a href="#_figure-16" class="auto internal xref">Figure 17</a> above, this example shows the path of a SCION packet sent from source endpoint A to destination endpoint B, and how it will be processed by each router on the path. This is done by means of simplified snapshots of the packet header after each such processing step. These snapshots, which are depicted in tables, show the most relevant information of the header, i.e., the SCION path and IP encapsulation for local communication.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="creating-an-end-to-end-scion-forwarding-path">
@@ -2537,16 +2631,16 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
         <h3 id="name-step-by-step-explanation">
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-step-by-step-explanation" class="section-name selfRef">Step-by-Step Explanation</a>
         </h3>
-<p id="section-3.3-1">This section explains the packet header modifications at each router, based on the network topology in <a href="#_figure-16" class="auto internal xref">Figure 16</a> above. Each step includes a table that represents a simplified snapshot of the packet header at the end of this specific step. Regarding the notation used in the figure/tables, each SRC and DST entry should be read as router (or endpoint) followed by its address. The current info field (with metadata on the current path segment) in the SCION header is depicted italic/cursive in the tables. The current hop field, representing the current AS, is shown bold. The snapshot tables also include references to IP/UDP addresses.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-1">This section explains the packet header modifications at each router, based on the network topology in <a href="#_figure-16" class="auto internal xref">Figure 17</a> above. Each step includes a table that represents a simplified snapshot of the packet header at the end of this specific step. Regarding the notation used in the figure/tables, each SRC and DST entry should be read as router (or endpoint) followed by its address. The current info field (with metadata on the current path segment) in the SCION header is depicted italic/cursive in the tables. The current hop field, representing the current AS, is shown bold. The snapshot tables also include references to IP/UDP addresses.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3-2"><strong>Note:</strong> In this context, a border router is called <strong>ingress</strong> border router when it refers to an entrance border router to an AS, as seen from the direction of travel of the SCION packet. So in the context here, the ingress border router is the <em>(packet) incoming</em> border router. A border router is called <strong>egress</strong> border router when it refers to an exit border router of an AS, as seen from the direction of travel of the SCION packet. So in this context, the egress border router is the <em>(packet) leaving</em> border router.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.3-3.1">
             <p id="section-3.3-3.1.1"><em>Step 1</em> <br> <strong>A-&gt;R1</strong>: The SCION-enabled source endpoint A in AS 2 creates a new SCION packet destined for destination endpoint B in AS 3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case R1. A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to R1, utilizing AS 2's internal routing protocol. The current info field is <em>IF1</em>. Upon receiving the packet, R1 will forward the packet on the egress interface that endpoint A has included into the first hop field of the SCION header.<a href="#section-3.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-1"></span><table class="center" id="table-5">
+<span id="name-snapshot-header-step-1"></span><table class="center" id="table-6">
           <caption>
-<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#table-6" class="selfRef">Table 6</a>:
 <a href="#name-snapshot-header-step-1" class="selfRef">Snapshot header - step 1</a>
           </caption>
 <thead>
@@ -2608,9 +2702,9 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 <p id="section-3.3-5.1.2"><strong>Note:</strong> Although technically there is no need for a UDP/IP underlay if two routers are directly connected, the SCION implementation always uses a UDP/IP underlay in practice. This is to enable a common interface for all routers.<a href="#section-3.3-5.1.2" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-2"></span><table class="center" id="table-6">
+<span id="name-snapshot-header-step-2"></span><table class="center" id="table-7">
           <caption>
-<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#table-7" class="selfRef">Table 7</a>:
 <a href="#name-snapshot-header-step-2" class="selfRef">Snapshot header - step 2</a>
           </caption>
 <thead>
@@ -2656,9 +2750,9 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
             <p id="section-3.3-7.1.1"><em>Step 3</em> <br> <strong>R2-&gt;R3</strong>: When receiving the packet, router R2 of core AS 1 checks whether the packet has been received through the ingress interface i1a as specified by the current hop field. Otherwise, the packet is dropped by router R2. The router notices that it has consumed the last hop field of the current path segment, and hence moves the pointer from the current info field to the next info field <em>IF2</em>. The corresponding current hop field is (0,i1b), which contains egress interface i1b. R2 maps the i1b interface ID to egress router R3, it therefore encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of R3 as the underlay destination.<a href="#section-3.3-7.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-3"></span><table class="center" id="table-7">
+<span id="name-snapshot-header-step-3"></span><table class="center" id="table-8">
           <caption>
-<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#table-8" class="selfRef">Table 8</a>:
 <a href="#name-snapshot-header-step-3" class="selfRef">Snapshot header - step 3</a>
           </caption>
 <thead>
@@ -2719,9 +2813,9 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
             <p id="section-3.3-9.1.1"><em>Step 4</em> <br> <strong>R3-&gt;R4</strong>: Router R3 inspects the current hop field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION router R4 of AS 3, and moves the current hop-field pointer forward. It adds an IP header to reach R4.<a href="#section-3.3-9.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-4"></span><table class="center" id="table-8">
+<span id="name-snapshot-header-step-4"></span><table class="center" id="table-9">
           <caption>
-<a href="#table-8" class="selfRef">Table 8</a>:
+<a href="#table-9" class="selfRef">Table 9</a>:
 <a href="#name-snapshot-header-step-4" class="selfRef">Snapshot header - step 4</a>
           </caption>
 <thead>
@@ -2782,9 +2876,9 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
             <p id="section-3.3-11.1.1"><em>Step 5</em> <br> <strong>R4-&gt;B</strong>: SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current hop field. R4 will then also realize, based on the fields <code>CurrHF</code> and <code>SegLen</code> in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next info or hop field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination and with itself as source. The intra-domain forwarding can now deliver the packet to destination endpoint B.<a href="#section-3.3-11.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-5"></span><table class="center" id="table-9">
+<span id="name-snapshot-header-step-5"></span><table class="center" id="table-10">
           <caption>
-<a href="#table-9" class="selfRef">Table 9</a>:
+<a href="#table-10" class="selfRef">Table 10</a>:
 <a href="#name-snapshot-header-step-5" class="selfRef">Snapshot header - step 5</a>
           </caption>
 <thead>
@@ -2866,7 +2960,8 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 <p id="section-4.1.1-1">The MAC in the hop fields of a SCION path has two purposes:<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.1.1-2.1">
-              <p id="section-4.1.1-2.1.1">Preventing malicious endpoints from illegally adding, removing, or reordering hops within a path segment created during beaconing in the control plane.<a href="#section-4.1.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.1-2.1.1">Preventing malicious endpoints from illegally adding, removing, or reordering hops within a path segment created during beaconing in the control plane.
+In particular, preventing path splicing, i.e. the combination of parts of different valid path segments into a new, unauthorized, path segment.<a href="#section-4.1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.1.1-2.2">
               <p id="section-4.1.1-2.2.1">Authentication of the information contained in the hop field itself, in particular the <code>ExpTime</code>, <code>ConsIngress</code>, and <code>ConsEgress</code>.<a href="#section-4.1.1-2.2.1" class="pilcrow">¶</a></p>
@@ -2876,12 +2971,12 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 <p id="section-4.1.1-4">When originating a path-segment construction beacon PCB in the <strong>control plane</strong>, a core AS chooses a random 16-bit value as segment identifier <code>SegID</code> for the path segment and includes it in the PCB's <code>Segment Info</code> component. In the control plane, each AS<sub>i</sub> on the path segment computes the MAC for the current hop HF<sub>i</sub>, based on the value of <code>SegID</code> and the MACs of the preceding hop entries. Here, the full XOR-sum is computed explicitly.<a href="#section-4.1.1-4" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-5">For high-speed packet processing in the <strong>data plane</strong>, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC-chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each (of the up to three) path segments in a path, as a separate, updatable accumulator field <code>Acc</code>. The routers update the accumulator field <code>Acc</code> by adding/subtracting only a single 16-bit value each.<a href="#section-4.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-6">When combining path segments to create a path to the destination endpoint, the source endpoint <span class="bcp14">MUST</span> also initialize the value of accumulator field <code>Acc</code> for each path segment. The <code>Acc</code> field <span class="bcp14">MUST</span> contain the correct XOR-sum of the path segment identifier and preceding hop field MACs expected by the first router that is traversed.<a href="#section-4.1.1-6" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-7">In the following, the computation of the hop field MAC as well as the accumulator field <code>Acc</code> is explained.<a href="#section-4.1.1-7" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-8"><strong>Note:</strong> The algorithm used by SCION to compute the hop field MAC is based on the AES-CMAC algorithm, truncated to 48-bits - see also <span>[<a href="#RFC4493" class="cite xref">RFC4493</a>]</span>. In principle, the computation of the MAC is an AS-specific choice; only the control service and routers of the AS need to agree on keys, algorithm, and input for the MAC. However, note that we do not provide nor specify any mechanism to coordinate AS-specific choices between the routers and the control services of the AS.<a href="#section-4.1.1-8" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-7">The aggregated 16-bit path segment identifier and preceding MACs prevents the splicing parts of different path segments, unless there is a per-chance collision of the <code>Acc</code> value among compatible path segments in on AS. See <a href="#path-splicing" class="auto internal xref">Section 5.1.3</a> for more details.<a href="#section-4.1.1-7" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-8">In the following, the computation of the hop field MAC as well as the accumulator field <code>Acc</code> is explained.<a href="#section-4.1.1-8" class="pilcrow">¶</a></p>
 <div id="def-mac">
 <section id="section-4.1.1.1">
-            <h5 id="name-mac-definition">
-<a href="#section-4.1.1.1" class="section-number selfRef">4.1.1.1. </a><a href="#name-mac-definition" class="section-name selfRef">MAC - Definition</a>
+            <h5 id="name-hop-field-mac-definition">
+<a href="#section-4.1.1.1" class="section-number selfRef">4.1.1.1. </a><a href="#name-hop-field-mac-definition" class="section-name selfRef">Hop Field MAC - Definition</a>
             </h5>
 <ul class="normal">
 <li class="normal" id="section-4.1.1.1-1.1">
@@ -2891,7 +2986,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
                 <p id="section-4.1.1.1-1.2.1">AS<sub>0</sub> is the core AS that created the PCB representing the path segment and that added a random initial 16-bit segment identifier <code>SegID</code> to the <code>Segment Info</code> field of the PCB.<a href="#section-4.1.1.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-4.1.1.1-2">The MAC<sub>i</sub> of the hop field of AS<sub>i</sub> is now calculated based on the following definition:<a href="#section-4.1.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.1-2">The MAC<sub>i</sub> of the hop field of AS<sub>i</sub> is now calculated as:<a href="#section-4.1.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1.1.1-3">MAC<sub>i</sub> = <br> Ck<sub>i</sub> (<code>SegID</code> XOR MAC<sub>0</sub> [:2] ... XOR MAC<sub>i-1</sub> [:2], Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)<a href="#section-4.1.1.1-3" class="pilcrow">¶</a></p>
 <p id="section-4.1.1.1-4">where<a href="#section-4.1.1.1-4" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2899,7 +2994,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
                 <p id="section-4.1.1.1-5.1.1">k<sub>i</sub> = The forwarding key k of the current AS<sub>i</sub><a href="#section-4.1.1.1-5.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-4.1.1.1-5.2">
-                <p id="section-4.1.1.1-5.2.1">Ck<sub>i</sub> (...) = Checksum C over (...) computed with forwarding key k<sub>i</sub><a href="#section-4.1.1.1-5.2.1" class="pilcrow">¶</a></p>
+                <p id="section-4.1.1.1-5.2.1">Ck<sub>i</sub> (...) = Cryptographic checksum C over (...) computed with forwarding key k<sub>i</sub><a href="#section-4.1.1.1-5.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-4.1.1.1-5.3">
                 <p id="section-4.1.1.1-5.3.1"><code>SegID</code> = The random initial 16-bit segment identifier set by the core AS when creating the corresponding PCB<a href="#section-4.1.1.1-5.3.1" class="pilcrow">¶</a></p>
@@ -2917,48 +3012,19 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
                 <p id="section-4.1.1.1-5.7.1">ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub> = The content of the hop field HF<sub>i</sub><a href="#section-4.1.1.1-5.7.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-4.1.1.1-6">The above definition implies that the current MAC is based on the XOR-sum of the truncated MACs of all preceding hop fields in the path segment as well as the path segment's <code>SegID</code>. In other words, the current MAC is <em>chained</em> to all preceding MACs.<a href="#section-4.1.1.1-6" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="layout-of-the-input-data-for-the-mac-calculation">
-<section id="section-4.1.1.2">
-            <h5 id="name-layout-of-the-input-data-fo">
-<a href="#section-4.1.1.2" class="section-number selfRef">4.1.1.2. </a><a href="#name-layout-of-the-input-data-fo" class="section-name selfRef">Layout of the Input Data for the MAC Calculation</a>
-            </h5>
-<p id="section-4.1.1.2-1"><a href="#_figure-17" class="auto internal xref">Figure 17</a> below shows the layout of the input data to calculate the hop field MAC in the data plane. The input layout represents the 8 bytes of the info field and the first 8 bytes of the hop field, with some fields zeroed out.<a href="#section-4.1.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.2-2">Note that the MAC field itself is only 6 bytes long - see also <a href="#hopfld" class="auto internal xref">Section 2.2.3.2.4</a>.<a href="#section-4.1.1.2-2" class="pilcrow">¶</a></p>
-<span id="name-input-data-to-calculate-the"></span><div id="_figure-17">
-<figure id="figure-17">
-              <div class="alignLeft art-text artwork" id="section-4.1.1.2-3.1">
-<pre>
-0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-|               0               |           Acc                 |   Hop|
-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| Field|
-|                           Timestamp                           |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| -----+
-|       0       |    ExpTime    |          ConsIngress          |  Info|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Field|
-|          ConsEgress           |               0               |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-</pre>
-</div>
-<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
-<a href="#name-input-data-to-calculate-the" class="selfRef">Input data to calculate the hop field MAC</a>
-              </figcaption></figure>
-</div>
+<p id="section-4.1.1.1-6">Thus, the current MAC is based on the XOR-sum of the truncated MACs of all preceding hop fields in the path segment as well as the path segment's <code>SegID</code>. In other words, the current MAC is <em>chained</em> to all preceding MACs.
+In order to effectively prevent path-splicing, the cryptographic checksum function used must ensure that the truncation of the MACs is non-degenerate and roughly uniformly distributed (see <a href="#mac-requirements" class="auto internal xref">Section 4.1.1.4</a>).<a href="#section-4.1.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="def-acc">
-<section id="section-4.1.1.3">
+<section id="section-4.1.1.2">
             <h5 id="name-accumulator-acc-definition">
-<a href="#section-4.1.1.3" class="section-number selfRef">4.1.1.3. </a><a href="#name-accumulator-acc-definition" class="section-name selfRef">Accumulator Acc - Definition</a>
+<a href="#section-4.1.1.2" class="section-number selfRef">4.1.1.2. </a><a href="#name-accumulator-acc-definition" class="section-name selfRef">Accumulator Acc - Definition</a>
             </h5>
-<p id="section-4.1.1.3-1">The accumulator Acc<sub>i</sub> is an updatable counter introduced in the data plane to reduce overhead caused by MAC-chaining for path authorization. This is achieved by incrementally tracking the XOR-sum of the previous MACs as a separate, updatable accumulator field <code>Acc</code>, which is part of the path segment's info field <code>InfoField</code> in the packet header (see also <a href="#inffield" class="auto internal xref">Section 2.2.3.2.3</a>). Routers update this field by adding/subtracting only a single 16-bit value each.<a href="#section-4.1.1.3-1" class="pilcrow">¶</a></p>
-<span id="name-the-info-field-of-a-specifi"></span><div id="_figure-18">
+<p id="section-4.1.1.2-1">The accumulator Acc<sub>i</sub> is an updatable counter introduced in the data plane to avoid the overhead caused by MAC-chaining for path authorization. This is achieved by incrementally tracking the XOR-sum of the previous MACs as a separate, updatable accumulator field <code>Acc</code>, which is part of the path segment's info field <code>InfoField</code> in the packet header (see also <a href="#inffield" class="auto internal xref">Section 2.2.3.2.3</a>). Routers update this field by adding/subtracting only a single 16-bit value each.<a href="#section-4.1.1.2-1" class="pilcrow">¶</a></p>
+<span id="name-the-info-field-of-a-specifi"></span><div id="_figure-17">
 <figure id="figure-18">
-              <div class="alignLeft art-text artwork" id="section-4.1.1.3-2.1">
+              <div class="alignLeft art-text artwork" id="section-4.1.1.2-2.1">
 <pre>
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -2973,22 +3039,71 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 <a href="#name-the-info-field-of-a-specifi" class="selfRef">The Info Field of a specific path segment in the packet header, with the updatable accumulator field `Acc`.</a>
               </figcaption></figure>
 </div>
-<p id="section-4.1.1.3-3">This is how it works:<a href="#section-4.1.1.3-3" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3-4"><a href="#def-mac" class="auto internal xref">Section 4.1.1.1</a> defines MAC<sub>i</sub> as follows:<a href="#section-4.1.1.3-4" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3-5">MAC<sub>i</sub> = <br> Ck<sub>i</sub> (<code>SegID</code> XOR MAC<sub>0</sub> [:2] ... XOR MAC<sub>i-1</sub> [:2], Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)<a href="#section-4.1.1.3-5" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3-6">In the data plane, the expression <code>SegID XOR MAC_0 [:2] ... XOR MAC_i-1 [:2]</code> is replaced by Acc<sub>i</sub>. This results in the following alternative procedure for the computation of MAC<sub>i</sub> used in the data plane:<a href="#section-4.1.1.3-6" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3-7">MAC<sub>i</sub> = Ck<sub>i</sub> (Acc<sub>i</sub>, Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)<a href="#section-4.1.1.3-7" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3-8">During forwarding in the data plane, each AS<sub>i</sub> updates the <code>Acc</code> field in the packet header, such, that it contains the correct input value of the Accumulator Acc for the next AS in the path segment to be able to calculate the MAC over its hop field. Note that the correct input value of the <code>Acc</code> field depends on the direction of travel.<a href="#section-4.1.1.3-8" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3-9">The value of the accumulator Acc<sub>i+1</sub> is calculated based on the following definition (in the direction of beaconing):<a href="#section-4.1.1.3-9" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3-10">Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> [:2]<a href="#section-4.1.1.3-10" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-3">This is how it works:<a href="#section-4.1.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-4"><a href="#def-mac" class="auto internal xref">Section 4.1.1.1</a> defines MAC<sub>i</sub> as follows:<a href="#section-4.1.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-5">MAC<sub>i</sub> = <br> Ck<sub>i</sub> (<code>SegID</code> XOR MAC<sub>0</sub> [:2] ... XOR MAC<sub>i-1</sub> [:2], Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)<a href="#section-4.1.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-6">In the data plane, the expression <code>SegID XOR MAC_0 [:2] ... XOR MAC_i-1 [:2]</code> is replaced by Acc<sub>i</sub>. This results in the following alternative procedure for the computation of MAC<sub>i</sub> used in the data plane:<a href="#section-4.1.1.2-6" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-7">MAC<sub>i</sub> = Ck<sub>i</sub> (Acc<sub>i</sub>, Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)<a href="#section-4.1.1.2-7" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-8">During forwarding in the data plane, each AS<sub>i</sub> updates the <code>Acc</code> field in the packet header, such, that it contains the correct input value of the Accumulator Acc for the next AS in the path segment to be able to calculate the MAC over its hop field. Note that the correct input value of the <code>Acc</code> field depends on the direction of travel.<a href="#section-4.1.1.2-8" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-9">The value of the accumulator Acc<sub>i+1</sub> is calculated based on the following definition (in the direction of beaconing):<a href="#section-4.1.1.2-9" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.2-10">Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> [:2]<a href="#section-4.1.1.2-10" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.1.1.3-11.1">
-                <p id="section-4.1.1.3-11.1.1">XOR = The bitwise "exclusive or" operation<a href="#section-4.1.1.3-11.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.1.1.2-11.1">
+                <p id="section-4.1.1.2-11.1.1">XOR = The bitwise "exclusive or" operation<a href="#section-4.1.1.2-11.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1.1.3-11.2">
-                <p id="section-4.1.1.3-11.2.1">MAC<sub>i</sub> [:2] = The hop field MAC for the current AS<sub>i</sub>, truncated to 2 bytes<a href="#section-4.1.1.3-11.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-4.1.1.2-11.2">
+                <p id="section-4.1.1.2-11.2.1">MAC<sub>i</sub> [:2] = The hop field MAC for the current AS<sub>i</sub>, truncated to 2 bytes<a href="#section-4.1.1.2-11.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+</section>
+</div>
+<div id="default-hop-field-mac-algorithm">
+<section id="section-4.1.1.3">
+            <h5 id="name-default-hop-field-mac-algor">
+<a href="#section-4.1.1.3" class="section-number selfRef">4.1.1.3. </a><a href="#name-default-hop-field-mac-algor" class="section-name selfRef">Default Hop Field MAC Algorithm</a>
+            </h5>
+<p id="section-4.1.1.3-1">The algorithm used to compute the hop field MAC is an AS-specific choice. The operator of an AS can freely choose any MAC algorithm without outside coordination. However, the control service and routers of the AS do need to agree on the algorithm used.
+All control service and router implementations <span class="bcp14">MUST</span> support the Default Hop Field MAC algorithm described below.<a href="#section-4.1.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.3-2">The default MAC algorithm is AES-CMAC (<span>[<a href="#RFC4493" class="cite xref">RFC4493</a>]</span>) truncated to 48-bits, computed over the info field and the first 6 bytes of the hop field, with flags and reserved fields zeroed out. The input is padded to 16 bytes. The <em>first</em> 6 bytes of the AES-CMAC output are used as resulting hop field MAC.
+<a href="#_figure-18" class="auto internal xref">Figure 19</a> below shows the layout of the input data to calculate the hop field MAC.<a href="#section-4.1.1.3-2" class="pilcrow">¶</a></p>
+<span id="name-input-data-to-calculate-the"></span><div id="_figure-18">
+<figure id="figure-19">
+              <div class="alignLeft art-text artwork" id="section-4.1.1.3-3.1">
+<pre>
+0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
+|               0               |           Acc                 |  Info|
+|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| Field|
+|                           Timestamp                           |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| -----+
+|       0       |    ExpTime    |          ConsIngress          |   Hop|
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Field|
+|          ConsEgress           |               0               |      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
+</pre>
+</div>
+<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
+<a href="#name-input-data-to-calculate-the" class="selfRef">Input data to calculate the hop field MAC for the default hop-field MAC algorithm</a>
+              </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="mac-requirements">
+<section id="section-4.1.1.4">
+            <h5 id="name-alternative-hop-field-mac-a">
+<a href="#section-4.1.1.4" class="section-number selfRef">4.1.1.4. </a><a href="#name-alternative-hop-field-mac-a" class="section-name selfRef">Alternative Hop Field MAC Algorithms</a>
+            </h5>
+<p id="section-4.1.1.4-1">For alternative algorithms, the following requirements <span class="bcp14">MUST</span> all be met:
+- The hop field MAC field is computed as a function of the secret forwarding key, the <code>Acc</code>, <code>Timestamp</code> fields of the info field and the <code>ExpTime</code>, <code>ConsIngress</code> and <code>ConsEgress</code> fields of the hop field.
+  Function is used in the mathematical sense, that is, for any values of these inputs there is exactly one result.
+- The algorithm returns an unforgable 48-bit value.
+  Unforgable specifically means "existentially unforgable under a chosen message attack" (<span>[<a href="#CRYPTOBOOK" class="cite xref">CRYPTOBOOK</a>]</span>). Informally, this means an attacker without access to the secret key has no computationally efficient means to create a valid MAC for some attacker chosen input values, even if it has access to an "oracle" providing a valid MAC for any other input values.
+- The truncation of the result value to the first 2 bytes / 16 bits of the result value:
+    - is not degenerate, i.e. any small change in any input value should have an "avalanche effect" on these bits, and
+    - is roughly uniformly distributed when considering all possible input values.<a href="#section-4.1.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.4-2">This additional requirment is naturally satisfied for MAC algorithms based on typical block ciphers or hash algorithms.
+  It ensures that the MAC chaining via the <code>Acc</code> field is not degenerate.<a href="#section-4.1.1.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3057,7 +3172,7 @@ The following <code>InfoField</code> settings are possible, based on the followi
                       <p id="section-4.2.1-2.3.5.1.2.2.1">The Construction Direction flag <code>C</code> = "1"<a href="#section-4.2.1-2.3.5.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
                     <li class="normal" id="section-4.2.1-2.3.5.1.2.3">
-                      <p id="section-4.2.1-2.3.5.1.2.3.1">The value of the <code>Acc</code> = Acc<sub>i</sub>. For more details, see <a href="#def-acc" class="auto internal xref">Section 4.1.1.3</a>.<a href="#section-4.2.1-2.3.5.1.2.3.1" class="pilcrow">¶</a></p>
+                      <p id="section-4.2.1-2.3.5.1.2.3.1">The value of the <code>Acc</code> = Acc<sub>i</sub>. For more details, see <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>.<a href="#section-4.2.1-2.3.5.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
                   </ul>
 </li>
@@ -3071,7 +3186,7 @@ The following <code>InfoField</code> settings are possible, based on the followi
                       <p id="section-4.2.1-2.3.5.2.2.2.1">The Construction Direction flag <code>C</code> = "1"<a href="#section-4.2.1-2.3.5.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                     <li class="normal" id="section-4.2.1-2.3.5.2.2.3">
-                      <p id="section-4.2.1-2.3.5.2.2.3.1">The value of the <code>Acc</code> = Acc<sub>i+1</sub>. For more details, see <a href="#def-acc" class="auto internal xref">Section 4.1.1.3</a>.<a href="#section-4.2.1-2.3.5.2.2.3.1" class="pilcrow">¶</a></p>
+                      <p id="section-4.2.1-2.3.5.2.2.3.1">The value of the <code>Acc</code> = Acc<sub>i+1</sub>. For more details, see <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>.<a href="#section-4.2.1-2.3.5.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
                   </ul>
 </li>
@@ -3085,7 +3200,7 @@ The following <code>InfoField</code> settings are possible, based on the followi
                       <p id="section-4.2.1-2.3.5.3.2.2.1">The Construction Direction flag <code>C</code> = "0"<a href="#section-4.2.1-2.3.5.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
                     <li class="normal" id="section-4.2.1-2.3.5.3.2.3">
-                      <p id="section-4.2.1-2.3.5.3.2.3.1">The value of the <code>Acc</code> = Acc<sub>n-1</sub>. This is because seen from the direction of beaconing, the source endpoint is the last AS in the path segment. For more details, see <a href="#def-mac" class="auto internal xref">Section 4.1.1.1</a> and <a href="#def-acc" class="auto internal xref">Section 4.1.1.3</a>.<a href="#section-4.2.1-2.3.5.3.2.3.1" class="pilcrow">¶</a></p>
+                      <p id="section-4.2.1-2.3.5.3.2.3.1">The value of the <code>Acc</code> = Acc<sub>n-1</sub>. This is because seen from the direction of beaconing, the source endpoint is the last AS in the path segment. For more details, see <a href="#def-mac" class="auto internal xref">Section 4.1.1.1</a> and <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>.<a href="#section-4.2.1-2.3.5.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
                   </ul>
 </li>
@@ -3108,7 +3223,7 @@ The following <code>InfoField</code> settings are possible, based on the followi
 <p id="section-4.2.2-4"><strong>Note:</strong> In this context, a border router is called <strong>ingress</strong> border router when it refers to an entrance border router to an AS, as seen from the direction of travel of the SCION packet. So in the context here, the ingress border router is the <em>(packet) incoming</em> border router. A border router is called <strong>egress</strong> border router when it refers to an exit border router of an AS, as seen from the direction of travel of the SCION packet. So in this context, the egress border router is the <em>(packet) leaving</em> border router.<a href="#section-4.2.2-4" class="pilcrow">¶</a></p>
 <p id="section-4.2.2-5">The following figure provides a simplified representation of the processing at routers both in construction direction and against construction direction.<a href="#section-4.2.2-5" class="pilcrow">¶</a></p>
 <span id="name-a-simplified-representation"></span><div id="_figure-19">
-<figure id="figure-19">
+<figure id="figure-20">
             <div class="alignLeft art-text artwork" id="section-4.2.2-6.1">
 <pre>
                               .--.
@@ -3141,7 +3256,7 @@ direction
                                                                direction
 </pre>
 </div>
-<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
+<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
 <a href="#name-a-simplified-representation" class="selfRef">A simplified representation of the processing at routers in both directions.</a>
             </figcaption></figure>
 </div>
@@ -3153,10 +3268,10 @@ direction
 <p id="section-4.2.2.1-1">This section describes the steps that a SCION ingress border router <span class="bcp14">MUST</span> perform when it receives a SCION packet.<a href="#section-4.2.2.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.2.2.1-2">
 <li id="section-4.2.2.1-2.1">
-                <p id="section-4.2.2.1-2.1.1">Check that the interface through which the packet was received is equal to the ingress interface in the current hop field.<a href="#section-4.2.2.1-2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-4.2.2.1-2.1.1">Check that the interface through which the packet was received is equal to the ingress interface in the current hop field. If not, the router <span class="bcp14">MUST</span> drop the packet.<a href="#section-4.2.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-4.2.2.1-2.2">
-                <p id="section-4.2.2.1-2.2.1">Check that the current hop field is not expired and within its validity period.<a href="#section-4.2.2.1-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-4.2.2.1-2.2.1">Check if the current hop field is expired or originated in the future. That is, the current info field must not have a timestamp in the future, as defined in <a href="#inffield" class="auto internal xref">Section 2.2.3.2.3</a>. If either is true, the router <span class="bcp14">MUST</span> drop the packet.<a href="#section-4.2.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-4.2.2.1-2.3">
                 <p id="section-4.2.2.1-2.3.1">The next steps depend on the direction of travel and whether this segment includes a peering hop field. Both features are indicated by the settings of the Construction Direction flag <code>C</code> and the Peering flag <code>P</code> in the current info field. Therefore, check the settings of both flags. The following combinations are possible:<a href="#section-4.2.2.1-2.3.1" class="pilcrow">¶</a></p>
@@ -3177,7 +3292,7 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
 where <br>
 Acc<sub>i+1</sub> = the current value of the field <code>Acc</code> in the current info field <br>
 MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field representing AS<sub>i</sub><a href="#section-4.2.2.1-2.3.2.2.2.1.2.1.2" class="pilcrow">¶</a></p>
-<p id="section-4.2.2.1-2.3.2.2.2.1.2.1.3"><strong>Note:</strong> In the case described here the packet travels against direction of beaconing. That is, the packet comes from AS<sub>i+1</sub> and is going to enter AS<sub>i</sub>. This means that the <code>Acc</code> field of this incoming packet represents the value of Accumulator Acc<sub>i+1</sub>. However, to compute the MAC<sub>i</sub> for the current AS<sub>i</sub>, we need the value of Accumulator Acc<sub>i</sub> (see <a href="#def-acc" class="auto internal xref">Section 4.1.1.3</a>). Because the border router knows that the formula for Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> [:2] (see also <a href="#def-acc" class="auto internal xref">Section 4.1.1.3</a>), and because the values of Acc<sub>i+1</sub> and MAC<sub>i</sub> are known, the router will be able to recover the value Acc<sub>i</sub> based on the just-mentioned formula for Acc.<a href="#section-4.2.2.1-2.3.2.2.2.1.2.1.3" class="pilcrow">¶</a></p>
+<p id="section-4.2.2.1-2.3.2.2.2.1.2.1.3"><strong>Note:</strong> In the case described here the packet travels against direction of beaconing. That is, the packet comes from AS<sub>i+1</sub> and is going to enter AS<sub>i</sub>. This means that the <code>Acc</code> field of this incoming packet represents the value of Accumulator Acc<sub>i+1</sub>. However, to compute the MAC<sub>i</sub> for the current AS<sub>i</sub>, we need the value of Accumulator Acc<sub>i</sub> (see <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>). Because the border router knows that the formula for Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> [:2] (see also <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>), and because the values of Acc<sub>i+1</sub> and MAC<sub>i</sub> are known, the router will be able to recover the value Acc<sub>i</sub> based on the just-mentioned formula for Acc.<a href="#section-4.2.2.1-2.3.2.2.2.1.2.1.3" class="pilcrow">¶</a></p>
 </li>
                           <li class="normal" id="section-4.2.2.1-2.3.2.2.2.1.2.2">
                             <p id="section-4.2.2.1-2.3.2.2.2.1.2.2.1">Replace the current value of the field <code>Acc</code> in the current info field with the newly calculated value of Acc.<a href="#section-4.2.2.1-2.3.2.2.2.1.2.2.1" class="pilcrow">¶</a></p>
@@ -3186,7 +3301,7 @@ MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field represen
                             <p id="section-4.2.2.1-2.3.2.2.2.1.2.3.1">Compute the MAC<sup>Verify</sup><sub>i</sub> over the hop field of the current AS<sub>i</sub>. For this, use the formula in <a href="#def-mac" class="auto internal xref">Section 4.1.1.1</a>, but replace <code>SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]</code> in the formula with the value of the accumulator Acc as just set in the <code>Acc</code> field in the current info field.<a href="#section-4.2.2.1-2.3.2.2.2.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
                           <li class="normal" id="section-4.2.2.1-2.3.2.2.2.1.2.4">
-                            <p id="section-4.2.2.1-2.3.2.2.2.1.2.4.1">Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Verify</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.<a href="#section-4.2.2.1-2.3.2.2.2.1.2.4.1" class="pilcrow">¶</a></p>
+                            <p id="section-4.2.2.1-2.3.2.2.2.1.2.4.1">Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Verify</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet.<a href="#section-4.2.2.1-2.3.2.2.2.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
                           <li class="normal" id="section-4.2.2.1-2.3.2.2.2.1.2.5">
                             <p id="section-4.2.2.1-2.3.2.2.2.1.2.5.1">Check whether the current hop field is the last hop field in the path segment. For this, look at the value of the current <code>SegLen</code> and other metadata in the path meta header. If yes, increment both <code>CurrInf</code> and <code>CurrHF</code> in the path meta header. Proceed with step 4.<a href="#section-4.2.2.1-2.3.2.2.2.1.2.5.1" class="pilcrow">¶</a></p>
@@ -3203,7 +3318,7 @@ MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field represen
                             <p id="section-4.2.2.1-2.3.2.2.2.3.2.1.1">Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in <a href="#peerlink" class="auto internal xref">Section 4.1.2</a>, but replace <code>SegID XOR MAC_0[:2] ... XOR MAC_i [:2]</code> in the formula with the value of the accumulator Acc as set in the <code>Acc</code> field in the current info field (this is the value of the accumulator Acc as it comes with the packet).<a href="#section-4.2.2.1-2.3.2.2.2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
                           <li class="normal" id="section-4.2.2.1-2.3.2.2.2.3.2.2">
-                            <p id="section-4.2.2.1-2.3.2.2.2.3.2.2.1">Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.<a href="#section-4.2.2.1-2.3.2.2.2.3.2.2.1" class="pilcrow">¶</a></p>
+                            <p id="section-4.2.2.1-2.3.2.2.2.3.2.2.1">Check that the MAC<sub>i</sub> in the current hop field matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine. Otherwise, drop the packet.<a href="#section-4.2.2.1-2.3.2.2.2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
                           <li class="normal" id="section-4.2.2.1-2.3.2.2.2.3.2.3">
                             <p id="section-4.2.2.1-2.3.2.2.2.3.2.3.1">Increment both <code>CurrInf</code> and <code>CurrHF</code> in the path meta header. Proceed with step 4.<a href="#section-4.2.2.1-2.3.2.2.2.3.2.3.1" class="pilcrow">¶</a></p>
@@ -3241,10 +3356,10 @@ MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field represen
                         <p id="section-4.2.2.2-2.2.2.1.2.1.1">Compute MAC<sup>Verify</sup><sub>i</sub> over the hop field of the current AS<sub>i</sub>. For this, use the formula in <a href="#def-mac" class="auto internal xref">Section 4.1.1.1</a>, but replace <code>SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]</code> in the formula with the value of the accumulator Acc as set in the <code>Acc</code> field in the current info field.<a href="#section-4.2.2.2-2.2.2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
                       <li class="normal" id="section-4.2.2.2-2.2.2.1.2.2">
-                        <p id="section-4.2.2.2-2.2.2.1.2.2.1">Check that the just-calculated MAC<sup>Verify</sup><sub>i</sub> matches MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub>. If yes, it is fine. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.<a href="#section-4.2.2.2-2.2.2.1.2.2.1" class="pilcrow">¶</a></p>
+                        <p id="section-4.2.2.2-2.2.2.1.2.2.1">Check that the just-calculated MAC<sup>Verify</sup><sub>i</sub> matches MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub>. If yes, it is fine. Otherwise, drop the packet.<a href="#section-4.2.2.2-2.2.2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
                       <li class="normal" id="section-4.2.2.2-2.2.2.1.2.3">
-                        <p id="section-4.2.2.2-2.2.2.1.2.3.1">Compute the value of Acc<sub>i+1</sub>. For this, use the formula in <a href="#def-acc" class="auto internal xref">Section 4.1.1.3</a>. Replace Acc<sub>i</sub> in the formula with the current value of the accumulator Acc as set in the <code>Acc</code> field of the current info field.<a href="#section-4.2.2.2-2.2.2.1.2.3.1" class="pilcrow">¶</a></p>
+                        <p id="section-4.2.2.2-2.2.2.1.2.3.1">Compute the value of Acc<sub>i+1</sub>. For this, use the formula in <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>. Replace Acc<sub>i</sub> in the formula with the current value of the accumulator Acc as set in the <code>Acc</code> field of the current info field.<a href="#section-4.2.2.2-2.2.2.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
                       <li class="normal" id="section-4.2.2.2-2.2.2.1.2.4">
                         <p id="section-4.2.2.2-2.2.2.1.2.4.1">Replace the value of the <code>Acc</code> field in the current info field with the just-calculated value of Acc<sub>i+1</sub>.<a href="#section-4.2.2.2-2.2.2.1.2.4.1" class="pilcrow">¶</a></p>
@@ -3261,7 +3376,7 @@ MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field represen
                         <p id="section-4.2.2.2-2.2.2.2.2.1.1">Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in <a href="#peerlink" class="auto internal xref">Section 4.1.2</a>, but replace <code>SegID XOR MAC_0 [:2] ... XOR MAC_i [:2]</code> with the value in the <code>Acc</code> field of the current info field.<a href="#section-4.2.2.2-2.2.2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
                       <li class="normal" id="section-4.2.2.2-2.2.2.2.2.2">
-                        <p id="section-4.2.2.2-2.2.2.2.2.2.1">Check that the MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub> matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine - proceed with step 3. Otherwise, drop the packet, and reply with a "parameter problem" type of SCMP message.<a href="#section-4.2.2.2-2.2.2.2.2.2.1" class="pilcrow">¶</a></p>
+                        <p id="section-4.2.2.2-2.2.2.2.2.2.1">Check that the MAC<sub>i</sub> in the hop field of the current AS<sub>i</sub> matches the just-calculated MAC<sup>Peer</sup><sub>i</sub>. If yes, it is fine - proceed with step 3. Otherwise, drop the packet.<a href="#section-4.2.2.2-2.2.2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                     </ul>
 </li>
@@ -3278,6 +3393,25 @@ MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current hop field represen
 </li>
             </ol>
 <p id="section-4.2.2.2-3"><strong>Note:</strong> For more information on the path meta header, see <a href="#PathMetaHdr" class="auto internal xref">Section 2.2.3.2.1</a>.<a href="#section-4.2.2.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="effects-of-clock-inaccuracy">
+<section id="section-4.2.2.3">
+            <h5 id="name-effects-of-clock-inaccuracy">
+<a href="#section-4.2.2.3" class="section-number selfRef">4.2.2.3. </a><a href="#name-effects-of-clock-inaccuracy" class="section-name selfRef">Effects of Clock Inaccuracy</a>
+            </h5>
+<p id="section-4.2.2.3-1">A PCB originated by a given control service is used to construct data plane paths. Specifically, the timestamp in the Info Field and the expiry time of hop fields are used for hop field MAC computation, see <a href="#hf-mac-calc" class="auto internal xref">Section 4.1.1</a>, which is used to validate paths at each on-path SCION router. A segment's originating control service and the routers that the segment refers to all have different clocks. Their differences affect the validation process:<a href="#section-4.2.2.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.2.2.3-2.1">
+                <p id="section-4.2.2.3-2.1.1">A fast clock at origination or a slow clock at validation will yield a lengthened expiration time for hops, and possibly an origination time in the future.<a href="#section-4.2.2.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-4.2.2.3-2.2">
+                <p id="section-4.2.2.3-2.2.1">A slow clock at origination or a fast clock at validation will yield a shortened expiration time for hops, and possibly an expiration time in the past.<a href="#section-4.2.2.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-4.2.2.3-3">This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may become available for path construction up to N intervals (so typically N minutes) after origination. This creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see <a href="#hopfld" class="auto internal xref">Section 2.2.3.2.4</a>) would render useless any path segment longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time. The norm is 6 hours.<a href="#section-4.2.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.2.2.3-4">In comparison to these time scales, clock offsets in the order of minutes are immaterial.<a href="#section-4.2.2.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.2.2.3-5">Each administrator of SCION control services and routers is responsible for maintaining sufficient clock accuracy. No particular method is assumed by this specification.<a href="#section-4.2.2.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3309,6 +3443,11 @@ Recall that each hop field MAC is computed using the respective AS's secret forw
 In addition, the MAC algorithm can be freely chosen by each AS, enabling algorithmic agility for MAC computations. Should a MAC algorithm be discovered to be weak or insecure, each AS can quickly switch to a secure algorithm without the need for coordination with other ASes.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-2">A more realistic risk to the secrecy of the forwarding key is exfiltration from a compromised router or control plane service.
 An AS can optionally rotate its forwarding key at regular intervals to limit the exposure after a temporary device compromise. However, as is perhaps self-evident, such a key rotation scheme cannot mitigate the impact of an undiscovered, permanent compromise of a device.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-3">When an AS's forwarding key is compromised, an attacker can forge hop field MACs, undermining path authorization. Recall that path segments are checked for validity and policy compliance during the path discovery phase, and during forwarding, routers only validate the MAC and basic validity of the current the hop field. Consequently, creating fraudulent hop fields with valid MACs allows an attacker to bypass most path segment validity checks, and to create path segments that violate the AS's local policy and/or general path segment validity requirements.
+In particular, an attacker could create paths that include loops (limited by the maximum number of hop fields of a path).<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-4">Unless an attacker has access to the forwarding keys of all ASes on the illegitimate path it wants to fabricate, it will need to splice fragments of two legitimate path segments with an illegitimate hop field. For this, it needs to create a hop field with a MAC that fits into the MAC chain expected by the second path segment fragment. The only input that the attacker can vary relatively freely is the 8 bit <code>ExpTime</code>, but the resulting MAC needs to match a specific 16 bit <code>Acc</code> value. While there is a low probability of this working for a specific attempt (1/256), the attack will succeed eventually if the attacker can keep retrying over a longer time period or with many different path segment fragments.<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-5">While a forwarding key compromise and the resulting loss of path authorization is a serious degradation of SCION's routing security properties, this does not affect, for example, access control or data security for the hosts in the affected AS.
+Unauthorized paths are available to the attacker, but the routing of packets from legitimate senders is not affected.<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="forging-hop-field-mac">
@@ -3326,7 +3465,14 @@ In the unlikely case that an online brute-force attack succeeds, the obtained ho
           <h4 id="name-path-splicing">
 <a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-path-splicing" class="section-name selfRef">Path Splicing</a>
           </h4>
-<p id="section-5.1.3-1">In a path-splicing attack, an adversary source endpoint takes valid hop fields of multiple path segments and splices them together to obtain a new unauthorized path. However, SCION’s MAC-chaining mechanism prevents from this kind of attacks. MAC validation for spliced segments would fail at SCION routers and the corresponding packets would be dropped. For details, see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>.<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-1">In a path-splicing attack, an adversary source endpoint takes valid hop fields of multiple path segments and splices them together to obtain a new unauthorized path.<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-2">Two candidates path segments for splicing must have at least one AS interface in common as a connection point.
+The path segments must have the same origination timestamp, as this is directly protected by the hop field MAC. This can occur by chance, or if the two candidate path segments were originated as the same segment that then diverged and converged back.
+Finally, the hop field MAC protects the 16-bit aggregation of path segment identifier and preceding MACs. For details, see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>. This MAC chaining prevents splicing even in the case that the AS interface and segment timestamp match.<a href="#section-5.1.3-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-3">As the segment identifier and aggregation of preceding MACs is only 16-bits wide, per-chance collision among compatible path segments can occur.
+With typical network sizes and numbers of paths of today, such collisions might occur rarely.
+Successful path splicing would allow an attacker to briefly use a path that violates an ASes path policy, e.g. making a special transit link available to a customer AS that is not billed accordingly, or violate general path segment validity requirements. In particular, a spliced path segment could traverse one or multiple links twice. However, creating a loop traversing a link an arbitrary number of times would involve multiple path splices and therefore multiple random collisions happening simultaneously, which is exceedingly unlikely.
+A wider security margin against path splicing could be obtained by increasing the width of the segment identifier / <code>Acc</code> field, e.g. by extending it into the 8-bit reserved field next to it in the info field.<a href="#section-5.1.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3394,13 +3540,9 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
         <dd>
 <span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-controlplane/">https://datatracker.ietf.org/doc/draft-dekater-scion-controlplane/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC1122">[RFC1122]</dt>
+<dt id="I-D.scion-cppki">[I-D.scion-cppki]</dt>
         <dd>
-<span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1122">https://www.rfc-editor.org/rfc/rfc1122</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC1918">[RFC1918]</dt>
-        <dd>
-<span class="refAuthor">Rekhter, Y.</span>, <span class="refAuthor">Moskowitz, B.</span>, <span class="refAuthor">Karrenberg, D.</span>, <span class="refAuthor">de Groot, G. J.</span>, and <span class="refAuthor">E. Lear</span>, <span class="refTitle">"Address Allocation for Private Internets"</span>, <span class="seriesInfo">BCP 5</span>, <span class="seriesInfo">RFC 1918</span>, <span class="seriesInfo">DOI 10.17487/RFC1918</span>, <time datetime="1996-02" class="refDate">February 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1918">https://www.rfc-editor.org/rfc/rfc1918</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control-Plane PKI"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-pki/">https://datatracker.ietf.org/doc/draft-dekater-scion-pki/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -3410,10 +3552,6 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
         <dd>
 <span class="refAuthor">Nichols, K.</span>, <span class="refAuthor">Blake, S.</span>, <span class="refAuthor">Baker, F.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"Definition of the Differentiated Services Field (DS Field) in the IPv4 and IPv6 Headers"</span>, <span class="seriesInfo">RFC 2474</span>, <span class="seriesInfo">DOI 10.17487/RFC2474</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2474">https://www.rfc-editor.org/rfc/rfc2474</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC2711">[RFC2711]</dt>
-        <dd>
-<span class="refAuthor">Partridge, C.</span> and <span class="refAuthor">A. Jackson</span>, <span class="refTitle">"IPv6 Router Alert Option"</span>, <span class="seriesInfo">RFC 2711</span>, <span class="seriesInfo">DOI 10.17487/RFC2711</span>, <time datetime="1999-10" class="refDate">October 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2711">https://www.rfc-editor.org/rfc/rfc2711</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC3168">[RFC3168]</dt>
         <dd>
 <span class="refAuthor">Ramakrishnan, K.</span>, <span class="refAuthor">Floyd, S.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"The Addition of Explicit Congestion Notification (ECN) to IP"</span>, <span class="seriesInfo">RFC 3168</span>, <span class="seriesInfo">DOI 10.17487/RFC3168</span>, <time datetime="2001-09" class="refDate">September 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3168">https://www.rfc-editor.org/rfc/rfc3168</a>&gt;</span>. </dd>
@@ -3421,6 +3559,10 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
 <dt id="RFC4493">[RFC4493]</dt>
         <dd>
 <span class="refAuthor">Song, JH.</span>, <span class="refAuthor">Poovendran, R.</span>, <span class="refAuthor">Lee, J.</span>, and <span class="refAuthor">T. Iwata</span>, <span class="refTitle">"The AES-CMAC Algorithm"</span>, <span class="seriesInfo">RFC 4493</span>, <span class="seriesInfo">DOI 10.17487/RFC4493</span>, <time datetime="2006-06" class="refDate">June 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4493">https://www.rfc-editor.org/rfc/rfc4493</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5280">[RFC5280]</dt>
+        <dd>
+<span class="refAuthor">Cooper, D.</span>, <span class="refAuthor">Santesson, S.</span>, <span class="refAuthor">Farrell, S.</span>, <span class="refAuthor">Boeyen, S.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">W. Polk</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"</span>, <span class="seriesInfo">RFC 5280</span>, <span class="seriesInfo">DOI 10.17487/RFC5280</span>, <time datetime="2008-05" class="refDate">May 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5280">https://www.rfc-editor.org/rfc/rfc5280</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5880">[RFC5880]</dt>
         <dd>
@@ -3435,12 +3577,8 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8200">[RFC8200]</dt>
-        <dd>
-<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC9473">[RFC9473]</dt>
       <dd>
-<span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <span class="seriesInfo">RFC 9473</span>, <span class="seriesInfo">DOI 10.17487/RFC9473</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9473">https://www.rfc-editor.org/rfc/rfc9473</a>&gt;</span>. </dd>
+<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -3455,17 +3593,33 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
         <dd>
 <span class="refAuthor">Chuat, L.</span>, <span class="refAuthor">Legner, M.</span>, <span class="refAuthor">Basin, D.</span>, <span class="refAuthor">Hausheer, D.</span>, <span class="refAuthor">Hitz, S.</span>, <span class="refAuthor">Mueller, P.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"The Complete Guide to SCION"</span>, <span class="seriesInfo">ISBN 978-3-031-05287-3</span>, <time datetime="2022" class="refDate">2022</time>, <span>&lt;<a href="https://doi.org/10.1007/978-3-031-05288-0">https://doi.org/10.1007/978-3-031-05288-0</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.scion-components">[I-D.scion-components]</dt>
+<dt id="CRYPTOBOOK">[CRYPTOBOOK]</dt>
         <dd>
-<span class="refAuthor">Rustignoli, N.</span> and <span class="refAuthor">C. de Kater</span>, <span class="refTitle">"SCION Components Analysis"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/">https://datatracker.ietf.org/doc/draft-rustignoli-panrg-scion-components/</a>&gt;</span>. </dd>
+<span class="refAuthor">Boneh, D.</span> and <span class="refAuthor">V. Shoup</span>, <span class="refTitle">"A Graduate Course in Applied Cryptography"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://toc.cryptobook.us/">https://toc.cryptobook.us/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.scion-cppki">[I-D.scion-cppki]</dt>
+<dt id="RFC1122">[RFC1122]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control-Plane PKI"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-scion-pki/">https://datatracker.ietf.org/doc/draft-dekater-scion-pki/</a>&gt;</span>. </dd>
+<span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1122">https://www.rfc-editor.org/rfc/rfc1122</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.scion-overview">[I-D.scion-overview]</dt>
+<dt id="RFC1918">[RFC1918]</dt>
+        <dd>
+<span class="refAuthor">Rekhter, Y.</span>, <span class="refAuthor">Moskowitz, B.</span>, <span class="refAuthor">Karrenberg, D.</span>, <span class="refAuthor">de Groot, G. J.</span>, and <span class="refAuthor">E. Lear</span>, <span class="refTitle">"Address Allocation for Private Internets"</span>, <span class="seriesInfo">BCP 5</span>, <span class="seriesInfo">RFC 1918</span>, <span class="seriesInfo">DOI 10.17487/RFC1918</span>, <time datetime="1996-02" class="refDate">February 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1918">https://www.rfc-editor.org/rfc/rfc1918</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2711">[RFC2711]</dt>
+        <dd>
+<span class="refAuthor">Partridge, C.</span> and <span class="refAuthor">A. Jackson</span>, <span class="refTitle">"IPv6 Router Alert Option"</span>, <span class="seriesInfo">RFC 2711</span>, <span class="seriesInfo">DOI 10.17487/RFC2711</span>, <time datetime="1999-10" class="refDate">October 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2711">https://www.rfc-editor.org/rfc/rfc2711</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9217">[RFC9217]</dt>
+        <dd>
+<span class="refAuthor">Trammell, B.</span>, <span class="refTitle">"Current Open Questions in Path-Aware Networking"</span>, <span class="seriesInfo">RFC 9217</span>, <span class="seriesInfo">DOI 10.17487/RFC9217</span>, <time datetime="2022-03" class="refDate">March 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9217">https://www.rfc-editor.org/rfc/rfc9217</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9473">[RFC9473]</dt>
+        <dd>
+<span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <span class="seriesInfo">RFC 9473</span>, <span class="seriesInfo">DOI 10.17487/RFC9473</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9473">https://www.rfc-editor.org/rfc/rfc9473</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SCMP">[SCMP]</dt>
       <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"SCION Overview"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/">https://datatracker.ietf.org/doc/draft-dekater-panrg-scion-overview/</a>&gt;</span>. </dd>
+<span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"SCMP Documentation"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/protocols/scmp.html">https://docs.scion.org/en/latest/protocols/scmp.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -3491,7 +3645,8 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
 <a href="#name-considerations" class="section-name selfRef">Considerations</a>
         </h3>
 <p id="appendix-B.1-1">SCION attempts to take the IANA's assigned Internet protocol numbers into consideration. Widely employed protocols have the same protocol number as the one assigned by IANA. SCION specific protocol numbers start at 200.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
-<p id="appendix-B.1-2">The protocol numbers are used in the SCION header to identify the next level protocol.<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-2">The protocol numbers are used in the SCION header to identify the upper layer protocol.<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-3">SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is optional. A work-in-progress specification is available at: <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>.<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="assignment">
@@ -3499,9 +3654,9 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
         <h3 id="name-assignment">
 <a href="#name-assignment" class="section-name selfRef">Assignment</a>
         </h3>
-<span id="name-the-assigned-scion-protocol"></span><table class="center" id="table-10">
+<span id="name-the-assigned-scion-protocol"></span><table class="center" id="table-11">
           <caption>
-<a href="#table-10" class="selfRef">Table 10</a>:
+<a href="#table-11" class="selfRef">Table 11</a>:
 <a href="#name-the-assigned-scion-protocol" class="selfRef">The assigned SCION protocol numbers</a>
           </caption>
 <thead>
