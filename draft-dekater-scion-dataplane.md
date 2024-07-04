@@ -266,7 +266,7 @@ The full forwarding process for a packet transiting an intermediate AS consists 
 
 ### Configuration
 
-Border routers require mappings from SCION  interface IDs to underlay addresses. Such information must be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values must be configured. A typical implementation will require:
+Border routers require mappings from SCION interface IDs to underlay addresses. Such information MUST be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values MUST be configured. A typical implementation will require:
 
 - Interface ID.
 - Link type (core, parent, child, peer). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
@@ -1162,7 +1162,7 @@ where
 - ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub> = The content of the hop field HF<sub>i</sub>
 
 Thus, the current MAC is based on the XOR-sum of the truncated MACs of all preceding hop fields in the path segment as well as the path segment's `SegID`. In other words, the current MAC is *chained* to all preceding MACs.
-In order to effectively prevent path-splicing, the cryptographic checksum function used must ensure that the truncation of the MACs is non-degenerate and roughly uniformly distributed (see {{mac-requirements}}).
+In order to effectively prevent path-splicing, the cryptographic checksum function used MUST ensure that the truncation of the MACs is non-degenerate and roughly uniformly distributed (see {{mac-requirements}}).
 
 #### Accumulator Acc - Definition {#def-acc}
 
@@ -1232,7 +1232,7 @@ For alternative algorithms, the following requirements MUST all be met:
 - The algorithm returns an unforgable 48-bit value.
   Unforgable specifically means "existentially unforgable under a chosen message attack" ({{CRYPTOBOOK}}). Informally, this means an attacker without access to the secret key has no computationally efficient means to create a valid MAC for some attacker chosen input values, even if it has access to an "oracle" providing a valid MAC for any other input values.
 - The truncation of the result value to the first 2 bytes / 16 bits of the result value:
-    - is not degenerate, i.e. any small change in any input value should have an "avalanche effect" on these bits, and
+    - is not degenerate, i.e. any small change in any input value SHOULD have an "avalanche effect" on these bits, and
     - is roughly uniformly distributed when considering all possible input values.
 
   This additional requirment is naturally satisfied for MAC algorithms based on typical block ciphers or hash algorithms.
@@ -1352,7 +1352,7 @@ direction
 This section describes the steps that a SCION ingress border router MUST perform when it receives a SCION packet.
 
 1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field. If not, the router MUST drop the packet.
-2. Check if the current hop field is expired or originated in the future. That is, the current info field must not have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
+2. Check if the current hop field is expired or originated in the future. That is, the current info field MUST NOT have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 3. The next steps depend on the direction of travel and whether this segment includes a peering hop field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current info field. Therefore, check the settings of both flags. The following combinations are possible:
 
    - The packet traverses the path segment in **construction direction** (`C` = "1" and `P` = "0" or "1"). In this case, proceed with step 4.
@@ -1468,8 +1468,8 @@ In the unlikely case that an online brute-force attack succeeds, the obtained ho
 
 In a path-splicing attack, an adversary source endpoint takes valid hop fields of multiple path segments and splices them together to obtain a new unauthorized path.
 
-Two candidates path segments for splicing must have at least one AS interface in common as a connection point.
-The path segments must have the same origination timestamp, as this is directly protected by the hop field MAC. This can occur by chance, or if the two candidate path segments were originated as the same segment that then diverged and converged back.
+Two candidates path segments for splicing MUST have at least one AS interface in common as a connection point.
+The path segments MUST have the same origination timestamp, as this is directly protected by the hop field MAC. This can occur by chance, or if the two candidate path segments were originated as the same segment that then diverged and converged back.
 Finally, the hop field MAC protects the 16-bit aggregation of path segment identifier and preceding MACs. For details, see [](#auth-chained-macs). This MAC chaining prevents splicing even in the case that the AS interface and segment timestamp match.
 
 As the segment identifier and aggregation of preceding MACs is only 16-bits wide, per-chance collision among compatible path segments can occur.
@@ -1485,7 +1485,7 @@ When an adversary sits on the path between the source and destination endpoint, 
 
 ### Modification of the Path Header
 
-An on-path adversary could modify the SCION path header, and replace the remaining part of path segments to the destination with different segments. Such replaced segments must include authorized segments, as otherwise the packet would be simply dropped on its way to the destination. The already traversed portion of the current segment and past segments can also be modified by the adversary (for instance, deleting and adding valid and invalid hop fields). On reply packets from the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M). The new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M, which can then transparently change the invalid path back to the valid path to A. In addition, the endpoint address header can also be modified.
+An on-path adversary could modify the SCION path header, and replace the remaining part of path segments to the destination with different segments. Such replaced segments MUST include authorized segments, as otherwise the packet would be simply dropped on its way to the destination. The already traversed portion of the current segment and past segments can also be modified by the adversary (for instance, deleting and adding valid and invalid hop fields). On reply packets from the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M). The new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M, which can then transparently change the invalid path back to the valid path to A. In addition, the endpoint address header can also be modified.
 
 Modifications of the SCION path and address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, loosely analogous to the IPSec Authentication Header, exists for SCION but is out of scope for this document. This is described as the SCION Packet Authentication Option (SPAO) in [CHUAT22].
 
