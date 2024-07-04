@@ -415,9 +415,9 @@ Table of Contents
 1.3.3.  Configuration
 
    Border routers require mappings from SCION interface IDs to underlay
-   addresses.  Such information must be supplied to each router in an
+   addresses.  Such information MUST be supplied to each router in an
    out of band fashion (e.g in a configuration file).  For each link to
-   a neighbor, these values must be configured.  A typical
+   a neighbor, these values MUST be configured.  A typical
    implementation will require:
 
    *  Interface ID.
@@ -1882,7 +1882,7 @@ Table of Contents
    of all preceding hop fields in the path segment as well as the path
    segment's SegID.  In other words, the current MAC is _chained_ to all
    preceding MACs.  In order to effectively prevent path-splicing, the
-   cryptographic checksum function used must ensure that the truncation
+   cryptographic checksum function used MUST ensure that the truncation
    of the MACs is non-degenerate and roughly uniformly distributed (see
    Section 4.1.1.4).
 
@@ -1986,7 +1986,7 @@ Table of Contents
    access to an "oracle" providing a valid MAC for any other input
    values. - The truncation of the result value to the first 2 bytes /
    16 bits of the result value: - is not degenerate, i.e. any small
-   change in any input value should have an "avalanche effect" on these
+   change in any input value SHOULD have an "avalanche effect" on these
    bits, and - is roughly uniformly distributed when considering all
    possible input values.
 
@@ -2218,7 +2218,7 @@ direction
        the router MUST drop the packet.
 
    2.  Check if the current hop field is expired or originated in the
-       future.  That is, the current info field must not have a
+       future.  That is, the current info field MUST NOT have a
        timestamp in the future, as defined in Section 2.2.3.2.3.  If
        either is true, the router MUST drop the packet.
 
@@ -2541,8 +2541,8 @@ direction
    hop fields of multiple path segments and splices them together to
    obtain a new unauthorized path.
 
-   Two candidates path segments for splicing must have at least one AS
-   interface in common as a connection point.  The path segments must
+   Two candidates path segments for splicing MUST have at least one AS
+   interface in common as a connection point.  The path segments MUST
    have the same origination timestamp, as this is directly protected by
    the hop field MAC.  This can occur by chance, or if the two candidate
    path segments were originated as the same segment that then diverged
@@ -2584,7 +2584,7 @@ direction
 
    An on-path adversary could modify the SCION path header, and replace
    the remaining part of path segments to the destination with different
-   segments.  Such replaced segments must include authorized segments,
+   segments.  Such replaced segments MUST include authorized segments,
    as otherwise the packet would be simply dropped on its way to the
    destination.  The already traversed portion of the current segment
    and past segments can also be modified by the adversary (for
