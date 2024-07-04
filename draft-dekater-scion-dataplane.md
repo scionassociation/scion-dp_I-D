@@ -259,9 +259,9 @@ The full forwarding process for a packet transiting an intermediate AS consists 
 
 1. The AS's SCION ingress router receives a SCION packet from the neighboring AS.
 2. The SCION router parses, validates, and authenticates the SCION header.
-3. The SCION router maps the egress interface ID in the current hop field of the SCION header to the destination "intra-protocol" address of the egress border router (where "intra-protocol" is the intra-domain forwarding protocol, e.g., MPLS or IP).
-4. The packet is forwarded within the AS by routers and switches based on the "intra-protocol" header.
-5. Upon receiving the packet, the SCION egress router strips off the "intra-protocol" header, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
+3. The SCION router maps the egress interface ID in the current hop field of the SCION header to the destination address of the intra-domain protocol (e.g. MPLS or IP) on the egress border router.
+4. The packet is forwarded within the AS by routers and switches based on the header of the intra-domain protocol.
+5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
 6. The last SCION router on the path forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
 
 ### Configuration
@@ -272,7 +272,7 @@ Border routers require mappings from SCION  interface IDs to underlay addresses.
 - Link type (core, parent, child, peer). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number.
 - For the router that manages the interface: the neighbor interface underlay address.
-- For the routers that do not manage the interface:  "intra-protocol" address of the router that does.
+- For the routers that do not manage the interface:  the address of the intra-domain protocol on the router that does.
 
 In order to forward traffic to a service endpoint addresse (`DT/DS` == 0b01 in the [common header](#common-header)), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
