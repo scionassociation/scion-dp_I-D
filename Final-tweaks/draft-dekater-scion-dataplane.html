@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 5 January 2025</td>
+<td class="center">Expires 8 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-04" class="published">4 July 2024</time>
+<time datetime="2024-07-07" class="published">7 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-05">5 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-01-08">8 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1556,7 +1556,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.4-10.1.1"><strong>Communication through core ASes</strong>:<a href="#section-1.4-10.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.4-10.1.2.1">
-                <p id="section-1.4-10.1.2.1.1"><strong>Core-segment combination</strong> (Cases 1a, 1b, 1c, 1d in <a href="#_figure-1" class="auto internal xref">Figure 1</a>): The up- and down-segments of source and destination do not have an AS in common. In this case, a core-segment is required to connect the source's up- and the destination's down-segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up- or down-segment(s) are required to connect the respective AS(es) to the core-segment.<a href="#section-1.4-10.1.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-1.4-10.1.2.1.1"><strong>Core-segment combination</strong> (Cases 1a, 1b, 1c, 1d in <a href="#_figure-1" class="auto internal xref">Figure 1</a>): The up- and down-segments of source and destination do not have an AS in common. In this case, a core-segment is <span class="bcp14">REQUIRED</span> to connect the source's up- and the destination's down-segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up- or down-segment(s) are <span class="bcp14">REQUIRED</span> to connect the respective AS(es) to the core-segment.<a href="#section-1.4-10.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-1.4-10.1.2.2">
                 <p id="section-1.4-10.1.2.2.1"><strong>Immediate combination</strong> (Cases 2a, 2b in <a href="#_figure-1" class="auto internal xref">Figure 1</a>): The last AS on the up-segment (which is necessarily a core AS) is the same as the first AS on the down-segment. In this case, a simple combination of up- and down-segments creates a valid forwarding path. In Case 2b, only one segment is required.<a href="#section-1.4-10.1.2.2.1" class="pilcrow">¶</a></p>
@@ -1611,7 +1611,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 |                      Path header                       |
 |                                                        |
 +--------------------------------------------------------+
-|               Extension header (optional)              |
+|               Extension header (OPTIONAL)              |
 |                                                        |
 +--------------------------------------------------------+
 </pre>
@@ -1623,7 +1623,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-2.1-3">The <em>common header</em> contains important meta information like a version number and lengths of the header and payload. In particular, it contains flags that control the format of subsequent headers such as the address and path headers. For more details, see <a href="#common-header" class="auto internal xref">Section 2.2.1</a>.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
 <p id="section-2.1-4">The <em>address header</em> contains the ISD-, AS-, and endpoint-addresses of source and destination. The type and length of endpoint addresses are variable and can be set independently using flags in the common header. For more details, see <a href="#address-header" class="auto internal xref">Section 2.2.2</a>.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
 <p id="section-2.1-5">The <em>path header</em> contains the full AS-level forwarding path of the packet. A path type field in the common header specifies the path format used in the path header. For more details, see <a href="#path-header" class="auto internal xref">Section 2.2.3</a>.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
-<p id="section-2.1-6">Finally, the optional <em>extension</em> header contains a variable number of hop-by-hop and end-to-end options, similar to the extensions in the IPv6 header <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>. For more details, see <a href="#ext-header" class="auto internal xref">Section 2.3</a>.<a href="#section-2.1-6" class="pilcrow">¶</a></p>
+<p id="section-2.1-6">Finally, the <span class="bcp14">OPTIONAL</span> <em>extension</em> header contains a variable number of hop-by-hop and end-to-end options, similar to the extensions in the IPv6 header <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>. For more details, see <a href="#ext-header" class="auto internal xref">Section 2.3</a>.<a href="#section-2.1-6" class="pilcrow">¶</a></p>
 <div id="header-alignment">
 <section id="section-2.1.1">
           <h4 id="name-header-alignment">
@@ -2172,7 +2172,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
                   <p id="section-2.2.3.2.3-3.4.1"><code>RSV</code>: Unused and reserved for future use.<a href="#section-2.2.3.2.3-3.4.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.3.2.3-3.5">
-                  <p id="section-2.2.3.2.3-3.5.1"><code>Acc</code>: This updatable field/counter is required for calculating the MAC in the data plane. <code>Acc</code> stands for "Accumulator". For more details, see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>.<a href="#section-2.2.3.2.3-3.5.1" class="pilcrow">¶</a></p>
+                  <p id="section-2.2.3.2.3-3.5.1"><code>Acc</code>: This updatable field/counter is <span class="bcp14">REQUIRED</span> for calculating the MAC in the data plane. <code>Acc</code> stands for "Accumulator". For more details, see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>.<a href="#section-2.2.3.2.3-3.5.1" class="pilcrow">¶</a></p>
 </li>
                 <li class="normal" id="section-2.2.3.2.3-3.6">
                   <p id="section-2.2.3.2.3-3.6.1"><code>Timestamp</code>: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).<a href="#section-2.2.3.2.3-3.6.1" class="pilcrow">¶</a></p>
@@ -2317,10 +2317,10 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 <p id="section-2.3-1">This section specifies the SCION extension headers. SCION currently provides two types of extension headers: the Hop-by-Hop (HBH) Options header and the End-to-End (E2E) Options header.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3-2.1">
-            <p id="section-2.3-2.1.1">The Hop-by-Hop Options header is used to carry optional information that may be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the <code>NextHdr</code> field of the SCION common header (see <a href="#common-header" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.3-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.3-2.1.1">The Hop-by-Hop Options header is used to carry <span class="bcp14">OPTIONAL</span> information that <span class="bcp14">MAY</span> be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the <code>NextHdr</code> field of the SCION common header (see <a href="#common-header" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.3-2.2">
-            <p id="section-2.3-2.2.1">The End-to-End Options header is used to carry optional information that may be examined and processed by the sender and/or the receiver of the packet. The End-to-End Options header is identified by value "201" in the <code>NextHdr</code> field of the SCION common header (see <a href="#common-header" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.3-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.3-2.2.1">The End-to-End Options header is used to carry <span class="bcp14">OPTIONAL</span> information that <span class="bcp14">MAY</span> be examined and processed by the sender and/or the receiver of the packet. The End-to-End Options header is identified by value "201" in the <code>NextHdr</code> field of the SCION common header (see <a href="#common-header" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-2.3-3">If both headers are present, the HBH Options header <span class="bcp14">MUST</span> come before the E2E Options header.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
@@ -2437,7 +2437,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 </li>
             </ul>
 <p id="section-2.3.1.1-6">The options within a header <span class="bcp14">MUST</span> be processed strictly in the order they appear in the header. This is to prevent a receiver from, for example, scanning through the header looking for a specific option and processing this option prior to all preceding ones.<a href="#section-2.3.1.1-6" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-7">Individual options may have specific alignment requirements, to ensure that multibyte values within the <code>OptData</code> fields have natural boundaries. The alignment requirement of an option is specified using the notation "xn+y". This means that the <code>OptType</code> <span class="bcp14">MUST</span> appear at an integer multiple of x bytes from the start of the header, plus y bytes. For example:<a href="#section-2.3.1.1-7" class="pilcrow">¶</a></p>
+<p id="section-2.3.1.1-7">Individual options <span class="bcp14">MAY</span> have specific alignment requirements, to ensure that multibyte values within the <code>OptData</code> fields have natural boundaries. The alignment requirement of an option is specified using the notation "xn+y". This means that the <code>OptType</code> <span class="bcp14">MUST</span> appear at an integer multiple of x bytes from the start of the header, plus y bytes. For example:<a href="#section-2.3.1.1-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.1.1-8.1">
                 <p id="section-2.3.1.1-8.1.1"><code>2n</code>: means any 2-bytes offset from the start of the header.<a href="#section-2.3.1.1-8.1.1" class="pilcrow">¶</a></p>
@@ -3646,7 +3646,7 @@ An adversary can attempt to disrupt the connectivity of said path by flooding a 
         </h3>
 <p id="appendix-B.1-1">SCION attempts to take the IANA's assigned Internet protocol numbers into consideration. Widely employed protocols have the same protocol number as the one assigned by IANA. SCION specific protocol numbers start at 200.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
 <p id="appendix-B.1-2">The protocol numbers are used in the SCION header to identify the upper layer protocol.<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
-<p id="appendix-B.1-3">SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is optional. A work-in-progress specification is available at: <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>.<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-3">SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is <span class="bcp14">OPTIONAL</span>. A work-in-progress specification is available at: <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>.<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="assignment">
