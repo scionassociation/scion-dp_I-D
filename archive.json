@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-04T00:00:30.930502+00:00",
+  "timestamp": "2024-07-07T00:00:45.722395+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -203,20 +203,30 @@
         "knmeynell"
       ],
       "labels": [
+        "Prio 3",
+        "needs-discussion",
         "editorial"
       ],
       "body": "No need for this in the abstract: \\*SCION data plane\\*",
       "createdAt": "2024-05-13T21:06:52Z",
-      "updatedAt": "2024-06-03T07:09:16Z",
+      "updatedAt": "2024-07-04T09:57:22Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@elear may we leave emphasized/italic text in the text version? (e.g. ` _PKI_` or ` *Autonomous System (AS)*`\r\nOr is it something that we should remove everywhere?\r\n\r\n\r\nContext: bold/italic text can be used in HTML versions using the `<strong>`/`<em>` attributes (see [RFC7992](https://datatracker.ietf.org/doc/html/rfc7992#section-9.50)). The tool we use, is indeed using this attribute for the HTML version. However, in the text only version, the markdown syntax `*`/`_` gets left there  ",
+          "createdAt": "2024-07-04T08:15:14Z",
+          "updatedAt": "2024-07-04T09:57:22Z"
+        }
+      ]
     },
     {
       "number": 10,
       "id": "I_kwDOKYa7786IuWFf",
       "title": "Extend introduction and remove/edit notes",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [
@@ -229,8 +239,8 @@
       ],
       "body": "The following text needs to be reworked as you are not publishing some of these:\r\n\r\n > \\*Note:\\* This is the very first version of the SCION Data Plane\r\n   document.  We are aware that the draft is far from perfect, and hope\r\n   to improve the content in later versions of the document.  To reach\r\n   this goal, any feedback is welcome and much appreciated.  Thanks!\r\n\r\n>  \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-cppki], and [I-D.scion-cp], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\n\r\n\r\nAlso, \r\n> From: Ron Bonica\r\n> The problem statement is weak. Before describing forwarding plane details, you need to tell the readers why they should deploy SCION. You say that the design advantages are:\r\n>  - It provides control and transparency over forwarding paths the endpoints.  \u2002\u2002\u2002\u2002\u2002\u2002\u2002\r\n>  -  It simplifies the packet-processing at routers: Instead of having to perform longest-prefix matching on IP addresses, which requires expensive hardware and substantial amounts of energy, a router can simply access the next hop from the packet header, after having verified the authenticity of the hop field's MAC.\r\n\r\n> \u2002\u2002\u2002\u2002\u2002\u2002Is there any benefit in switching, as opposed to routing, at the AS boundary? Yes, routing is expensive. But the router is already there. There is no incremental cost. By contrast, you would have to add a SCION device.\r\n> Is the real motivation to support new settlement models?\r\n\r\n\r\nSame issue in other drafts: \r\n- CPPKI  https://github.com/scionassociation/scion-cppki_I-D/issues/29\r\n- CP        https://github.com/scionassociation/scion-cp_I-D/issues/14",
       "createdAt": "2024-05-13T21:08:42Z",
-      "updatedAt": "2024-06-03T09:34:25Z",
-      "closedAt": null,
+      "updatedAt": "2024-07-04T08:20:30Z",
+      "closedAt": "2024-07-04T08:20:30Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -245,6 +255,13 @@
           "body": "\"allowed\" is also used in the CP draft: \r\n\r\n> - The `::` zero-compression feature of IPv6 is NOT allowed. The feature has very limited use in a 48-bit address space and would only add more complexity. ",
           "createdAt": "2024-06-03T09:34:23Z",
           "updatedAt": "2024-06-03T09:34:23Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "This has been addressed in #24 and in other PRs for the other drafts.",
+          "createdAt": "2024-07-04T08:20:30Z",
+          "updatedAt": "2024-07-04T08:20:30Z"
         }
       ]
     },
@@ -401,11 +418,12 @@
         "knmeynell"
       ],
       "labels": [
+        "Prio 1",
         "editorial"
       ],
       "body": "Some ideas:\r\n- intra-domain underlay\r\n\r\n\r\nSecond choice:\r\n- intra-domain network protocol\r\n\r\nIf we use a term, we may need to add it to the glossary too.",
       "createdAt": "2024-05-30T08:27:11Z",
-      "updatedAt": "2024-05-30T09:22:03Z",
+      "updatedAt": "2024-07-04T08:16:24Z",
       "closedAt": null,
       "comments": []
     },
@@ -2876,6 +2894,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOKYa77850beES",
+      "title": "Replaced 'intra-protocol' with 'intra-domain protocol' throughout",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/29",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I decided to use 'intra-domain protocol' rather than 'intra-domain network protocol' in the interests of conciseness, but also because intra-domain protocol was already defined in the document. Some further re-wording for improved readability and clarify.",
+      "createdAt": "2024-07-04T10:37:40Z",
+      "updatedAt": "2024-07-04T11:27:41Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a059acf11afc3a5a349578035d5a24bbd7887edb",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "Final-tweaks",
+      "headRefOid": "546243f3b9d07201876c91100910d3a31b3f7a39",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
