@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 5 January 2025                                          S. Hitz
+Expires: 8 January 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                             4 July 2024
+                                                             7 July 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 January 2025.
+   This Internet-Draft will expire on 8 January 2025.
 
 Copyright Notice
 
@@ -571,11 +571,11 @@ Table of Contents
 
       -  *Core-segment combination* (Cases 1a, 1b, 1c, 1d in Figure 1):
          The up- and down-segments of source and destination do not have
-         an AS in common.  In this case, a core-segment is required to
+         an AS in common.  In this case, a core-segment is REQUIRED to
          connect the source's up- and the destination's down-segment
          (Case 1a).  If either the source or the destination AS is a
          core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then
-         no up- or down-segment(s) are required to connect the
+         no up- or down-segment(s) are REQUIRED to connect the
          respective AS(es) to the core-segment.
 
       -  *Immediate combination* (Cases 2a, 2b in Figure 1): The last AS
@@ -637,7 +637,7 @@ Table of Contents
    |                      Path header                       |
    |                                                        |
    +--------------------------------------------------------+
-   |               Extension header (optional)              |
+   |               Extension header (OPTIONAL)              |
    |                                                        |
    +--------------------------------------------------------+
 
@@ -658,7 +658,7 @@ Table of Contents
    packet.  A path type field in the common header specifies the path
    format used in the path header.  For more details, see Section 2.2.3.
 
-   Finally, the optional _extension_ header contains a variable number
+   Finally, the OPTIONAL _extension_ header contains a variable number
    of hop-by-hop and end-to-end options, similar to the extensions in
    the IPv6 header [RFC8200].  For more details, see Section 2.3.
 
@@ -1115,7 +1115,7 @@ Table of Contents
 
    *  RSV: Unused and reserved for future use.
 
-   *  Acc: This updatable field/counter is required for calculating the
+   *  Acc: This updatable field/counter is REQUIRED for calculating the
       MAC in the data plane.  Acc stands for "Accumulator".  For more
       details, see Section 4.1.
 
@@ -1253,14 +1253,14 @@ Table of Contents
    provides two types of extension headers: the Hop-by-Hop (HBH) Options
    header and the End-to-End (E2E) Options header.
 
-   *  The Hop-by-Hop Options header is used to carry optional
-      information that may be examined and processed by every SCION
+   *  The Hop-by-Hop Options header is used to carry OPTIONAL
+      information that MAY be examined and processed by every SCION
       router along a packet's delivery path.  The Hop-by-Hop Options
       header is identified by value "200" in the NextHdr field of the
       SCION common header (see Section 2.2.1).
 
-   *  The End-to-End Options header is used to carry optional
-      information that may be examined and processed by the sender and/
+   *  The End-to-End Options header is used to carry OPTIONAL
+      information that MAY be examined and processed by the sender and/
       or the receiver of the packet.  The End-to-End Options header is
       identified by value "201" in the NextHdr field of the SCION common
       header (see Section 2.2.1).
@@ -1362,7 +1362,7 @@ Table of Contents
    example, scanning through the header looking for a specific option
    and processing this option prior to all preceding ones.
 
-   Individual options may have specific alignment requirements, to
+   Individual options MAY have specific alignment requirements, to
    ensure that multibyte values within the OptData fields have natural
    boundaries.  The alignment requirement of an option is specified
    using the notation "xn+y".  This means that the OptType MUST appear
@@ -2791,7 +2791,7 @@ Assigned SCION Protocol Numbers
 
    SCMP refers to the SCION Control Message Protocol, used for
    diagnostics and error messages.  Support for this protocol is
-   optional.  A work-in-progress specification is available at: [SCMP].
+   OPTIONAL.  A work-in-progress specification is available at: [SCMP].
 
 Assignment
 
