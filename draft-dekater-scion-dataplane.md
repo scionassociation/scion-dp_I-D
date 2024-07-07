@@ -368,7 +368,7 @@ Valid path-segment combinations:
 
 - **Communication through core ASes**:
 
-  - **Core-segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up- and down-segments of source and destination do not have an AS in common. In this case, a core-segment is required to connect the source's up- and the destination's down-segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up- or down-segment(s) are required to connect the respective AS(es) to the core-segment.
+  - **Core-segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up- and down-segments of source and destination do not have an AS in common. In this case, a core-segment is REQUIRED to connect the source's up- and the destination's down-segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up- or down-segment(s) are REQUIRED to connect the respective AS(es) to the core-segment.
   - **Immediate combination** (Cases 2a, 2b in {{figure-1}}): The last AS on the up-segment (which is necessarily a core AS) is the same as the first AS on the down-segment. In this case, a simple combination of up- and down-segments creates a valid forwarding path. In Case 2b, only one segment is required.
 
 - **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up- and down-segment. The extraneous path segments to the core are cut off. Note that the up- and down-segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
@@ -401,7 +401,7 @@ The SCION packet header is composed of a common header, an address header, a pat
 |                      Path header                       |
 |                                                        |
 +--------------------------------------------------------+
-|               Extension header (optional)              |
+|               Extension header (OPTIONAL)              |
 |                                                        |
 +--------------------------------------------------------+
 ~~~~
@@ -413,7 +413,7 @@ The *address header* contains the ISD-, AS-, and endpoint-addresses of source an
 
 The *path header* contains the full AS-level forwarding path of the packet. A path type field in the common header specifies the path format used in the path header. For more details, see [](#path-header).
 
-Finally, the optional *extension* header contains a variable number of hop-by-hop and end-to-end options, similar to the extensions in the IPv6 header {{RFC8200}}. For more details, see [](#ext-header).
+Finally, the OPTIONAL *extension* header contains a variable number of hop-by-hop and end-to-end options, similar to the extensions in the IPv6 header {{RFC8200}}. For more details, see [](#ext-header).
 
 
 ### Header Alignment
@@ -731,7 +731,7 @@ The 8-byte Info Field (`InfoField`) has the following format:
 - `P`: Peering flag. If the flag has value "1", the segment represented by this info field contains a peering hop field, which requires special processing in the data plane. For more details, see [](#peerlink) and [](#packet-verif).
 - `C`: Construction direction flag. If the flag has value "1", the hop fields in the segment represented by this info field are arranged in the direction they have been constructed during beaconing.
 - `RSV`: Unused and reserved for future use.
-- `Acc`: This updatable field/counter is required for calculating the MAC in the data plane. `Acc` stands for "Accumulator". For more details, see [](#auth-chained-macs).
+- `Acc`: This updatable field/counter is REQUIRED for calculating the MAC in the data plane. `Acc` stands for "Accumulator". For more details, see [](#auth-chained-macs).
 - `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).
 
 
@@ -813,8 +813,8 @@ When a destination endpoint receives a SCION packet, it can use the path informa
 
 This section specifies the SCION extension headers. SCION currently provides two types of extension headers: the Hop-by-Hop (HBH) Options header and the End-to-End (E2E) Options header.
 
-- The Hop-by-Hop Options header is used to carry optional information that may be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
-- The End-to-End Options header is used to carry optional information that may be examined and processed by the sender and/or the receiver of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The Hop-by-Hop Options header is used to carry OPTIONAL information that MAY be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The End-to-End Options header is used to carry OPTIONAL information that MAY be examined and processed by the sender and/or the receiver of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
 
 If both headers are present, the HBH Options header MUST come before the E2E Options header.
 
@@ -877,7 +877,7 @@ The `Options` field of the Hop-by-Hop Options and the End-to-End Options headers
 
 The options within a header MUST be processed strictly in the order they appear in the header. This is to prevent a receiver from, for example, scanning through the header looking for a specific option and processing this option prior to all preceding ones.
 
-Individual options may have specific alignment requirements, to ensure that multibyte values within the `OptData` fields have natural boundaries. The alignment requirement of an option is specified using the notation "xn+y". This means that the `OptType` MUST appear at an integer multiple of x bytes from the start of the header, plus y bytes. For example:
+Individual options MAY have specific alignment requirements, to ensure that multibyte values within the `OptData` fields have natural boundaries. The alignment requirement of an option is specified using the notation "xn+y". This means that the `OptType` MUST appear at an integer multiple of x bytes from the start of the header, plus y bytes. For example:
 
 - `2n`: means any 2-bytes offset from the start of the header.
 - `4n+2`: means any 4-bytes offset from the start of the header, plus 2 bytes.
@@ -1538,7 +1538,7 @@ SCION attempts to take the IANA's assigned Internet protocol numbers into consid
 
 The protocol numbers are used in the SCION header to identify the upper layer protocol.
 
-SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is optional. A work-in-progress specification is available at: {{SCMP}}.
+SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is OPTIONAL. A work-in-progress specification is available at: {{SCMP}}.
 
 ## Assignment
 {:numbered="false"}
