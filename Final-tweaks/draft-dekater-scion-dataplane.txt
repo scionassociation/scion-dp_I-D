@@ -1362,7 +1362,7 @@ Table of Contents
    example, scanning through the header looking for a specific option
    and processing this option prior to all preceding ones.
 
-   Individual options MAY have specific alignment requirements, to
+   Individual options may have specific alignment requirements, to
    ensure that multibyte values within the OptData fields have natural
    boundaries.  The alignment requirement of an option is specified
    using the notation "xn+y".  This means that the OptType MUST appear

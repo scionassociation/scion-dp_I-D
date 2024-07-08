@@ -2437,7 +2437,7 @@ A SCION path has the following layout:<a href="#section-2.2.3.2-1" class="pilcro
 </li>
             </ul>
 <p id="section-2.3.1.1-6">The options within a header <span class="bcp14">MUST</span> be processed strictly in the order they appear in the header. This is to prevent a receiver from, for example, scanning through the header looking for a specific option and processing this option prior to all preceding ones.<a href="#section-2.3.1.1-6" class="pilcrow">¶</a></p>
-<p id="section-2.3.1.1-7">Individual options <span class="bcp14">MAY</span> have specific alignment requirements, to ensure that multibyte values within the <code>OptData</code> fields have natural boundaries. The alignment requirement of an option is specified using the notation "xn+y". This means that the <code>OptType</code> <span class="bcp14">MUST</span> appear at an integer multiple of x bytes from the start of the header, plus y bytes. For example:<a href="#section-2.3.1.1-7" class="pilcrow">¶</a></p>
+<p id="section-2.3.1.1-7">Individual options may have specific alignment requirements, to ensure that multibyte values within the <code>OptData</code> fields have natural boundaries. The alignment requirement of an option is specified using the notation "xn+y". This means that the <code>OptType</code> <span class="bcp14">MUST</span> appear at an integer multiple of x bytes from the start of the header, plus y bytes. For example:<a href="#section-2.3.1.1-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.1.1-8.1">
                 <p id="section-2.3.1.1-8.1.1"><code>2n</code>: means any 2-bytes offset from the start of the header.<a href="#section-2.3.1.1-8.1.1" class="pilcrow">¶</a></p>
