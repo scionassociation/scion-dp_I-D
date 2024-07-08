@@ -1468,8 +1468,8 @@ In the unlikely case that an online brute-force attack succeeds, the obtained ho
 
 In a path-splicing attack, an adversary source endpoint takes valid hop fields of multiple path segments and splices them together to obtain a new unauthorized path.
 
-Two candidates path segments for splicing MUST have at least one AS interface in common as a connection point.
-The path segments MUST have the same origination timestamp, as this is directly protected by the hop field MAC. This can occur by chance, or if the two candidate path segments were originated as the same segment that then diverged and converged back.
+Two candidates path segments for splicing must have at least one AS interface in common as a connection point.
+The path segments must have the same origination timestamp, as this is directly protected by the hop field MAC. This can occur by chance, or if the two candidate path segments were originated as the same segment that then diverged and converged back.
 Finally, the hop field MAC protects the 16-bit aggregation of path segment identifier and preceding MACs. For details, see [](#auth-chained-macs). This MAC chaining prevents splicing even in the case that the AS interface and segment timestamp match.
 
 As the segment identifier and aggregation of preceding MACs is only 16-bits wide, per-chance collision among compatible path segments can occur.
