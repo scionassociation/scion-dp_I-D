@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 8 January 2025                                          S. Hitz
+Expires: 9 January 2025                                          S. Hitz
                                                          Anapaya Systems
-                                                             7 July 2024
+                                                             8 July 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2025.
+   This Internet-Draft will expire on 9 January 2025.
 
 Copyright Notice
 
@@ -2541,8 +2541,8 @@ direction
    hop fields of multiple path segments and splices them together to
    obtain a new unauthorized path.
 
-   Two candidates path segments for splicing MUST have at least one AS
-   interface in common as a connection point.  The path segments MUST
+   Two candidates path segments for splicing must have at least one AS
+   interface in common as a connection point.  The path segments must
    have the same origination timestamp, as this is directly protected by
    the hop field MAC.  This can occur by chance, or if the two candidate
    path segments were originated as the same segment that then diverged
