@@ -2584,7 +2584,7 @@ direction
 
    An on-path adversary could modify the SCION path header, and replace
    the remaining part of path segments to the destination with different
-   segments.  Such replaced segments MUST include authorized segments,
+   segments.  Such replaced segments must include authorized segments,
    as otherwise the packet would be simply dropped on its way to the
    destination.  The already traversed portion of the current segment
    and past segments can also be modified by the adversary (for
