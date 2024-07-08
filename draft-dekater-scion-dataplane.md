@@ -877,7 +877,7 @@ The `Options` field of the Hop-by-Hop Options and the End-to-End Options headers
 
 The options within a header MUST be processed strictly in the order they appear in the header. This is to prevent a receiver from, for example, scanning through the header looking for a specific option and processing this option prior to all preceding ones.
 
-Individual options MAY have specific alignment requirements, to ensure that multibyte values within the `OptData` fields have natural boundaries. The alignment requirement of an option is specified using the notation "xn+y". This means that the `OptType` MUST appear at an integer multiple of x bytes from the start of the header, plus y bytes. For example:
+Individual options may have specific alignment requirements, to ensure that multibyte values within the `OptData` fields have natural boundaries. The alignment requirement of an option is specified using the notation "xn+y". This means that the `OptType` MUST appear at an integer multiple of x bytes from the start of the header, plus y bytes. For example:
 
 - `2n`: means any 2-bytes offset from the start of the header.
 - `4n+2`: means any 4-bytes offset from the start of the header, plus 2 bytes.
