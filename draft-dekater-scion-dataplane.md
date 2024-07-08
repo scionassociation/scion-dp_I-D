@@ -259,20 +259,20 @@ The full forwarding process for a packet transiting an intermediate AS consists 
 
 1. The AS's SCION ingress router receives a SCION packet from the neighboring AS.
 2. The SCION router parses, validates, and authenticates the SCION header.
-3. The SCION router maps the egress interface ID in the current hop field of the SCION header to the destination "intra-protocol" address of the egress border router (where "intra-protocol" is the intra-domain forwarding protocol, e.g., MPLS or IP).
-4. The packet is forwarded within the AS by routers and switches based on the "intra-protocol" header.
-5. Upon receiving the packet, the SCION egress router strips off the "intra-protocol" header, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
+3. The SCION router maps the egress interface ID in the current hop field of the SCION header to the destination address of the intra-domain protocol (e.g. MPLS or IP) on the egress border router.
+4. The packet is forwarded within the AS by routers and switches based on the header of the intra-domain protocol.
+5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
 6. The last SCION router on the path forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
 
 ### Configuration
 
-Border routers require mappings from SCION  interface IDs to underlay addresses. Such information must be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values must be configured. A typical implementation will require:
+Border routers require mappings from SCION interface IDs to underlay addresses. Such information MUST be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values MUST be configured. A typical implementation will require:
 
 - Interface ID.
 - Link type (core, parent, child, peer). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number.
 - For the router that manages the interface: the neighbor interface underlay address.
-- For the routers that do not manage the interface:  "intra-protocol" address of the router that does.
+- For the routers that do not manage the interface:  the address of the intra-domain protocol on the router that does.
 
 In order to forward traffic to a service endpoint addresse (`DT/DS` == 0b01 in the [common header](#common-header)), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document. It only depends on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
@@ -368,7 +368,7 @@ Valid path-segment combinations:
 
 - **Communication through core ASes**:
 
-  - **Core-segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up- and down-segments of source and destination do not have an AS in common. In this case, a core-segment is required to connect the source's up- and the destination's down-segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up- or down-segment(s) are required to connect the respective AS(es) to the core-segment.
+  - **Core-segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up- and down-segments of source and destination do not have an AS in common. In this case, a core-segment is REQUIRED to connect the source's up- and the destination's down-segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up- or down-segment(s) are REQUIRED to connect the respective AS(es) to the core-segment.
   - **Immediate combination** (Cases 2a, 2b in {{figure-1}}): The last AS on the up-segment (which is necessarily a core AS) is the same as the first AS on the down-segment. In this case, a simple combination of up- and down-segments creates a valid forwarding path. In Case 2b, only one segment is required.
 
 - **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up- and down-segment. The extraneous path segments to the core are cut off. Note that the up- and down-segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
@@ -401,7 +401,7 @@ The SCION packet header is composed of a common header, an address header, a pat
 |                      Path header                       |
 |                                                        |
 +--------------------------------------------------------+
-|               Extension header (optional)              |
+|               Extension header (OPTIONAL)              |
 |                                                        |
 +--------------------------------------------------------+
 ~~~~
@@ -413,7 +413,7 @@ The *address header* contains the ISD-, AS-, and endpoint-addresses of source an
 
 The *path header* contains the full AS-level forwarding path of the packet. A path type field in the common header specifies the path format used in the path header. For more details, see [](#path-header).
 
-Finally, the optional *extension* header contains a variable number of hop-by-hop and end-to-end options, similar to the extensions in the IPv6 header {{RFC8200}}. For more details, see [](#ext-header).
+Finally, the OPTIONAL *extension* header contains a variable number of hop-by-hop and end-to-end options, similar to the extensions in the IPv6 header {{RFC8200}}. For more details, see [](#ext-header).
 
 
 ### Header Alignment
@@ -731,7 +731,7 @@ The 8-byte Info Field (`InfoField`) has the following format:
 - `P`: Peering flag. If the flag has value "1", the segment represented by this info field contains a peering hop field, which requires special processing in the data plane. For more details, see [](#peerlink) and [](#packet-verif).
 - `C`: Construction direction flag. If the flag has value "1", the hop fields in the segment represented by this info field are arranged in the direction they have been constructed during beaconing.
 - `RSV`: Unused and reserved for future use.
-- `Acc`: This updatable field/counter is required for calculating the MAC in the data plane. `Acc` stands for "Accumulator". For more details, see [](#auth-chained-macs).
+- `Acc`: This updatable field/counter is REQUIRED for calculating the MAC in the data plane. `Acc` stands for "Accumulator". For more details, see [](#auth-chained-macs).
 - `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a hop field in the segment represented by this info field, by verifying the expiration time and MAC set in the hop field - the expiration time of a hop field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).
 
 
@@ -813,8 +813,8 @@ When a destination endpoint receives a SCION packet, it can use the path informa
 
 This section specifies the SCION extension headers. SCION currently provides two types of extension headers: the Hop-by-Hop (HBH) Options header and the End-to-End (E2E) Options header.
 
-- The Hop-by-Hop Options header is used to carry optional information that may be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
-- The End-to-End Options header is used to carry optional information that may be examined and processed by the sender and/or the receiver of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The Hop-by-Hop Options header is used to carry OPTIONAL information that MAY be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The End-to-End Options header is used to carry OPTIONAL information that MAY be examined and processed by the sender and/or the receiver of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
 
 If both headers are present, the HBH Options header MUST come before the E2E Options header.
 
@@ -1162,7 +1162,7 @@ where
 - ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub> = The content of the hop field HF<sub>i</sub>
 
 Thus, the current MAC is based on the XOR-sum of the truncated MACs of all preceding hop fields in the path segment as well as the path segment's `SegID`. In other words, the current MAC is *chained* to all preceding MACs.
-In order to effectively prevent path-splicing, the cryptographic checksum function used must ensure that the truncation of the MACs is non-degenerate and roughly uniformly distributed (see {{mac-requirements}}).
+In order to effectively prevent path-splicing, the cryptographic checksum function used MUST ensure that the truncation of the MACs is non-degenerate and roughly uniformly distributed (see {{mac-requirements}}).
 
 #### Accumulator Acc - Definition {#def-acc}
 
@@ -1232,7 +1232,7 @@ For alternative algorithms, the following requirements MUST all be met:
 - The algorithm returns an unforgable 48-bit value.
   Unforgable specifically means "existentially unforgable under a chosen message attack" ({{CRYPTOBOOK}}). Informally, this means an attacker without access to the secret key has no computationally efficient means to create a valid MAC for some attacker chosen input values, even if it has access to an "oracle" providing a valid MAC for any other input values.
 - The truncation of the result value to the first 2 bytes / 16 bits of the result value:
-    - is not degenerate, i.e. any small change in any input value should have an "avalanche effect" on these bits, and
+    - is not degenerate, i.e. any small change in any input value SHOULD have an "avalanche effect" on these bits, and
     - is roughly uniformly distributed when considering all possible input values.
 
   This additional requirment is naturally satisfied for MAC algorithms based on typical block ciphers or hash algorithms.
@@ -1352,7 +1352,7 @@ direction
 This section describes the steps that a SCION ingress border router MUST perform when it receives a SCION packet.
 
 1. Check that the interface through which the packet was received is equal to the ingress interface in the current hop field. If not, the router MUST drop the packet.
-2. Check if the current hop field is expired or originated in the future. That is, the current info field must not have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
+2. Check if the current hop field is expired or originated in the future. That is, the current info field MUST NOT have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 3. The next steps depend on the direction of travel and whether this segment includes a peering hop field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current info field. Therefore, check the settings of both flags. The following combinations are possible:
 
    - The packet traverses the path segment in **construction direction** (`C` = "1" and `P` = "0" or "1"). In this case, proceed with step 4.
@@ -1538,7 +1538,7 @@ SCION attempts to take the IANA's assigned Internet protocol numbers into consid
 
 The protocol numbers are used in the SCION header to identify the upper layer protocol.
 
-SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is optional. A work-in-progress specification is available at: {{SCMP}}.
+SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is OPTIONAL. A work-in-progress specification is available at: {{SCMP}}.
 
 ## Assignment
 {:numbered="false"}
