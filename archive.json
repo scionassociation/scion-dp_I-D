@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-07T00:00:45.722395+00:00",
+  "timestamp": "2024-07-09T00:00:34.960352+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -411,7 +411,7 @@
       "id": "I_kwDOKYa7786Kl1sF",
       "title": "intra-protocol? --> better wording ",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/23",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -423,8 +423,8 @@
       ],
       "body": "Some ideas:\r\n- intra-domain underlay\r\n\r\n\r\nSecond choice:\r\n- intra-domain network protocol\r\n\r\nIf we use a term, we may need to add it to the glossary too.",
       "createdAt": "2024-05-30T08:27:11Z",
-      "updatedAt": "2024-07-04T08:16:24Z",
-      "closedAt": null,
+      "updatedAt": "2024-07-08T08:30:35Z",
+      "closedAt": "2024-07-08T08:30:35Z",
       "comments": []
     },
     {
@@ -2900,26 +2900,76 @@
       "id": "PR_kwDOKYa77850beES",
       "title": "Replaced 'intra-protocol' with 'intra-domain protocol' throughout",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/29",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "I decided to use 'intra-domain protocol' rather than 'intra-domain network protocol' in the interests of conciseness, but also because intra-domain protocol was already defined in the document. Some further re-wording for improved readability and clarify.",
+      "body": "Solves #23\r\nI decided to use 'intra-domain protocol' rather than 'intra-domain network protocol' in the interests of conciseness, but also because intra-domain protocol was already defined in the document. Some further re-wording for improved readability and clarify.",
       "createdAt": "2024-07-04T10:37:40Z",
-      "updatedAt": "2024-07-04T11:27:41Z",
+      "updatedAt": "2024-07-08T08:30:19Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "a059acf11afc3a5a349578035d5a24bbd7887edb",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "Final-tweaks",
-      "headRefOid": "546243f3b9d07201876c91100910d3a31b3f7a39",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "e88f1d1a3bee48c7298f009954a94cc4689b8317",
+      "closedAt": "2024-07-08T08:30:16Z",
+      "mergedAt": "2024-07-08T08:30:16Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "8c7f01e0eb53cf684f7cb561d8f3e39be2b4ef7c"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I had to also change this in the CP draft: https://github.com/scionassociation/scion-cp_I-D/pull/44 ",
+          "createdAt": "2024-07-07T21:46:29Z",
+          "updatedAt": "2024-07-07T21:46:29Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786A3Gr2",
+          "commit": {
+            "abbreviatedOid": "9998af2"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-07-07T21:48:54Z",
+          "updatedAt": "2024-07-07T21:57:14Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "```suggestion\r\nTwo candidates path segments for splicing must have at least one AS interface in common as a connection point.\r\nThe path segments must have the same origination timestamp, as this is directly protected by the hop field MAC. This can occur by chance, or if the two candidate path segments were originated as the same segment that then diverged and converged back.\r\n```",
+              "createdAt": "2024-07-07T21:48:54Z",
+              "updatedAt": "2024-07-07T21:57:14Z"
+            },
+            {
+              "originalPosition": 69,
+              "body": "```suggestion\r\nAn on-path adversary could modify the SCION path header, and replace the remaining part of path segments to the destination with different segments. Such replaced segments must include authorized segments, as otherwise the packet would be simply dropped on its way to the destination. The already traversed portion of the current segment and past segments can also be modified by the adversary (for instance, deleting and adding valid and invalid hop fields). On reply packets from the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet\u2019s past path (leading up to, but not including M). The new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M, which can then transparently change the invalid path back to the valid path to A. In addition, the endpoint address header can also be modified.\r\n```\r\nWe are atlaking about attacks, I'd not use keywords\r\n",
+              "createdAt": "2024-07-07T21:49:41Z",
+              "updatedAt": "2024-07-07T21:57:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786A5t07",
+          "commit": {
+            "abbreviatedOid": "e88f1d1"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-08T08:23:57Z",
+          "updatedAt": "2024-07-08T08:23:57Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
