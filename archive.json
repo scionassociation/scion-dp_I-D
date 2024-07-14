@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-11T00:00:50.256763+00:00",
+  "timestamp": "2024-07-14T00:00:40.202940+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -2970,6 +2970,34 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 30,
+      "id": "PR_kwDOKYa77851FO7R",
+      "title": "Update GitHub actions",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/30",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-11T11:10:52Z",
+      "updatedAt": "2024-07-11T11:12:22Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "8c7f01e0eb53cf684f7cb561d8f3e39be2b4ef7c",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "actions_update",
+      "headRefOid": "f302815bedad22cae63ee3505b2a88c07923adef",
+      "closedAt": "2024-07-11T11:12:19Z",
+      "mergedAt": "2024-07-11T11:12:19Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
