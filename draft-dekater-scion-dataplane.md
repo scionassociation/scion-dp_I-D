@@ -1490,7 +1490,9 @@ An on-path adversary could modify the SCION path header, and replace the remaini
 Modifications of the SCION path and address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, loosely analogous to the IPSec Authentication Header, exists for SCION but is out of scope for this document. This is described as the SCION Packet Authentication Option (SPAO) in [CHUAT22].
 
 
-Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. To prevent this attack and to defend against multiple on-path adversaries in general, proof of transit is required, which is not in scope for this document.
+Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds.
+Under the assumptions for this attack to be possible, each of the  malicious on-path adversary may already inspect/copy traffic, therefore this attack does not represent an additional security gap.
+To prevent this attack and to defend against multiple on-path adversaries in general, proof of transit is required, which is not in scope for this document, given the marginal benefit.
 
 
 ## Off-Path Attacks
