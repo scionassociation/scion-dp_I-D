@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-18T00:00:36.269467+00:00",
+  "timestamp": "2024-07-21T00:00:49.835762+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -455,6 +455,24 @@
           "updatedAt": "2024-06-20T08:11:20Z"
         }
       ]
+    },
+    {
+      "number": 31,
+      "id": "I_kwDOKYa7786QGJPM",
+      "title": "dataplane -> data plane",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/31",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": "Misspelling might have been reintroduced in some recent change ",
+      "createdAt": "2024-07-18T22:45:15Z",
+      "updatedAt": "2024-07-18T22:45:16Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
