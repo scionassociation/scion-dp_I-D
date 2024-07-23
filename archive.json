@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-21T00:00:49.835762+00:00",
+  "timestamp": "2024-07-23T00:00:37.555359+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -470,7 +470,61 @@
       ],
       "body": "Misspelling might have been reintroduced in some recent change ",
       "createdAt": "2024-07-18T22:45:15Z",
-      "updatedAt": "2024-07-18T22:45:16Z",
+      "updatedAt": "2024-07-21T00:57:48Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOKYa7786QT8x9",
+      "title": "Better explanation of ConsIngress,  ConsEgress,  ConsEgress Router Alert flag",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/32",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": "\r\n- [ ] Clarify use of the  ConsEgress Router Alert flag\r\n- [ ] ConsIngress and ConsEgress are just instances of interfaces Identifiers, we should make this clearer (e.g. when we define interface IDs). \r\n\r\n\r\n> Eliot, 20.07.2024\r\n>   ConsIngress and ConsEgress require a lot more explanation if they're to be included.\r\n\r\n> Arald Alvestrand, 20.07\r\n>  There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n",
+      "createdAt": "2024-07-21T00:48:48Z",
+      "updatedAt": "2024-07-21T00:57:44Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 33,
+      "id": "I_kwDOKYa7786QT8-y",
+      "title": "Add discussion about fragmentation",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/33",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "",
+      "createdAt": "2024-07-21T00:50:53Z",
+      "updatedAt": "2024-07-21T00:51:52Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 35,
+      "id": "I_kwDOKYa7786QVa58",
+      "title": "Use auto-generated references",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/35",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": "As in https://github.com/scionassociation/scion-cp_I-D/pull/54",
+      "createdAt": "2024-07-21T17:33:12Z",
+      "updatedAt": "2024-07-21T17:33:13Z",
       "closedAt": null,
       "comments": []
     }
@@ -3016,6 +3070,53 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 34,
+      "id": "PR_kwDOKYa77852AD0Z",
+      "title": "Proof of transit: mention why it is not needed",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/34",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-21T01:01:45Z",
+      "updatedAt": "2024-07-22T08:52:24Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "nic_pot_reason",
+      "headRefOid": "63f3a43ccd0c09a488ac0ab1899bfa14c5ff6eac",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786CmB1J",
+          "commit": {
+            "abbreviatedOid": "63f3a43"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-22T08:52:12Z",
+          "updatedAt": "2024-07-22T08:52:24Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "I propose a slightly different wording, because I think that, as it is, the last sentence seems to contradict the rest. May be the explanation below is clearer? Not binding, keep your text if you prefer it.\r\n\r\nMoreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. However, such an attack is of little value. An on-path adversary can inspect/copy/disrupt the traffic that reaches it without diverting the traffic away from the sender-chosen path. For this reason proof-of-transit, which would be required to detect such an attack, has little benfit in the context of SCION and is not in scope for this document.\r\n",
+              "createdAt": "2024-07-22T08:52:12Z",
+              "updatedAt": "2024-07-22T08:52:24Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
