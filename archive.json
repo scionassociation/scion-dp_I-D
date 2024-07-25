@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-23T00:00:37.555359+00:00",
+  "timestamp": "2024-07-25T00:00:48.357372+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -486,9 +486,9 @@
       "labels": [
         "editorial"
       ],
-      "body": "\r\n- [ ] Clarify use of the  ConsEgress Router Alert flag\r\n- [ ] ConsIngress and ConsEgress are just instances of interfaces Identifiers, we should make this clearer (e.g. when we define interface IDs). \r\n\r\n\r\n> Eliot, 20.07.2024\r\n>   ConsIngress and ConsEgress require a lot more explanation if they're to be included.\r\n\r\n> Arald Alvestrand, 20.07\r\n>  There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n",
+      "body": "- [ ] Clarify use of the  ConsEgress Router Alert flag\r\n- [ ] ConsIngress and ConsEgress are just instances of interfaces Identifiers, we should make this clearer (e.g. when we define interface IDs). \r\n\r\n\r\n> Eliot, 20.07.2024\r\n>   ConsIngress and ConsEgress require a lot more explanation if they're to be included.\r\n\r\n> Arald Alvestrand, 20.07\r\n>  There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\nNote: we use naming ConsIngress, ConsEgress because of https://github.com/scionproto/scion/issues/1479 \r\n",
       "createdAt": "2024-07-21T00:48:48Z",
-      "updatedAt": "2024-07-21T00:57:44Z",
+      "updatedAt": "2024-07-23T01:38:56Z",
       "closedAt": null,
       "comments": []
     },
@@ -525,6 +525,87 @@
       "body": "As in https://github.com/scionassociation/scion-cp_I-D/pull/54",
       "createdAt": "2024-07-21T17:33:12Z",
       "updatedAt": "2024-07-21T17:33:13Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 36,
+      "id": "I_kwDOKYa7786QfDAL",
+      "title": "Clarify handling failures & path revocation",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/36",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "Prio 1",
+        "needs-discussion"
+      ],
+      "body": "Path revocation is not clear:\r\n\r\n- [ ] scionassociation/scion-dp_I-D#37\r\n- [ ] Clarify that endpoints are expected to handle failures (and why)\r\n- [ ] Clarify wether a SCMP [Interface Down](https://scion.docs.anapaya.net/en/latest/protocols/scmp.html#external-interface-down) message is sent or not,  and why\r\n\r\n\r\n> Harald Alvestrand <harald@alvestrand.no> \r\n Once sent, a packet\u2019s path cannot be changed; path changes are handled by routers discovering that the path no longer exists and (I assume, this is likely documented in -controlplane) sending an alert back \u201cdon\u2019t use this path\u201d.\r\n \r\n \r\n Relates to https://github.com/scionassociation/scion-research_I-D/issues/25",
+      "createdAt": "2024-07-22T21:00:37Z",
+      "updatedAt": "2024-07-23T12:27:46Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "In the current implementation, a SCMP interface down is sent if BFD is enabled for the interface.  ",
+          "createdAt": "2024-07-23T12:27:44Z",
+          "updatedAt": "2024-07-23T12:27:44Z"
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "I_kwDOKYa7786QfDE4",
+      "title": "Clarify how routers use BFD",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/37",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement",
+        "needs-discussion"
+      ],
+      "body": "We currently mention BFD in [2.2.3.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#section-2.2.3.1)[Empty Path Type](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#name-empty-path-type): \r\n> One use case of the Empty path type lies in the context of link-failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ([[RFC5880](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#RFC5880)] and [[RFC5881](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#RFC5881)]). BFD is a protocol intended to detect faults in the bidirectional path between two forwarding engines, with typically very low latency. It operates independently of media, data protocols, and routing protocols. SCION uses the Empty path type, together with OneHopPath path type, to bootstrap BFD within SCION. (For more information on the OneHopPath path type, see [Section 2.2.3.3](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#onehop).)\r\n\r\nHowever, we don't say much about how it works.\r\n- How much should be in the draft? (is it necessary to add details, or could we leave it open)?\r\n- Why do routers have to use something like BFD? What do they do with signals from BFD?\r\n- How is BFD on top of SCION working? (currently described in https://docs.scion.org/en/latest/protocols/bfd.html )\r\n",
+      "createdAt": "2024-07-22T22:57:51Z",
+      "updatedAt": "2024-07-23T01:43:19Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 38,
+      "id": "I_kwDOKYa7786Qf0PK",
+      "title": "Anapaya review",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/38",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Following the first wave of ISE feedback, we did quite some work on the dataplane draft:\r\n\r\n[Changelog TODO link]()\r\n[Datatracker diff TODO link]\r\n",
+      "createdAt": "2024-07-23T04:59:27Z",
+      "updatedAt": "2024-07-24T17:01:38Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 39,
+      "id": "I_kwDOKYa7786QkTOn",
+      "title": "Add discussion about MTU",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/39",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement",
+        "Prio 1"
+      ],
+      "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nRelated issues: \r\n* CP draft: https://github.com/scionassociation/scion-cp_I-D/issues/57 \r\n* Implementations: https://github.com/scionproto/scion/issues/2608 ",
+      "createdAt": "2024-07-23T14:58:19Z",
+      "updatedAt": "2024-07-23T14:58:20Z",
       "closedAt": null,
       "comments": []
     }
