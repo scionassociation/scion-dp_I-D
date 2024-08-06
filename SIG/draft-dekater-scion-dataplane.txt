@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 26 December 2024                                        S. Hitz
+Expires: 7 February 2025                                         S. Hitz
                                                          Anapaya Systems
-                                                            24 June 2024
+                                                           6 August 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 December 2024.
+   This Internet-Draft will expire on 7 February 2025.
 
 Copyright Notice
 
@@ -117,10 +117,11 @@ Table of Contents
        5.2.1.  Modification of the Path Header
      5.3.  Off-Path Attacks
      5.4.  Volumetric Denial of Service Attacks
-   6.  IANA Considerations
-   7.  References
-     7.1.  Normative References
-     7.2.  Informative References
+   6.  SCION IP Gateway
+   7.  IANA Considerations
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Acknowledgments
    Assigned SCION Protocol Numbers
       Considerations
@@ -396,16 +397,17 @@ Table of Contents
        header.
 
    3.  The SCION router maps the egress interface ID in the current hop
-       field of the SCION header to the destination "intra-protocol"
-       address of the egress border router (where "intra-protocol" is
-       the intra-domain forwarding protocol, e.g., MPLS or IP).
+       field of the SCION header to the destination address of the
+       intra-domain protocol (e.g.  MPLS or IP) on the egress border
+       router.
 
    4.  The packet is forwarded within the AS by routers and switches
-       based on the "intra-protocol" header.
+       based on the header of the intra-domain protocol.
 
    5.  Upon receiving the packet, the SCION egress router strips off the
-       "intra-protocol" header, again validates and updates the SCION
-       header, and forwards the packet to the neighboring SCION router.
+       header of the intra-domain protocol, again validates and updates
+       the SCION header, and forwards the packet to the neighboring
+       SCION router.
 
    6.  The last SCION router on the path forwards the packet to the
        packet's destination endpoint indicated by the field DstHostAddr
@@ -414,9 +416,9 @@ Table of Contents
 1.3.3.  Configuration
 
    Border routers require mappings from SCION interface IDs to underlay
-   addresses.  Such information must be supplied to each router in an
+   addresses.  Such information MUST be supplied to each router in an
    out of band fashion (e.g in a configuration file).  For each link to
-   a neighbor, these values must be configured.  A typical
+   a neighbor, these values MUST be configured.  A typical
    implementation will require:
 
    *  Interface ID.
@@ -430,8 +432,8 @@ Table of Contents
    *  For the router that manages the interface: the neighbor interface
       underlay address.
 
-   *  For the routers that do not manage the interface: "intra-protocol"
-      address of the router that does.
+   *  For the routers that do not manage the interface: the address of
+      the intra-domain protocol on the router that does.
 
    In order to forward traffic to a service endpoint addresse (DT/DS ==
    0b01 in the common header (Section 2.2.1)), a border router
@@ -570,11 +572,11 @@ Table of Contents
 
       -  *Core-segment combination* (Cases 1a, 1b, 1c, 1d in Figure 1):
          The up- and down-segments of source and destination do not have
-         an AS in common.  In this case, a core-segment is required to
+         an AS in common.  In this case, a core-segment is REQUIRED to
          connect the source's up- and the destination's down-segment
          (Case 1a).  If either the source or the destination AS is a
          core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then
-         no up- or down-segment(s) are required to connect the
+         no up- or down-segment(s) are REQUIRED to connect the
          respective AS(es) to the core-segment.
 
       -  *Immediate combination* (Cases 2a, 2b in Figure 1): The last AS
@@ -636,7 +638,7 @@ Table of Contents
    |                      Path header                       |
    |                                                        |
    +--------------------------------------------------------+
-   |               Extension header (optional)              |
+   |               Extension header (OPTIONAL)              |
    |                                                        |
    +--------------------------------------------------------+
 
@@ -657,7 +659,7 @@ Table of Contents
    packet.  A path type field in the common header specifies the path
    format used in the path header.  For more details, see Section 2.2.3.
 
-   Finally, the optional _extension_ header contains a variable number
+   Finally, the OPTIONAL _extension_ header contains a variable number
    of hop-by-hop and end-to-end options, similar to the extensions in
    the IPv6 header [RFC8200].  For more details, see Section 2.3.
 
@@ -1114,7 +1116,7 @@ Table of Contents
 
    *  RSV: Unused and reserved for future use.
 
-   *  Acc: This updatable field/counter is required for calculating the
+   *  Acc: This updatable field/counter is REQUIRED for calculating the
       MAC in the data plane.  Acc stands for "Accumulator".  For more
       details, see Section 4.1.
 
@@ -1252,14 +1254,14 @@ Table of Contents
    provides two types of extension headers: the Hop-by-Hop (HBH) Options
    header and the End-to-End (E2E) Options header.
 
-   *  The Hop-by-Hop Options header is used to carry optional
-      information that may be examined and processed by every SCION
+   *  The Hop-by-Hop Options header is used to carry OPTIONAL
+      information that MAY be examined and processed by every SCION
       router along a packet's delivery path.  The Hop-by-Hop Options
       header is identified by value "200" in the NextHdr field of the
       SCION common header (see Section 2.2.1).
 
-   *  The End-to-End Options header is used to carry optional
-      information that may be examined and processed by the sender and/
+   *  The End-to-End Options header is used to carry OPTIONAL
+      information that MAY be examined and processed by the sender and/
       or the receiver of the packet.  The End-to-End Options header is
       identified by value "201" in the NextHdr field of the SCION common
       header (see Section 2.2.1).
@@ -1881,7 +1883,7 @@ Table of Contents
    of all preceding hop fields in the path segment as well as the path
    segment's SegID.  In other words, the current MAC is _chained_ to all
    preceding MACs.  In order to effectively prevent path-splicing, the
-   cryptographic checksum function used must ensure that the truncation
+   cryptographic checksum function used MUST ensure that the truncation
    of the MACs is non-degenerate and roughly uniformly distributed (see
    Section 4.1.1.4).
 
@@ -1985,7 +1987,7 @@ Table of Contents
    access to an "oracle" providing a valid MAC for any other input
    values. - The truncation of the result value to the first 2 bytes /
    16 bits of the result value: - is not degenerate, i.e. any small
-   change in any input value should have an "avalanche effect" on these
+   change in any input value SHOULD have an "avalanche effect" on these
    bits, and - is roughly uniformly distributed when considering all
    possible input values.
 
@@ -2217,7 +2219,7 @@ direction
        the router MUST drop the packet.
 
    2.  Check if the current hop field is expired or originated in the
-       future.  That is, the current info field must not have a
+       future.  That is, the current info field MUST NOT have a
        timestamp in the future, as defined in Section 2.2.3.2.3.  If
        either is true, the router MUST drop the packet.
 
@@ -2657,7 +2659,31 @@ direction
    additional information contained in the SCION header enables more
    targeted filtering, e.g., by ISD, AS or path length.
 
-6.  IANA Considerations
+6.  SCION IP Gateway
+
+   The SCION IP Gateway (SIG) enables IP packets to be tunnelled over
+   SCION to support the use of applications that are not SCION enabled.
+
+   An ingress SIG encapsulates IP packets within SCION packets and sends
+   them across a SCION network to an egress SIG.  The egress SIG
+   decapsulates the IP packets from the SCION packets and forwards them
+   towards their destination IP address.  The SIGs at either end of a
+   tunnel act as routers from the perspective of IP, whilst acting as
+   SCION-enabled applications from the perspective of the SCION network.
+   Both IPv4 and IPv6 packets may be encapsulated, but no other types of
+   packets are supported.  Hosts within SCION networks that wish to be
+   reachable from external IP networks must have public IP addresses,
+   although this does not preclude the use of Network Address
+   Translation.
+
+   Each SIG establishes a session to one or multiple remote SIGs.  They
+   can choose to send SCION packets to remote SIGs in accordance with
+   statically configured IP prefixes, or by dynamically announcing IP
+   prefixes to each other.  Each SIG may also choose how to send SCION
+   packets based on locally configured policies when multiple SIGs are
+   available.
+
+7.  IANA Considerations
 
    This document has no IANA actions.
 
@@ -2668,9 +2694,9 @@ direction
    This task is currently being transitioned from Anapaya to the SCION
    Association.
 
-7.  References
+8.  References
 
-7.1.  Normative References
+8.1.  Normative References
 
    [I-D.scion-cp]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
@@ -2726,7 +2752,7 @@ direction
               DOI 10.17487/RFC8200, July 2017,
               <https://www.rfc-editor.org/rfc/rfc8200>.
 
-7.2.  Informative References
+8.2.  Informative References
 
    [CHUAT22]  Chuat, L., Legner, M., Basin, D., Hausheer, D., Hitz, S.,
               Mueller, P., and A. Perrig, "The Complete Guide to SCION",
@@ -2790,7 +2816,7 @@ Assigned SCION Protocol Numbers
 
    SCMP refers to the SCION Control Message Protocol, used for
    diagnostics and error messages.  Support for this protocol is
-   optional.  A work-in-progress specification is available at: [SCMP].
+   OPTIONAL.  A work-in-progress specification is available at: [SCMP].
 
 Assignment
 
