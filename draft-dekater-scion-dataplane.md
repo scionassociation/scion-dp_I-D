@@ -1510,6 +1510,15 @@ On the flip side, the path choice of the endpoint may possibly be exploited by a
 **Note** that SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope. However, the additional information contained in the SCION header enables more targeted filtering, e.g., by ISD, AS or path length.
 
 
+# SCION IP Gateway
+
+The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support the use of applications that are not SCION enabled.
+
+An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION-enabled applications from the perspective of the SCION network. Both IPv4 and IPv6 packets may be encapsulated, but no other types of packets are supported. Hosts within SCION networks that wish to be reachable from external IP networks must have public IP addresses, although this does not preclude the use of Network Address Translation.
+
+Each SIG establishes a session to one or multiple remote SIGs. They can choose to send SCION packets to remote SIGs in accordance with statically configured IP prefixes, or by dynamically announcing IP prefixes to each other. Each SIG may also choose how to send SCION packets based on locally configured policies when multiple SIGs are available.
+
+
 # IANA Considerations
 
 This document has no IANA actions.
