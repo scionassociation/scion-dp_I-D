@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-06T00:00:51.100782+00:00",
+  "timestamp": "2024-08-08T00:00:36.377396+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -766,7 +766,54 @@
       "labels": [],
       "body": "Go through the draft again and make sure there are no other forward references\r\n\r\nTwin issues:\r\n- https://github.com/scionassociation/scion-cp_I-D/issues/58\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36",
       "createdAt": "2024-07-26T22:50:30Z",
-      "updatedAt": "2024-07-30T09:12:57Z",
+      "updatedAt": "2024-08-06T19:04:50Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell [here](https://drive.google.com/file/d/1hNtOtWpkwSnsre7nMYJgDPUHbuVQTasi/view?usp=drive_link) you can find my paper review of version -02",
+          "createdAt": "2024-08-06T19:04:49Z",
+          "updatedAt": "2024-08-06T19:04:49Z"
+        }
+      ]
+    },
+    {
+      "number": 47,
+      "id": "I_kwDOKYa7786SQot6",
+      "title": "Upper layer checksums",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/47",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "Prio 1",
+        "needs-discussion",
+        "design"
+      ],
+      "body": "The upper layer checksum raises questions.. However this is used in the current implementation. \r\n\r\n- [ ] Can we adapt the text in the draft?\r\n- [ ] Respond to Harald Alvestrand and Mike Mc Bride\r\n\r\n\r\n\r\n> Harald Alvestrand\r\nSCION keeps accommodating the \u201cchecksum across layers 3 and 4\u201d. This was a bad idea in 1975, and keeps being a bad idea now. The idea should (in my opinion) be relegated to gateways and kept out of the core.\r\n\r\n> The payload of a packet can be anything (does not affect SCION operation), but the header contains an integer saying which content it is, with the defined values being \u201cUDP\u201d, \u201cTCP\u201d, and some numbers for internal use. The process for constructing an IP packet from the SCION packet (or vice versa) is not described, but presumably involves mangling checksums - -dataplane describes a \u201cvirtual header\u201d for constructing the checksum of things that require it, which implies that a gateway to non-SCION IP would mangle checksums inside the UDP or TCP packet.\r\n(There are references in -overview to docs des \r\n\r\n>  Mike McBride'\u00a0<mmcbride7@gmail.com>\r\nI discussed potential scion checksum issues (like why have them) with Eliot and understand that they\u2019ve been discussed with scion authors so won\u2019t get into that.\r\n \r\n \r\n ",
+      "createdAt": "2024-08-07T16:00:48Z",
+      "updatedAt": "2024-08-07T16:03:14Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 48,
+      "id": "I_kwDOKYa7786SQuEW",
+      "title": "Clarify that document does not relate to previous IETF work",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/48",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement",
+        "Prio 2"
+      ],
+      "body": "We should add somewhere a sentence mentioning that the protocol was developed outside IETF for a while (ETH Zurich, Anapaya Systems, etc.), and that these document are meant to document the existing deployment. \r\n\r\n- [ ] repeat for all three drafts\r\n\r\n\r\n> On 7 Aug 2024, at 17:36, Independent Submissions Editor (Eliot Lear) <rfc-ise@rfc-editor.org> wrote:\r\n'Mike McBride' [<mmcbride7@gmail.com>](mailto:mmcbride7@gmail.com) \r\nE. Does the document make clear upfront how the specification does or does not relate to past or current IETF activities?\r\n \r\n> No. That would be helpful including, perhaps, why they are individual submissions. Since SR seems to be taking the world by storm, it would perhaps help to explain (even briefly) how scion takes intradomain SR to the next level of a secure interdomain solution. But that might be better for the panrg scion overview document and not one of these ise documents. The current documents focus on BGP limitations which is fair.\r\nGood idea, we could add somewhere a sentence mentioning that the protocol was developed outside IETF for a while (ETH Zurich, Anapaya Systems, etc.), and that these document are meant to document the existing deployment. ",
+      "createdAt": "2024-08-07T16:13:16Z",
+      "updatedAt": "2024-08-07T16:13:16Z",
       "closedAt": null,
       "comments": []
     }
@@ -3359,6 +3406,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 46,
+      "id": "PR_kwDOKYa77853iY85",
+      "title": "Added SCION IP Gateway section",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/46",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Basic description pulled from different sources. Do we need to describe the encapsulation/framing protocol in detail here?\r\nIs this section in the right place in the I-D?\r\n\r\nResolves #40 ",
+      "createdAt": "2024-08-06T08:17:22Z",
+      "updatedAt": "2024-08-06T09:14:21Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "SIG",
+      "headRefOid": "5bc1781c8b45c9035ef96a1bd8117ae700c42026",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
