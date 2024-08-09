@@ -1488,33 +1488,33 @@ This specification defines the message formats for the following SCMP messages:
 
 **SCMP error messages**:
 
-|Type | Meaning													  |
+|Type | Meaning                                                   |
 |-----+-----------------------------------------------------------|
-|1    | Reserved for future use									  |
-|2    | [Packet Too Big](#packet-too-big)						  |
-|3    | Reserved for future use									  |
-|4    | Reserved for future use									  |
-|5    | [External Interface Down](#external-interface-down)		  |
+|1    | Reserved for future use                                   |
+|2    | [Packet Too Big](#packet-too-big)                         |
+|3    | Reserved for future use                                   |
+|4    | Reserved for future use                                   |
+|5    | [External Interface Down](#external-interface-down)       |
 |6    | [Internal Connectivity Down](#internal-connectivity-down) |
-|	  |															  |
-|100  | Private Experimentation									  |
-|101  | Private Experimentation									  |
-|	  |															  |
-|127  | Reserved for expansion of SCMP error messages			  |
+|     |                                                           |
+|100  | Private Experimentation                                   |
+|101  | Private Experimentation                                   |
+|     |                                                           |
+|127  | Reserved for expansion of SCMP error messages             |
 {: title="type values"}
 
 **SCMP informational messages**:
 
-| Type | Meaning												  |
+| Type | Meaning                                                  |
 |------+----------------------------------------------------------|
-| 128  | Reserved for future use								  |
-| 129  | Reserved for future use								  |
-| 130  | Reserved for future use								  |
-| 131  | Reserved for future use								  |
-| 200  | Private Experimentation								  |
-| 201  | Private Experimentation								  |
-|      |														  |
-| 255  | Reserved for expansion of SCMP informational messages	  |
+| 128  | Reserved for future use                                  |
+| 129  | Reserved for future use                                  |
+| 130  | Reserved for future use                                  |
+| 131  | Reserved for future use                                  |
+| 200  | Private Experimentation                                  |
+| 201  | Private Experimentation                                  |
+|      |                                                          |
+| 255  | Reserved for expansion of SCMP informational messages    |
 {: title="type values"}
 
 Type values 100, 101, 200, and 201 are reserved for private experimentation.
@@ -1564,11 +1564,11 @@ Implementations MUST respect the following rules when processing SCMP messages:
 ~~~~
 {:figure-24 title="packet-too-big}
 
-| SCMP Fields  |                                                               |
-|--------------+---------------------------------------------------------------|
-| Type         | 2                                                             |
-| Code         | 0                                                             |
-| MTU          | The Maximum Transmission Unit of the next-hop link.           |
+| SCMP Fields  |                                                     |
+|--------------+-----------------------------------------------------|
+| Type         | 2                                                   |
+| Code         | 0                                                   |
+| MTU          | The Maximum Transmission Unit of the next-hop link. |
 {: title="field values"}
 
 A **Packet Too Big** message SHOULD be originated by a router in response to a
