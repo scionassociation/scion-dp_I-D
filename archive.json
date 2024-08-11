@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-08T00:00:36.377396+00:00",
+  "timestamp": "2024-08-11T00:00:50.516630+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -564,9 +564,9 @@
         "Prio 1",
         "needs-discussion"
       ],
-      "body": "Path revocation in case of link failures is not clear. We only mention something in controlplane-02 section 2.4:\r\n``` \r\nOn link failures, endpoints route around the failed link by switching to\r\ndifferent paths in the data plane.\r\n```\r\nWe should make this clearer in -dataplane too. \r\n\r\n#### TODO: \r\n- [ ] scionassociation/scion-dp_I-D#37\r\n- [ ] Clarify that endpoints are expected to handle failures (and why)\r\n- [ ] Clarify when a SCMP [Interface Down](https://scion.docs.anapaya.net/en/latest/protocols/scmp.html#external-interface-down) message is sent or not,  and why (it _should_ be sent)\r\n- [ ] Clarify that SCMP interface down is currently unauthenticated, but it should be\r\n- [ ] Send email to Eliot, Harald and ask if external reference to SCMP is enough (within the context of link down messages)\r\n\r\n#### Feedback details\r\n> Harald Alvestrand <harald@alvestrand.no> \r\n Once sent, a packet\u2019s path cannot be changed; path changes are handled by routers discovering that the path no longer exists and (I assume, this is likely documented in -controlplane) sending an alert back \u201cdon\u2019t use this path\u201d.\r\n \r\n >  Form my lunch with Harald at IETF120: \r\nPath revocation in case of link down should be clarified, the mechanism to signal  endpoints how to react quickly to failures should be described better.   Right now the draft only hints to this. This topic is very relevant also for webRTC. I mentioned SCMP  Interface Down  messages: This has been a topic of discussion within the SCION community for a long time. Currently, in the deployment routers send a non-authenticated SCMP message, while it should be. There are some proposals to leverage the PKI to authenticate this. Harald proposed to  say out loud that we don\u2019t have support for authentication in current deployment but that this should be authenticated, showing this is a known problem. We should avoid saying in the draft that a feature exists but then it is not specified. Ok to say some problems still need to be solved but not yet a concern in current deployment. (he shared story about irc and ICMP destination unreachable)\r\n \r\n \r\n \r\n Relates to https://github.com/scionassociation/scion-research_I-D/issues/25",
+      "body": "Path revocation in case of link failures is not clear. We only mention something in controlplane-02 section 2.4:\r\n``` \r\nOn link failures, endpoints route around the failed link by switching to\r\ndifferent paths in the data plane.\r\n```\r\nWe should make this clearer in -dataplane too. \r\n\r\n#### TODO: \r\n- [ ] scionassociation/scion-dp_I-D#37\r\n- [x] Clarify that endpoints are expected to handle failures (and why)\r\n- [x] Clarify when a SCMP [Interface Down](https://scion.docs.anapaya.net/en/latest/protocols/scmp.html#external-interface-down) message is sent or not,  and why (it _should_ be sent)\r\n- [x] Clarify that SCMP interface down is currently unauthenticated, but it should be\r\n- [ ] Send email to Eliot, Harald and ask if external reference to SCMP is enough (within the context of link down messages)\r\n\r\n#### Feedback details\r\n> Harald Alvestrand <harald@alvestrand.no> \r\n Once sent, a packet\u2019s path cannot be changed; path changes are handled by routers discovering that the path no longer exists and (I assume, this is likely documented in -controlplane) sending an alert back \u201cdon\u2019t use this path\u201d.\r\n \r\n >  Form my lunch with Harald at IETF120: \r\nPath revocation in case of link down should be clarified, the mechanism to signal  endpoints how to react quickly to failures should be described better.   Right now the draft only hints to this. This topic is very relevant also for webRTC. I mentioned SCMP  Interface Down  messages: This has been a topic of discussion within the SCION community for a long time. Currently, in the deployment routers send a non-authenticated SCMP message, while it should be. There are some proposals to leverage the PKI to authenticate this. Harald proposed to  say out loud that we don\u2019t have support for authentication in current deployment but that this should be authenticated, showing this is a known problem. We should avoid saying in the draft that a feature exists but then it is not specified. Ok to say some problems still need to be solved but not yet a concern in current deployment. (he shared story about irc and ICMP destination unreachable)\r\n \r\n \r\n \r\n Relates to https://github.com/scionassociation/scion-research_I-D/issues/25",
       "createdAt": "2024-07-22T21:00:37Z",
-      "updatedAt": "2024-07-30T09:43:56Z",
+      "updatedAt": "2024-08-09T15:50:47Z",
       "closedAt": null,
       "comments": [
         {
@@ -3426,6 +3426,32 @@
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "SIG",
       "headRefOid": "5bc1781c8b45c9035ef96a1bd8117ae700c42026",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 49,
+      "id": "PR_kwDOKYa778539rVS",
+      "title": "describe scmp and bfd.",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/49",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I added an entire section dedicated to link failures, with a subsection for detection (BFD) and a subsection for notification (SCMP).\r\n\r\nFor SCMP: I copied the SCMP description in our manuals but reduced it to the 3 message types that we need for path recovery. I included the message too big because we know we'll have to talk about that too. Then I described what the router does with them in my own words.\r\n\r\nFor BFD, I created a dedicated subsection and moved and expanded what little text we had, I have not described the bootstrapping because I thought it'd be too much, but I think it might be ok to add it. Let me know what you think.\r\n\r\nCleaned-up mentions of those here and there to turn them into references to the above.\r\n\r\nFixes #36 \r\nFixes #37 ",
+      "createdAt": "2024-08-09T15:50:06Z",
+      "updatedAt": "2024-08-09T15:56:25Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "linkfailures",
+      "headRefOid": "2dd20567a53c281411d37a437c5e662576a96d5f",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
