@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-11T00:00:50.516630+00:00",
+  "timestamp": "2024-08-13T00:00:43.336607+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -806,16 +806,26 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "knmeynell"
+      ],
       "labels": [
         "enhancement",
         "Prio 2"
       ],
       "body": "We should add somewhere a sentence mentioning that the protocol was developed outside IETF for a while (ETH Zurich, Anapaya Systems, etc.), and that these document are meant to document the existing deployment. \r\n\r\n- [ ] repeat for all three drafts\r\n\r\n\r\n> On 7 Aug 2024, at 17:36, Independent Submissions Editor (Eliot Lear) <rfc-ise@rfc-editor.org> wrote:\r\n'Mike McBride' [<mmcbride7@gmail.com>](mailto:mmcbride7@gmail.com) \r\nE. Does the document make clear upfront how the specification does or does not relate to past or current IETF activities?\r\n \r\n> No. That would be helpful including, perhaps, why they are individual submissions. Since SR seems to be taking the world by storm, it would perhaps help to explain (even briefly) how scion takes intradomain SR to the next level of a secure interdomain solution. But that might be better for the panrg scion overview document and not one of these ise documents. The current documents focus on BGP limitations which is fair.\r\nGood idea, we could add somewhere a sentence mentioning that the protocol was developed outside IETF for a while (ETH Zurich, Anapaya Systems, etc.), and that these document are meant to document the existing deployment. ",
       "createdAt": "2024-08-07T16:13:16Z",
-      "updatedAt": "2024-08-07T16:13:16Z",
+      "updatedAt": "2024-08-12T10:35:32Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell maybe you could have a go at this?",
+          "createdAt": "2024-08-12T10:35:30Z",
+          "updatedAt": "2024-08-12T10:35:30Z"
+        }
+      ]
     }
   ],
   "pulls": [
