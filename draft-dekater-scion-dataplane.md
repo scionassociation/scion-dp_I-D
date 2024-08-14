@@ -1208,7 +1208,7 @@ The source endpoint MUST perform the following steps to correctly initialize a p
 3. Each 8-byte Info Field `InfoField` in the packet header contains the updatable `Acc` field as well as a Peering flag `P` and a Construction Direction flag `C` (see also [](#inffield)). As a next step in the path initialization process, the source MUST correctly set the flags and the `Acc` field of all `InfoFields` included in the path, according to the following rules:
    - The Construction Direction flag `C` MUST be set to "1" whenever the corresponding segment is traversed in construction direction, i.e., for down-path segments and potentially for core segments. It MUST be set to "0" for up-path segments and "reversed" core segments.
    - The Peering flag `P` MUST be set to "1" for up-segments and down-segments if the path contains a peering Hop Field.
-   
+
    The following `InfoField` settings are possible, based on the following use cases:
 
    - **Case 1** <br> The path segment is traversed in construction direction and includes no peering Hop Field. It starts at the *i*-th AS of the full segment discovered in beaconing. In this case:
