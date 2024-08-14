@@ -891,10 +891,7 @@ Alignment requirement: none.
 The PadN option is used to insert two or more bytes of padding into the `Options` field of an extension header. For N bytes of padding, the `OptDataLen` field contains the value N-2, and the `OptData` consists of N-2 zero-valued bytes.
 
 
-## Upper-Layer Protocol Considerations
-
-
-### Pseudo Header for Upper-Layer Checksum {#pseudo}
+## Pseudo Header for Upper-Layer Checksum {#pseudo}
 
 Any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation MUST use the following pseudo header:
 
@@ -925,7 +922,6 @@ Any transport or other upper-layer protocol that includes addresses from the SCI
 - `DstISD`, `SrcISD`, `DstAS`, `SrcAS`, `DstHostAddr`, `SrcHostAddr`: These values are taken from the SCION address header.
 - `Upper-Layer Packet Length`: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly, use the value from the `PayloadLen` field in the SCION common header, minus the sum of the extension header lengths.
 - `Next Header`: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also [](#protnum)). This field can differ from the `NextHdr` field in the SCION common header, if extensions are present.
-
 
 
 # Life of a SCION Data Packet
