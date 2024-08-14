@@ -96,8 +96,7 @@ Table of Contents
        2.3.4.  Path Reversal
      2.4.  Extension Headers
        2.4.1.  Options Field
-     2.5.  Upper-Layer Protocol Considerations
-       2.5.1.   Pseudo Header for Upper-Layer Checksum
+     2.5.   Pseudo Header for Upper-Layer Checksum
    3.  Life of a SCION Data Packet
      3.1.   Description
      3.2.   Creating an End-to-End SCION Forwarding Path
@@ -1374,9 +1373,7 @@ Table of Contents
    the OptDataLen field contains the value N-2, and the OptData consists
    of N-2 zero-valued bytes.
 
-2.5.  Upper-Layer Protocol Considerations
-
-2.5.1.   Pseudo Header for Upper-Layer Checksum
+2.5.   Pseudo Header for Upper-Layer Checksum
 
    Any transport or other upper-layer protocol that includes addresses
    from the SCION header in the checksum computation MUST use the

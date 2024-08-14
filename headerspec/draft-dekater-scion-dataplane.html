@@ -1195,12 +1195,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5">
-                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="auto internal xref">2.5</a>.  <a href="#name-upper-layer-protocol-consid" class="internal xref">Upper-Layer Protocol Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5.2.1">
-                    <p id="section-toc.1-1.2.2.5.2.1.1"><a href="#section-2.5.1" class="auto internal xref">2.5.1</a>.  <a href="#name-pseudo-header-for-upper-lay" class="internal xref">Pseudo Header for Upper-Layer Checksum</a></p>
-</li>
-                </ul>
+                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="auto internal xref">2.5</a>.  <a href="#name-pseudo-header-for-upper-lay" class="internal xref">Pseudo Header for Upper-Layer Checksum</a></p>
 </li>
             </ul>
 </li>
@@ -2461,20 +2456,15 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </div>
 </section>
 </div>
-<div id="upper-layer-protocol-considerations">
-<section id="section-2.5">
-        <h3 id="name-upper-layer-protocol-consid">
-<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-upper-layer-protocol-consid" class="section-name selfRef">Upper-Layer Protocol Considerations</a>
-        </h3>
 <div id="pseudo">
-<section id="section-2.5.1">
-          <h4 id="name-pseudo-header-for-upper-lay">
-<a href="#section-2.5.1" class="section-number selfRef">2.5.1. </a><a href="#name-pseudo-header-for-upper-lay" class="section-name selfRef">Pseudo Header for Upper-Layer Checksum</a>
-          </h4>
-<p id="section-2.5.1-1">Any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation <span class="bcp14">MUST</span> use the following pseudo header:<a href="#section-2.5.1-1" class="pilcrow">¶</a></p>
+<section id="section-2.5">
+        <h3 id="name-pseudo-header-for-upper-lay">
+<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-pseudo-header-for-upper-lay" class="section-name selfRef">Pseudo Header for Upper-Layer Checksum</a>
+        </h3>
+<p id="section-2.5-1">Any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation <span class="bcp14">MUST</span> use the following pseudo header:<a href="#section-2.5-1" class="pilcrow">¶</a></p>
 <span id="name-layout-of-the-pseudo-header"></span><div id="_figure-15">
 <figure id="figure-16">
-            <div class="alignLeft art-text artwork" id="section-2.5.1-2.1">
+          <div class="alignLeft art-text artwork" id="section-2.5-2.1">
 <pre>
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -2499,21 +2489,19 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </div>
 <figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
 <a href="#name-layout-of-the-pseudo-header" class="selfRef">Layout of the pseudo header for the upper-layer checksum</a>
-            </figcaption></figure>
+          </figcaption></figure>
 </div>
 <ul class="normal">
-<li class="normal" id="section-2.5.1-3.1">
-              <p id="section-2.5.1-3.1.1"><code>DstISD</code>, <code>SrcISD</code>, <code>DstAS</code>, <code>SrcAS</code>, <code>DstHostAddr</code>, <code>SrcHostAddr</code>: These values are taken from the SCION address header.<a href="#section-2.5.1-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.5-3.1">
+            <p id="section-2.5-3.1.1"><code>DstISD</code>, <code>SrcISD</code>, <code>DstAS</code>, <code>SrcAS</code>, <code>DstHostAddr</code>, <code>SrcHostAddr</code>: These values are taken from the SCION address header.<a href="#section-2.5-3.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.5.1-3.2">
-              <p id="section-2.5.1-3.2.1"><code>Upper-Layer Packet Length</code>: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly, use the value from the <code>PayloadLen</code> field in the SCION common header, minus the sum of the extension header lengths.<a href="#section-2.5.1-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.5-3.2">
+            <p id="section-2.5-3.2.1"><code>Upper-Layer Packet Length</code>: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly, use the value from the <code>PayloadLen</code> field in the SCION common header, minus the sum of the extension header lengths.<a href="#section-2.5-3.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.5.1-3.3">
-              <p id="section-2.5.1-3.3.1"><code>Next Header</code>: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also <a href="#protnum" class="auto internal xref">Appendix "Assigned SCION Protocol Numbers"</a>). This field can differ from the <code>NextHdr</code> field in the SCION common header, if extensions are present.<a href="#section-2.5.1-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-2.5-3.3">
+            <p id="section-2.5-3.3.1"><code>Next Header</code>: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also <a href="#protnum" class="auto internal xref">Appendix "Assigned SCION Protocol Numbers"</a>). This field can differ from the <code>NextHdr</code> field in the SCION common header, if extensions are present.<a href="#section-2.5-3.3.1" class="pilcrow">¶</a></p>
 </li>
-          </ul>
-</section>
-</div>
+        </ul>
 </section>
 </div>
 </section>
