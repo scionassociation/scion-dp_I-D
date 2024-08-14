@@ -186,6 +186,11 @@ Table of Contents
 
    This document describes the SCION Data Plane component.
 
+   The SCION architecture was initially developed outside of the IETF by
+   ETH Zurich with significant contributions from Anapaya Systems.  The
+   aim of this document is to describe existing implementations and
+   operational deployments.
+
 1.1.  Terminology
 
    *Autonomous System (AS)*: An autonomous system is a network under a
