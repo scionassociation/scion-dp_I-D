@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-13T00:00:43.336607+00:00",
+  "timestamp": "2024-08-15T00:00:45.525730+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -676,9 +676,17 @@
       ],
       "body": "Current text is confusing\r\n\r\n#### TODOs: \r\n- [ ] Clarify use of the  ConsEgress Router Alert flag\r\n- [ ] ConsIngress and ConsEgress are just instances of interfaces Identifiers, we should make this clearer (e.g. when we define interface IDs). \r\n- [ ] ... (see feedback below)\r\n\r\n#### Reviewer feedback\r\n> Harald Alvestrand\r\nEndpoint addresses consist of an AS number, an interface ID, and a \u201cnext protocol\u201d address. This last is presumably only useful at SCION endpoints.\r\n\r\n> My answer:\r\nOne of the fields in a SCION address is the ISD (Isolation Domain) number, not the interface ID. We mention \"a complete SCION address is composed of the <ISD, AS, endpoint address>\u201d in section 1.3.1. The we show the  address header in 2.2.2. If this is too late in the draft, we could add some text earlier to clarify this. Interface IDs, instead, are part of hop fields (interface IDs are in the  the ConsIngress / ConsEgress). Perhaps the confusing fact is that the field is called ConsIngress/Egress. This is because  these fields refer to interface IDs in the direction the link was discovered during path construction (beaconing). \r\n\r\n> Harald Alvestrand\r\n> There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\n> Response: \r\nYou are probably referring to the ConsEgress Router Alert flag, right? Thank you for spotting this, the description should be extended. This is actually one bit, we\u2019ll add some explanation on this flag. (I see how the current description is somehow confusing). Besides that, ConsIngress and ConsEgress are just instances of interfaces Identifiers, we probably have to make this clearer. \r\nRegarding traceroute, this is an example of how this might be used (there is a SCON trace route application). As we don\u2019t describe it, I\u2019d remove it. \r\n\r\n> Eliot, 20.07.2024\r\n>   ConsIngress and ConsEgress require a lot more explanation if they're to be included.\r\n\r\n> Arald Alvestrand, 20.07\r\n>  There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\nNote: we use naming ConsIngress, ConsEgress because of https://github.com/scionproto/scion/issues/1479 \r\n\r\n",
       "createdAt": "2024-07-26T22:28:49Z",
-      "updatedAt": "2024-07-30T09:51:30Z",
+      "updatedAt": "2024-08-13T10:36:38Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "While researching traceroute, I wasn't able to figure out what it accomplishes: the path is already determined, link failures would be reported by scmp errors, and ping would be available to provide positive confirmation. So, what's left for traceroute to do? If traceroute is useless (not mentioning we don't really want to describe SCMP messages besides link failures), then so are the router alert flags and the associated behavior. Should we just mark them as reserved for future use and delete all mentions of traceroute (and deprecate that stuff from our code)?\r\n\r\nFrom my naive perspective, it seems that router alert flags were a solution in search of a problem and that traceroute was invented as an example (contrived) of their use.\r\n\r\nTo be fair, the concept that a packet can contain a payload to be processed by the router itself seems potentially useful. Even if traceroute is a poor example. I can imagine remote administration protocols, for example. So, how about we simply state that these flags are there to enable messages destined to the router itself, but that such messages are a future extension. WDYT?\r\n",
+          "createdAt": "2024-08-13T10:27:05Z",
+          "updatedAt": "2024-08-13T10:36:38Z"
+        }
+      ]
     },
     {
       "number": 42,
@@ -803,7 +811,7 @@
       "id": "I_kwDOKYa7786SQuEW",
       "title": "Clarify that document does not relate to previous IETF work",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/48",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -815,8 +823,8 @@
       ],
       "body": "We should add somewhere a sentence mentioning that the protocol was developed outside IETF for a while (ETH Zurich, Anapaya Systems, etc.), and that these document are meant to document the existing deployment. \r\n\r\n- [ ] repeat for all three drafts\r\n\r\n\r\n> On 7 Aug 2024, at 17:36, Independent Submissions Editor (Eliot Lear) <rfc-ise@rfc-editor.org> wrote:\r\n'Mike McBride' [<mmcbride7@gmail.com>](mailto:mmcbride7@gmail.com) \r\nE. Does the document make clear upfront how the specification does or does not relate to past or current IETF activities?\r\n \r\n> No. That would be helpful including, perhaps, why they are individual submissions. Since SR seems to be taking the world by storm, it would perhaps help to explain (even briefly) how scion takes intradomain SR to the next level of a secure interdomain solution. But that might be better for the panrg scion overview document and not one of these ise documents. The current documents focus on BGP limitations which is fair.\r\nGood idea, we could add somewhere a sentence mentioning that the protocol was developed outside IETF for a while (ETH Zurich, Anapaya Systems, etc.), and that these document are meant to document the existing deployment. ",
       "createdAt": "2024-08-07T16:13:16Z",
-      "updatedAt": "2024-08-12T10:35:32Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-14T19:15:09Z",
+      "closedAt": "2024-08-14T19:15:09Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -824,6 +832,13 @@
           "body": "@knmeynell maybe you could have a go at this?",
           "createdAt": "2024-08-12T10:35:30Z",
           "updatedAt": "2024-08-12T10:35:30Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Added reference in Introduction section.",
+          "createdAt": "2024-08-14T19:15:09Z",
+          "updatedAt": "2024-08-14T19:15:09Z"
         }
       ]
     }
@@ -3429,19 +3444,58 @@
       "labels": [],
       "body": "Basic description pulled from different sources. Do we need to describe the encapsulation/framing protocol in detail here?\r\nIs this section in the right place in the I-D?\r\n\r\nResolves #40 ",
       "createdAt": "2024-08-06T08:17:22Z",
-      "updatedAt": "2024-08-06T09:14:21Z",
+      "updatedAt": "2024-08-13T17:29:07Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "SIG",
-      "headRefOid": "5bc1781c8b45c9035ef96a1bd8117ae700c42026",
+      "headRefOid": "f121b2b225118c35b77a67e722b40826445ae079",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786EacvL",
+          "commit": {
+            "abbreviatedOid": "f121b2b"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Nice scrub too.\r\n",
+          "createdAt": "2024-08-06T14:44:25Z",
+          "updatedAt": "2024-08-13T17:29:07Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "Subject to Nico confirming my understanding, I would suggest adding the following (in the hope of clarifying the situation for the readers):\r\n\r\na SIG, as viewed by non-SCION hosts, reside inside the same AS internal network. Non-scion hosts used the SIG as a default router. In terms of network topology, the SIG has the same relationship with non-SCION hosts as the border router with SCION hosts.\r\n",
+              "createdAt": "2024-08-06T14:44:25Z",
+              "updatedAt": "2024-08-13T17:29:07Z"
+            },
+            {
+              "originalPosition": 4,
+              "body": "May be we could title this \"interoperability with IP\" or \"support for IP-only hosts\"; just so it answers the question on the audience's mind. And segue with a one line introducing the rest...something like \"interoperability is ensured by SCION IP Gateway devices\".",
+              "createdAt": "2024-08-06T14:50:31Z",
+              "updatedAt": "2024-08-13T17:29:07Z"
+            },
+            {
+              "originalPosition": 12,
+              "body": "Overall I found your text clear and concise. Now we have a choice:\r\n* Leave it at that and see if that's enough.\r\n* Say explicitly that the tunneling and route-trading protocols are not mandated by this draft (and-see-this-doc-for-current-practice)\r\n* Propose the current tunneling protocol as a standard but leave the route-trading business up the gateway implementors (pretty-much leaving it at what your last paragraph says).\r\n* Describe everything :-(\r\n* Any other option?",
+              "createdAt": "2024-08-06T14:54:30Z",
+              "updatedAt": "2024-08-13T17:29:07Z"
+            },
+            {
+              "originalPosition": 11,
+              "body": "used the SIG -> use the SIG. Sorry.\r\n",
+              "createdAt": "2024-08-13T17:26:39Z",
+              "updatedAt": "2024-08-13T17:29:07Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 49,
@@ -3462,6 +3516,58 @@
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "linkfailures",
       "headRefOid": "2dd20567a53c281411d37a437c5e662576a96d5f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 50,
+      "id": "PR_kwDOKYa77854V9ri",
+      "title": "Changes to SCION Header Specification section",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/50",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-08-14T10:58:05Z",
+      "updatedAt": "2024-08-14T11:26:33Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "headerspec",
+      "headRefOid": "21b1322918d52995b4ce14785058e70a8f088657",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 51,
+      "id": "PR_kwDOKYa77854ZJu7",
+      "title": "Substantial updates",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/51",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "1. Incorporated Nico's review notes (mostly)\r\n2. Rationalised text\r\n3. Removed duplicate notes and unnecessary repetition \r\n4. Clarified and made use of terminology more consistent\r\n5. Improved grammar and text flow\r\n6. Amalgamated some sub-sections to reduce number of levels",
+      "createdAt": "2024-08-14T18:13:00Z",
+      "updatedAt": "2024-08-14T19:14:44Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "other-fixes",
+      "headRefOid": "1342a18be1ada737283e8c0ab651694e5d1cfd0f",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
