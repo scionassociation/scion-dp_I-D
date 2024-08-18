@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-15T00:00:45.525730+00:00",
+  "timestamp": "2024-08-18T00:00:51.678837+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -461,7 +461,7 @@
       "id": "I_kwDOKYa7786QGJPM",
       "title": "dataplane -> data plane",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/31",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -473,9 +473,17 @@
       ],
       "body": "Misspelling might have been reintroduced in some recent change ",
       "createdAt": "2024-07-18T22:45:15Z",
-      "updatedAt": "2024-07-30T09:52:37Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-08-15T13:02:38Z",
+      "closedAt": "2024-08-15T13:02:38Z",
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "All outstanding instances of 'dataplane' changed to 'data plane, with the exception of the filename (file name?).",
+          "createdAt": "2024-08-15T13:02:38Z",
+          "updatedAt": "2024-08-15T13:02:38Z"
+        }
+      ]
     },
     {
       "number": 32,
@@ -774,7 +782,7 @@
       "labels": [],
       "body": "Go through the draft again and make sure there are no other forward references\r\n\r\nTwin issues:\r\n- https://github.com/scionassociation/scion-cp_I-D/issues/58\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36",
       "createdAt": "2024-07-26T22:50:30Z",
-      "updatedAt": "2024-08-06T19:04:50Z",
+      "updatedAt": "2024-08-15T12:58:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -783,6 +791,13 @@
           "body": "@knmeynell [here](https://drive.google.com/file/d/1hNtOtWpkwSnsre7nMYJgDPUHbuVQTasi/view?usp=drive_link) you can find my paper review of version -02",
           "createdAt": "2024-08-06T19:04:49Z",
           "updatedAt": "2024-08-06T19:04:49Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "After a couple of passes, I didn't find a whole lot of forward references, but have removed or re-written where I did find the odd one. One reference to SPAO is still in 'Security Considerations' because it's probably relevant to the discussion and does reference the 'Complete Guide to SCION'. ",
+          "createdAt": "2024-08-15T12:58:53Z",
+          "updatedAt": "2024-08-15T12:58:53Z"
         }
       ]
     },
