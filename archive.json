@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-20T00:00:46.056041+00:00",
+  "timestamp": "2024-08-22T00:00:54.665822+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -684,7 +684,7 @@
       ],
       "body": "Current text is confusing\r\n\r\n#### TODOs: \r\n- [ ] Clarify use of the  ConsEgress Router Alert flag\r\n- [ ] ConsIngress and ConsEgress are just instances of interfaces Identifiers, we should make this clearer (e.g. when we define interface IDs). \r\n- [ ] ... (see feedback below)\r\n\r\n#### Reviewer feedback\r\n> Harald Alvestrand\r\nEndpoint addresses consist of an AS number, an interface ID, and a \u201cnext protocol\u201d address. This last is presumably only useful at SCION endpoints.\r\n\r\n> My answer:\r\nOne of the fields in a SCION address is the ISD (Isolation Domain) number, not the interface ID. We mention \"a complete SCION address is composed of the <ISD, AS, endpoint address>\u201d in section 1.3.1. The we show the  address header in 2.2.2. If this is too late in the draft, we could add some text earlier to clarify this. Interface IDs, instead, are part of hop fields (interface IDs are in the  the ConsIngress / ConsEgress). Perhaps the confusing fact is that the field is called ConsIngress/Egress. This is because  these fields refer to interface IDs in the direction the link was discovered during path construction (beaconing). \r\n\r\n> Harald Alvestrand\r\n> There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\n> Response: \r\nYou are probably referring to the ConsEgress Router Alert flag, right? Thank you for spotting this, the description should be extended. This is actually one bit, we\u2019ll add some explanation on this flag. (I see how the current description is somehow confusing). Besides that, ConsIngress and ConsEgress are just instances of interfaces Identifiers, we probably have to make this clearer. \r\nRegarding traceroute, this is an example of how this might be used (there is a SCON trace route application). As we don\u2019t describe it, I\u2019d remove it. \r\n\r\n> Eliot, 20.07.2024\r\n>   ConsIngress and ConsEgress require a lot more explanation if they're to be included.\r\n\r\n> Arald Alvestrand, 20.07\r\n>  There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\nNote: we use naming ConsIngress, ConsEgress because of https://github.com/scionproto/scion/issues/1479 \r\n\r\n",
       "createdAt": "2024-07-26T22:28:49Z",
-      "updatedAt": "2024-08-13T10:36:38Z",
+      "updatedAt": "2024-08-21T20:47:18Z",
       "closedAt": null,
       "comments": [
         {
@@ -693,6 +693,20 @@
           "body": "While researching traceroute, I wasn't able to figure out what it accomplishes: the path is already determined, link failures would be reported by scmp errors, and ping would be available to provide positive confirmation. So, what's left for traceroute to do? If traceroute is useless (not mentioning we don't really want to describe SCMP messages besides link failures), then so are the router alert flags and the associated behavior. Should we just mark them as reserved for future use and delete all mentions of traceroute (and deprecate that stuff from our code)?\r\n\r\nFrom my naive perspective, it seems that router alert flags were a solution in search of a problem and that traceroute was invented as an example (contrived) of their use.\r\n\r\nTo be fair, the concept that a packet can contain a payload to be processed by the router itself seems potentially useful. Even if traceroute is a poor example. I can imagine remote administration protocols, for example. So, how about we simply state that these flags are there to enable messages destined to the router itself, but that such messages are a future extension. WDYT?\r\n",
           "createdAt": "2024-08-13T10:27:05Z",
           "updatedAt": "2024-08-13T10:36:38Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> So, what's left for traceroute to do?  \r\n\r\nAFAIK, SCION traceroute is meant to allow the endpoint to be informed of ISD,ASes traversed, because the SCION path only contains a sequence of interface IDs (but not the ISD and AS numbers). \r\n\r\n> Should we just mark them as reserved for future use and delete all mentions of traceroute (and deprecate that stuff from our code)? \r\n\r\nI think router alert flags are there in the deployed protocol, so we cannot remove them. We can leave them there and mention that they are reserved for options that must be processed at each router. \r\n\r\n@oncilla did I get it right? Is there any other critical use of traceroute or router alert flags, that makes them necessary for the current deployment? ",
+          "createdAt": "2024-08-21T14:21:51Z",
+          "updatedAt": "2024-08-21T14:21:51Z"
+        },
+        {
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "body": "Traceroute is an essential SCMP message to discover path health in the current implementation.\r\nBoth the IP-SCION Gateway and scion showpaths rely on it.\r\nWe cannot simply remove it without an appropriate replacements.\r\n\r\nFWIW, I think the readers are a bit confused as they seem to think the router alert flag and the interface IDs are somehow the same thing.\r\n\r\n",
+          "createdAt": "2024-08-21T20:45:40Z",
+          "updatedAt": "2024-08-21T20:47:18Z"
         }
       ]
     },
@@ -3459,7 +3473,7 @@
       "labels": [],
       "body": "Basic description pulled from different sources. Do we need to describe the encapsulation/framing protocol in detail here?\r\nIs this section in the right place in the I-D?\r\n\r\nResolves #40 ",
       "createdAt": "2024-08-06T08:17:22Z",
-      "updatedAt": "2024-08-13T17:29:07Z",
+      "updatedAt": "2024-08-21T15:46:54Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
@@ -3507,6 +3521,46 @@
               "body": "used the SIG -> use the SIG. Sorry.\r\n",
               "createdAt": "2024-08-13T17:26:39Z",
               "updatedAt": "2024-08-13T17:29:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786GLzIG",
+          "commit": {
+            "abbreviatedOid": "5bc1781"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-21T15:45:32Z",
+          "updatedAt": "2024-08-21T15:45:32Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": ">a SIG, as viewed by non-SCION hosts, reside inside the same AS internal network.\r\n\r\nThis is true in some cases, but not all. For example, in cases such as SBAS the SIG might be deployed in a \"remote\" AS, and I believe this  may be the case also for some Gate deployments\r\n\r\n>  Non-scion hosts used the SIG as a default router. \r\n\r\nThis means that the SIG is on the same L2 as IP hosts. It could be, but in many cases the SIG is at the edge of the corporate network (see example topos: https://docs.anapaya.net/en/release-v0.36/gate/deployment/ ), so there is some IP routing between the SIG and endpoints. \r\n\r\n>  In terms of network topology, the SIG has the same relationship with non-SCION hosts as the border router with SCION hosts. \r\n\r\nI'd say that the SIG is usually deployed at the edge of the customer network. \r\n\r\n \r\n",
+              "createdAt": "2024-08-21T15:45:32Z",
+              "updatedAt": "2024-08-21T15:45:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786GLz24",
+          "commit": {
+            "abbreviatedOid": "5bc1781"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-21T15:46:54Z",
+          "updatedAt": "2024-08-21T15:46:54Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\n# Interoperability: SCION IP Gateway\r\n```\r\nI like it, how about this?",
+              "createdAt": "2024-08-21T15:46:54Z",
+              "updatedAt": "2024-08-21T15:46:54Z"
             }
           ]
         }
@@ -3574,9 +3628,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "1. Incorporated Nico's review notes (mostly)\r\n2. Rationalised text\r\n3. Removed duplicate notes and unnecessary repetition \r\n4. Clarified and made use of terminology more consistent\r\n5. Improved grammar and text flow\r\n6. Amalgamated some sub-sections to reduce number of levels",
+      "body": "1. Incorporated Nico's review notes (mostly)\r\n2. Rationalised text\r\n3. Removed duplicate notes and unnecessary repetition \r\n4. Clarified and made use of terminology more consistent\r\n5. Improved grammar and text flow\r\n6. Amalgamated some sub-sections to reduce number of levels\r\n\r\nContributes to \r\n\r\n- #45 ",
       "createdAt": "2024-08-14T18:13:00Z",
-      "updatedAt": "2024-08-14T19:14:44Z",
+      "updatedAt": "2024-08-21T15:13:36Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
