@@ -190,7 +190,7 @@ This document describes the SCION Data Plane component.
 
 **Data Plane**: The data plane (sometimes also referred to as the forwarding plane) is responsible for forwarding data packets that endpoints have injected into the network. After routing information has been disseminated by the control plane, packets are forwarded by the data plane in accordance with such information.
 
-**Endpoint**: An endpoint is the start or the end of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}} or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
+**Endpoint**: An endpoint is the start or the end of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}} or a [SCION IP gateway](#sig) bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
 
 **Forwarding Key**: A forwarding key is a symmetric key that is shared between the control service (control plane) and the routers (data plane) of an AS. It is used to authenticate Hop Fields in the end-to-end SCION path. The forwarding key is an AS-local secret and is not shared with other ASes.
 
@@ -1506,14 +1506,16 @@ On the flip side, the path choice of the endpoint may possibly be exploited by a
 **Note** that SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope. However, the additional information contained in the SCION header enables more targeted filtering, e.g., by ISD, AS or path length.
 
 
-# SCION IP Gateway
+# Interoperability: SCION IP Gateway {#sig}
 
 The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support the use of applications that are not SCION enabled.
 
-An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION-enabled applications from the perspective of the SCION network. Both IPv4 and IPv6 packets may be encapsulated, but no other types of packets are supported. Hosts within SCION networks that wish to be reachable from external IP networks must have public IP addresses, although this does not preclude the use of Network Address Translation.
+An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION endpoints from the perspective of the SCION network. Both IPv4 and IPv6 packets may be encapsulated, but no other types of packets are supported. Hosts within SCION networks that wish to be reachable from external IP networks must have public IP addresses, although this does not preclude the use of Network Address Translation.
 
-Each SIG establishes a session to one or multiple remote SIGs. They can choose to send SCION packets to remote SIGs in accordance with statically configured IP prefixes, or by dynamically announcing IP prefixes to each other. Each SIG may also choose how to send SCION packets based on locally configured policies when multiple SIGs are available.
+Each SIG establishes a session to one or multiple remote SIGs. Each pair of SIGs uses a common tunneling protocol. Each SIG may choose to send SCION packets to a remote SIG in accordance with static IP routes, or by dynamically announcing IP prefixes to each other via a routing protocol. Each SIG may also choose how to send SCION packets based on locally configured policies when multiple remote SIGs are available.
+In addition, the source SIG is responsible for SCION path selection.
 
+A SIG is typically deployed inside the same AS internal network as its non-SCION hosts. In an enterprise scenario, it is usually deployed at the edge of the enterprise network.
 
 # IANA Considerations
 
