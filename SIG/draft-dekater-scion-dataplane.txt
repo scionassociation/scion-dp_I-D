@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 14 February 2025                                        S. Hitz
+Expires: 24 February 2025                                        S. Hitz
                                                          Anapaya Systems
-                                                          13 August 2024
+                                                          23 August 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 February 2025.
+   This Internet-Draft will expire on 24 February 2025.
 
 Copyright Notice
 
@@ -117,7 +117,7 @@ Table of Contents
        5.2.1.  Modification of the Path Header
      5.3.  Off-Path Attacks
      5.4.  Volumetric Denial of Service Attacks
-   6.  SCION IP Gateway
+   6.  Interoperability: SCION IP Gateway
    7.  IANA Considerations
    8.  References
      8.1.  Normative References
@@ -204,9 +204,9 @@ Table of Contents
    the data plane in accordance with such information.
 
    *Endpoint*: An endpoint is the start or the end of a SCION path.  For
-   example, an endpoint can be a host as defined in [RFC1122] or a
-   gateway bridging a SCION and an IP domain.  This definition is based
-   on the definition in [RFC9473].
+   example, an endpoint can be a host as defined in [RFC1122] or a SCION
+   IP gateway (Section 6) bridging a SCION and an IP domain.  This
+   definition is based on the definition in [RFC9473].
 
    *Forwarding Key*: A forwarding key is a symmetric key that is shared
    between the control service (control plane) and the routers (data
@@ -2647,7 +2647,7 @@ direction
    additional information contained in the SCION header enables more
    targeted filtering, e.g., by ISD, AS or path length.
 
-6.  SCION IP Gateway
+6.  Interoperability: SCION IP Gateway
 
    The SCION IP Gateway (SIG) enables IP packets to be tunnelled over
    SCION to support the use of applications that are not SCION enabled.
@@ -2657,19 +2657,24 @@ direction
    decapsulates the IP packets from the SCION packets and forwards them
    towards their destination IP address.  The SIGs at either end of a
    tunnel act as routers from the perspective of IP, whilst acting as
-   SCION-enabled applications from the perspective of the SCION network.
-   Both IPv4 and IPv6 packets may be encapsulated, but no other types of
-   packets are supported.  Hosts within SCION networks that wish to be
-   reachable from external IP networks must have public IP addresses,
-   although this does not preclude the use of Network Address
-   Translation.
+   SCION endpoints from the perspective of the SCION network.  Both IPv4
+   and IPv6 packets may be encapsulated, but no other types of packets
+   are supported.  Hosts within SCION networks that wish to be reachable
+   from external IP networks must have public IP addresses, although
+   this does not preclude the use of Network Address Translation.
 
-   Each SIG establishes a session to one or multiple remote SIGs.  They
-   can choose to send SCION packets to remote SIGs in accordance with
-   statically configured IP prefixes, or by dynamically announcing IP
-   prefixes to each other.  Each SIG may also choose how to send SCION
-   packets based on locally configured policies when multiple SIGs are
-   available.
+   Each SIG establishes a session to one or multiple remote SIGs.  Each
+   pair of SIGs uses a common tunneling protocol.  Each SIG may choose
+   to send SCION packets to a remote SIG in accordance with static IP
+   routes, or by dynamically announcing IP prefixes to each other via a
+   routing protocol.  Each SIG may also choose how to send SCION packets
+   based on locally configured policies when multiple remote SIGs are
+   available.  In addition, the source SIG is responsible for SCION path
+   selection.
+
+   A SIG is typically deployed inside the same AS internal network as
+   its non-SCION hosts.  In an enterprise scenario, it is usually
+   deployed at the edge of the enterprise network.
 
 7.  IANA Considerations
 
