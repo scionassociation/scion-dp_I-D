@@ -743,7 +743,7 @@ The 12-byte Hop Field (``HopField``) has the following format:
   - `Timestamp` + (1 + `ExpTime`) * (3600/256)
 
 - `ConsIngress`, `ConsEgress`: The 16-bits ingress/egress interface IDs in construction direction, that is, the direction of beaconing.
-- `MAC`: The 6-byte Message Authentication Code to authenticate the Hop Field. For details on how this MAC is calculated, see [](#hf-mac-calc).
+- `MAC`: The 6-byte Message Authentication Code to authenticate the Hop Field. For details on how this MAC is calculated, see [](#hf-mac-overview).
 
 
 ### One-Hop Path Type {#onehop}
@@ -987,7 +987,7 @@ Endpoint A now adds this end-to-end forwarding path to the header of the packet 
 
 ## Step-by-Step Explanation
 
-This section explains what happens with the SCION packet header at each router, based on the network topology in described {{figure-16}} above. Each step includes a table that represents a simplified snapshot of the packet header at the end of this specific step. Regarding the notation used in the figure/tables, each source and destination entry should be read as router (or endpoint) followed by its address. The current Info Field (with metadata on the current path segment) in the SCION header is depicted as italic/cursive in the tables. The current Hop Field, representing the current AS, is shown bold. The snapshot tables also include references to IP/UDP addresses.
+This section explains what happens with the SCION packet header at each router, based on the network topology in described {{figure-16}} above. Each step includes a table that represents a simplified snapshot of the packet header at the end of this specific step. Regarding the notation used in the figure/tables, each source and destination entry should be read as router (or endpoint) followed by its address. The current Info Field (with metadata on the current path segment) in the SCION header is depicted as italic/cursive in the tables. The current Hop Field, representing the current AS, is shown bold. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel of SCION data packets.
 
 - *Step 1* <br> **A->R1**: The SCION-enabled Endpoint A in AS2 creates a new SCION packet destined for destination endpoint B in AS3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case Router 1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to Router 1, utilizing AS2's internal routing protocol. The current Info Field is *IF1*. Upon receiving the packet, Router 1 will forward the packet on the egress interface that endpoint A has included into the first Hop Field of the SCION header.
 
@@ -1083,7 +1083,7 @@ SCION uses cryptographic mechanisms to efficiently provide path authorization. T
 When authorizing SCION PCBs and path segments in the control plane and forwarding information in the data plane, an AS authenticates not only its own hop information but also an aggregation of all upstream hops. This section describes how this works.
 
 
-### Hop Field MAC Computation {#hf-mac-calc}
+### Hop Field MAC Overview {#hf-mac-overview}
 
 The MAC in the Hop Fields of a SCION path has two purposes:
 
@@ -1101,7 +1101,7 @@ When combining path segments to create a path to the destination endpoint, the s
 The aggregated 16-bit path segment identifier and preceding MACs prevent splicing of different path segments unless there is a collision of the `Acc` value among compatible path segments in an AS. See {{path-splicing}} for more details.
 
 
-#### Hop Field MAC - Definition {#def-mac}
+#### Hop Field MAC - Calculation {#hf-mac-calc}
 
 The Hop Field MAC is calculated as follows:
 
@@ -1126,7 +1126,7 @@ Thus, the current MAC is based on the XOR-sum of the truncated MACs of all prece
 
 The Accumulator Acc<sub>i</sub> is an updatable counter introduced in the data plane to avoid the overhead caused by MAC-chaining for path authorization. This is achieved by incrementally tracking the XOR-sum of the previous MACs as a separate, updatable accumulator field `Acc`, which is part of the path segment's Info Field `InfoField` in the packet header (see also [](#inffield)). Routers update this field by adding/subtracting only a single 16-bit value each.
 
-[](#def-mac) defines MAC<sub>i</sub>, but in the data plane the expression `SegID XOR MAC_0 [:2] ... XOR MAC_i-1 [:2]` is replaced by Acc<sub>i</sub>. This results in the following alternative procedure for the computation of MAC<sub>i</sub> used in the data plane:
+[](#hf-mac-calc) defines MAC<sub>i</sub>, but in the data plane the expression `SegID XOR MAC_0 [:2] ... XOR MAC_i-1 [:2]` is replaced by Acc<sub>i</sub>. This results in the following alternative procedure for the computation of MAC<sub>i</sub> used in the data plane:
 
 MAC<sub>i</sub> = Ck<sub>i</sub> (Acc<sub>i</sub>, Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
 
@@ -1178,7 +1178,7 @@ For alternative algorithms, the following requirements MUST all be met:
 
 ### Peering Link MAC Computation {#peerlink}
 
-The Hop Field MAC computation described in [](#def-mac) does not apply to a peering Hop Field, i.e. to a Hop Field that allows transiting from a child interface/link to a peering interface/link.
+The Hop Field MAC computation described in [](#hf-mac-calc) does not apply to a peering Hop Field, i.e. to a Hop Field that allows transiting from a child interface/link to a peering interface/link.
 
 The reason for this is that the MACs of the Hop Fields "after" the peering Hop Field (in beaconing direction) are not chained to the MAC of the peering Hop Field, but to the MAC of the main Hop Field in the corresponding AS entry. To make this work, the MAC of the peering Hop Field is also chained to the MAC of the main Hop Field - this allows for the validation of the chained MAC for both the peering Hop Field and the following Hop Fields by using the same `Acc` field value.
 
@@ -1228,7 +1228,7 @@ The source endpoint MUST perform the following steps to correctly initialize a p
 
      - The Peering flag `P` = "0" or "1" (depending on whether the last Hop Field in the up-segment is a peering Hop Field)
      - The Construction Direction flag `C` = "0"
-     - The value of the `Acc` = Acc<sub>n-1</sub>. This is because seen from the direction of beaconing, the source endpoint is the last AS in the path segment. For more details, see [](#def-mac) and [](#def-acc).
+     - The value of the `Acc` = Acc<sub>n-1</sub>. This is because seen from the direction of beaconing, the source endpoint is the last AS in the path segment. For more details, see [](#hf-mac-calc) and [](#def-acc).
 
 4. Besides setting the flags and the `Acc` field, the source endpoint MUST also set the pointers in the `CurrInf` and `CurrHF` fields of the Path Meta Header `PathMetaHdr` (see [](#PathMetaHdr)). As the source endpoint builds the starting point of the forwarding, both pointers MUST be set to "0".
 
@@ -1301,7 +1301,7 @@ The next steps depend on the direction of travel and whether this segment includ
         **Note:** In the case described here, the packet travels against direction of beaconing, i.e. the packet comes from AS<sub>i+1</sub> and will enter AS<sub>i</sub>. This means that the `Acc` field of this incoming packet represents the value of Acc<sub>i+1</sub>, but to compute the MAC<sub>i</sub> for the current AS<sub>i</sub>, we need the value of Acc<sub>i</sub> (see [](#def-acc)). As the border router knows that the formula for Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2] (see also [](#def-acc)), and because the values of Acc<sub>i+1</sub> and MAC<sub>i</sub> are known, the router will be able to recover the value Acc<sub>i</sub> based on the aforementioned formula for Acc.
 
     - Replace the current value of the field `Acc` in the current Info Field with the newly calculated value of Acc.
-    - Compute the MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in [](#def-mac), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of Acc as just set in the `Acc` field in the current Info Field.
+    - Compute the MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in [](#hf-mac-calc), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of Acc as just set in the `Acc` field in the current Info Field.
     - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Verify</sup><sub>i</sub>, drop the packet.
     - If the current Hop Field is the last Hop Field in the path segment as determined by the value of the current `SegLen` and other metadata in the path meta header, increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
 
@@ -1324,7 +1324,7 @@ A SCION egress border router MUST perform the following steps when it receives a
 
    - **Case 1** <br> The packet traverses the path segment in **construction direction** (`C` = "1"). The path segment either includes **no peering Hop Field** (`P` = "0") or the path segment does include a **peering Hop Field** (`P` = "1"), but the current hop is not the peering hop, i.e. the current Hop Field is **not** the *first* Hop Field of the segment, as determined by the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router MUST take the following step(s):
 
-     - Compute MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in [](#def-mac), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of Acc as set in the `Acc` field in the current Info Field.
+     - Compute MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in [](#hf-mac-calc), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of Acc as set in the `Acc` field in the current Info Field.
      - If the just calculated MAC<sup>Verify</sup><sub>i</sub> does not match the MAC<sub>i</sub> in the Hop Field of the current AS<sub>i</sub>, drop the packet.
      - Compute the value of Acc<sub>i+1</sub>. For this, use the formula in [](#def-acc). Replace Acc<sub>i</sub> in the formula with the current value of Acc as set in the `Acc` field of the current Info Field.
      - Replace the value of the `Acc` field in the current Info Field with the just calculated value of Acc<sub>i+1</sub>.
