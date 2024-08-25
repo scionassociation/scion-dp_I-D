@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-22T00:00:54.665822+00:00",
+  "timestamp": "2024-08-25T00:00:54.813541+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -684,7 +684,7 @@
       ],
       "body": "Current text is confusing\r\n\r\n#### TODOs: \r\n- [ ] Clarify use of the  ConsEgress Router Alert flag\r\n- [ ] ConsIngress and ConsEgress are just instances of interfaces Identifiers, we should make this clearer (e.g. when we define interface IDs). \r\n- [ ] ... (see feedback below)\r\n\r\n#### Reviewer feedback\r\n> Harald Alvestrand\r\nEndpoint addresses consist of an AS number, an interface ID, and a \u201cnext protocol\u201d address. This last is presumably only useful at SCION endpoints.\r\n\r\n> My answer:\r\nOne of the fields in a SCION address is the ISD (Isolation Domain) number, not the interface ID. We mention \"a complete SCION address is composed of the <ISD, AS, endpoint address>\u201d in section 1.3.1. The we show the  address header in 2.2.2. If this is too late in the draft, we could add some text earlier to clarify this. Interface IDs, instead, are part of hop fields (interface IDs are in the  the ConsIngress / ConsEgress). Perhaps the confusing fact is that the field is called ConsIngress/Egress. This is because  these fields refer to interface IDs in the direction the link was discovered during path construction (beaconing). \r\n\r\n> Harald Alvestrand\r\n> There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\n> Response: \r\nYou are probably referring to the ConsEgress Router Alert flag, right? Thank you for spotting this, the description should be extended. This is actually one bit, we\u2019ll add some explanation on this flag. (I see how the current description is somehow confusing). Besides that, ConsIngress and ConsEgress are just instances of interfaces Identifiers, we probably have to make this clearer. \r\nRegarding traceroute, this is an example of how this might be used (there is a SCON trace route application). As we don\u2019t describe it, I\u2019d remove it. \r\n\r\n> Eliot, 20.07.2024\r\n>   ConsIngress and ConsEgress require a lot more explanation if they're to be included.\r\n\r\n> Arald Alvestrand, 20.07\r\n>  There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\nNote: we use naming ConsIngress, ConsEgress because of https://github.com/scionproto/scion/issues/1479 \r\n\r\n",
       "createdAt": "2024-07-26T22:28:49Z",
-      "updatedAt": "2024-08-21T20:47:18Z",
+      "updatedAt": "2024-08-22T16:37:22Z",
       "closedAt": null,
       "comments": [
         {
@@ -707,6 +707,13 @@
           "body": "Traceroute is an essential SCMP message to discover path health in the current implementation.\r\nBoth the IP-SCION Gateway and scion showpaths rely on it.\r\nWe cannot simply remove it without an appropriate replacements.\r\n\r\nFWIW, I think the readers are a bit confused as they seem to think the router alert flag and the interface IDs are somehow the same thing.\r\n\r\n",
           "createdAt": "2024-08-21T20:45:40Z",
           "updatedAt": "2024-08-21T20:47:18Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> FWIW, I think the readers are a bit confused as they seem to think the router alert flag and the interface IDs are somehow the same thing.\r\n\r\nYes, this is the main point.\r\n\r\n> Traceroute is an essential SCMP message to discover path health in the current implementation. Both the IP-SCION Gateway and scion showpaths rely on it. We cannot simply remove it without an appropriate replacements.\r\n\r\nThanks for the clarification @oncilla. We are trying to limit the scope of the drafts as much as possible, for now we tried avoiding having to describe in full SIGs and SCMP (which might be another two drafts on their own). So we are trying to strike the right balance to add what is necessary for the data plane draft to be clear and self sufficient. \r\n\r\n \r\n\r\n\r\n",
+          "createdAt": "2024-08-22T16:37:21Z",
+          "updatedAt": "2024-08-22T16:37:21Z"
         }
       ]
     },
@@ -3473,13 +3480,13 @@
       "labels": [],
       "body": "Basic description pulled from different sources. Do we need to describe the encapsulation/framing protocol in detail here?\r\nIs this section in the right place in the I-D?\r\n\r\nResolves #40 ",
       "createdAt": "2024-08-06T08:17:22Z",
-      "updatedAt": "2024-08-21T15:46:54Z",
+      "updatedAt": "2024-08-23T09:42:50Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "SIG",
-      "headRefOid": "f121b2b225118c35b77a67e722b40826445ae079",
+      "headRefOid": "42e355fa691221b7783eb793a9072a8839013398",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3563,6 +3570,66 @@
               "updatedAt": "2024-08-21T15:46:54Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786GgYOG",
+          "commit": {
+            "abbreviatedOid": "5bc1781"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-23T08:10:58Z",
+          "updatedAt": "2024-08-23T08:10:58Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Added it to my changes",
+              "createdAt": "2024-08-23T08:10:58Z",
+              "updatedAt": "2024-08-23T08:10:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Gg-FX",
+          "commit": {
+            "abbreviatedOid": "5bc1781"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-23T09:26:45Z",
+          "updatedAt": "2024-08-23T09:26:45Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "I added this to the text: \r\n\r\n> A SIG is typically deployed inside the same AS internal network as its non-SCION hosts. In an enterprise scenario, it is usually deployed at the edge of the enterprise network. ",
+              "createdAt": "2024-08-23T09:26:45Z",
+              "updatedAt": "2024-08-23T09:26:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786GhFxh",
+          "commit": {
+            "abbreviatedOid": "42e355f"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Thanks a lot @knmeynell, concise and effective. There are a couple of details that I've either changed or commented, let's discuss!",
+          "createdAt": "2024-08-23T09:42:09Z",
+          "updatedAt": "2024-08-23T09:42:50Z",
+          "comments": [
+            {
+              "originalPosition": 818,
+              "body": "```suggestion\r\nAn ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION endpoints from the perspective of the SCION network.\r\n```\r\n\r\n>  Both IPv4 and IPv6 packets may be encapsulated, but no other types of packets are supported. \r\n\r\nThis is a limitation of the SIG framing protocol, that we do not describe in detail (in my rewording, I just mention that two SIGs should speak a common tunneling protocol between each other). I'd therefore not mention this.\r\n\r\n> Hosts within SCION networks that wish to be reachable from external IP networks must have public IP addresses, although this does not preclude the use of Network Address Translation. \r\n\r\nWhat do you mean with this, I don't really understand. If this is referring to IP hosts, isn't it always like this? ",
+              "createdAt": "2024-08-23T09:42:09Z",
+              "updatedAt": "2024-08-23T09:42:50Z"
+            }
+          ]
         }
       ]
     },
@@ -3628,9 +3695,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "1. Incorporated Nico's review notes (mostly)\r\n2. Rationalised text\r\n3. Removed duplicate notes and unnecessary repetition \r\n4. Clarified and made use of terminology more consistent\r\n5. Improved grammar and text flow\r\n6. Amalgamated some sub-sections to reduce number of levels\r\n\r\nContributes to \r\n\r\n- #45 ",
+      "body": "1. Incorporated Nico's review notes (mostly)\r\n2. Rationalised text\r\n3. Removed duplicate notes and unnecessary repetition \r\n4. Clarified and made use of terminology more consistent\r\n5. Improved grammar and text flow\r\n6. Amalgamated some sub-sections to reduce number of levels\r\n\r\nContributes to \r\n\r\n- #45 \r\n- #41 (partially)\r\n\r\nTODO: \r\n* [ ] Some glossary changes may have to be replicated across other drafts",
       "createdAt": "2024-08-14T18:13:00Z",
-      "updatedAt": "2024-08-21T15:13:36Z",
+      "updatedAt": "2024-08-23T12:41:13Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
