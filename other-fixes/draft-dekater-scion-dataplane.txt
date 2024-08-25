@@ -1996,7 +1996,7 @@ Table of Contents
           down-segments if the path contains a peering Hop Field.
 
        The following InfoField settings are possible, based on the
-       following use cases:
+       following cases:
 
        *  *Case 1*
           The path segment is traversed in construction direction and
@@ -2125,7 +2125,7 @@ direction
       (C = "1" and P = "0" or "1").  In this case, proceed with step 4.
 
    *  The packet traverses the path segment *against construction
-      direction* (C = "0").  The following use cases are possible:
+      direction* (C = "0").  The following cases are possible:
 
       -  *Case 1*
          The path segment includes *no peering Hop Field* (P = "0").  In
@@ -2213,7 +2213,7 @@ direction
 
    1.  Check the settings of the Construction Direction flag C and the
        Peering flag P in the currently valid Info Field.  The following
-       use cases are possible:
+       cases are possible:
 
        *  *Case 1*
           The packet traverses the path segment in *construction
@@ -2437,8 +2437,8 @@ direction
 
    When an adversary sits on the path between the source and destination
    endpoint, it is able to intercept the data packets that are being
-   forwarded and would allow the adversary to hijack traffic ontoto a
-   path that is different from the intended one selected by the source
+   forwarded and would allow the adversary to hijack traffic onto a path
+   that is different from the intended one selected by the source
    endpoint.  Possible on-path attacks in the data plane are
    modifications of the SCION path header and SCION address header, or
    by simply dropping packets.  This kind of attack generally cannot be
@@ -2491,7 +2491,7 @@ direction
    it will follow its determined path regardless of the actions of the
    adversary.  An adversary can attempt to disrupt the connectivity of
    the path by flooding a link with excessive traffic (see Section 5.4
-   below), but ater detecting congestion, the endpoint can switch to
+   below), but after detecting congestion, the endpoint can switch to
    another non-congested path for subsequent packets.
 
 5.4.  Volumetric Denial of Service Attacks
