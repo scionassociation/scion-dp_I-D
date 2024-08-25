@@ -172,12 +172,13 @@ Table of Contents
    the trust roots and provide connectivity to other ISDs.  This is the
    basis of the public key infrastructure which the SCION control plane
    relies upon for the authentication of messages that is used for the
-   SCION control plane.  See [I-D.scion-cppki]
+   SCION control plane.  See [I-D.dekater-scion-pki]
 
    _Control Plane_ - performs inter-domain routing by discovering and
    securely disseminating path information between ASes.  The core ASes
    use Path-segment Construction Beacons (PCBs) to explore intra-ISD
-   paths, or to explore paths across different ISDs.  See [I-D.scion-cp]
+   paths, or to explore paths across different ISDs.  See
+   [I-D.dekater-scion-controlplane]
 
    _Data Plane_ - carries out secure packet forwarding between SCION-
    enabled ASes over paths selected by endpoints.  A SCION border router
@@ -444,14 +445,14 @@ Table of Contents
 
    Paths are discovered by the SCION control plane which makes them
    available to SCION endpoints in the form of path segments.  As
-   described in [I-D.scion-cp], there are three kinds of path segments:
-   up, down, and core.  In the data plane, a SCION endpoint creates end-
-   to-end paths from the path segments by combining multiple path
-   segments.  Depending on the network topology, a SCION forwarding path
-   can consist of one, two, or three segments.  Each path segment
-   contains several Hop Fields representing the ASes on the segment as
-   well as one Info Field with basic information about the segment, such
-   as a timestamp.
+   described in [I-D.dekater-scion-controlplane], there are three kinds
+   of path segments: up, down, and core.  In the data plane, a SCION
+   endpoint creates end-to-end paths from the path segments by combining
+   multiple path segments.  Depending on the network topology, a SCION
+   forwarding path can consist of one, two, or three segments.  Each
+   path segment contains several Hop Fields representing the ASes on the
+   segment as well as one Info Field with basic information about the
+   segment, such as a timestamp.
 
    Segments cannot be combined arbitrarily.  To construct a valid
    forwarding path, the source endpoint MUST obey the following rules:
@@ -833,7 +834,7 @@ Table of Contents
                       Table 4: Known Service Numbers
 
    *Note:* For more information on addressing in SCION, see the SCION
-   Control Plane Specification ([I-D.scion-cp]).
+   Control Plane Specification ([I-D.dekater-scion-controlplane]).
 
 2.3.  Path Header
 
@@ -1494,7 +1495,7 @@ Table of Contents
 
    *Note:* For more details on the lookup of path segments, see the
    section "Path Lookup" in the Control Plane specification
-   ([I-D.scion-cp]).
+   ([I-D.dekater-scion-controlplane]).
 
    Based on its own selection criteria, Endpoint A selects the up
    segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the
@@ -1942,7 +1943,7 @@ Table of Contents
    Hop Field^Peer_i = (ExpTime^Peer_i, ConsIngress^Peer_i,
    ConsEgress^Peer_i, MAC^Peer_i)
 
-   See [I-D.scion-cp] for more information.
+   See [I-D.dekater-scion-controlplane] for more information.
 
    This results in the calculation of the MAC for the peering Hop
    Field^Peer_i as follows:
@@ -2563,15 +2564,19 @@ direction
 
 8.1.  Normative References
 
-   [I-D.scion-cp]
+   [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
-              Plane", 2024, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-controlplane/>.
+              Plane", Work in Progress, Internet-Draft, draft-dekater-
+              scion-controlplane-05, 21 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-controlplane-05>.
 
-   [I-D.scion-cppki]
+   [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
-              Plane PKI", 2024, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-pki/>.
+              Plane PKI", Work in Progress, Internet-Draft, draft-
+              dekater-scion-pki-06, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-pki-06>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
