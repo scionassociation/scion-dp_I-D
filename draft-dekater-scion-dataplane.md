@@ -234,7 +234,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 ## Overview
 
-The SCION data plane forwards inter-domain packets between SCION-enabled ASes. SCION routers are normally deployed at the edge of an AS, and peer with neighbor SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header. This path information consists of a sequence of Hop Fields (HFs). Each Hop Field corresponds to an AS on the path, and it includes an ingress interface ID as well as an egress interface ID, which uniquivocally identifies the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.
+The SCION data plane forwards inter-domain packets between SCION-enabled ASes. SCION routers are normally deployed at the edge of an AS, and peer with neighbor SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header. This path information consists of a sequence of Hop Fields (HFs). Each Hop Field corresponds to an AS on the path, and it includes an ingress interface ID as well as an egress interface ID, which unequivocally identifies the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.
 
 This concept allows SCION routers to forward packets to a neighbor AS without inspecting the destination address and also without consulting an inter-domain forwarding table. Intra-domain forwarding and routing are based on existing mechanisms (e.g. IP). A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. The last SCION router at the destination AS therefore uses the destination address to forward the packet to the appropriate local endpoint.
 
@@ -285,7 +285,7 @@ Paths are discovered by the SCION control plane which makes them available to SC
 
 Segments cannot be combined arbitrarily. To construct a valid forwarding path, the source endpoint MUST obey the following rules:
 
-- There can be at most one of each type of segment (up, core, and down). Allowing multiple up or down segments would decrease efficiency and the ability of ASes to enforce path policies.
+- There MUST be at most one of each type of segment (up, core, and down). Allowing multiple up or down segments would decrease efficiency and the ability of ASes to enforce path policies.
 - If an up segment is present, it MUST be the first segment in the path.
 - If a down segment is present, it MUST be the last segment in the path.
 - If there are two path segments (one up and one down segment) that both announce the same peering link, then a shortcut via this peering link is possible.
@@ -431,7 +431,7 @@ The SCION common header has the following packet format:
 - `TrafficClass` (`TraffCl` in the image above): The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. The current use of the `TrafficClass` field for Differentiated Services and Explicit Congestion Notification is specified in {{RFC2474}} and {{RFC3168}}.
 - `FlowID`: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources MUST set this field.
 - `NextHdr`: Encodes the type of the first header after the SCION header. This can be either a SCION extension or a Layer 4 protocol such as TCP or UDP. Values of this field respect the Assigned SCION Protocol Numbers (see [](#protnum)).
-- `HdrLen`: Specifies the entire length of the SCION header in bytes, i.e. the sum of the lengths of the common header, the address header, and the path header. The SCION header fields is aligned to a multiple of 4 bytes. The SCION header length is computed as `HdrLen` * 4 bytes. The 8 bits of the `HdrLen` field limit the SCION header to a maximum of 255 * 4 = 1020 bytes.
+- `HdrLen`: Specifies the entire length of the SCION header in bytes, i.e. the sum of the lengths of the common header, the address header, and the path header. The SCION header is aligned to a multiple of 4 bytes. The SCION header length is computed as `HdrLen` * 4 bytes. The 8 bits of the `HdrLen` field limit the SCION header to a maximum of 255 * 4 = 1020 bytes.
 - `PayloadLen`: Specifies the length of the payload in bytes. The payload includes (SCION) extension headers and the L4 payload. This field is 16 bits long, supporting a maximum payload size of 65'535 bytes.
 - `PathType`: Specifies the type of the SCION path and is 8 bits long. The format of one path type is independent of all other path types. The currently defined SCION path types are Empty (0), SCION (1), OneHopPath (2), EPIC (3) and COLIBRI (4). This document only specifies the Empty, SCION and OneHopPath path types. The other path types are currently experimental. For more details, see [](#path-header).
 
@@ -569,9 +569,9 @@ The `SCION` path type (`PathType=1`) is the standard path type. A SCION path has
 
 It consists of a path meta header, up to 3 Info Fields and up to 64 Hop Fields.
 
-- (`PathMetaHdr`) indicates the currently valid Info Field and Hop Field while the packet is traversing the network along the path, as well as the number of Hop Fields per segment.
-- (`InfoField`) equals the number of path segments that the path contains - there is one Info Field per path segment. Each Info Field contains basic information about the corresponding segment, such as a timestamp indicating the creation time. There are also two flags: one specifies whether the segment is to be traversed in construction direction, the other whether the first or last Hop Field in the segment represents a peering Hop Field.
-- (`HopField`) represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. This information is authenticated with a Message Authentication Code (MAC) to prevent forgery.
+- `PathMetaHdr` indicates the currently valid Info Field and Hop Field while the packet is traversing the network along the path, as well as the number of Hop Fields per segment.
+- `InfoField` equals the number of path segments that the path contains - there is one Info Field per path segment. Each Info Field contains basic information about the corresponding segment, such as a timestamp indicating the creation time. There are also two flags: one specifies whether the segment is to be traversed in construction direction, the other whether the first or last Hop Field in the segment represents a peering Hop Field.
+- `HopField` represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. This information is authenticated with a Message Authentication Code (MAC) to prevent forgery.
 
 The SCION header is created by extracting the required Info Fields and Hop Fields from the corresponding path segments. The process of extracting is illustrated in {{figure-6}} below. Note that ASes at the intersection of multiple segments are represented by two Hop Fields. Be aware that these Hop Fields are not equal!
 
@@ -684,8 +684,8 @@ The offsets of the current Info Field and current Hop Field (relative to the end
 
 ~~~~
    B = byte
-   InfoFieldOffset = 4B + 8B.CurrINF
-   HopFieldOffset = 4B + 8B.NumINF + 12B.CurrHF
+   InfoFieldOffset = 4B + 8B * CurrINF
+   HopFieldOffset = 4B + 8B.NumINF + 12B * CurrHF
 ~~~~
 
 To check that the current Hop Field is in the segment of the current Info Field, the `CurrHF` needs to be compared to the `SegLen` fields of the current and preceding Info Fields.
@@ -699,7 +699,7 @@ The 8-byte Info Field (`InfoField`) has the following format:
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|r r r r r r P C|      RSV      |             Acc               |
+|    RSV    |P|C|      RSV      |             Acc               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                           Timestamp                           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -707,10 +707,9 @@ The 8-byte Info Field (`InfoField`) has the following format:
 {: #figure-8 title="SCION path type - Format of the Info Field"}
 
 
-- `r`: The `r` bits are unused and reserved for future use.
+- `RSV`: Unused and reserved for future use.
 - `P`: Peering flag. If the flag has value "1", the segment represented by this Info Field contains a peering Hop Field, which requires special processing in the data plane. For more details, see [](#peerlink) and [](#packet-verif).
 - `C`: Construction direction flag. If the flag has value "1", the Hop Fields in the segment represented by this Info Field are arranged in the direction they have been constructed during beaconing.
-- `RSV`: Reserved for future use.
 - `Acc`: Accumulator. This updatable field/counter is REQUIRED for calculating the MAC in the data plane. For more details, see [](#auth-chained-macs).
 - `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a Hop Field in the segment represented by this Info Field, by verifying the expiration time and MAC set in the Hop Field - the expiration time of a Hop Field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).
 
@@ -723,7 +722,7 @@ The 12-byte Hop Field (``HopField``) has the following format:
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|r r r r r r I E|    ExpTime    |           ConsIngress         |
+|    RSV    |I|E|    ExpTime    |           ConsIngress         |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |        ConsEgress             |                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
@@ -733,7 +732,7 @@ The 12-byte Hop Field (``HopField``) has the following format:
 {: #figure-9 title="SCION path type - Format of the Hop Field"}
 
 
-- `r`: The `r` bits are unused and reserved for future use.
+- `RSV`: Unused and reserved for future use.
 - `I`: The Ingress Router Alert flag. If this has value "1", the ingress router (in construction direction) SHOULD process the L4 payload in the packet. The construction direction is the direction of beaconing.
 - `E`: The Egress Router Alert flag. If this has value "1", the egress router (in construction direction) SHOULD process the L4 payload in the packet.
 
@@ -873,7 +872,7 @@ Alignment requirement: none.
 
 **Note:** The format of the Pad1 option is a special case - it does not have length and value fields.
 
-The Pad1 option is used to insert 1 byte of padding into the `Options` field of an extension header. If more than one byte of padding is required, the PadN option MUST be used,.
+The Pad1 option is used to insert 1 byte of padding into the `Options` field of an extension header. If more than one byte of padding is required, the PadN option MUST be used.
 
 
 #### PadN Option {#padn}
