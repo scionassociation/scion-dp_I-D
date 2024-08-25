@@ -103,7 +103,7 @@ Table of Contents
      3.3.   Step-by-Step Explanation
    4.  Path Authorization
      4.1.  Authorizing Segments through Chained MACs
-       4.1.1.   Hop Field MAC Computation
+       4.1.1.   Hop Field MAC Overview
        4.1.2.   Peering Link MAC Computation
      4.2.   Path Initialization and Packet Processing
        4.2.1.   Initialization at Source Endpoint
@@ -1528,7 +1528,8 @@ Table of Contents
    path segment) in the SCION header is depicted as italic/cursive in
    the tables.  The current Hop Field, representing the current AS, is
    shown bold.  The snapshot tables also include references to IP/UDP
-   addresses.
+   addresses.  In this context, words "ingress" and "egress" refer to
+   the direction of travel of SCION data packets.
 
    *  _Step 1_
       *A->R1*: The SCION-enabled Endpoint A in AS2 creates a new SCION
@@ -1733,7 +1734,7 @@ Table of Contents
    only its own hop information but also an aggregation of all upstream
    hops.  This section describes how this works.
 
-4.1.1.   Hop Field MAC Computation
+4.1.1.   Hop Field MAC Overview
 
    The MAC in the Hop Fields of a SCION path has two purposes:
 
@@ -1781,7 +1782,7 @@ Table of Contents
    collision of the Acc value among compatible path segments in an AS.
    See Section 5.1.3 for more details.
 
-4.1.1.1.   Hop Field MAC - Definition
+4.1.1.1.   Hop Field MAC - Calculation
 
    The Hop Field MAC is calculated as follows:
 
@@ -2275,10 +2276,10 @@ direction
    A PCB originated by a given control service is used to construct data
    plane paths.  Specifically, the timestamp in the Info Field and the
    expiry time of Hop Fields are used for Hop Field MAC computation, see
-   Section 4.1.1, which is used to validate paths at each on-path SCION
-   router.  A segment's originating control service and the routers that
-   the segment refers to all have different clocks.  Their differences
-   affect the validation process:
+   Section 4.1.1.1, which is used to validate paths at each on-path
+   SCION router.  A segment's originating control service and the
+   routers that the segment refers to all have different clocks.  Their
+   differences affect the validation process:
 
    *  A fast clock at origination or a slow clock at validation will
       yield a lengthened expiration time for hops, and possibly an
