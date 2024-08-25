@@ -27,7 +27,7 @@
     pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.32.3
-    setuptools 69.5.1
+    setuptools 70.3.0
     wcwidth 0.2.13
 -->
 <link href="draft-dekater-scion-dataplane.xml" rel="alternate" type="application/rfc+xml">
@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 15 February 2025</td>
+<td class="center">Expires 26 February 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-08-14" class="published">14 August 2024</time>
+<time datetime="2024-08-25" class="published">25 August 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-02-15">15 February 2025</time></dd>
+<dd class="expires"><time datetime="2025-02-26">26 February 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1371,7 +1371,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         <h3 id="name-overview">
 <a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
         </h3>
-<p id="section-1.3-1">The SCION data plane forwards inter-domain packets between SCION-enabled ASes. SCION routers are normally deployed at the edge of an AS, and peer with neighbor SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header. This path information consists of a sequence of Hop Fields (HFs). Each Hop Field corresponds to an AS on the path, and it includes an ingress interface ID as well as an egress interface ID, which uniquivocally identifies the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-1">The SCION data plane forwards inter-domain packets between SCION-enabled ASes. SCION routers are normally deployed at the edge of an AS, and peer with neighbor SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header. This path information consists of a sequence of Hop Fields (HFs). Each Hop Field corresponds to an AS on the path, and it includes an ingress interface ID as well as an egress interface ID, which unequivocally identifies the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
 <p id="section-1.3-2">This concept allows SCION routers to forward packets to a neighbor AS without inspecting the destination address and also without consulting an inter-domain forwarding table. Intra-domain forwarding and routing are based on existing mechanisms (e.g. IP). A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS. The last SCION router at the destination AS therefore uses the destination address to forward the packet to the appropriate local endpoint.<a href="#section-1.3-2" class="pilcrow">¶</a></p>
 <p id="section-1.3-3">This SCION design choice has the following advantages:<a href="#section-1.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1458,7 +1458,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.4-2">Segments cannot be combined arbitrarily. To construct a valid forwarding path, the source endpoint <span class="bcp14">MUST</span> obey the following rules:<a href="#section-1.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.4-3.1">
-            <p id="section-1.4-3.1.1">There can be at most one of each type of segment (up, core, and down). Allowing multiple up or down segments would decrease efficiency and the ability of ASes to enforce path policies.<a href="#section-1.4-3.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-3.1.1">There <span class="bcp14">MUST</span> be at most one of each type of segment (up, core, and down). Allowing multiple up or down segments would decrease efficiency and the ability of ASes to enforce path policies.<a href="#section-1.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-3.2">
             <p id="section-1.4-3.2.1">If an up segment is present, it <span class="bcp14">MUST</span> be the first segment in the path.<a href="#section-1.4-3.2.1" class="pilcrow">¶</a></p>
@@ -1656,7 +1656,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-2.1-3.4.1"><code>NextHdr</code>: Encodes the type of the first header after the SCION header. This can be either a SCION extension or a Layer 4 protocol such as TCP or UDP. Values of this field respect the Assigned SCION Protocol Numbers (see <a href="#protnum" class="auto internal xref">Appendix "Assigned SCION Protocol Numbers"</a>).<a href="#section-2.1-3.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.5">
-            <p id="section-2.1-3.5.1"><code>HdrLen</code>: Specifies the entire length of the SCION header in bytes, i.e. the sum of the lengths of the common header, the address header, and the path header. The SCION header fields is aligned to a multiple of 4 bytes. The SCION header length is computed as <code>HdrLen</code> * 4 bytes. The 8 bits of the <code>HdrLen</code> field limit the SCION header to a maximum of 255 * 4 = 1020 bytes.<a href="#section-2.1-3.5.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.5.1"><code>HdrLen</code>: Specifies the entire length of the SCION header in bytes, i.e. the sum of the lengths of the common header, the address header, and the path header. The SCION header is aligned to a multiple of 4 bytes. The SCION header length is computed as <code>HdrLen</code> * 4 bytes. The 8 bits of the <code>HdrLen</code> field limit the SCION header to a maximum of 255 * 4 = 1020 bytes.<a href="#section-2.1-3.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.6">
             <p id="section-2.1-3.6.1"><code>PayloadLen</code>: Specifies the length of the payload in bytes. The payload includes (SCION) extension headers and the L4 payload. This field is 16 bits long, supporting a maximum payload size of 65'535 bytes.<a href="#section-2.1-3.6.1" class="pilcrow">¶</a></p>
@@ -1948,13 +1948,13 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-2.3.2-3">It consists of a path meta header, up to 3 Info Fields and up to 64 Hop Fields.<a href="#section-2.3.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3.2-4.1">
-              <p id="section-2.3.2-4.1.1">(<code>PathMetaHdr</code>) indicates the currently valid Info Field and Hop Field while the packet is traversing the network along the path, as well as the number of Hop Fields per segment.<a href="#section-2.3.2-4.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.2-4.1.1"><code>PathMetaHdr</code> indicates the currently valid Info Field and Hop Field while the packet is traversing the network along the path, as well as the number of Hop Fields per segment.<a href="#section-2.3.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.3.2-4.2">
-              <p id="section-2.3.2-4.2.1">(<code>InfoField</code>) equals the number of path segments that the path contains - there is one Info Field per path segment. Each Info Field contains basic information about the corresponding segment, such as a timestamp indicating the creation time. There are also two flags: one specifies whether the segment is to be traversed in construction direction, the other whether the first or last Hop Field in the segment represents a peering Hop Field.<a href="#section-2.3.2-4.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.2-4.2.1"><code>InfoField</code> equals the number of path segments that the path contains - there is one Info Field per path segment. Each Info Field contains basic information about the corresponding segment, such as a timestamp indicating the creation time. There are also two flags: one specifies whether the segment is to be traversed in construction direction, the other whether the first or last Hop Field in the segment represents a peering Hop Field.<a href="#section-2.3.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.3.2-4.3">
-              <p id="section-2.3.2-4.3.1">(<code>HopField</code>) represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. This information is authenticated with a Message Authentication Code (MAC) to prevent forgery.<a href="#section-2.3.2-4.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.3.2-4.3.1"><code>HopField</code> represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. This information is authenticated with a Message Authentication Code (MAC) to prevent forgery.<a href="#section-2.3.2-4.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-2.3.2-5">The SCION header is created by extracting the required Info Fields and Hop Fields from the corresponding path segments. The process of extracting is illustrated in <a href="#_figure-6" class="auto internal xref">Figure 7</a> below. Note that ASes at the intersection of multiple segments are represented by two Hop Fields. Be aware that these Hop Fields are not equal!<a href="#section-2.3.2-5" class="pilcrow">¶</a></p>
@@ -2094,8 +2094,8 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <div class="alignLeft art-text artwork" id="section-2.3.2.2-5">
 <pre>
    B = byte
-   InfoFieldOffset = 4B + 8B.CurrINF
-   HopFieldOffset = 4B + 8B.NumINF + 12B.CurrHF
+   InfoFieldOffset = 4B + 8B * CurrINF
+   HopFieldOffset = 4B + 8B.NumINF + 12B * CurrHF
 </pre><a href="#section-2.3.2.2-5" class="pilcrow">¶</a>
 </div>
 <p id="section-2.3.2.2-6">To check that the current Hop Field is in the segment of the current Info Field, the <code>CurrHF</code> needs to be compared to the <code>SegLen</code> fields of the current and preceding Info Fields.<a href="#section-2.3.2.2-6" class="pilcrow">¶</a></p>
@@ -2114,7 +2114,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|r r r r r r P C|      RSV      |             Acc               |
+|    RSV    |P|C|      RSV      |             Acc               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                           Timestamp                           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -2126,7 +2126,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </div>
 <ul class="normal">
 <li class="normal" id="section-2.3.2.3-3.1">
-                <p id="section-2.3.2.3-3.1.1"><code>r</code>: The <code>r</code> bits are unused and reserved for future use.<a href="#section-2.3.2.3-3.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.3-3.1.1"><code>RSV</code>: Unused and reserved for future use.<a href="#section-2.3.2.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.3-3.2">
                 <p id="section-2.3.2.3-3.2.1"><code>P</code>: Peering flag. If the flag has value "1", the segment represented by this Info Field contains a peering Hop Field, which requires special processing in the data plane. For more details, see <a href="#peerlink" class="auto internal xref">Section 4.1.2</a> and <a href="#packet-verif" class="auto internal xref">Section 4.2</a>.<a href="#section-2.3.2.3-3.2.1" class="pilcrow">¶</a></p>
@@ -2135,13 +2135,10 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                 <p id="section-2.3.2.3-3.3.1"><code>C</code>: Construction direction flag. If the flag has value "1", the Hop Fields in the segment represented by this Info Field are arranged in the direction they have been constructed during beaconing.<a href="#section-2.3.2.3-3.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.3-3.4">
-                <p id="section-2.3.2.3-3.4.1"><code>RSV</code>: Reserved for future use.<a href="#section-2.3.2.3-3.4.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.3-3.4.1"><code>Acc</code>: Accumulator. This updatable field/counter is <span class="bcp14">REQUIRED</span> for calculating the MAC in the data plane. For more details, see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>.<a href="#section-2.3.2.3-3.4.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.3-3.5">
-                <p id="section-2.3.2.3-3.5.1"><code>Acc</code>: Accumulator. This updatable field/counter is <span class="bcp14">REQUIRED</span> for calculating the MAC in the data plane. For more details, see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>.<a href="#section-2.3.2.3-3.5.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.3.2.3-3.6">
-                <p id="section-2.3.2.3-3.6.1"><code>Timestamp</code>: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a Hop Field in the segment represented by this Info Field, by verifying the expiration time and MAC set in the Hop Field - the expiration time of a Hop Field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).<a href="#section-2.3.2.3-3.6.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.3-3.5.1"><code>Timestamp</code>: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a Hop Field in the segment represented by this Info Field, by verifying the expiration time and MAC set in the Hop Field - the expiration time of a Hop Field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).<a href="#section-2.3.2.3-3.5.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </section>
@@ -2159,7 +2156,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|r r r r r r I E|    ExpTime    |           ConsIngress         |
+|    RSV    |I|E|    ExpTime    |           ConsIngress         |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |        ConsEgress             |                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
@@ -2173,7 +2170,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </div>
 <ul class="normal">
 <li class="normal" id="section-2.3.2.4-3.1">
-                <p id="section-2.3.2.4-3.1.1"><code>r</code>: The <code>r</code> bits are unused and reserved for future use.<a href="#section-2.3.2.4-3.1.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.4-3.1.1"><code>RSV</code>: Unused and reserved for future use.<a href="#section-2.3.2.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.4-3.2">
                 <p id="section-2.3.2.4-3.2.1"><code>I</code>: The Ingress Router Alert flag. If this has value "1", the ingress router (in construction direction) <span class="bcp14">SHOULD</span> process the L4 payload in the packet. The construction direction is the direction of beaconing.<a href="#section-2.3.2.4-3.2.1" class="pilcrow">¶</a></p>
@@ -2425,7 +2422,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               </figcaption></figure>
 </div>
 <p id="section-2.4.1.1-3"><strong>Note:</strong> The format of the Pad1 option is a special case - it does not have length and value fields.<a href="#section-2.4.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.4.1.1-4">The Pad1 option is used to insert 1 byte of padding into the <code>Options</code> field of an extension header. If more than one byte of padding is required, the PadN option <span class="bcp14">MUST</span> be used,.<a href="#section-2.4.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.4.1.1-4">The Pad1 option is used to insert 1 byte of padding into the <code>Options</code> field of an extension header. If more than one byte of padding is required, the PadN option <span class="bcp14">MUST</span> be used.<a href="#section-2.4.1.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="padn">
