@@ -1210,7 +1210,7 @@ The source endpoint MUST perform the following steps to correctly initialize a p
    - The Construction Direction flag `C` MUST be set to "1" whenever the corresponding segment is traversed in construction direction, i.e., for down-path segments and potentially for core segments. It MUST be set to "0" for up-path segments and "reversed" core segments.
    - The Peering flag `P` MUST be set to "1" for up-segments and down-segments if the path contains a peering Hop Field.
 
-   The following `InfoField` settings are possible, based on the following use cases:
+   The following `InfoField` settings are possible, based on the following cases:
 
    - **Case 1** <br> The path segment is traversed in construction direction and includes no peering Hop Field. It starts at the *i*-th AS of the full segment discovered in beaconing. In this case:
 
@@ -1287,7 +1287,7 @@ The next steps depend on the direction of travel and whether this segment includ
 
 - The packet traverses the path segment in **construction direction** (`C` = "1" and `P` = "0" or "1"). In this case, proceed with step 4.
 
-- The packet traverses the path segment **against construction direction** (`C` = "0"). The following use cases are possible:
+- The packet traverses the path segment **against construction direction** (`C` = "0"). The following cases are possible:
 
   - **Case 1** <br> The path segment includes **no peering Hop Field** (`P` = "0"). In this case, the ingress border router MUST take the following step(s):
 
@@ -1320,7 +1320,7 @@ The next steps depend on the direction of travel and whether this segment includ
 
 A SCION egress border router MUST perform the following steps when it receives a SCION packet:
 
-1. Check the settings of the Construction Direction flag `C` and the Peering flag `P` in the currently valid Info Field. The following use cases are possible:
+1. Check the settings of the Construction Direction flag `C` and the Peering flag `P` in the currently valid Info Field. The following cases are possible:
 
    - **Case 1** <br> The packet traverses the path segment in **construction direction** (`C` = "1"). The path segment either includes **no peering Hop Field** (`P` = "0") or the path segment does include a **peering Hop Field** (`P` = "1"), but the current hop is not the peering hop, i.e. the current Hop Field is **not** the *first* Hop Field of the segment, as determined by the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router MUST take the following step(s):
 
@@ -1401,7 +1401,7 @@ As the segment identifier and aggregation of preceding MACs is only 16-bits wide
 
 ## On-Path Attacks
 
-When an adversary sits on the path between the source and destination endpoint, it is able to intercept the data packets that are being forwarded and would allow the adversary to hijack traffic ontoto a path that is different from the intended one selected by the source endpoint. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, or by simply dropping packets. This kind of attack generally cannot be prevented, although anendpoint can use SCION's path awareness to immediately select an alternate path if available.
+When an adversary sits on the path between the source and destination endpoint, it is able to intercept the data packets that are being forwarded and would allow the adversary to hijack traffic onto a path that is different from the intended one selected by the source endpoint. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, or by simply dropping packets. This kind of attack generally cannot be prevented, although anendpoint can use SCION's path awareness to immediately select an alternate path if available.
 
 
 ### Modification of the Path Header
@@ -1417,7 +1417,7 @@ Moreover, packet integrity protection is not enough if there are two colluding a
 
 ## Off-Path Attacks
 
-SCION's path awareness limits the abilities of an off-path adversary to influence forwarding in the data plane. Once a packet is en-route it will follow its determined path regardless of the actions of the adversary. An adversary can attempt to disrupt the connectivity of the path by flooding a link with excessive traffic (see [](#dos) below), but ater detecting congestion, the endpoint can switch to another non-congested path for subsequent packets.
+SCION's path awareness limits the abilities of an off-path adversary to influence forwarding in the data plane. Once a packet is en-route it will follow its determined path regardless of the actions of the adversary. An adversary can attempt to disrupt the connectivity of the path by flooding a link with excessive traffic (see [](#dos) below), but after detecting congestion, the endpoint can switch to another non-congested path for subsequent packets.
 
 
 ## Volumetric Denial of Service Attacks {#dos}
