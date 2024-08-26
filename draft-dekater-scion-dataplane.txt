@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 12 January 2025                                         S. Hitz
+Expires: 27 February 2025                                        S. Hitz
                                                          Anapaya Systems
-                                                            11 July 2024
+                                                          26 August 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 January 2025.
+   This Internet-Draft will expire on 27 February 2025.
 
 Copyright Notice
 
@@ -2612,10 +2612,12 @@ direction
    by the source endpoint: The first on-path attacker remodels the
    packet header arbitrarily, and the second on-path attacker changes
    the path back to the original source-selected path, such that the
-   integrity check by the destination endpoint succeeds.  To prevent
-   this attack and to defend against multiple on-path adversaries in
-   general, proof of transit is required, which is not in scope for this
-   document.
+   integrity check by the destination endpoint succeeds.  However, such
+   an attack is of little value.  An on-path adversary may inspect/copy/
+   disrupt its traffic without diverting it away from the sender-chosen
+   path.  For this reason proof-of-transit, which would be required to
+   detect such an attack, has marginal benefit in the context of SCION
+   and it is not in scope for this document.
 
 5.3.  Off-Path Attacks
 
