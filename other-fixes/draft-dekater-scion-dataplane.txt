@@ -228,8 +228,8 @@ Table of Contents
    not shared with other ASes.
 
    *Forwarding Path*: A forwarding path is a complete end-to-end path
-   between two SCION hosts which is used to transmit packets in the data
-   plane.  It can be created with a combination of up to three path
+   between two SCION endpoints which is used to transmit packets in the
+   data plane.  It can be created with a combination of up to three path
    segments (an up segment, a core segment, and a down segment).
 
    *Hop Field (HF)*: As they traverse the network, path segment
