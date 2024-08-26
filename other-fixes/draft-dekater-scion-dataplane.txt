@@ -1842,10 +1842,10 @@ Table of Contents
    packet header (see also Section 2.3.2.3).  Routers update this field
    by adding/subtracting only a single 16-bit value each.
 
-   Section 4.1.1.1 defines MAC_i, but in the data plane the expression
-   SegID XOR MAC_0 [:2] ... XOR MAC_i-1 [:2] is replaced by Acc_i.  This
-   results in the following alternative procedure for the computation of
-   MAC_i used in the data plane:
+   Section 4.1.1.1 provides a general formula to compute MAC_i, but at
+   each SCION router the expression SegID XOR MAC_0 [:2] ... XOR MAC_i-1
+   [:2] is replaced by Acc_i.  This results in the following alternative
+   procedure for the computation of MAC_i at SCION routers:
 
    MAC_i = Ck_i (Acc_i, Timestamp, ExpTime_i, ConsIngress_i,
    ConsEgress_i)
