@@ -1510,7 +1510,7 @@ On the flip side, the path choice of the endpoint may possibly be exploited by a
 
 The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support the use of applications that are not SCION enabled.
 
-An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION endpoints from the perspective of the SCION network. Both IPv4 and IPv6 packets may be encapsulated, but no other types of packets are supported. Hosts within SCION networks that wish to be reachable from external IP networks must have public IP addresses, although this does not preclude the use of Network Address Translation.
+An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION endpoints from the perspective of the SCION network.
 
 Each SIG establishes a session to one or multiple remote SIGs. Each pair of SIGs uses a common tunneling protocol. Each SIG may choose to send SCION packets to a remote SIG in accordance with static IP routes, or by dynamically announcing IP prefixes to each other via a routing protocol. Each SIG may also choose how to send SCION packets based on locally configured policies when multiple remote SIGs are available.
 In addition, the source SIG is responsible for SCION path selection.
