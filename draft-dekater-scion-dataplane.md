@@ -1203,7 +1203,7 @@ The source endpoint MUST perform the following steps to correctly initialize a p
 
 ### Processing at Routers {#process-router}
 
-During forwarding, each SCION router verifies the path contained in the packet header. Each SCION router also MUST correctly set the value of the Accumulator in the `Acc` field for the next AS to be able to verify its Hop Field. The exact operations differ based on the location of the AS on the path.
+During forwarding, each SCION router verifies the path contained in the packet header. Each SCION router also MUST correctly verify or set the value of the Accumulator in the `Acc` field for the next AS to be able to verify its Hop Field. The exact operations differ based on the location of the AS on the path.
 
 The processing of SCION packets for ASes where a peering link is crossed between path segments is a special case. A path containing a peering link contains exactly two path segments, one against construction direction (up) and one in construction direction (down). On the path segment against construction direction (up), the peering Hop Field is the last hop of the segment. In construction direction (down), the peering Hop Field is the first hop of the segment.
 
