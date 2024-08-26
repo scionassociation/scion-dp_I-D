@@ -251,9 +251,11 @@ Table of Contents
    designates a SCION interface at the end of a link connecting two
    SCION ASes, with each interface belonging to one border router.  Hop
    fields describe the traversal of an AS by a pair of interface IDs
-   (the ingress and egress interfaces).  The Interface ID MUST be unique
-   within each AS.  Interface ID 0 is not a valid identifier as
-   implementations MAY use it as the "unspecified" value.
+   called ConsIngress and ConsEgress, as they refer to the ingress and
+   egress interfaces in the direction of path construction (beaconing).
+   The Interface ID MUST be unique within each AS.  Interface ID 0 is
+   not a valid identifier as implementations MAY use it as the
+   "unspecified" value.
 
    *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
    organized into logical groups called Isolation Domains or ISDs.  Each
