@@ -1851,10 +1851,10 @@ Table of Contents
    MAC_i = Ck_i (Acc_i, Timestamp, ExpTime_i, ConsIngress_i,
    ConsEgress_i)
 
-   During forwarding in the data plane, each AS_i updates the Acc field
-   in the packet header so that it contains the correct input value of
-   Acc for the next AS in the path segment to be able to calculate the
-   MAC over its Hop Field.  Note that the correct input value of the Acc
+   During forwarding, SCION routers at each AS_i update the Acc field in
+   the packet header so that it contains the correct input value of Acc
+   for the next AS in the path segment to be able to calculate the MAC
+   over its Hop Field.  Note that the correct input value of the Acc
    field depends on the direction of travel.
 
    The value of Acc_(i+1) is calculated based on the following
