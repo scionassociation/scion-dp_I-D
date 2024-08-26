@@ -1241,71 +1241,130 @@ svg :is([fill="white"], [fill^="#fff"]) {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-scmp" class="internal xref">SCMP</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-path-authorization-3" class="internal xref">Path Authorization</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
-                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-forwarding-key-compromise" class="internal xref">Forwarding key compromise</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
-                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-forging-hop-field-mac" class="internal xref">Forging Hop Field MAC</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.3">
-                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="auto internal xref">5.1.3</a>.  <a href="#name-path-splicing" class="internal xref">Path Splicing</a></p>
-</li>
-                </ul>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-introduction-2" class="internal xref">Introduction</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-on-path-attacks" class="internal xref">On-Path Attacks</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-general-format" class="internal xref">General Format</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-message-types" class="internal xref">Message Types</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-checksum-calculation" class="internal xref">Checksum Calculation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
+                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-processing-rules" class="internal xref">Processing Rules</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6">
+                <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-error-messages" class="internal xref">Error Messages</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.1">
-                    <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-modification-of-the-path-he" class="internal xref">Modification of the Path Header</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6.2.1">
+                    <p id="section-toc.1-1.5.2.6.2.1.1"><a href="#section-5.6.1" class="auto internal xref">5.6.1</a>.  <a href="#name-packet-too-big" class="internal xref">Packet Too Big</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6.2.2">
+                    <p id="section-toc.1-1.5.2.6.2.2.1"><a href="#section-5.6.2" class="auto internal xref">5.6.2</a>.  <a href="#name-external-interface-down" class="internal xref">External Interface Down</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6.2.3">
+                    <p id="section-toc.1-1.5.2.6.2.3.1"><a href="#section-5.6.3" class="auto internal xref">5.6.3</a>.  <a href="#name-internal-connectivity-down" class="internal xref">Internal Connectivity Down</a></p>
 </li>
                 </ul>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-off-path-attacks" class="internal xref">Off-Path Attacks</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.7">
+                <p id="section-toc.1-1.5.2.7.1"><a href="#section-5.7" class="auto internal xref">5.7</a>.  <a href="#name-informational-messages" class="internal xref">Informational Messages</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.7.2.1">
+                    <p id="section-toc.1-1.5.2.7.2.1.1"><a href="#section-5.7.1" class="auto internal xref">5.7.1</a>.  <a href="#name-traceroute-request" class="internal xref">Traceroute Request</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
-                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-volumetric-denial-of-servic" class="internal xref">Volumetric Denial of Service Attacks</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.7.2.2">
+                    <p id="section-toc.1-1.5.2.7.2.2.1"><a href="#section-5.7.2" class="auto internal xref">5.7.2</a>.  <a href="#name-traceroute-reply" class="internal xref">Traceroute Reply</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.8">
+                <p id="section-toc.1-1.5.2.8.1"><a href="#section-5.8" class="auto internal xref">5.8</a>.  <a href="#name-authentication" class="internal xref">Authentication</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-scion-ip-gateway" class="internal xref">SCION IP Gateway</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-failure-to-forward" class="internal xref">Failure To Forward</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-link-failure-detection-bfd" class="internal xref">Link Failure Detection - BFD</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-notification-scmp" class="internal xref">Notification - SCMP</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-path-authorization-3" class="internal xref">Path Authorization</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.1">
+                    <p id="section-toc.1-1.7.2.1.2.1.1"><a href="#section-7.1.1" class="auto internal xref">7.1.1</a>.  <a href="#name-forwarding-key-compromise" class="internal xref">Forwarding key compromise</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.2">
+                    <p id="section-toc.1-1.7.2.1.2.2.1"><a href="#section-7.1.2" class="auto internal xref">7.1.2</a>.  <a href="#name-forging-hop-field-mac" class="internal xref">Forging Hop Field MAC</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.3">
+                    <p id="section-toc.1-1.7.2.1.2.3.1"><a href="#section-7.1.3" class="auto internal xref">7.1.3</a>.  <a href="#name-path-splicing" class="internal xref">Path Splicing</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-on-path-attacks" class="internal xref">On-Path Attacks</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
+                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-modification-of-the-path-he" class="internal xref">Modification of the Path Header</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-off-path-attacks" class="internal xref">Off-Path Attacks</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
+                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="auto internal xref">7.4</a>.  <a href="#name-volumetric-denial-of-servic" class="internal xref">Volumetric Denial of Service Attacks</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-interoperability-scion-ip-g" class="internal xref">Interoperability: SCION IP Gateway</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-assigned-scion-protocol-num" class="internal xref">Assigned SCION Protocol Numbers</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#appendix-B.1" class="auto internal xref"></a><a href="#name-considerations" class="internal xref">Considerations</a></p>
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#appendix-B.2" class="auto internal xref"></a><a href="#name-assignment" class="internal xref">Assignment</a></p>
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-assigned-scion-protocol-num" class="internal xref">Assigned SCION Protocol Numbers</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-B.1" class="auto internal xref"></a><a href="#name-considerations" class="internal xref">Considerations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#appendix-B.2" class="auto internal xref"></a><a href="#name-assignment" class="internal xref">Assignment</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1337,22 +1396,21 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1.1-2"><strong>Core AS</strong>: Each SCION isolation domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path discovery and path construction process (in SCION called "beaconing").<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1-3"><strong>Data Plane</strong>: The data plane (sometimes also referred to as the forwarding plane) is responsible for forwarding data packets that endpoints have injected into the network. After routing information has been disseminated by the control plane, packets are forwarded by the data plane in accordance with such information.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 <p id="section-1.1-4"><strong>Egress/Ingress</strong>: refers to the direction of travel. In SCION, path construction with beaconing happens in one direction, while actual traffic might follow the opposite direction. This document clarifies on a case-by-case basis whether 'egress' or 'ingress' refers to the direction of travel of the SCION packet or to the direction of beaconing.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
-<p id="section-1.1-5"><strong>Endpoint</strong>: An endpoint is the start or the end of a SCION path. For example, an endpoint can be a host as defined in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span> or a gateway bridging a SCION and an IP domain. This definition is based on the definition in <span>[<a href="#RFC9473" class="cite xref">RFC9473</a>]</span>.<a href="#section-1.1-5" class="pilcrow">¶</a></p>
+<p id="section-1.1-5"><strong>Endpoint</strong>: An endpoint is the start or the end of a SCION path. For example, an endpoint can be a host as defined in <span>[<a href="#RFC1122" class="cite xref">RFC1122</a>]</span> or a <span><a href="#sig" class="internal xref">SCION IP gateway</a> (<a href="#sig" class="auto internal xref">Section 8</a>)</span> bridging a SCION and an IP domain. This definition is based on the definition in <span>[<a href="#RFC9473" class="cite xref">RFC9473</a>]</span>.<a href="#section-1.1-5" class="pilcrow">¶</a></p>
 <p id="section-1.1-6"><strong>Forwarding Key</strong>: A forwarding key is a symmetric key that is shared between the control service (control plane) and the routers (data plane) of an AS. It is used to authenticate Hop Fields in the end-to-end SCION path. The forwarding key is an AS-local secret and is not shared with other ASes.<a href="#section-1.1-6" class="pilcrow">¶</a></p>
 <p id="section-1.1-7"><strong>Forwarding Path</strong>: A forwarding path is a complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. It can be created with a combination of up to three path segments (an up segment, a core segment, and a down segment).<a href="#section-1.1-7" class="pilcrow">¶</a></p>
 <p id="section-1.1-8"><strong>Hop Field (HF)</strong>: As they traverse the network, path segment construction beacons (PCBs) accumulate cryptographically protected AS-level path information in the form of Hop Fields. In the data plane, Hop Fields are used for packet forwarding: they contain the incoming and outgoing interface IDs of the ASes on the forwarding path.<a href="#section-1.1-8" class="pilcrow">¶</a></p>
 <p id="section-1.1-9"><strong>Info Field (INF)</strong>: Each path segment construction beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.<a href="#section-1.1-9" class="pilcrow">¶</a></p>
-<p id="section-1.1-10"><strong>Ingress Border Router</strong>: A router processing packets entering an AS, as seen from the direction of travel of the SCION packet.<a href="#section-1.1-10" class="pilcrow">¶</a></p>
-<p id="section-1.1-11"><strong>Interface Identifier (Interface ID)</strong>: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs called <code>ConsIngress</code> and <code>ConsEgress</code>, as they refer to the ingress and egress interfaces in the direction of path construction (beaconing). The Interface ID <span class="bcp14">MUST</span> be unique within each AS. Interface ID 0 is not a valid identifier as implementations <span class="bcp14">MAY</span> use it as the "unspecified" value.<a href="#section-1.1-11" class="pilcrow">¶</a></p>
-<p id="section-1.1-12"><strong>Isolation Domain (ISD)</strong>: In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.<a href="#section-1.1-12" class="pilcrow">¶</a></p>
-<p id="section-1.1-13"><strong>Leaf AS</strong>: An AS at the "edge" of an ISD, with no other downstream ASes.<a href="#section-1.1-13" class="pilcrow">¶</a></p>
-<p id="section-1.1-14"><strong>MAC</strong>: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.<a href="#section-1.1-14" class="pilcrow">¶</a></p>
-<p id="section-1.1-15"><strong>Path Authorization</strong>: A requirement for the data plane is that endpoints can only use paths that were constructed and authorized by ASes in the control plane. This property is called path authorization. The goal of path authorization is to prevent endpoints from crafting Hop Fields (HFs) themselves, modifying HFs in authorized path segments, or combining HFs of different path segments.<a href="#section-1.1-15" class="pilcrow">¶</a></p>
-<p id="section-1.1-16"><strong>Path Control</strong>: Path control is a property of a network architecture that gives endpoints the ability to select how their packets travel through the network. Path control is stronger than path transparency.<a href="#section-1.1-16" class="pilcrow">¶</a></p>
-<p id="section-1.1-17"><strong>Path Segment</strong>: Path segments are derived from path segment construction beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.<a href="#section-1.1-17" class="pilcrow">¶</a></p>
-<p id="section-1.1-18"><strong>Path-Segment Construction Beacon (PCB)</strong>: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.<a href="#section-1.1-18" class="pilcrow">¶</a></p>
-<p id="section-1.1-19"><strong>Path Transparency</strong>: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.<a href="#section-1.1-19" class="pilcrow">¶</a></p>
-<p id="section-1.1-20"><strong>Peering Link</strong>: A link between two SCION border routers of different ASes, where at least one of the two ASes is not a core AS. Two peering ASes may be in different ISDs. A peering link can be seen as a shortcut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.<a href="#section-1.1-20" class="pilcrow">¶</a></p>
+<p id="section-1.1-10"><strong>Interface Identifier (Interface ID)</strong>: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs called <code>ConsIngress</code> and <code>ConsEgress</code>, as they refer to the ingress and egress interfaces in the direction of path construction (beaconing). The Interface ID <span class="bcp14">MUST</span> be unique within each AS. Interface ID 0 is not a valid identifier as implementations <span class="bcp14">MAY</span> use it as the "unspecified" value.<a href="#section-1.1-10" class="pilcrow">¶</a></p>
+<p id="section-1.1-11"><strong>Isolation Domain (ISD)</strong>: In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.<a href="#section-1.1-11" class="pilcrow">¶</a></p>
+<p id="section-1.1-12"><strong>Leaf AS</strong>: An AS at the "edge" of an ISD, with no other downstream ASes.<a href="#section-1.1-12" class="pilcrow">¶</a></p>
+<p id="section-1.1-13"><strong>MAC</strong>: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.<a href="#section-1.1-13" class="pilcrow">¶</a></p>
+<p id="section-1.1-14"><strong>Path Authorization</strong>: A requirement for the data plane is that endpoints can only use paths that were constructed and authorized by ASes in the control plane. This property is called path authorization. The goal of path authorization is to prevent endpoints from crafting Hop Fields (HFs) themselves, modifying HFs in authorized path segments, or combining HFs of different path segments.<a href="#section-1.1-14" class="pilcrow">¶</a></p>
+<p id="section-1.1-15"><strong>Path Control</strong>: Path control is a property of a network architecture that gives endpoints the ability to select how their packets travel through the network. Path control is stronger than path transparency.<a href="#section-1.1-15" class="pilcrow">¶</a></p>
+<p id="section-1.1-16"><strong>Path Segment</strong>: Path segments are derived from path segment construction beacons (PCBs). A path segment can be (1) an up segment (i.e. a path between a non-core AS and a core AS in the same ISD), (2) a down segment (i.e. the same as an up segment, but in the opposite direction), or (3) a core segment (i.e., a path between core ASes). Up to three path segments can be used to create a forwarding path.<a href="#section-1.1-16" class="pilcrow">¶</a></p>
+<p id="section-1.1-17"><strong>Path-Segment Construction Beacon (PCB)</strong>: Core AS control planes generate PCBs to explore paths within their isolation domain (ISD) and among different ISDs. ASes further propagate selected PCBs to their neighboring ASes. As a PCB traverses the network, it carries path segments, which can subsequently be used for traffic forwarding.<a href="#section-1.1-17" class="pilcrow">¶</a></p>
+<p id="section-1.1-18"><strong>Path Transparency</strong>: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.<a href="#section-1.1-18" class="pilcrow">¶</a></p>
+<p id="section-1.1-19"><strong>Peering Link</strong>: A link between two SCION border routers of different ASes, where at least one of the two ASes is not a core AS. Two peering ASes may be in different ISDs. A peering link can be seen as a shortcut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.<a href="#section-1.1-19" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1900,7 +1958,8 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-empty-path-type" class="section-name selfRef">Empty Path Type</a>
           </h4>
 <p id="section-2.3.1-1">The <code>Empty</code> path type (<code>PathType=0</code>) is used to send traffic within an AS. It has no additional fields, i.e. it consumes 0 bytes on the wire.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1-2">One use case of the <code>Empty</code> path type lies in the context of link failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol (<span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span> and <span>[<a href="#RFC5881" class="cite xref">RFC5881</a>]</span>). It operates independently of media, data protocols, and routing protocols. SCION uses the <code>Empty</code> path type, together with <code>OneHopPath</code> path type, to bootstrap BFD within SCION. (For more information on the <code>OneHopPath</code> path type, see <a href="#onehop" class="auto internal xref">Section 2.3.3</a>.)<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-2">One use case of the <code>Empty</code> path type lies in the context of link failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol (<span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span> and <span>[<a href="#RFC5881" class="cite xref">RFC5881</a>]</span>). It operates independently of media, data protocols, and routing protocols. SCION uses the <code>Empty</code> path type, together with <code>OneHopPath</code> path type, to bootstrap BFD within SCION. (For more information on the <code>OneHopPath</code> path type, see <a href="#onehop" class="auto internal xref">Section 2.3.3</a>.)
+One use case of the <code>Empty</code> path type lies in the context of <span><a href="#scion-bfd" class="internal xref">link-failure detection</a> (<a href="#scion-bfd" class="auto internal xref">Section 6.1</a>)</span>.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scion-path-type">
@@ -2913,7 +2972,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-4.1.1-4">When originating a path segment construction beacon PCB in the control plane, a core AS chooses a random 16-bit value as segment identifier <code>SegID</code> for the path segment and includes it in the PCB's <code>Segment Info</code> component. In the control plane, each AS<sub>i</sub> on the path segment computes the MAC for the current HF<sub>i</sub>, based on the value of <code>SegID</code> and the MACs of the preceding hop entries. Here, the full XOR-sum is computed explicitly.<a href="#section-4.1.1-4" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-5">For high-speed packet processing in the data plane, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each of the path segments in a path as a separate, updatable Accumulator Field <code>Acc</code>. The routers update <code>Acc</code> by adding/subtracting only a single 16-bit value each.<a href="#section-4.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-6">When combining path segments to create a path to the destination endpoint, the source endpoint <span class="bcp14">MUST</span> also initialize the value of accumulator field <code>Acc</code> for each path segment. The <code>Acc</code> field <span class="bcp14">MUST</span> contain the correct XOR-sum of the path segment identifier and preceding Hop Field MACs expected by the first router that is traversed.<a href="#section-4.1.1-6" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-7">The aggregated 16-bit path segment identifier and preceding MACs prevent splicing of different path segments unless there is a collision of the <code>Acc</code> value among compatible path segments in an AS. See <a href="#path-splicing" class="auto internal xref">Section 5.1.3</a> for more details.<a href="#section-4.1.1-7" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-7">The aggregated 16-bit path segment identifier and preceding MACs prevent splicing of different path segments unless there is a collision of the <code>Acc</code> value among compatible path segments in an AS. See <a href="#path-splicing" class="auto internal xref">Section 7.1.3</a> for more details.<a href="#section-4.1.1-7" class="pilcrow">¶</a></p>
 <div id="hf-mac-calc">
 <section id="section-4.1.1.1">
             <h5 id="name-hop-field-mac-calculation">
@@ -3336,122 +3395,764 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
 </div>
 </section>
 </div>
-<div id="security-considerations">
+<div id="scmp">
 <section id="section-5">
-      <h2 id="name-security-considerations">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-scmp">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-scmp" class="section-name selfRef">SCMP</a>
       </h2>
-<p id="section-5-1">This section describes the possible security risks and attacks that SCION's data plane may be prone to, and how these attacks may be mitigated. It first discusses security risks that pertain to path authorization, followed by a section on other forwarding related security considerations.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<div id="path-authorization-1">
+<div id="introduction-1">
 <section id="section-5.1">
-        <h3 id="name-path-authorization-3">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-path-authorization-3" class="section-name selfRef">Path Authorization</a>
+        <h3 id="name-introduction-2">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-introduction-2" class="section-name selfRef">Introduction</a>
         </h3>
-<p id="section-5.1-1">A central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's prevention mechanisms; either an attacker can attempt to create unauthorized Hop Fields, or they can attempt to create illegitimate paths assembled from authentic individual Hop Fields.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">The main protection mechanism is the Hop Field MAC (see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>) that authenticates the Hop Field content comprised of ingress/egress interface identifiers, creation and expiration timestamp and the preceding Hop Field MACs in the path segment. Each Hop Field MAC is computed using the secret forwarding key of the respective AS, which is shared across the SCION routers and control plane services within each AS.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<div id="forwarding-key-compromise">
-<section id="section-5.1.1">
-          <h4 id="name-forwarding-key-compromise">
-<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-forwarding-key-compromise" class="section-name selfRef">Forwarding key compromise</a>
+<p id="section-5.1-1">The SCION Control Message Protocol (SCMP) is analogous to the Internet Control Message Protocol (ICMP). It provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, an optimization for end hosts to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">This document specifies only messages <span class="bcp14">RECOMMENDED</span> for the purposes of path diagnosis and recovery. An extended specification, still a work in progress, can be found in <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="general-format">
+<section id="section-5.2">
+        <h3 id="name-general-format">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-general-format" class="section-name selfRef">General Format</a>
+        </h3>
+<p id="section-5.2-1">Every SCMP message is preceded by a SCION header, and zero or more SCION extension headers. The SCMP header is identified by a <code>NextHdr</code> value of <code>202</code> in the immediately preceding header.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">The messages have the following general format:<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<span id="name-scmp-message-format"></span><div id="_figure-21">
+<figure id="figure-20">
+          <div class="alignLeft art-text artwork" id="section-5.2-3.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |           Checksum            |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                       Type-dependent Block                    |
+    +                                                               +
+    |                         (variable length)                     |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
+<a href="#name-scmp-message-format" class="selfRef">SCMP message format</a>
+          </figcaption></figure>
+</div>
+<p id="section-5.2-4"><em>Type</em> indicates the type of SCMP message. Its value determines the format of the info and data block.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-5"><em>Code</em> provides additional granularity to the SCMP type.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.2-6"><em>Checksum</em> is used to detect data corruption.<a href="#section-5.2-6" class="pilcrow">¶</a></p>
+<p id="section-5.2-7"><em>InfoBlock</em> is an optional field of variable length. The format is dependent on the message type.<a href="#section-5.2-7" class="pilcrow">¶</a></p>
+<p id="section-5.2-8"><em>DataBlock</em> is an optional field of variable length. The format is dependent on the message type.<a href="#section-5.2-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="message-types">
+<section id="section-5.3">
+        <h3 id="name-message-types">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-message-types" class="section-name selfRef">Message Types</a>
+        </h3>
+<p id="section-5.3-1">SCMP messages are grouped into two classes: error messages and informational messages. Error messages are identified by a zero in the high-order bit of the type value. I.e., error messages have a type value in the range of 0-127. Informational messages have type values in the range of 128-255.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">This specification defines the message formats for the following SCMP messages:<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+<p id="section-5.3-3"><strong>SCMP error messages</strong>:<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+<span id="name-type-values"></span><table class="center" id="table-11">
+          <caption>
+<a href="#table-11" class="selfRef">Table 11</a>:
+<a href="#name-type-values" class="selfRef">type values</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">2</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#packet-too-big" class="internal xref">Packet Too Big</a> (<a href="#packet-too-big" class="auto internal xref">Section 5.6.1</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">3</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">4</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">5</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#external-interface-down" class="internal xref">External Interface Down</a> (<a href="#external-interface-down" class="auto internal xref">Section 5.6.2</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">6</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#internal-connectivity-down" class="internal xref">Internal Connectivity Down</a> (<a href="#internal-connectivity-down" class="auto internal xref">Section 5.6.3</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">100</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Experimentation</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">101</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Experimentation</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">127</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for expansion of SCMP error messages</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-5.3-5"><strong>SCMP informational messages</strong>:<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+<span id="name-type-values-2"></span><table class="center" id="table-12">
+          <caption>
+<a href="#table-12" class="selfRef">Table 12</a>:
+<a href="#name-type-values-2" class="selfRef">type values</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">128</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">129</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">130</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#traceroute-request" class="internal xref">Traceroute Request</a> (<a href="#traceroute-request" class="auto internal xref">Section 5.7.1</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">131</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply</a> (<a href="#traceroute-reply" class="auto internal xref">Section 5.7.2</a>)</span>
+</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">200</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Experimentation</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">201</td>
+              <td class="text-left" rowspan="1" colspan="1">Private Experimentation</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">255</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for expansion of SCMP informational messages</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-5.3-7">Type values 100, 101, 200, and 201 are reserved for private experimentation.
+They are not intended for general use. Any wide-scale and/or uncontrolled usage
+should obtain a real allocation.<a href="#section-5.3-7" class="pilcrow">¶</a></p>
+<p id="section-5.3-8">Type values 127 and 255 are reserved for future expansion of in case of a
+shortage of type values.<a href="#section-5.3-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="checksum-calculation">
+<section id="section-5.4">
+        <h3 id="name-checksum-calculation">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-checksum-calculation" class="section-name selfRef">Checksum Calculation</a>
+        </h3>
+<p id="section-5.4-1">The checksum is the 16-bit one's complement of the one's complement sum of the
+entire SCMP message, starting with the SCMP message type field, and prepended
+with a "pseudo-header" consisting of the SCION address header and the layer-4
+protocol type as defined in <a href="#pseudo" class="auto internal xref">Section 2.5</a>.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="processing-rules">
+<section id="section-5.5">
+        <h3 id="name-processing-rules">
+<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-processing-rules" class="section-name selfRef">Processing Rules</a>
+        </h3>
+<p id="section-5.5-1">Implementations <span class="bcp14">MUST</span> respect the following rules when processing SCMP messages:<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.5-2.1">
+            <p id="section-5.5-2.1.1">If an SCMP error message of unknown type is received at its destination, it <span class="bcp14">MUST</span> be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.<a href="#section-5.5-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.5-2.2">
+            <p id="section-5.5-2.2.1">If an SCMP informational message of unknown type is received, it <span class="bcp14">MUST</span> be silently dropped.<a href="#section-5.5-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.5-2.3">
+            <p id="section-5.5-2.3.1">Every SCMP error message <span class="bcp14">MUST</span> include as much of the offending SCION packet as possible without making the error message packet - including the SCION header and all extension headers - exceed <strong>1232 bytes</strong>.<a href="#section-5.5-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.5-2.4">
+            <p id="section-5.5-2.4.1">In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message <span class="bcp14">MUST</span> be silently dropped.<a href="#section-5.5-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.5-2.5">
+            <p id="section-5.5-2.5.1">An SCMP error message <span class="bcp14">MUST NOT</span> be originated in response to any of the following:<a href="#section-5.5-2.5.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.5-2.5.2.1">
+                <p id="section-5.5-2.5.2.1.1">An SCMP error message.<a href="#section-5.5-2.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-5.5-2.5.2.2">
+                <p id="section-5.5-2.5.2.2.1">A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.<a href="#section-5.5-2.5.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+        </ul>
+</section>
+</div>
+<div id="scmp-notification">
+<section id="section-5.6">
+        <h3 id="name-error-messages">
+<a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-error-messages" class="section-name selfRef">Error Messages</a>
+        </h3>
+<div id="packet-too-big">
+<section id="section-5.6.1">
+          <h4 id="name-packet-too-big">
+<a href="#section-5.6.1" class="section-number selfRef">5.6.1. </a><a href="#name-packet-too-big" class="section-name selfRef">Packet Too Big</a>
           </h4>
-<p id="section-5.1.1-1">For the current default MAC algorithm - AES-CMAC truncated to 48 bits - key recovery attacks from (any number of) known plaintext/MAC combinations is computationally infeasible as far as publicly known. In addition, the MAC algorithm can be freely chosen by each AS, enabling algorithmic agility for MAC computations. Should a MAC algorithm be discovered to be weak or insecure, each AS can quickly switch to a secure algorithm without the need for coordination with other ASes.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-2">A more realistic risk to the secrecy of the forwarding key is exfiltration from a compromised router or control plane service. An AS can optionally rotate its forwarding key at regular intervals to limit the exposure after a temporary device compromise. However, such a key rotation scheme cannot mitigate the impact of an undiscovered compromise of a device.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-3">When an AS's forwarding key is compromised, an attacker can forge Hop Field MACs and undermine path authorization. As path segments are checked for validity and policy compliance during the path discovery phase and during forwarding, routers only validate the MAC and basic validity of the current the Hop Field. Consequently, creating fraudulent Hop Fields with valid MACs allows an attacker to bypass most path segment validity checks and to create path segments that violate the AS's local policy and/or general path segment validity requirements. In particular, an attacker could create paths that include loops (limited by the maximum number of Hop Fields of a path).<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-4">Unless an attacker has access to the forwarding keys of all ASes on the illegitimate path it wants to fabricate, it will need to splice fragments of two legitimate path segments with an illegitimate Hop Field. For this, it needs to create a Hop Field with a MAC that fits into the MAC chain expected by the second path segment fragment. The only input that the attacker can vary relatively freely is the 8-bit <code>ExpTime</code>, but the resulting MAC needs to match a specific 16 bit <code>Acc</code> value. While there is a low probability of this working for a specific attempt (1/256), the attack will succeed eventually if the attacker can keep retrying over a longer time period or with many different path segment fragments.<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.1.1-5">While a forwarding key compromise and the resulting loss of path authorization is a serious degradation of SCION's routing security properties, this does not affect access control or data security for the hosts in the affected AS. Unauthorized paths are available to the attacker, but the routing of packets from legitimate senders is not affected.<a href="#section-5.1.1-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.6.1-1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |            reserved           |             MTU               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                As much of the offending packet                |
+    +              as possible without the SCMP packet              +
+    |                    exceeding 1232 bytes.                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre><a href="#section-5.6.1-1" class="pilcrow">¶</a>
+</div>
+<span id="name-field-values"></span><table class="center" id="table-13">
+            <caption>
+<a href="#table-13" class="selfRef">Table 13</a>:
+<a href="#name-field-values" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
+                <th class="text-left" rowspan="1" colspan="1"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">2</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">MTU</td>
+                <td class="text-left" rowspan="1" colspan="1">The Maximum Transmission Unit of the next-hop link.</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-5.6.1-3">A <strong>Packet Too Big</strong> message <span class="bcp14">SHOULD</span> be originated by a router in response to a
+packet that cannot be forwarded because the packet is larger than the MTU of the
+outgoing link. The MTU value is set to the maximum size a SCION packet can have
+to still fit on the next-hop link, as the sender has no knowledge of the
+underlay.<a href="#section-5.6.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="external-interface-down">
+<section id="section-5.6.2">
+          <h4 id="name-external-interface-down">
+<a href="#section-5.6.2" class="section-number selfRef">5.6.2. </a><a href="#name-external-interface-down" class="section-name selfRef">External Interface Down</a>
+          </h4>
+<span id="name-external-interface-down-for"></span><div id="_figure-22">
+<figure id="figure-21">
+            <div class="alignLeft art-text artwork" id="section-5.6.2-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                        Interface ID                           +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                As much of the offending packet                |
+    +              as possible without the SCMP packet              +
+    |                    exceeding 1232 bytes.                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
+<a href="#name-external-interface-down-for" class="selfRef">External-interface-down-format</a>
+            </figcaption></figure>
+</div>
+<span id="name-field-values-2"></span><table class="center" id="table-14">
+            <caption>
+<a href="#table-14" class="selfRef">Table 14</a>:
+<a href="#name-field-values-2" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
+                <th class="text-left" rowspan="1" colspan="1"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">5</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">ISD</td>
+                <td class="text-left" rowspan="1" colspan="1">The 16-bit ISD identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">AS</td>
+                <td class="text-left" rowspan="1" colspan="1">The 48-bit AS identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Interface ID</td>
+                <td class="text-left" rowspan="1" colspan="1">The interface ID of the external link with connectivity issue.</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-5.6.2-3">A <strong>External Interface Down</strong> message <span class="bcp14">SHOULD</span> be originated by a router in response
+to a packet that cannot be forwarded because the link to an external AS is broken.
+The ISD and AS identifier are set to the ISD-AS of the originating router.
+The interface ID identifies the link of the originating AS that is down.<a href="#section-5.6.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.6.2-4">Recipients can use this information to route around broken data-plane links.<a href="#section-5.6.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="internal-connectivity-down">
+<section id="section-5.6.3">
+          <h4 id="name-internal-connectivity-down">
+<a href="#section-5.6.3" class="section-number selfRef">5.6.3. </a><a href="#name-internal-connectivity-down" class="section-name selfRef">Internal Connectivity Down</a>
+          </h4>
+<span id="name-internal-connectivity-down-"></span><div id="_figure-23">
+<figure id="figure-22">
+            <div class="alignLeft art-text artwork" id="section-5.6.3-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                   Ingress Interface ID                        +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                   Egress Interface ID                         +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                As much of the offending packet                |
+    +              as possible without the SCMP packet              +
+    |                    exceeding 1232 bytes.                      |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
+<a href="#name-internal-connectivity-down-" class="selfRef">internal-connectivity-down-format</a>
+            </figcaption></figure>
+</div>
+<span id="name-field-values-3"></span><table class="center" id="table-15">
+            <caption>
+<a href="#table-15" class="selfRef">Table 15</a>:
+<a href="#name-field-values-3" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
+                <th class="text-left" rowspan="1" colspan="1"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">6</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">ISD</td>
+                <td class="text-left" rowspan="1" colspan="1">The 16-bit ISD identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">AS</td>
+                <td class="text-left" rowspan="1" colspan="1">The 48-bit AS identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Ingress ID</td>
+                <td class="text-left" rowspan="1" colspan="1">The interface ID of the ingress link.</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Egress ID</td>
+                <td class="text-left" rowspan="1" colspan="1">The interface ID of the egress link.</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-5.6.3-3">A <strong>Internal Connectivity Down</strong> message <span class="bcp14">SHOULD</span> be originated by a router in
+response to a packet that cannot be forwarded inside the AS because because the
+connectivity between the ingress and egress routers is broken. The ISD and AS
+identifier are set to the ISD-AS of the originating router. The ingress
+interface ID identifies the interface on which the packet enters the AS. The
+egress interface ID identifies the interface on which the packet is destined to
+leave the AS, but the connection is broken to.<a href="#section-5.6.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.6.3-4">Recipients can use this information to route around broken data-plane inside an
+AS.<a href="#section-5.6.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="scmp-information">
+<section id="section-5.7">
+        <h3 id="name-informational-messages">
+<a href="#section-5.7" class="section-number selfRef">5.7. </a><a href="#name-informational-messages" class="section-name selfRef">Informational Messages</a>
+        </h3>
+<div id="traceroute-request">
+<section id="section-5.7.1">
+          <h4 id="name-traceroute-request">
+<a href="#section-5.7.1" class="section-number selfRef">5.7.1. </a><a href="#name-traceroute-request" class="section-name selfRef">Traceroute Request</a>
+          </h4>
+<span id="name-traceroute-request-format"></span><div id="_figure-24">
+<figure id="figure-23">
+            <div class="alignLeft art-text artwork" id="section-5.7.1-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                          Interface ID                         +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
+<a href="#name-traceroute-request-format" class="selfRef">traceroute-request-format</a>
+            </figcaption></figure>
+</div>
+<span id="name-field-values-4"></span><table class="center" id="table-16">
+            <caption>
+<a href="#table-16" class="selfRef">Table 16</a>:
+<a href="#name-field-values-4" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
+                <th class="text-left" rowspan="1" colspan="1"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">130</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Identifier</td>
+                <td class="text-left" rowspan="1" colspan="1">A 16-bit identifier to aid matching replies with requests</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Sequence Nr.</td>
+                <td class="text-left" rowspan="1" colspan="1">A 16-bit sequence number to aid matching replies with request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">ISD</td>
+                <td class="text-left" rowspan="1" colspan="1">Place holder set to zero by SCMP sender</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">AS</td>
+                <td class="text-left" rowspan="1" colspan="1">Place holder set to zero by SCMP sender</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Interface ID</td>
+                <td class="text-left" rowspan="1" colspan="1">Place holder set to zero by SCMP sender</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-5.7.1-3">A border router is alerted of a Traceroute Request message through the ConsIngress or ConsEgress Router Alert flag in the hop field that describes the traversal of that router in a packet's path. Senders have to set these flags appropriately. When such a packet is received, the border router <span class="bcp14">SHOULD</span> reply with a <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply message</a> (<a href="#traceroute-reply" class="auto internal xref">Section 5.7.2</a>)</span>.<a href="#section-5.7.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="traceroute-reply">
+<section id="section-5.7.2">
+          <h4 id="name-traceroute-reply">
+<a href="#section-5.7.2" class="section-number selfRef">5.7.2. </a><a href="#name-traceroute-reply" class="section-name selfRef">Traceroute Reply</a>
+          </h4>
+<span id="name-traceroute-reply-format"></span><div id="_figure-25">
+<figure id="figure-24">
+            <div class="alignLeft art-text artwork" id="section-5.7.2-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              ISD              |                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+         AS                    +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                                                               |
+    +                          Interface ID                         +
+    |                                                               |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
+<a href="#name-traceroute-reply-format" class="selfRef">traceroute-reply-format</a>
+            </figcaption></figure>
+</div>
+<span id="name-field-values-5"></span><table class="center" id="table-17">
+            <caption>
+<a href="#table-17" class="selfRef">Table 17</a>:
+<a href="#name-field-values-5" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
+                <th class="text-left" rowspan="1" colspan="1"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">131</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Identifier</td>
+                <td class="text-left" rowspan="1" colspan="1">The identifier set in the Traceroute Request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Sequence Nr.</td>
+                <td class="text-left" rowspan="1" colspan="1">The sequence number of the Tracroute Request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">ISD</td>
+                <td class="text-left" rowspan="1" colspan="1">The 16-bit ISD identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">AS</td>
+                <td class="text-left" rowspan="1" colspan="1">The 48-bit AS identifier of the SCMP originator</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Interface ID</td>
+                <td class="text-left" rowspan="1" colspan="1">The interface ID of the SCMP originating router</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-5.7.2-3">The identifier is set to the identifier value from the <span><a href="#traceroute-request" class="internal xref">Traceroute Request message</a> (<a href="#traceroute-request" class="auto internal xref">Section 5.7.1</a>)</span>. The ISD and AS identifiers are set to the ISD-AS of the originating border router.<a href="#section-5.7.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="authentication">
+<section id="section-5.8">
+        <h3 id="name-authentication">
+<a href="#section-5.8" class="section-number selfRef">5.8. </a><a href="#name-authentication" class="section-name selfRef">Authentication</a>
+        </h3>
+<p id="section-5.8-1">Authentication of SCMP packets is not specified. In a context where endpoints may depend on SCMP messages (at least <span><a href="#external-interface-down" class="internal xref">External Interface Down</a> (<a href="#external-interface-down" class="auto internal xref">Section 5.6.2</a>)</span> and <span><a href="#internal-connectivity-down" class="internal xref">Internal Connectivity Down</a> (<a href="#internal-connectivity-down" class="auto internal xref">Section 5.6.3</a>)</span>) for reliable operations, this is recognized as a problem and is being addressed.<a href="#section-5.8-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="failure-to-forward">
+<section id="section-6">
+      <h2 id="name-failure-to-forward">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-failure-to-forward" class="section-name selfRef">Failure To Forward</a>
+      </h2>
+<div id="scion-bfd">
+<section id="section-6.1">
+        <h3 id="name-link-failure-detection-bfd">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-link-failure-detection-bfd" class="section-name selfRef">Link Failure Detection - BFD</a>
+        </h3>
+<p id="section-6.1-1">One of the reasons not to forward a packet is the failure of the link through which the packet needs to egress. Whether such failures are detectable upon sending depends on the underlay protocol being used. In the case of UDP/IP, it is common for failures to go undetected. To detect link failures more reliably, SCION uses the Bidirectional Forwarding Detection (BFD) protocol (<span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span> and <span>[<a href="#RFC5881" class="cite xref">RFC5881</a>]</span>). BFD is a protocol intended to detect faults in the bidirectional path between two forwarding engines, with typically very low latency. It operates independently of media, data protocols, and routing protocols.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">A SCION router monitor the links at each of its external interfaces by exchanging BFD messages with its peer. A SCION router monitors its connectivity with other routers in the same AS by exchanging BFD messages with them. A SCION BFD message is a SCION packet with a <code>NextHdr</code> value of <code>203</code> (<code>BFD/SCION</code>) and a path type of either <code>00</code> (<code>Empty</code> - used on internal links) or <code>2</code> (<code>OneHopPath</code> - used on inter-as links). The BFD header itself is a BFD Control Header as described in <span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span>.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">More information is available on one-hop and empty paths in <a href="#onehop" class="auto internal xref">Section 2.3.3</a> and <a href="#empty" class="auto internal xref">Section 2.3.1</a>.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">The protocol between peers is as descibed in <span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span>. To summarize: if a node does not receive a BFD message from its peer at some regular interval, it considers the link to be down (in both directions) until messages are received again.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-5">A SCION router should accept BFD connections from its peers and <span class="bcp14">SHOULD</span> establish BFD connections to its peers. While a link is considered to be down, a SCION router should drop packets that must egress via that link. In that case, it <span class="bcp14">SHOULD</span> send a <span><a href="#link-down-notification" class="internal xref">notification</a> (<a href="#link-down-notification" class="auto internal xref">Section 6.2</a>)</span> to the originator.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="link-down-notification">
+<section id="section-6.2">
+        <h3 id="name-notification-scmp">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-notification-scmp" class="section-name selfRef">Notification - SCMP</a>
+        </h3>
+<p id="section-6.2-1">If a failure to forward a packet is the result of a local condition, the path used by the packet is unusable. As a result, the originator cannot communicate with the recipient until the fault is repaired, the path expires, or a different path is used. SCION is designed so that a router cannot change the path followed by a packet. Only the originating endpoint can chose a different path. Therefore, to enable fast recovery, a router <span class="bcp14">SHOULD</span> notify the originator, via an <span><a href="#scmp-notification" class="internal xref">SCMP notifications</a> (<a href="#scmp-notification" class="auto internal xref">Section 5.6</a>)</span>, if the packet is dropped due to a local, non-transient, fault.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">Sending an SCMP error notification is never mandatory. To reduce exposure to denial-of-service attacks, a SCION router <span class="bcp14">SHOULD</span> restrict the amount of work done when dropping a packet. In most cases the packet <span class="bcp14">SHOULD</span> be dropped without performing any additional work. Rate-limiting the preparation and sending of recommended SCMP notifications (especially identical ones) is good practice. Rate limit policies are up to each AS' administrator.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-7">
+      <h2 id="name-security-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-7-1">This section describes the possible security risks and attacks that SCION's data plane may be prone to, and how these attacks may be mitigated. It first discusses security risks that pertain to path authorization, followed by a section on other forwarding related security considerations.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<div id="path-authorization-1">
+<section id="section-7.1">
+        <h3 id="name-path-authorization-3">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-path-authorization-3" class="section-name selfRef">Path Authorization</a>
+        </h3>
+<p id="section-7.1-1">A central property of the SCION path-aware data plane is path authorization. Path authorization guarantees that data packets always traverse the network along path segments authorized in the control plane by all on-path ASes. This section discusses how an adversary may attempt to violate the path-authorization property, as well as SCION's prevention mechanisms; either an attacker can attempt to create unauthorized Hop Fields, or they can attempt to create illegitimate paths assembled from authentic individual Hop Fields.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">The main protection mechanism is the Hop Field MAC (see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>) that authenticates the Hop Field content comprised of ingress/egress interface identifiers, creation and expiration timestamp and the preceding Hop Field MACs in the path segment. Each Hop Field MAC is computed using the secret forwarding key of the respective AS, which is shared across the SCION routers and control plane services within each AS.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<div id="forwarding-key-compromise">
+<section id="section-7.1.1">
+          <h4 id="name-forwarding-key-compromise">
+<a href="#section-7.1.1" class="section-number selfRef">7.1.1. </a><a href="#name-forwarding-key-compromise" class="section-name selfRef">Forwarding key compromise</a>
+          </h4>
+<p id="section-7.1.1-1">For the current default MAC algorithm - AES-CMAC truncated to 48 bits - key recovery attacks from (any number of) known plaintext/MAC combinations is computationally infeasible as far as publicly known. In addition, the MAC algorithm can be freely chosen by each AS, enabling algorithmic agility for MAC computations. Should a MAC algorithm be discovered to be weak or insecure, each AS can quickly switch to a secure algorithm without the need for coordination with other ASes.<a href="#section-7.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-2">A more realistic risk to the secrecy of the forwarding key is exfiltration from a compromised router or control plane service. An AS can optionally rotate its forwarding key at regular intervals to limit the exposure after a temporary device compromise. However, such a key rotation scheme cannot mitigate the impact of an undiscovered compromise of a device.<a href="#section-7.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-3">When an AS's forwarding key is compromised, an attacker can forge Hop Field MACs and undermine path authorization. As path segments are checked for validity and policy compliance during the path discovery phase and during forwarding, routers only validate the MAC and basic validity of the current the Hop Field. Consequently, creating fraudulent Hop Fields with valid MACs allows an attacker to bypass most path segment validity checks and to create path segments that violate the AS's local policy and/or general path segment validity requirements. In particular, an attacker could create paths that include loops (limited by the maximum number of Hop Fields of a path).<a href="#section-7.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-4">Unless an attacker has access to the forwarding keys of all ASes on the illegitimate path it wants to fabricate, it will need to splice fragments of two legitimate path segments with an illegitimate Hop Field. For this, it needs to create a Hop Field with a MAC that fits into the MAC chain expected by the second path segment fragment. The only input that the attacker can vary relatively freely is the 8-bit <code>ExpTime</code>, but the resulting MAC needs to match a specific 16 bit <code>Acc</code> value. While there is a low probability of this working for a specific attempt (1/256), the attack will succeed eventually if the attacker can keep retrying over a longer time period or with many different path segment fragments.<a href="#section-7.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-5">While a forwarding key compromise and the resulting loss of path authorization is a serious degradation of SCION's routing security properties, this does not affect access control or data security for the hosts in the affected AS. Unauthorized paths are available to the attacker, but the routing of packets from legitimate senders is not affected.<a href="#section-7.1.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="forging-hop-field-mac">
-<section id="section-5.1.2">
+<section id="section-7.1.2">
           <h4 id="name-forging-hop-field-mac">
-<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-forging-hop-field-mac" class="section-name selfRef">Forging Hop Field MAC</a>
+<a href="#section-7.1.2" class="section-number selfRef">7.1.2. </a><a href="#name-forging-hop-field-mac" class="section-name selfRef">Forging Hop Field MAC</a>
           </h4>
-<p id="section-5.1.2-1">Another method to break path authorization is to directly forge a Hop Field in an online attack, using the router as an oracle to determine the validity of the Hop Field MAC. The adversary needs to send one packet per guess for verification and for 6-byte MAC, an adversary would need an expected 2<sup>47</sup> (~140 trillion) tries to successfully forge the MAC of a single Hop Field.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.2-2">As the router only checks MACs during the encoded validity period of the Hop Field, which is limited by the packet header format to at most 24 hours, these tries need to occur in a limited time period. This results in a seemingly infeasible number of ~1.6e9 guesses per second.<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.1.2-3">In the unlikely case that an online brute-force attack succeeds, the obtained Hop Field can be used until its inevitable expiration after the just mentioned 24 hour limit.<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-1">Another method to break path authorization is to directly forge a Hop Field in an online attack, using the router as an oracle to determine the validity of the Hop Field MAC. The adversary needs to send one packet per guess for verification and for 6-byte MAC, an adversary would need an expected 2<sup>47</sup> (~140 trillion) tries to successfully forge the MAC of a single Hop Field.<a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-2">As the router only checks MACs during the encoded validity period of the Hop Field, which is limited by the packet header format to at most 24 hours, these tries need to occur in a limited time period. This results in a seemingly infeasible number of ~1.6e9 guesses per second.<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-3">In the unlikely case that an online brute-force attack succeeds, the obtained Hop Field can be used until its inevitable expiration after the just mentioned 24 hour limit.<a href="#section-7.1.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="path-splicing">
-<section id="section-5.1.3">
+<section id="section-7.1.3">
           <h4 id="name-path-splicing">
-<a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-path-splicing" class="section-name selfRef">Path Splicing</a>
+<a href="#section-7.1.3" class="section-number selfRef">7.1.3. </a><a href="#name-path-splicing" class="section-name selfRef">Path Splicing</a>
           </h4>
-<p id="section-5.1.3-1">In a path splicing attack, an adversary source endpoint takes valid Hop Fields of multiple path segments and splices them together to obtain a new unauthorized path.<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.3-2">Candidate path segments for splicing must have at least one AS interface in common as a connection point, and the same origination timestamp as this is directly protected by the Hop Field MAC. This can occur by chance or if the two candidate path segments were originated as the same segment that diverged and converged back.<a href="#section-5.1.3-2" class="pilcrow">¶</a></p>
-<p id="section-5.1.3-3">The Hop Field MAC protects the 16-bit aggregation of path segment identifier and preceding MACs, see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>. This MAC chaining prevents splicing even in the case that the AS interface and segment timestamp match.<a href="#section-5.1.3-3" class="pilcrow">¶</a></p>
-<p id="section-5.1.3-4">As the segment identifier and aggregation of preceding MACs is only 16-bits wide, a chance collision among compatible path segments can occur rarely. Successful path splicing would allow an attacker to briefly use a path that violates an ASes path policy, e.g. making a special transit link available to a customer AS that is not billed accordingly, or violate general path segment validity requirements. In particular, a spliced path segment could traverse one or multiple links twice. However, creating a loop traversing a link an arbitrary number of times would involve multiple path splices and therefore multiple random collisions happening simultaneously, which is exceedingly unlikely. A wider security margin against path splicing could be obtained by increasing the width of the segment identifier / <code>Acc</code> field, e.g. by extending it into the 8-bit reserved field next to it in the Info Field.<a href="#section-5.1.3-4" class="pilcrow">¶</a></p>
+<p id="section-7.1.3-1">In a path splicing attack, an adversary source endpoint takes valid Hop Fields of multiple path segments and splices them together to obtain a new unauthorized path.<a href="#section-7.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.1.3-2">Candidate path segments for splicing must have at least one AS interface in common as a connection point, and the same origination timestamp as this is directly protected by the Hop Field MAC. This can occur by chance or if the two candidate path segments were originated as the same segment that diverged and converged back.<a href="#section-7.1.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.3-3">The Hop Field MAC protects the 16-bit aggregation of path segment identifier and preceding MACs, see <a href="#auth-chained-macs" class="auto internal xref">Section 4.1</a>. This MAC chaining prevents splicing even in the case that the AS interface and segment timestamp match.<a href="#section-7.1.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.1.3-4">As the segment identifier and aggregation of preceding MACs is only 16-bits wide, a chance collision among compatible path segments can occur rarely. Successful path splicing would allow an attacker to briefly use a path that violates an ASes path policy, e.g. making a special transit link available to a customer AS that is not billed accordingly, or violate general path segment validity requirements. In particular, a spliced path segment could traverse one or multiple links twice. However, creating a loop traversing a link an arbitrary number of times would involve multiple path splices and therefore multiple random collisions happening simultaneously, which is exceedingly unlikely. A wider security margin against path splicing could be obtained by increasing the width of the segment identifier / <code>Acc</code> field, e.g. by extending it into the 8-bit reserved field next to it in the Info Field.<a href="#section-7.1.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="on-path-attacks">
-<section id="section-5.2">
+<section id="section-7.2">
         <h3 id="name-on-path-attacks">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-on-path-attacks" class="section-name selfRef">On-Path Attacks</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-on-path-attacks" class="section-name selfRef">On-Path Attacks</a>
         </h3>
-<p id="section-5.2-1">When an adversary sits on the path between the source and destination endpoint, it is able to intercept the data packets that are being forwarded and would allow the adversary to hijack traffic onto a path that is different from the intended one selected by the source endpoint. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, or by simply dropping packets. This kind of attack generally cannot be prevented, although anendpoint can use SCION's path awareness to immediately select an alternate path if available.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-1">When an adversary sits on the path between the source and destination endpoint, it is able to intercept the data packets that are being forwarded and would allow the adversary to hijack traffic onto a path that is different from the intended one selected by the source endpoint. Possible on-path attacks in the data plane are modifications of the SCION path header and SCION address header, or by simply dropping packets. This kind of attack generally cannot be prevented, although anendpoint can use SCION's path awareness to immediately select an alternate path if available.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <div id="modification-of-the-path-header">
-<section id="section-5.2.1">
+<section id="section-7.2.1">
           <h4 id="name-modification-of-the-path-he">
-<a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-modification-of-the-path-he" class="section-name selfRef">Modification of the Path Header</a>
+<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-modification-of-the-path-he" class="section-name selfRef">Modification of the Path Header</a>
           </h4>
-<p id="section-5.2.1-1">An on-path adversary could modify the SCION path header and replace the remaining part of path segments to the destination with different segments. Such replaced segments must include authorized segments as otherwise the packet would be simply dropped on its way to the destination.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.2.1-2">The already traversed portion of the current segment and past segments can also be modified by the adversary (e.g. by deleting and adding valid and invalid Hop Fields). On reply packets from the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M) where the new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M which can then transparently change the invalid path back to the valid path to A. In addition, the endpoint address header can also be modified.<a href="#section-5.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.2.1-3">Modifications of the SCION path and address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, loosely analogous to the IPSec Authentication Header, exists for SCION but is out of scope for this document. This is described as the SCION Packet Authentication Option (SPAO) in <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span>.<a href="#section-5.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.2.1-4">Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. However, such an attack is of little value. An on-path adversary may inspect/copy/disrupt its traffic without diverting it away from the sender-chosen path. For this reason proof-of-transit, which would be required to detect such an attack, has marginal benefit in the context of SCION and it is not in scope for this document.<a href="#section-5.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-1">An on-path adversary could modify the SCION path header and replace the remaining part of path segments to the destination with different segments. Such replaced segments must include authorized segments as otherwise the packet would be simply dropped on its way to the destination.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-2">The already traversed portion of the current segment and past segments can also be modified by the adversary (e.g. by deleting and adding valid and invalid Hop Fields). On reply packets from the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M) where the new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M which can then transparently change the invalid path back to the valid path to A. In addition, the endpoint address header can also be modified.<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-3">Modifications of the SCION path and address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, loosely analogous to the IPSec Authentication Header, exists for SCION but is out of scope for this document. This is described as the SCION Packet Authentication Option (SPAO) in <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span>.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-4">Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. However, such an attack is of little value. An on-path adversary may inspect/copy/disrupt its traffic without diverting it away from the sender-chosen path. For this reason proof-of-transit, which would be required to detect such an attack, has marginal benefit in the context of SCION and it is not in scope for this document.<a href="#section-7.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="off-path-attacks">
-<section id="section-5.3">
+<section id="section-7.3">
         <h3 id="name-off-path-attacks">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-off-path-attacks" class="section-name selfRef">Off-Path Attacks</a>
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-off-path-attacks" class="section-name selfRef">Off-Path Attacks</a>
         </h3>
-<p id="section-5.3-1">SCION's path awareness limits the abilities of an off-path adversary to influence forwarding in the data plane. Once a packet is en-route it will follow its determined path regardless of the actions of the adversary. An adversary can attempt to disrupt the connectivity of the path by flooding a link with excessive traffic (see <a href="#dos" class="auto internal xref">Section 5.4</a> below), but after detecting congestion, the endpoint can switch to another non-congested path for subsequent packets.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-1">SCION's path awareness limits the abilities of an off-path adversary to influence forwarding in the data plane. Once a packet is en-route it will follow its determined path regardless of the actions of the adversary. An adversary can attempt to disrupt the connectivity of the path by flooding a link with excessive traffic (see <a href="#dos" class="auto internal xref">Section 7.4</a> below), but after detecting congestion, the endpoint can switch to another non-congested path for subsequent packets.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="dos">
-<section id="section-5.4">
+<section id="section-7.4">
         <h3 id="name-volumetric-denial-of-servic">
-<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-volumetric-denial-of-servic" class="section-name selfRef">Volumetric Denial of Service Attacks</a>
+<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-volumetric-denial-of-servic" class="section-name selfRef">Volumetric Denial of Service Attacks</a>
         </h3>
-<p id="section-5.4-1">An adversary can attempt to disrupt the connectivity of a network path by flooding a link with excessive traffic. In this case, the endpoint can switch to another non-congested path for subsequent packets.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">SCION provides protection against certain reflection-based DoS attacks. Here, the adversary sends requests to a server with the source address set to the address of the victim, and the server will send a reply that is typically larger than the request to the victim. This can be prevented in SCION as long as the attacker and the victim are located in different ASes as the reply packets are simply returned along reversed path to the actual sender regardless of the source address information. Thus, the reply packets will be forwarded to the attacker's AS where they will be discarded because the destination AS does not match.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
-<p id="section-5.4-3">However, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with a relatively low send rate. The attacker can exploit the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
-<p id="section-5.4-4"><strong>Note</strong> SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering, e.g. by ISD, AS or path length.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
+<p id="section-7.4-1">An adversary can attempt to disrupt the connectivity of a network path by flooding a link with excessive traffic. In this case, the endpoint can switch to another non-congested path for subsequent packets.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.4-2">SCION provides protection against certain reflection-based DoS attacks. Here, the adversary sends requests to a server with the source address set to the address of the victim, and the server will send a reply that is typically larger than the request to the victim. This can be prevented in SCION as long as the attacker and the victim are located in different ASes as the reply packets are simply returned along reversed path to the actual sender regardless of the source address information. Thus, the reply packets will be forwarded to the attacker's AS where they will be discarded because the destination AS does not match.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
+<p id="section-7.4-3">However, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with a relatively low send rate. The attacker can exploit the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.<a href="#section-7.4-3" class="pilcrow">¶</a></p>
+<p id="section-7.4-4"><strong>Note</strong> SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering, e.g. by ISD, AS or path length.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
-<div id="scion-ip-gateway">
-<section id="section-6">
-      <h2 id="name-scion-ip-gateway">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-scion-ip-gateway" class="section-name selfRef">SCION IP Gateway</a>
+<div id="sig">
+<section id="section-8">
+      <h2 id="name-interoperability-scion-ip-g">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-interoperability-scion-ip-g" class="section-name selfRef">Interoperability: SCION IP Gateway</a>
       </h2>
-<p id="section-6-1">The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support the use of applications that are not SCION enabled.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION-enabled applications from the perspective of the SCION network. Both IPv4 and IPv6 packets may be encapsulated, but no other types of packets are supported. Hosts within SCION networks that wish to be reachable from external IP networks must have public IP addresses, although this does not preclude the use of Network Address Translation.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">Each SIG establishes a session to one or multiple remote SIGs. They can choose to send SCION packets to remote SIGs in accordance with statically configured IP prefixes, or by dynamically announcing IP prefixes to each other. Each SIG may also choose how to send SCION packets based on locally configured policies when multiple SIGs are available.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-8-1">The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support the use of applications that are not SCION enabled.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION endpoints from the perspective of the SCION network.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-3">Each SIG establishes a session to one or multiple remote SIGs. Each pair of SIGs uses a common tunneling protocol. Each SIG may choose to send SCION packets to a remote SIG in accordance with static IP routes, or by dynamically announcing IP prefixes to each other via a routing protocol. Each SIG may also choose how to send SCION packets based on locally configured policies when multiple remote SIGs are available.
+In addition, the source SIG is responsible for SCION path selection.<a href="#section-8-3" class="pilcrow">¶</a></p>
+<p id="section-8-4">A SIG is typically deployed inside the same AS internal network as its non-SCION hosts. In an enterprise scenario, it is usually deployed at the edge of the enterprise network.<a href="#section-8-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-7">
+<section id="section-9">
       <h2 id="name-iana-considerations">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-7-1">This document has no IANA actions.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">The SCION AS and ISD number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see <a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">Anapaya ISD AS assignments</a>). This task is currently being transitioned from Anapaya to the SCION Association.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-9-1">This document has no IANA actions.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">The SCION AS and ISD number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see <a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">Anapaya ISD AS assignments</a>). This task is currently being transitioned from Anapaya to the SCION Association.<a href="#section-9-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-8">
+<section id="section-10">
       <h2 id="name-references">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-8.1">
+<section id="section-10.1">
         <h3 id="name-normative-references">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="I-D.dekater-scion-controlplane">[I-D.dekater-scion-controlplane]</dt>
@@ -3502,9 +4203,9 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-8.2">
+<section id="section-10.2">
         <h3 id="name-informative-references">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="CHUAT22">[CHUAT22]</dt>
@@ -3565,7 +4266,6 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
         </h3>
 <p id="appendix-B.1-1">SCION attempts to take the IANA's assigned Internet protocol numbers into consideration. Widely employed protocols have the same protocol number as the one assigned by IANA. SCION specific protocol numbers start at 200.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
 <p id="appendix-B.1-2">The protocol numbers are used in the SCION header to identify the upper layer protocol.<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
-<p id="appendix-B.1-3">SCMP refers to the SCION Control Message Protocol, used for diagnostics and error messages. Support for this protocol is <span class="bcp14">OPTIONAL</span>. A work-in-progress specification is available at: <span>[<a href="#SCMP" class="cite xref">SCMP</a>]</span>.<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="assignment">
@@ -3573,9 +4273,9 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
         <h3 id="name-assignment">
 <a href="#name-assignment" class="section-name selfRef">Assignment</a>
         </h3>
-<span id="name-the-assigned-scion-protocol"></span><table class="center" id="table-11">
+<span id="name-the-assigned-scion-protocol"></span><table class="center" id="table-18">
           <caption>
-<a href="#table-11" class="selfRef">Table 11</a>:
+<a href="#table-18" class="selfRef">Table 18</a>:
 <a href="#name-the-assigned-scion-protocol" class="selfRef">The assigned SCION protocol numbers</a>
           </caption>
 <thead>
