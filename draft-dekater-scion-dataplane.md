@@ -200,7 +200,7 @@ This document describes the SCION Data Plane component.
 
 **Info Field (INF)**: Each path segment construction beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
 
-**Interface Identifier (Interface ID)**: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress interfaces). The Interface ID MUST be unique within each AS. Interface ID 0 is not a valid identifier as implementations MAY use it as the "unspecified" value.
+**Interface Identifier (Interface ID)**: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs (the ingress and egress interfaces). The Interface ID MUST be unique within each AS. Interface ID 0 is not a valid identifier as implementations MAY use it as the "unspecified" value. Interface IDs in Hop Fields are known as `ConsIngress` and `ConsEgress`, those designate the interfaces through which a packet enters (`ConsIngress`) or leaves (`ConsEgress`) the corresponding AS when that packet is traveling in the direction of the path segment's construction. The `Cons` prefix serves as a reminder that the meanings are reversed when the packet travels in the opposite direction.
 
 **Isolation Domain (ISD)**: In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
 
@@ -732,7 +732,6 @@ The 8-byte Info Field (`InfoField`) has the following format:
 - `Timestamp`: Timestamp created by the initiator of the corresponding beacon. The timestamp is defined as the number of seconds elapsed since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a 32-bit unsigned integer. This timestamp enables the validation of a Hop Field in the segment represented by this Info Field, by verifying the expiration time and MAC set in the Hop Field - the expiration time of a Hop Field is calculated relative to the timestamp. A Info field with a timestamp in the future is invalid. For the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e. the minimum time to live of a hop).
 
 
-
 ##### Hop Field {#hopfld}
 
 The 12-byte Hop Field (``HopField``) has the following format:
@@ -752,17 +751,18 @@ The 12-byte Hop Field (``HopField``) has the following format:
 
 
 - `r`: The `r` bits are unused and reserved for future use.
-- `I`: The ConsIngress Router Alert flag. If the ConsIngress Router Alert flag has value "1", the ingress router (in construction direction) will process the L4 payload in the packet. The construction direction is the direction of beaconing.
-- `E`: The ConsEgress Router Alert flag. If the ConsEgress Router Alert flag has value "1", the egress router (in construction direction) will process the L4 payload in the packet.
-
-**Note:** A sender cannot rely on multiple routers retrieving and processing the payload even if it sets multiple router alert flags. This is use-case dependent: In the case of Traceroute informational messages, for example, the router for which the traceroute request is intended will process the request (if the corresponding Router Alert flag is set to "1") and reply to it without further forwarding the request along the path. Use cases that require multiple routers/hops on the path to process a packet have to instead rely on a hop-by-hop extension (see [](#ext-header)). For general information on router alerts, see {{RFC2711}}.
-
+- `I`: The ConsIngress Router Alert flag. If the ConsIngress Router Alert flag has value "1", the ingress router (in construction direction) will treat the payload of the packet as a message to itself and attempt to process it according to the value of the `NextHdr` field. Such messages include [Traceroute Requests](#traceroute-request).
+- `E`: The ConsEgress Router Alert flag. If the ConsEgress Router Alert flag has value "1", the egress router (in construction direction) will treat the payload of the packet as a message to itself and attempt to process it according to the value of the `NextHdr` field. Such messages include [Traceroute Requests](#traceroute-request).
 - `ExpTime`: Expiration time of a Hop Field. The field is 1-byte long, thus there are 256 different values available to express an expiration time. The expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the `Timestamp` field (from the corresponding Info Field), as follows:
 
   - `Timestamp` + (1 + `ExpTime`) * (24 hours/256)
 
 - `ConsIngress`, `ConsEgress`: The 16-bits ingress/egress interface IDs in construction direction, that is, the direction of beaconing.
 - `MAC`: The 6-byte Message Authentication Code to authenticate the Hop Field. For details on how this MAC is calculated, see [](#hf-mac-calc).
+
+The two Router Alert flags are commonly named `ConsIngress` and `ConsEgress` as a reminder that they request an action by the router owning the Ingress or Egress interfaces when the packet is traveling in the *construction direction* of the path segment (i.e. the direction of beaconing). When the packet is traveling in the opposite direction the meanings are reversed. These *flags* (i.e. single bit) are not to be confused with the `ConsIngress` and `ConsEgress` *fields* which designate the interfaces for the purpose of forwarding the packet and are always set, regardless of any router alert.
+
+A sender cannot rely on multiple routers retrieving and processing the payload even if it sets multiple router alert flags. This is use-case dependent: In the case of Traceroute informational messages, for example, the router for which the traceroute request is intended will process the request (if the corresponding Router Alert flag is set to "1") and reply to it without further forwarding the request along the path. Use cases that require multiple routers/hops on the path to process a packet have to instead rely on a hop-by-hop extension (see [](#ext-header)). For general information on router alerts, see {{RFC2711}}.
 
 
 #### One-Hop Path Type {#onehop}
@@ -788,7 +788,6 @@ Upon receiving a packet containing a one-hop path, the ingress border router of 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ~~~~
 {: #figure-10 title="Layout of the SCION one-hop path type"}
-
 
 
 #### Path Reversal {#reverse}
