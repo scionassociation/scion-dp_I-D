@@ -160,7 +160,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Data Plane**: The data plane (sometimes also referred to as the forwarding plane) is responsible for forwarding data packets that endpoints have injected into the network. After routing information has been disseminated by the control plane, packets are forwarded by the data plane in accordance with such information.
 
-**Egress Border Router**: A router processing packets leaving an AS, as seen from the direction of travel of the SCION packet.
+**Egress/Ingress**: refers to the direction of travel. In SCION, path construction with beaconing happens in one direction, while actual traffic might follow the opposite direction. This document clarifies on a case-by-case basis whether 'egress' or 'ingress' refers to the direction of travel of the SCION packet or to the direction of beaconing.
 
 **Endpoint**: An endpoint is the start or the end of a SCION path. For example, an endpoint can be a host as defined in {{RFC1122}} or a gateway bridging a SCION and an IP domain. This definition is based on the definition in {{RFC9473}}.
 
