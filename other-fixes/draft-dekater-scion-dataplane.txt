@@ -2056,10 +2056,10 @@ Table of Contents
 4.2.2.   Processing at Routers
 
    During forwarding, each SCION router verifies the path contained in
-   the packet header.  Each SCION router also MUST correctly set the
-   value of the Accumulator in the Acc field for the next AS to be able
-   to verify its Hop Field.  The exact operations differ based on the
-   location of the AS on the path.
+   the packet header.  Each SCION router also MUST correctly verify or
+   set the value of the Accumulator in the Acc field for the next AS to
+   be able to verify its Hop Field.  The exact operations differ based
+   on the location of the AS on the path.
 
    The processing of SCION packets for ASes where a peering link is
    crossed between path segments is a special case.  A path containing a
