@@ -1791,7 +1791,8 @@ Table of Contents
 
 4.1.1.1.   Hop Field MAC - Calculation
 
-   The Hop Field MAC is calculated as follows:
+   The Hop Field MAC is generally calculated at a current AS_i as
+   follows:
 
    *  Consider a path segment with "n" hops, containing ASes AS_0, ... ,
       AS_(n-1), with forwarding keys K_0, ... , K_(n-1) in this order.
