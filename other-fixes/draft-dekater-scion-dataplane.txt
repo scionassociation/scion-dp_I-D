@@ -2489,10 +2489,12 @@ direction
    by the source endpoint: The first on-path attacker remodels the
    packet header arbitrarily, and the second on-path attacker changes
    the path back to the original source-selected path, such that the
-   integrity check by the destination endpoint succeeds.  To prevent
-   this attack and to defend against multiple on-path adversaries in
-   general, proof of transit is required, which is not in scope for this
-   document.
+   integrity check by the destination endpoint succeeds.  However, such
+   an attack is of little value.  An on-path adversary may inspect/copy/
+   disrupt its traffic without diverting it away from the sender-chosen
+   path.  For this reason proof-of-transit, which would be required to
+   detect such an attack, has marginal benefit in the context of SCION
+   and it is not in scope for this document.
 
 5.3.  Off-Path Attacks
 
