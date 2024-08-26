@@ -1071,7 +1071,7 @@ The aggregated 16-bit path segment identifier and preceding MACs prevent splicin
 
 #### Hop Field MAC - Calculation {#hf-mac-calc}
 
-The Hop Field MAC is calculated as follows:
+The Hop Field MAC is generally calculated at a current AS<sub>i</sub> as follows:
 
 - Consider a path segment with "n" hops, containing ASes AS<sub>0</sub>, ... , AS<sub>n-1</sub>, with forwarding keys K<sub>0</sub>, ... , K<sub>n-1</sub> in this order.
 - AS<sub>0</sub> is the core AS that created the PCB representing the path segment and that added a random initial 16-bit segment identifier `SegID` to the `Segment Info` field of the PCB.
