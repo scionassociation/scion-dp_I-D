@@ -1971,7 +1971,9 @@ Table of Contents
    additional data from the corresponding PCBs.  The SCION path also
    does not contain any AS numbers - except for the source and
    destination ASes - and there is no field explicitly defining the type
-   of each segment (up, core, or down).
+   of each segment (up, core, or down).  This chapter describes the
+   required steps for the source endpoint and SCION routers to
+   respectively craft and forward a data packet.
 
 4.2.1.   Initialization at Source Endpoint
 

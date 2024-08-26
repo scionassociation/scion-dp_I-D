@@ -3060,7 +3060,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         <h3 id="name-path-initialization-and-pac">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-path-initialization-and-pac" class="section-name selfRef">Path Initialization and Packet Processing</a>
         </h3>
-<p id="section-4.2-1">As described in <a href="#header" class="auto internal xref">Section 2</a>, the path header of the data plane packets only contains a sequence of Info Fields and Hop Fields without any additional data from the corresponding PCBs. The SCION path also does not contain any AS numbers - except for the source and destination ASes - and there is no field explicitly defining the type of each segment (up, core, or down).<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">As described in <a href="#header" class="auto internal xref">Section 2</a>, the path header of the data plane packets only contains a sequence of Info Fields and Hop Fields without any additional data from the corresponding PCBs. The SCION path also does not contain any AS numbers - except for the source and destination ASes - and there is no field explicitly defining the type of each segment (up, core, or down). This chapter describes the required steps for the source endpoint and SCION routers to respectively craft and forward a data packet.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <div id="initialization-at-source-endpoint">
 <section id="section-4.2.1">
           <h4 id="name-initialization-at-source-en">
