@@ -1098,7 +1098,7 @@ The Accumulator Acc<sub>i</sub> is an updatable counter introduced in the data p
 
 MAC<sub>i</sub> = Ck<sub>i</sub> (Acc<sub>i</sub>, Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
 
-During forwarding in the data plane, each AS<sub>i</sub> updates the Acc field in the packet header so that it contains the correct input value of Acc for the next AS in the path segment to be able to calculate the MAC over its Hop Field. Note that the correct input value of the `Acc` field depends on the direction of travel.
+During forwarding, SCION routers at each AS<sub>i</sub> update the Acc field in the packet header so that it contains the correct input value of Acc for the next AS in the path segment to be able to calculate the MAC over its Hop Field. Note that the correct input value of the `Acc` field depends on the direction of travel.
 
 The value of Acc<sub>i+1</sub> is calculated based on the following definition (in the direction of beaconing):
 
