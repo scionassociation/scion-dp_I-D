@@ -494,8 +494,6 @@ SCION supports three path types:
 ### Empty Path Type {#empty}
 
 The `Empty` path type (`PathType=0`) is used to send traffic within an AS. It has no additional fields, i.e. it consumes 0 bytes on the wire.
-
-One use case of the `Empty` path type lies in the context of link failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ({{RFC5880}} and {{RFC5881}}). It operates independently of media, data protocols, and routing protocols. SCION uses the `Empty` path type, together with `OneHopPath` path type, to bootstrap BFD within SCION. (For more information on the `OneHopPath` path type, see [](#onehop).)
 One use case of the `Empty` path type lies in the context of [link-failure detection](#scion-bfd).
 
 ### SCION Path Type {#scion-path-type}
