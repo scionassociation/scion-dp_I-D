@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-25T00:00:54.813541+00:00",
+  "timestamp": "2024-08-27T00:00:42.672362+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -542,7 +542,7 @@
       "id": "I_kwDOKYa7786QVa58",
       "title": "Use auto-generated references",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/35",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -553,8 +553,8 @@
       ],
       "body": "As in https://github.com/scionassociation/scion-cp_I-D/pull/54",
       "createdAt": "2024-07-21T17:33:12Z",
-      "updatedAt": "2024-07-30T09:52:37Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-26T15:55:13Z",
+      "closedAt": "2024-08-26T15:55:12Z",
       "comments": []
     },
     {
@@ -566,15 +566,16 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
+        "nicorusti",
         "jiceatscion"
       ],
       "labels": [
         "Prio 1",
         "needs-discussion"
       ],
-      "body": "Path revocation in case of link failures is not clear. We only mention something in controlplane-02 section 2.4:\r\n``` \r\nOn link failures, endpoints route around the failed link by switching to\r\ndifferent paths in the data plane.\r\n```\r\nWe should make this clearer in -dataplane too. \r\n\r\n#### TODO: \r\n- [ ] scionassociation/scion-dp_I-D#37\r\n- [x] Clarify that endpoints are expected to handle failures (and why)\r\n- [x] Clarify when a SCMP [Interface Down](https://scion.docs.anapaya.net/en/latest/protocols/scmp.html#external-interface-down) message is sent or not,  and why (it _should_ be sent)\r\n- [x] Clarify that SCMP interface down is currently unauthenticated, but it should be\r\n- [ ] Send email to Eliot, Harald and ask if external reference to SCMP is enough (within the context of link down messages)\r\n\r\n#### Feedback details\r\n> Harald Alvestrand <harald@alvestrand.no> \r\n Once sent, a packet\u2019s path cannot be changed; path changes are handled by routers discovering that the path no longer exists and (I assume, this is likely documented in -controlplane) sending an alert back \u201cdon\u2019t use this path\u201d.\r\n \r\n >  Form my lunch with Harald at IETF120: \r\nPath revocation in case of link down should be clarified, the mechanism to signal  endpoints how to react quickly to failures should be described better.   Right now the draft only hints to this. This topic is very relevant also for webRTC. I mentioned SCMP  Interface Down  messages: This has been a topic of discussion within the SCION community for a long time. Currently, in the deployment routers send a non-authenticated SCMP message, while it should be. There are some proposals to leverage the PKI to authenticate this. Harald proposed to  say out loud that we don\u2019t have support for authentication in current deployment but that this should be authenticated, showing this is a known problem. We should avoid saying in the draft that a feature exists but then it is not specified. Ok to say some problems still need to be solved but not yet a concern in current deployment. (he shared story about irc and ICMP destination unreachable)\r\n \r\n \r\n \r\n Relates to https://github.com/scionassociation/scion-research_I-D/issues/25",
+      "body": "Path revocation in case of link failures is not clear. We only mention something in controlplane-02 section 2.4:\r\n``` \r\nOn link failures, endpoints route around the failed link by switching to\r\ndifferent paths in the data plane.\r\n```\r\nWe should make this clearer in -dataplane too. \r\n\r\n#### TODO: \r\n- [x] scionassociation/scion-dp_I-D#37\r\n- [x] Clarify that endpoints are expected to handle failures (and why)\r\n- [x] Clarify when a SCMP [Interface Down](https://scion.docs.anapaya.net/en/latest/protocols/scmp.html#external-interface-down) message is sent or not,  and why (it _should_ be sent)\r\n- [x] Clarify that SCMP interface down is currently unauthenticated, but it should be\r\n- [ ] @nicorusti review https://github.com/scionassociation/scion-dp_I-D/pull/49/files \r\n- [ ] @nicorusti  Send email to Eliot, Harald and ask if external reference to SCMP is enough (within the context of link down messages)\r\n\r\n#### Feedback details\r\n> Harald Alvestrand <harald@alvestrand.no> \r\n Once sent, a packet\u2019s path cannot be changed; path changes are handled by routers discovering that the path no longer exists and (I assume, this is likely documented in -controlplane) sending an alert back \u201cdon\u2019t use this path\u201d.\r\n \r\n >  Form my lunch with Harald at IETF120: \r\nPath revocation in case of link down should be clarified, the mechanism to signal  endpoints how to react quickly to failures should be described better.   Right now the draft only hints to this. This topic is very relevant also for webRTC. I mentioned SCMP  Interface Down  messages: This has been a topic of discussion within the SCION community for a long time. Currently, in the deployment routers send a non-authenticated SCMP message, while it should be. There are some proposals to leverage the PKI to authenticate this. Harald proposed to  say out loud that we don\u2019t have support for authentication in current deployment but that this should be authenticated, showing this is a known problem. We should avoid saying in the draft that a feature exists but then it is not specified. Ok to say some problems still need to be solved but not yet a concern in current deployment. (he shared story about irc and ICMP destination unreachable)\r\n \r\n \r\n \r\n Relates to https://github.com/scionassociation/scion-research_I-D/issues/25",
       "createdAt": "2024-07-22T21:00:37Z",
-      "updatedAt": "2024-08-09T15:50:47Z",
+      "updatedAt": "2024-08-26T16:21:11Z",
       "closedAt": null,
       "comments": [
         {
@@ -591,7 +592,7 @@
       "id": "I_kwDOKYa7786QfDE4",
       "title": "Clarify how routers use BFD",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/37",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -603,8 +604,8 @@
       ],
       "body": "We currently mention BFD in [2.2.3.1. ](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#section-2.2.3.1)[Empty Path Type](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#name-empty-path-type): \r\n> One use case of the Empty path type lies in the context of link-failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ([[RFC5880](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#RFC5880)] and [[RFC5881](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#RFC5881)]). BFD is a protocol intended to detect faults in the bidirectional path between two forwarding engines, with typically very low latency. It operates independently of media, data protocols, and routing protocols. SCION uses the Empty path type, together with OneHopPath path type, to bootstrap BFD within SCION. (For more information on the OneHopPath path type, see [Section 2.2.3.3](https://www.ietf.org/archive/id/draft-dekater-scion-dataplane-02.html#onehop).)\r\n\r\nHowever, we don't say much about how it works.\r\n- How much should be in the draft? (is it necessary to add details, or could we leave it open)?\r\n- Why do routers have to use something like BFD? What do they do with signals from BFD?\r\n- How is BFD on top of SCION working? (currently described in https://docs.scion.org/en/latest/protocols/bfd.html )\r\n",
       "createdAt": "2024-07-22T22:57:51Z",
-      "updatedAt": "2024-07-30T09:44:03Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-26T11:44:24Z",
+      "closedAt": "2024-08-26T11:44:24Z",
       "comments": []
     },
     {
@@ -626,7 +627,7 @@
     {
       "number": 39,
       "id": "I_kwDOKYa7786QkTOn",
-      "title": "Add discussion about MTU",
+      "title": "Add discussion about MTU & fragmentation",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/39",
       "state": "OPEN",
       "author": "nicorusti",
@@ -638,9 +639,9 @@
         "enhancement",
         "Prio 1"
       ],
-      "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nRelated issues: \r\n* CP draft: https://github.com/scionassociation/scion-cp_I-D/issues/57 \r\n* Implementations: https://github.com/scionproto/scion/issues/2608 \r\n\r\nAlso: \r\n- [ ] Add discussion about fragmentation",
+      "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nRelated issues: \r\n* CP draft: https://github.com/scionassociation/scion-cp_I-D/issues/57 \r\n* Implementations: https://github.com/scionproto/scion/issues/2608 \r\n\r\nAlso: \r\n- [ ] Add discussion about fragmentation\r\n- [ ] Adapt this text  in the Common Header  paragraph` The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. `",
       "createdAt": "2024-07-23T14:58:19Z",
-      "updatedAt": "2024-07-30T09:48:13Z",
+      "updatedAt": "2024-08-25T12:09:58Z",
       "closedAt": null,
       "comments": []
     },
@@ -653,17 +654,16 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "nicorusti",
-        "knmeynell"
+        "nicorusti"
       ],
       "labels": [
         "enhancement",
         "Prio 1",
         "needs-discussion"
       ],
-      "body": "> Harald Alvestrand (meeting notes 26.07.2024)\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d must have enough information to make a connection over scion\r\n\r\n- [ ] Prepare a description of the SIG (try in terms of functionality rather than how they work)\r\n- [ ] Send text to Eliot\r\n- [ ] Decide if this needs to be a separate draft (or if it can be a paragraph in one of the other drafts)\r\n\r\n#### Feedback received:\r\n> Harald Alvestrand \r\nThe payload of a packet can be anything (does not affect SCION operation), but the header contains an integer saying which content it is, with the defined values being \u201cUDP\u201d, \u201cTCP\u201d, and some numbers for internal use. The process for constructing an IP packet from the SCION packet (or vice versa) is not described, but presumably involves mangling checksums - -dataplane describes a \u201cvirtual header\u201d for constructing the checksum of things that require it, which implies that a gateway to non-SCION IP would mangle checksums inside the UDP or TCP packet.\r\n(There are references in -overview to docs describing gateways. However, I can\u2019t see them at the moment.)\r\n\r\n>   My response: \r\nYes, we don\u2019t yet have a draft describing gateways in detail. There was [a presentation ](https://datatracker.ietf.org/meeting/118/materials/slides-118-panrg-operational-aspects-of-scion-00)by my co-author Sam Hitz at PANRG at 119 about it. Essentially gateways run an encapsulation protocol and exchange IP routes among each other. They use a custom protocol for that, so we felt for now it was best to leave this part out and treat gateways as a normal SCION endpoint. \r\nThis checksums is used, for example, by UDP on top of SCION. Gateways encapsulate the whole IP packet, so they don\u2019t mangle UDP/TCP checksums in them. However, the gateway encapsulation protocol itself runs on top of UDP on top of SCION, therefore there is a ckechsum in the encapsulating UDP packet, and this uses the \u201cvirtual header\u201d.\r\n\r\n> Lunch discussion\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d. The  must have enough information to make a connection over scion\r\n\r\n#### Potential sources: \r\n- [Anapaya Docs](https://docs.anapaya.net/en/latest/edge/configuration/scion-tunneling/#edge-tunneling-sgrp) for SGRP, tunneling, also called \"Prefix discovery\" in open source\r\n- [SCIONproto](https://docs.scion.org/en/latest/sig.html) for SIG framing \r\n- Scion book section  13.3 The SCION\u2013IP Gateway (SIG) \r\n- [component analysis draft](https://www.ietf.org/archive/id/draft-rustignoli-panrg-scion-components-03.txt) section 3.1",
+      "body": "> Harald Alvestrand (meeting notes 26.07.2024)\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d must have enough information to make a connection over scion\r\n\r\n- [x] Prepare a description of the SIG (try in terms of functionality rather than how they work)\r\n- [ ] Send text to Eliot\r\n- [ ] Decide if this needs to be a separate draft (or if it can be a paragraph in one of the other drafts)\r\n\r\n#### Feedback received:\r\n> Harald Alvestrand \r\nThe payload of a packet can be anything (does not affect SCION operation), but the header contains an integer saying which content it is, with the defined values being \u201cUDP\u201d, \u201cTCP\u201d, and some numbers for internal use. The process for constructing an IP packet from the SCION packet (or vice versa) is not described, but presumably involves mangling checksums - -dataplane describes a \u201cvirtual header\u201d for constructing the checksum of things that require it, which implies that a gateway to non-SCION IP would mangle checksums inside the UDP or TCP packet.\r\n(There are references in -overview to docs describing gateways. However, I can\u2019t see them at the moment.)\r\n\r\n>   My response: \r\nYes, we don\u2019t yet have a draft describing gateways in detail. There was [a presentation ](https://datatracker.ietf.org/meeting/118/materials/slides-118-panrg-operational-aspects-of-scion-00)by my co-author Sam Hitz at PANRG at 119 about it. Essentially gateways run an encapsulation protocol and exchange IP routes among each other. They use a custom protocol for that, so we felt for now it was best to leave this part out and treat gateways as a normal SCION endpoint. \r\nThis checksums is used, for example, by UDP on top of SCION. Gateways encapsulate the whole IP packet, so they don\u2019t mangle UDP/TCP checksums in them. However, the gateway encapsulation protocol itself runs on top of UDP on top of SCION, therefore there is a ckechsum in the encapsulating UDP packet, and this uses the \u201cvirtual header\u201d.\r\n\r\n> Lunch discussion\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d. The  must have enough information to make a connection over scion\r\n\r\n#### Potential sources: \r\n- [Anapaya Docs](https://docs.anapaya.net/en/latest/edge/configuration/scion-tunneling/#edge-tunneling-sgrp) for SGRP, tunneling, also called \"Prefix discovery\" in open source\r\n- [SCIONproto](https://docs.scion.org/en/latest/sig.html) for SIG framing \r\n- Scion book section  13.3 The SCION\u2013IP Gateway (SIG) \r\n- [component analysis draft](https://www.ietf.org/archive/id/draft-rustignoli-panrg-scion-components-03.txt) section 3.1",
       "createdAt": "2024-07-26T22:05:22Z",
-      "updatedAt": "2024-08-05T08:49:03Z",
+      "updatedAt": "2024-08-26T16:17:57Z",
       "closedAt": null,
       "comments": []
     },
@@ -684,7 +684,7 @@
       ],
       "body": "Current text is confusing\r\n\r\n#### TODOs: \r\n- [ ] Clarify use of the  ConsEgress Router Alert flag\r\n- [ ] ConsIngress and ConsEgress are just instances of interfaces Identifiers, we should make this clearer (e.g. when we define interface IDs). \r\n- [ ] ... (see feedback below)\r\n\r\n#### Reviewer feedback\r\n> Harald Alvestrand\r\nEndpoint addresses consist of an AS number, an interface ID, and a \u201cnext protocol\u201d address. This last is presumably only useful at SCION endpoints.\r\n\r\n> My answer:\r\nOne of the fields in a SCION address is the ISD (Isolation Domain) number, not the interface ID. We mention \"a complete SCION address is composed of the <ISD, AS, endpoint address>\u201d in section 1.3.1. The we show the  address header in 2.2.2. If this is too late in the draft, we could add some text earlier to clarify this. Interface IDs, instead, are part of hop fields (interface IDs are in the  the ConsIngress / ConsEgress). Perhaps the confusing fact is that the field is called ConsIngress/Egress. This is because  these fields refer to interface IDs in the direction the link was discovered during path construction (beaconing). \r\n\r\n> Harald Alvestrand\r\n> There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\n> Response: \r\nYou are probably referring to the ConsEgress Router Alert flag, right? Thank you for spotting this, the description should be extended. This is actually one bit, we\u2019ll add some explanation on this flag. (I see how the current description is somehow confusing). Besides that, ConsIngress and ConsEgress are just instances of interfaces Identifiers, we probably have to make this clearer. \r\nRegarding traceroute, this is an example of how this might be used (there is a SCON trace route application). As we don\u2019t describe it, I\u2019d remove it. \r\n\r\n> Eliot, 20.07.2024\r\n>   ConsIngress and ConsEgress require a lot more explanation if they're to be included.\r\n\r\n> Arald Alvestrand, 20.07\r\n>  There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\nNote: we use naming ConsIngress, ConsEgress because of https://github.com/scionproto/scion/issues/1479 \r\n\r\n",
       "createdAt": "2024-07-26T22:28:49Z",
-      "updatedAt": "2024-08-22T16:37:22Z",
+      "updatedAt": "2024-08-26T12:40:52Z",
       "closedAt": null,
       "comments": [
         {
@@ -714,6 +714,20 @@
           "body": "> FWIW, I think the readers are a bit confused as they seem to think the router alert flag and the interface IDs are somehow the same thing.\r\n\r\nYes, this is the main point.\r\n\r\n> Traceroute is an essential SCMP message to discover path health in the current implementation. Both the IP-SCION Gateway and scion showpaths rely on it. We cannot simply remove it without an appropriate replacements.\r\n\r\nThanks for the clarification @oncilla. We are trying to limit the scope of the drafts as much as possible, for now we tried avoiding having to describe in full SIGs and SCMP (which might be another two drafts on their own). So we are trying to strike the right balance to add what is necessary for the data plane draft to be clear and self sufficient. \r\n\r\n \r\n\r\n\r\n",
           "createdAt": "2024-08-22T16:37:21Z",
           "updatedAt": "2024-08-22T16:37:21Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Ok, in this case, I propose to extend https://github.com/scionassociation/scion-dp_I-D/pull/49 in the following manner:\r\n\r\n* Move SCMP to its own main section.\r\n* Refer to the appropriate subsection of it in the link-failure notification section.\r\n",
+          "createdAt": "2024-08-26T09:41:16Z",
+          "updatedAt": "2024-08-26T09:41:16Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Still a bit of clarification needed for the two flags.\r\n",
+          "createdAt": "2024-08-26T12:40:50Z",
+          "updatedAt": "2024-08-26T12:40:50Z"
         }
       ]
     },
@@ -793,7 +807,7 @@
       "id": "I_kwDOKYa7786RBb6-",
       "title": "General review - forward references ",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/45",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -803,8 +817,8 @@
       "labels": [],
       "body": "Go through the draft again and make sure there are no other forward references\r\n\r\nTwin issues:\r\n- https://github.com/scionassociation/scion-cp_I-D/issues/58\r\n- https://github.com/scionassociation/scion-cppki_I-D/issues/36",
       "createdAt": "2024-07-26T22:50:30Z",
-      "updatedAt": "2024-08-15T12:58:54Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-26T15:57:33Z",
+      "closedAt": "2024-08-26T15:57:33Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -819,6 +833,13 @@
           "body": "After a couple of passes, I didn't find a whole lot of forward references, but have removed or re-written where I did find the odd one. One reference to SPAO is still in 'Security Considerations' because it's probably relevant to the discussion and does reference the 'Complete Guide to SCION'. ",
           "createdAt": "2024-08-15T12:58:53Z",
           "updatedAt": "2024-08-15T12:58:53Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@knmeynell SPAO has the SCION book as a reference, so I don't think it counts as a forward ref. I think we can resolve this",
+          "createdAt": "2024-08-26T15:57:33Z",
+          "updatedAt": "2024-08-26T15:57:33Z"
         }
       ]
     },
@@ -877,6 +898,126 @@
           "updatedAt": "2024-08-14T19:15:09Z"
         }
       ]
+    },
+    {
+      "number": 52,
+      "id": "I_kwDOKYa7786UISMk",
+      "title": "Clarify wether routers perform checks on segment types (up/down/core)",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/52",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "question",
+        "Prio 3"
+      ],
+      "body": "In section 1.4 we write: \r\n\r\n> The type of segment is known to the endpoint but is not visible\r\nis the path header of data packets. **Therefore, a SCION router needs\r\nto explicitly verify that these rules were followed correctly.**\r\n\r\nthis sentence actually comes from the book section \"5.5 Path Construction (Segment Combinations)\". \r\n\r\n\r\nWe then describe checks at routers in 4.2.2.   Processing at Routers and there is no mention that routers verify any of the rules in 1.4. \r\n\r\n@jiceatscion do you know if routers do any checks at all? If not, we should just remove the second sentence I guess.",
+      "createdAt": "2024-08-25T11:42:57Z",
+      "updatedAt": "2024-08-26T09:05:49Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If my reading of the code is correct, these checks are implemented. Albeit\r\nnot exactly mapping 1:1 with how the rules are written:\r\nThere is no explicit check that the first segment is up, the second core,\r\nand the third is down. Instead, there is a check on each segment change\r\nthat the ingress links are either:\r\nchild to core or core to child or child to child. Without a segment change,\r\nthe code also rejects valley-use of peering-links or hair-pin segments. I think that ends-up\r\nenforcing the rules since any rule-breaking path would end-up containing a\r\nsegment change that fails those checks. Code here:\r\nhttps://github.com/scionproto/scion/blob/4c929f6b440c568663b4194c125df15cad544bb4/router/dataplane.go#L1552\r\n\r\n\r\nOn Sun, Aug 25, 2024 at 1:43\u202fPM Nicola Rustignoli ***@***.***>\r\nwrote:\r\n\r\n> In section 1.4 we write:\r\n>\r\n> The type of segment is known to the endpoint but is not visible\r\n> is the path header of data packets.\r\n> *Therefore, a SCION router needs to explicitly verify that these rules\r\n> were followed correctly.*\r\n>\r\n> this sentence actually comes from the book section \"5.5 Path Construction\r\n> (Segment Combinations)\".\r\n>\r\n> We then describe checks at routers in 4.2.2. Processing at Routers and\r\n> there is no mention that routers verify any of the rules in 1.4.\r\n>\r\n> @jiceatscion <https://github.com/jiceatscion> do you know if routers do\r\n> any checks at all?\r\n>\r\n> \u2014\r\n> Reply to this email directly, view it on GitHub\r\n> <https://github.com/scionassociation/scion-dp_I-D/issues/52>, or\r\n> unsubscribe\r\n> <https://github.com/notifications/unsubscribe-auth/BBLEYOBP5XUSMQ3SRWJ2AEDZTG7NNAVCNFSM6AAAAABNCO5KKCVHI2DSMVQWIX3LMV43ASLTON2WKOZSGQ4DKMJZHE3DKMQ>\r\n> .\r\n> You are receiving this because you were mentioned.Message ID:\r\n> ***@***.***>\r\n>\r\n\r\n\r\n-- \r\n\r\nJEAN-CHRISTOPHE HUGLY\r\n\r\nSoftware Engineer\r\n\r\n\r\n +41 79 455 68 69\r\n***@***.*** ***@***.***>\r\n scion.org <http://www.scion.org/>\r\n SCION Association <https://www.linkedin.com/company/scion-association/>\r\n\r\n\r\n<https://www.scion.org/>\r\n",
+          "createdAt": "2024-08-26T09:03:26Z",
+          "updatedAt": "2024-08-26T09:05:49Z"
+        }
+      ]
+    },
+    {
+      "number": 53,
+      "id": "I_kwDOKYa7786UIVFZ",
+      "title": "Make header field lengths and descriptions consistent",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/53",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "Prio 3",
+        "needs-discussion",
+        "editorial"
+      ],
+      "body": "We describe header fields and their lengths in various ways, for example: \r\n* `FlowID`: This 20-bit field \r\n* `PayloadLen`: Specifies the length of the payload in bytes. The payload includes (SCION) extension headers and the L4 payload. This field is 16 bits long, supporting a maximum payload size of 65'535 bytes.\r\n* Sometimes field length is missing and it is only inferrable from a figure\r\n\r\nWe should switch to something more consistent. \r\n \r\nIdeas: \r\n* `FieldName` (xx bits): field description\r\n* Define and use a custom format, like RFC9000 (QUIC): \r\n```\r\n   Example Structure {\r\n     One-bit Field (1),\r\n     7-bit Field with Fixed Value (7) = 61,\r\n     Field with Variable-Length Integer (i),\r\n     Arbitrary-Length Field (..),\r\n     Variable-Length Field (8..24),\r\n     Field With Minimum Length (16..),\r\n     Field With Maximum Length (..128),\r\n     [Optional Field (64)],\r\n     Repeated Field (8) ...,\r\n   }\r\n  ```\r\n\r\nI'd ask Eliot for recommendations before doing anything, so I keep this issue with low prio\r\n",
+      "createdAt": "2024-08-25T12:06:31Z",
+      "updatedAt": "2024-08-25T12:06:32Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 54,
+      "id": "I_kwDOKYa7786UIW05",
+      "title": "FlowID / IPv6 Flow Label",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/54",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "Prio 3"
+      ],
+      "body": "IMHO use of the `FlowID` field is underspecified in the draft. This is all we say:\r\n> - `FlowID`: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources MUST set this field.\r\n \r\n Context: \r\nin https://github.com/scionproto/scion/issues/3714 @shitz says: \r\n> Note, the QoS and FlowID fields where moved to the first line of the common header. This is to be in line with the IPv6 header from which we borrow the specifications of these two fields.\r\n \r\n I have some questions: \r\n*  What value should the source use and why?\r\n* Is this the same as IPv6 Flow Labels? If yes, shall we just use the same naming  (Flow ID --> Flow Label)?\r\n*  Can we refer to the rules for IPv6 FLow Labels (e.g. [rfc2460](https://datatracker.ietf.org/doc/html/rfc2460) section 6 )?\r\n\r\n@oncilla do you have some background on this? ",
+      "createdAt": "2024-08-25T12:23:01Z",
+      "updatedAt": "2024-08-26T08:52:02Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "body": "> What value should the source use and why?\r\n\r\nA random value per flow of traffic that the source creates.\r\n\r\nThe exact mechanism to choose such a value is protocol dependent.\r\nE.g., QUIC has some guidance: https://datatracker.ietf.org/doc/html/rfc9000#section-9.7\r\n\r\nIn general, I think we should define something similar to https://datatracker.ietf.org/doc/html/rfc6437\r\nand the source should be compliant with it.\r\n\r\n> Is this the same as IPv6 Flow Labels? If yes, shall we just use the same naming (Flow ID --> Flow Label)?\r\n\r\nIt is yes, and we can rename if that makes things easier, IMO.\r\n\r\n> Can we refer to the rules for IPv6 FLow Labels (e.g. [rfc2460](https://datatracker.ietf.org/doc/html/rfc2460) section 6 )?\r\n\r\nI would rather refer to https://datatracker.ietf.org/doc/html/rfc6437\r\n",
+          "createdAt": "2024-08-26T08:52:00Z",
+          "updatedAt": "2024-08-26T08:52:00Z"
+        }
+      ]
+    },
+    {
+      "number": 55,
+      "id": "I_kwDOKYa7786UIn1h",
+      "title": "Life of a packet: is L2 link possible?",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/55",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "question",
+        "needs-discussion"
+      ],
+      "body": "In 3. Life of a SCION Data Packet we have a L2 link between R1, R2. Is this something that comes from the book or is this actually possible today? Can any of the implementations actually support this?\r\n\r\n\r\nI feel there are some missing pieces: \r\n* We'd need an [Assigned Protocol Number](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml) that can be used by L2\r\n* Is there any need for a L2 discovery mechanism?\r\n\r\n@jiceatscion \r\n",
+      "createdAt": "2024-08-25T14:15:37Z",
+      "updatedAt": "2024-08-26T12:01:54Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@jiceatscion confirmed he has not heard of instances of this. I think we can remove L2 from the text.",
+          "createdAt": "2024-08-26T12:01:53Z",
+          "updatedAt": "2024-08-26T12:01:53Z"
+        }
+      ]
+    },
+    {
+      "number": 56,
+      "id": "I_kwDOKYa7786UI6E8",
+      "title": "Peering links clarifications",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/56",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "Prio 1",
+        "needs-discussion",
+        "design"
+      ],
+      "body": "We currently say that peering links are only possible if one of the two ASes is not core, but there is an open discussion. \r\n\r\n- [ ] Clarify wether peering links between core ASes are possible following https://github.com/scionproto/scion/issues/4484\r\n- [ ] We might need to say more explicitly how a router can determine whether the current hop is a peering hop. We now only mention this in \"Steps at Egress Border Router\" and I feel text is not too clear: ` This would be the case if the current Hop Field is the *first* Hop Field of the segment, `",
+      "createdAt": "2024-08-25T16:29:19Z",
+      "updatedAt": "2024-08-25T16:29:19Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -3426,24 +3567,26 @@
       "id": "PR_kwDOKYa77852AD0Z",
       "title": "Proof of transit: mention why it is not needed",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/34",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Follow up to https://github.com/scionassociation/scion-cp_I-D/issues/52 ",
       "createdAt": "2024-07-21T01:01:45Z",
-      "updatedAt": "2024-07-22T08:52:24Z",
+      "updatedAt": "2024-08-26T07:51:31Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "nic_pot_reason",
-      "headRefOid": "63f3a43ccd0c09a488ac0ab1899bfa14c5ff6eac",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "87f6ea812ba69a9cec8fbd54be99f0771e1c3fae",
+      "closedAt": "2024-08-26T07:51:27Z",
+      "mergedAt": "2024-08-26T07:51:27Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "bacdcaa7496f35990cc815115e7878ab9691666d"
+      },
       "comments": [],
       "reviews": [
         {
@@ -3465,6 +3608,46 @@
               "updatedAt": "2024-07-22T08:52:24Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786GtTTw",
+          "commit": {
+            "abbreviatedOid": "63f3a43"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-26T07:47:04Z",
+          "updatedAt": "2024-08-26T07:47:04Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nMoreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. However, such an attack is of little value. An on-path adversary may inspect/copy/disrupt its traffic without diverting it away from the sender-chosen path. For this reason proof-of-transit, which would be required to detect such an attack, has marginal benefit in the context of SCION and it is not in scope for this document.\r\n```",
+              "createdAt": "2024-08-26T07:47:04Z",
+              "updatedAt": "2024-08-26T07:49:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786GtVQ2",
+          "commit": {
+            "abbreviatedOid": "63f3a43"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-26T07:51:08Z",
+          "updatedAt": "2024-08-26T07:51:08Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Thanks, I used a slightly edited version of your wording",
+              "createdAt": "2024-08-26T07:51:08Z",
+              "updatedAt": "2024-08-26T07:51:08Z"
+            }
+          ]
         }
       ]
     },
@@ -3473,24 +3656,26 @@
       "id": "PR_kwDOKYa77853iY85",
       "title": "Added SCION IP Gateway section",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/46",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Basic description pulled from different sources. Do we need to describe the encapsulation/framing protocol in detail here?\r\nIs this section in the right place in the I-D?\r\n\r\nResolves #40 ",
       "createdAt": "2024-08-06T08:17:22Z",
-      "updatedAt": "2024-08-23T09:42:50Z",
+      "updatedAt": "2024-08-26T15:52:15Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
+      "baseRefOid": "351994e4d26a027f80cc861ee4a5c0f60ba49213",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "SIG",
-      "headRefOid": "42e355fa691221b7783eb793a9072a8839013398",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "5f909c33f6b10070300a183921a77a7dc6bf115d",
+      "closedAt": "2024-08-26T11:50:28Z",
+      "mergedAt": "2024-08-26T11:50:28Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "1f615a44fb8a3221a3068e2e59a7c0f673bb5484"
+      },
       "comments": [],
       "reviews": [
         {
@@ -3630,6 +3815,26 @@
               "updatedAt": "2024-08-23T09:42:50Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Gwun6",
+          "commit": {
+            "abbreviatedOid": "5bc1781"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-26T15:02:31Z",
+          "updatedAt": "2024-08-26T15:02:32Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "> Leave it at that and see if that's enough.\r\n \r\nP.S. we will go for this approach, I'll shoot an email to Eliot and Harald\r\n",
+              "createdAt": "2024-08-26T15:02:31Z",
+              "updatedAt": "2024-08-26T15:02:32Z"
+            }
+          ]
         }
       ]
     },
@@ -3638,51 +3843,75 @@
       "id": "PR_kwDOKYa778539rVS",
       "title": "describe scmp and bfd.",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/49",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "I added an entire section dedicated to link failures, with a subsection for detection (BFD) and a subsection for notification (SCMP).\r\n\r\nFor SCMP: I copied the SCMP description in our manuals but reduced it to the 3 message types that we need for path recovery. I included the message too big because we know we'll have to talk about that too. Then I described what the router does with them in my own words.\r\n\r\nFor BFD, I created a dedicated subsection and moved and expanded what little text we had, I have not described the bootstrapping because I thought it'd be too much, but I think it might be ok to add it. Let me know what you think.\r\n\r\nCleaned-up mentions of those here and there to turn them into references to the above.\r\n\r\nFixes #36 \r\nFixes #37 ",
+      "body": "I added an entire section dedicated to link failures, with a subsection for detection (BFD) and a subsection for notification (SCMP).\r\n\r\nFor SCMP: I copied the SCMP description in our manuals but reduced it to the 3 message types that we need for path recovery. I included the message too big because we know we'll have to talk about that too. Then I described what the router does with them in my own words.\r\n\r\nFor BFD, I created a dedicated subsection and moved and expanded what little text we had, I have not described the bootstrapping because I thought it'd be too much, but I think it might be ok to add it. Let me know what you think.\r\n\r\nCleaned-up mentions of those here and there to turn them into references to the above.\r\n\r\nFixes #36 \r\nFixes #37 \r\nFixes #41 ",
       "createdAt": "2024-08-09T15:50:06Z",
-      "updatedAt": "2024-08-09T15:56:25Z",
+      "updatedAt": "2024-08-26T12:39:33Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "linkfailures",
-      "headRefOid": "2dd20567a53c281411d37a437c5e662576a96d5f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "f00079b543150f631ffb9c90018211704290b95f",
+      "closedAt": "2024-08-26T11:44:22Z",
+      "mergedAt": "2024-08-26T11:44:22Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "351994e4d26a027f80cc861ee4a5c0f60ba49213"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786GvClD",
+          "commit": {
+            "abbreviatedOid": "f00079b"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-08-26T11:44:04Z",
+          "updatedAt": "2024-08-26T11:44:04Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 50,
       "id": "PR_kwDOKYa77854V9ri",
       "title": "Changes to SCION Header Specification section",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/50",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-08-14T10:58:05Z",
-      "updatedAt": "2024-08-14T11:26:33Z",
+      "updatedAt": "2024-08-25T18:03:49Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "headerspec",
       "headRefOid": "21b1322918d52995b4ce14785058e70a8f088657",
-      "closedAt": null,
+      "closedAt": "2024-08-25T18:03:49Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Duplicate of #51 , @knmeynell feel free to  delete this branch as we are already reviewed these changes in #51 ",
+          "createdAt": "2024-08-25T18:03:49Z",
+          "updatedAt": "2024-08-25T18:03:49Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -3690,20 +3919,160 @@
       "id": "PR_kwDOKYa77854ZJu7",
       "title": "Substantial updates",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/51",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "1. Incorporated Nico's review notes (mostly)\r\n2. Rationalised text\r\n3. Removed duplicate notes and unnecessary repetition \r\n4. Clarified and made use of terminology more consistent\r\n5. Improved grammar and text flow\r\n6. Amalgamated some sub-sections to reduce number of levels\r\n\r\nContributes to \r\n\r\n- #45 \r\n- #41 (partially)\r\n- Resolves #35 \r\n\r\nTODO: \r\n* [ ] Some terminology changes may have to be replicated across other drafts\r\n* [ ] Hyphens must me removed also from CP and PKI drafts",
+      "createdAt": "2024-08-14T18:13:00Z",
+      "updatedAt": "2024-08-26T15:55:15Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1f615a44fb8a3221a3068e2e59a7c0f673bb5484",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "other-fixes",
+      "headRefOid": "83987ee326d4e0d1eeef07c281083221a2a0deaa",
+      "closedAt": "2024-08-26T15:55:12Z",
+      "mergedAt": "2024-08-26T15:55:12Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550"
+      },
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Conflicts resolved, except 'Empty Path'",
+          "createdAt": "2024-08-26T12:02:40Z",
+          "updatedAt": "2024-08-26T12:02:40Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786GiL0v",
+          "commit": {
+            "abbreviatedOid": "c3c22aa"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Thanks a lot, looks good! \r\nI fixed a few typos and other things directly, and left some more proposed changes here. @knmeynell  Let's discuss after you had a look :\r\n\r\n- Use lf \"-\"\r\n- A couple of open points \r\n- Replicating terminology changes",
+          "createdAt": "2024-08-23T12:25:53Z",
+          "updatedAt": "2024-08-25T17:57:46Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "```suggestion\r\n**Egress/Ingress**: refers to the direction of travel. In SCION, path construction with beaconing happens in one direction, while actual traffic might follow the opposite direction. This document clarifies on a case-by-case basis whether 'egress' or 'ingress' refers to the direction of travel of the SCION packet or to the direction of beaconing.\r\n```\r\nI think this is coming from the fact that overall our usage of words \"egress/ingress\" is a bit tricky, because data packets and beacons may traverse routers/interfaces in opposite directions, therefore an egress packet might go out via the ingress interface in a hop field, if the path is reversed.  \r\n\r\nI suggest that we either: \r\n*  don't add the definition above\r\n*  add something else about \"Egress/Ingress\", like: \r\n\r\n> **Egress/Ingress** in this document refer to the direction of travel. Keep in mind that in SCION, path construction with beaconing happens in one direction, while actual traffic might follow the opposite direction. In this document, we clarify case by case whether \"egress/Ingress\" refer to the direction of travel of the SCION packet or to the direction of beaconing.\r\n",
+              "createdAt": "2024-08-23T12:25:53Z",
+              "updatedAt": "2024-08-26T11:32:10Z"
+            },
+            {
+              "originalPosition": 43,
+              "body": "```suggestion\r\n**Forwarding Path**: A forwarding path is a complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. It can be created with a combination of up to three path segments (an up segment, a core segment, and a down segment).\r\n```",
+              "createdAt": "2024-08-23T12:27:00Z",
+              "updatedAt": "2024-08-25T17:57:30Z"
+            },
+            {
+              "originalPosition": 49,
+              "body": ">  path-segment construction beacons (PCBs) \r\n\r\nI remember that Corine followed this rule:\r\n* If path-segment works as an \"adjective\", e.g.  path-segment construction beacons, then use the -\r\n* If it is a proper noun, then do not use - \r\n\r\n@knmeynell how do you feel about this? Need some native speaker opinion :) ",
+              "createdAt": "2024-08-23T12:30:26Z",
+              "updatedAt": "2024-08-25T17:57:30Z"
+            },
+            {
+              "originalPosition": 55,
+              "body": "```suggestion\r\n**Interface Identifier (Interface ID)**: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of interface IDs called `ConsIngress` and `ConsEgress`, as they refer to the ingress and egress interfaces in the direction of path construction (beaconing). The Interface ID MUST be unique within each AS. Interface ID 0 is not a valid identifier as implementations MAY use it as the \"unspecified\" value.\r\n```\r\n\r\nTHis partiially handles: \r\n* #41 ",
+              "createdAt": "2024-08-23T12:39:48Z",
+              "updatedAt": "2024-08-25T17:57:30Z"
+            },
+            {
+              "originalPosition": 787,
+              "body": "```suggestion\r\nThe Hop Field MAC is generally calculated at a current AS<sub>i</sub> as follows:\r\n```",
+              "createdAt": "2024-08-25T14:59:56Z",
+              "updatedAt": "2024-08-25T17:57:30Z"
+            },
+            {
+              "originalPosition": 861,
+              "body": "```suggestion\r\n[](#hf-mac-calc) provides a general formula to compute MAC<sub>i</sub>, but at each SCION router the expression `SegID XOR MAC_0 [:2] ... XOR MAC_i-1 [:2]` is replaced by Acc<sub>i</sub>. This results in the following alternative procedure for the computation of MAC<sub>i</sub> at SCION routers:\r\n```",
+              "createdAt": "2024-08-25T15:04:38Z",
+              "updatedAt": "2024-08-25T17:57:30Z"
+            },
+            {
+              "originalPosition": 866,
+              "body": "```suggestion\r\nDuring forwarding, SCION routers at each AS<sub>i</sub> update the Acc field in the packet header so that it contains the correct input value of Acc for the next AS in the path segment to be able to calculate the MAC over its Hop Field. Note that the correct input value of the `Acc` field depends on the direction of travel.\r\n```",
+              "createdAt": "2024-08-25T15:05:31Z",
+              "updatedAt": "2024-08-25T17:57:30Z"
+            },
+            {
+              "originalPosition": 952,
+              "body": "```suggestion\r\nAs described in [](#header), the path header of the data plane packets only contains a sequence of Info Fields and Hop Fields without any additional data from the corresponding PCBs. The SCION path also does not contain any AS numbers - except for the source and destination ASes - and there is no field explicitly defining the type of each segment (up, core, or down). This chapter describes the required steps for the source endpoint and SCION routers to respectively craft and forward a data packet.\r\n```",
+              "createdAt": "2024-08-25T15:13:07Z",
+              "updatedAt": "2024-08-25T17:57:30Z"
+            },
+            {
+              "originalPosition": 1008,
+              "body": "```suggestion\r\nDuring forwarding, each SCION router verifies the path contained in the packet header. Each SCION router also MUST correctly verify or set the value of the Accumulator in the `Acc` field for the next AS to be able to verify its Hop Field. The exact operations differ based on the location of the AS on the path.\r\n```\r\nRewording because one router verifies the received acc, the other one sets it for the next AS (depending on direction of construction)",
+              "createdAt": "2024-08-25T15:55:13Z",
+              "updatedAt": "2024-08-25T17:57:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Gt4PS",
+          "commit": {
+            "abbreviatedOid": "1342a18"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-26T08:58:11Z",
+          "updatedAt": "2024-08-26T08:58:11Z",
+          "comments": [
+            {
+              "originalPosition": 49,
+              "body": "Discussed, we agreed to de-hyphenate ",
+              "createdAt": "2024-08-26T08:58:11Z",
+              "updatedAt": "2024-08-26T08:58:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786GxJw9",
+          "commit": {
+            "abbreviatedOid": "83987ee"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-08-26T15:54:02Z",
+          "updatedAt": "2024-08-26T15:54:02Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 57,
+      "id": "PR_kwDOKYa77855dwYf",
+      "title": "Clarify the router alert flags and relationship to the ConsIngress/egress fields",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/57",
+      "state": "OPEN",
+      "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "1. Incorporated Nico's review notes (mostly)\r\n2. Rationalised text\r\n3. Removed duplicate notes and unnecessary repetition \r\n4. Clarified and made use of terminology more consistent\r\n5. Improved grammar and text flow\r\n6. Amalgamated some sub-sections to reduce number of levels\r\n\r\nContributes to \r\n\r\n- #45 \r\n- #41 (partially)\r\n\r\nTODO: \r\n* [ ] Some glossary changes may have to be replicated across other drafts",
-      "createdAt": "2024-08-14T18:13:00Z",
-      "updatedAt": "2024-08-23T12:41:13Z",
+      "body": "Fixes #41 ",
+      "createdAt": "2024-08-26T16:59:16Z",
+      "updatedAt": "2024-08-26T17:00:01Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "c8ea5a4b3e8d8f46969634fccd873d3b91c94112",
+      "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
       "headRepository": "scionassociation/scion-dp_I-D",
-      "headRefName": "other-fixes",
-      "headRefOid": "1342a18be1ada737283e8c0ab651694e5d1cfd0f",
+      "headRefName": "ingressegress",
+      "headRefOid": "d84c3c68e7e21c0321f92d57eaff90344665c5a8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
