@@ -7,6 +7,7 @@
 <title>SCION Data Plane</title>
 <meta content="Corine de Kater" name="author">
 <meta content="Nicola Rustignoli" name="author">
+<meta content="Jean-Christophe Hugly" name="author">
 <meta content="Samuel Hitz" name="author">
 <meta content="
        This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION data plane is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path. 
@@ -1058,6 +1059,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </div>
 <div class="author">
       <div class="author-name">N. Rustignoli</div>
+<div class="org">SCION Association</div>
+</div>
+<div class="author">
+      <div class="author-name">J. C. Hugly</div>
 <div class="org">SCION Association</div>
 </div>
 <div class="author">
@@ -4249,7 +4254,7 @@ In addition, the source SIG is responsible for SCION path selection.<a href="#se
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Kevin Meynell (SCION Association) and Jean-Christophe Hugly (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="protnum">
@@ -4375,6 +4380,14 @@ In addition, the source SIG is responsible for SCION path selection.<a href="#se
 <div class="email">
 <span>Email:</span>
 <a href="mailto:nic@scion.org" class="email">nic@scion.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Jean-Christophe Hugly</span></div>
+<div dir="auto" class="left"><span class="org">SCION Association</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:jch@scion.org" class="email">jch@scion.org</a>
 </div>
 </address>
 <address class="vcard">
