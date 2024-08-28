@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 27 February 2025                                        S. Hitz
+Expires: 1 March 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                          26 August 2024
+                                                          28 August 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 February 2025.
+   This Internet-Draft will expire on 1 March 2025.
 
 Copyright Notice
 
@@ -85,26 +85,26 @@ Table of Contents
        1.3.2.   Intra-Domain Forwarding Process
        1.3.3.  Configuration
      1.4.  Path Construction (Segment Combinations)
-     1.5.   Path Authorization
+     1.5.  Path Authorization
    2.  SCION Header Specification
-     2.1.  SCION Packet Header Format
-       2.1.1.   Header Alignment
-     2.2.   SCION Header Structure
-       2.2.1.   Common Header
-       2.2.2.   Address Header
-       2.2.3.   Path Header
-     2.3.  Extension Headers
-       2.3.1.   Format of the SCION Options Headers
-     2.4.  Upper-Layer Protocol Issues
-       2.4.1.   Pseudo Header for Upper-Layer Checksum
+     2.1.  Common Header
+     2.2.  Address Header
+     2.3.  Path Header
+       2.3.1.  Empty Path Type
+       2.3.2.   SCION Path Type
+       2.3.3.  One-Hop Path Type
+       2.3.4.  Path Reversal
+     2.4.  Extension Headers
+       2.4.1.  Options Field
+     2.5.   Pseudo Header for Upper-Layer Checksum
    3.  Life of a SCION Data Packet
      3.1.   Description
      3.2.   Creating an End-to-End SCION Forwarding Path
      3.3.   Step-by-Step Explanation
    4.  Path Authorization
      4.1.  Authorizing Segments through Chained MACs
-       4.1.1.   Hop Field MAC Computation
-       4.1.2.   Peering Links
+       4.1.1.   Hop Field MAC Overview
+       4.1.2.   Peering Link MAC Computation
      4.2.   Path Initialization and Packet Processing
        4.2.1.   Initialization at Source Endpoint
        4.2.2.   Processing at Routers
@@ -189,12 +189,13 @@ Table of Contents
    the trust roots and provide connectivity to other ISDs.  This is the
    basis of the public key infrastructure which the SCION control plane
    relies upon for the authentication of messages that is used for the
-   SCION control plane.  See [I-D.scion-cppki]
+   SCION control plane.  See [I-D.dekater-scion-pki]
 
    _Control Plane_ - performs inter-domain routing by discovering and
    securely disseminating path information between ASes.  The core ASes
    use Path-segment Construction Beacons (PCBs) to explore intra-ISD
-   paths, or to explore paths across different ISDs.  See [I-D.scion-cp]
+   paths, or to explore paths across different ISDs.  See
+   [I-D.dekater-scion-controlplane]
 
    _Data Plane_ - carries out secure packet forwarding between SCION-
    enabled ASes over paths selected by endpoints.  A SCION border router
@@ -202,6 +203,11 @@ Table of Contents
    SCION routers or SCION endpoints within its AS.
 
    This document describes the SCION Data Plane component.
+
+   The SCION architecture was initially developed outside of the IETF by
+   ETH Zurich with significant contributions from Anapaya Systems.  The
+   aim of this document is to describe existing implementations and
+   operational deployments.
 
 1.1.  Terminology
 
@@ -220,6 +226,13 @@ Table of Contents
    has been disseminated by the control plane, packets are forwarded by
    the data plane in accordance with such information.
 
+   *Egress/Ingress*: refers to the direction of travel.  In SCION, path
+   construction with beaconing happens in one direction, while actual
+   traffic might follow the opposite direction.  This document clarifies
+   on a case-by-case basis whether 'egress' or 'ingress' refers to the
+   direction of travel of the SCION packet or to the direction of
+   beaconing.
+
    *Endpoint*: An endpoint is the start or the end of a SCION path.  For
    example, an endpoint can be a host as defined in [RFC1122] or a SCION
    IP gateway (Section 8) bridging a SCION and an IP domain.  This
@@ -232,8 +245,8 @@ Table of Contents
    not shared with other ASes.
 
    *Forwarding Path*: A forwarding path is a complete end-to-end path
-   between two SCION hosts which is used to transmit packets in the data
-   plane.  It can be created with a combination of up to three path
+   between two SCION endpoints which is used to transmit packets in the
+   data plane.  It can be created with a combination of up to three path
    segments (an up segment, a core segment, and a down segment).
 
    *Hop Field (HF)*: As they traverse the network, path segment
@@ -252,15 +265,11 @@ Table of Contents
    designates a SCION interface at the end of a link connecting two
    SCION ASes, with each interface belonging to one border router.  Hop
    fields describe the traversal of an AS by a pair of interface IDs
-   (the ingress and egress interfaces).  The Interface ID MUST be unique
-   within each AS.  Interface ID 0 is not a valid identifier as
-   implementations MAY use it as the "unspecified" value.  Interface IDs
-   in Hop Fields are known as ConsIngress and ConsEgress, those
-   designate the interfaces through which a packet enters (ConsIngress)
-   or leaves (ConsEgress) the corresponding AS when that packet is
-   traveling in the direction of the path segment's construction.  The
-   Cons prefix serves as a reminder that the meanings are reversed when
-   the packet travels in the opposite direction.
+   called ConsIngress and ConsEgress, as they refer to the ingress and
+   egress interfaces in the direction of path construction (beaconing).
+   The Interface ID MUST be unique within each AS.  Interface ID 0 is
+   not a valid identifier as implementations MAY use it as the
+   "unspecified" value.
 
    *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
    organized into logical groups called Isolation Domains or ISDs.  Each
@@ -333,7 +342,7 @@ Table of Contents
    This path information consists of a sequence of Hop Fields (HFs).
    Each Hop Field corresponds to an AS on the path, and it includes an
    ingress interface ID as well as an egress interface ID, which
-   uniquivocally identifies the ingress and egress interfaces within the
+   unequivocally identifies the ingress and egress interfaces within the
    AS.  The information is authenticated with a Message Authentication
    Code (MAC) to prevent forgery.
 
@@ -395,13 +404,6 @@ Table of Contents
    The full forwarding process for a packet transiting an intermediate
    AS consists of the following steps.
 
-   *Note:* In this context, a border router is called an *ingress*
-   border router when it refers to an entrance border router to an AS,
-   as seen from the direction of travel of the SCION packet.  A border
-   router is called *egress* border router when it refers to an exit
-   border router of an AS, as seen from the direction of travel of the
-   SCION packet.
-
    1.  The AS's SCION ingress router receives a SCION packet from the
        neighboring AS.
 
@@ -423,7 +425,7 @@ Table of Contents
 
    6.  The last SCION router on the path forwards the packet to the
        packet's destination endpoint indicated by the field DstHostAddr
-       of the Address Header (Section 2.2.2).
+       of the Address Header (Section 2.2).
 
 1.3.3.  Configuration
 
@@ -448,12 +450,12 @@ Table of Contents
       the intra-domain protocol on the router that does.
 
    In order to forward traffic to a service endpoint address (DT/DS ==
-   0b01 in the common header (Section 2.2.1)), a border router
-   translates the service number into a specific destination address.
-   The method used to accomplish the translation is not defined by this
-   document and is only dependent on the implementation and the choices
-   of each AS's administrator.  In current practice this is accomplished
-   by way of a configuration file.
+   0b01 in the common header (Section 2.1)), a border router translates
+   the service number into a specific destination address.  The method
+   used to accomplish the translation is not defined by this document
+   and is only dependent on the implementation and the choices of each
+   AS's administrator.  In current practice this is accomplished by way
+   of a configuration file.
 
    *Note:* The current SCION implementation runs over the UDP/IP
    protocol.  However, the use of other lower layers protocols is
@@ -463,19 +465,19 @@ Table of Contents
 
    Paths are discovered by the SCION control plane which makes them
    available to SCION endpoints in the form of path segments.  As
-   described in [I-D.scion-cp], there are three kinds of path segments:
-   up, down, and core.  In the data plane, a SCION endpoint creates end-
-   to-end paths from the path segments by combining multiple path
-   segments.  Depending on the network topology, a SCION forwarding path
-   can consist of one, two, or three segments.  Each path segment
-   contains several Hop Fields representing the ASes on the segment as
-   well as one Info Field with basic information about the segment, such
-   as a timestamp.
+   described in [I-D.dekater-scion-controlplane], there are three kinds
+   of path segments: up, down, and core.  In the data plane, a SCION
+   endpoint creates end-to-end paths from the path segments by combining
+   multiple path segments.  Depending on the network topology, a SCION
+   forwarding path can consist of one, two, or three segments.  Each
+   path segment contains several Hop Fields representing the ASes on the
+   segment as well as one Info Field with basic information about the
+   segment, such as a timestamp.
 
    Segments cannot be combined arbitrarily.  To construct a valid
    forwarding path, the source endpoint MUST obey the following rules:
 
-   *  There can be at most one of each type of segment (up, core, and
+   *  There MUST be at most one of each type of segment (up, core, and
       down).  Allowing multiple up or down segments would decrease
       efficiency and the ability of ASes to enforce path policies.
 
@@ -616,7 +618,7 @@ Table of Contents
       construct a forwarding path.  Again, no core AS is on the final
       path.
 
-1.5.   Path Authorization
+1.5.  Path Authorization
 
    The SCION data plane provides _path authorization_. This property
    ensures that data packets always traverse the network using path
@@ -629,15 +631,9 @@ Table of Contents
 
 2.  SCION Header Specification
 
-   This section provides a detailed specification of the SCION packet
-   header.  SCION also supports extension headers, which are
-   additionally described.
-
-2.1.  SCION Packet Header Format
-
-   The SCION packet header is composed of a common header, an address
-   header, a path header, and an OPTIONAL extension header, see Figure 2
-   below.
+   The SCION packet header is aligned to 4 bytes.  It is composed of a
+   common header, an address header, a path header, and an OPTIONAL
+   extension header, see Figure 2 below.
 
    +--------------------------------------------------------+
    |                     Common header                      |
@@ -655,32 +651,26 @@ Table of Contents
 
                 Figure 2: High-level SCION header structure
 
-   The _common header_ contains important meta information like a
-   version number and lengths of the header and payload.  In particular,
-   it contains flags that control the format of subsequent headers such
-   as the address and path headers.  For more details, see
-   Section 2.2.1.
+   The _common header_ contains important meta information including
+   version number and the lengths of the header and payload.  In
+   particular, it contains flags that control the format of subsequent
+   headers such as the address and path headers.  For more details, see
+   Section 2.1.
 
    The _address header_ contains the ISD, AS and endpoint addresses of
    source and destination.  The type and length of endpoint addresses
    are variable and can be set independently using flags in the common
-   header.  For more details, see Section 2.2.2.
+   header.  For more details, see Section 2.2.
 
    The _path header_ contains the full AS-level forwarding path of the
    packet.  A path type field in the common header specifies the path
-   format used in the path header.  For more details, see Section 2.2.3.
+   format used in the path header.  For more details, see Section 2.3.
 
-   Finally, the OPTIONAL _extension_ header contains a variable number
-   of hop-by-hop and end-to-end options, similar to the extensions in
-   the IPv6 header [RFC8200].  For more details, see Section 2.3.
+   The OPTIONAL _extension_ header contains a variable number of hop-by-
+   hop and end-to-end options, similar to extensions in the IPv6 header
+   [RFC8200].  For more details, see Section 2.4.
 
-2.1.1.   Header Alignment
-
-   The SCION header is aligned to 4 bytes.
-
-2.2.   SCION Header Structure
-
-2.2.1.   Common Header
+2.1.  Common Header
 
    The SCION common header has the following packet format:
 
@@ -718,8 +708,8 @@ Table of Contents
 
    *  HdrLen: Specifies the entire length of the SCION header in bytes,
       i.e. the sum of the lengths of the common header, the address
-      header, and the path header.  All SCION header fields are aligned
-      to a multiple of 4 bytes.  The SCION header length is computed as
+      header, and the path header.  The SCION header is aligned to a
+      multiple of 4 bytes.  The SCION header length is computed as
       HdrLen * 4 bytes.  The 8 bits of the HdrLen field limit the SCION
       header to a maximum of 255 * 4 = 1020 bytes.
 
@@ -728,13 +718,13 @@ Table of Contents
       This field is 16 bits long, supporting a maximum payload size of
       65'535 bytes.
 
-   *  PathType: Specifies the type of the SCION path.  It is possible to
-      specify up to 256 different types.  The format of one path type is
-      independent of all other path types.  The currently defined SCION
-      path types are Empty (0), SCION (1), OneHopPath (2), EPIC (3) and
-      COLIBRI (4).  This document only specifies the Empty, SCION and
-      OneHopPath path types.  The other path types are currently
-      experimental.
+   *  PathType: Specifies the type of the SCION path and is 8 bits long.
+      The format of one path type is independent of all other path
+      types.  The currently defined SCION path types are Empty (0),
+      SCION (1), OneHopPath (2), EPIC (3) and COLIBRI (4).  This
+      document only specifies the Empty, SCION and OneHopPath path
+      types.  The other path types are currently experimental.  For more
+      details, see Section 2.3.
 
                   +=======+=============================+
                   | Value | Path Type                   |
@@ -757,15 +747,15 @@ Table of Contents
       DT and DL stand for Destination Type and Destination Length,
       whereas ST and SL stand for Source Type and Source Length.  The
       possible endpoint address length values are 4 bytes, 8 bytes, 12
-      bytes, and 16 bytes.  If some address has a length different from
-      the supported values, the next larger size can be used and the
+      bytes, and 16 bytes.  If an address has a length different from
+      the supported values, the next larger size SHALL be used and the
       address can be padded with zeros.  Table 2 below lists the
       currently used values for address length.  The "type" identifier
       is only defined in combination with a specific address length.
       For example, address type "0" is defined as IPv4 in combination
-      with address length 4, but in combination with address length 16,
-      it stands for IPv6.  Per address length, several sub-types are
-      possible.  Table 3 shows the currently assigned combinations of
+      with address length 4, but is defined as IPv6 in combination with
+      address length 16.  Per address length, several sub-types are
+      possible and Table 3 shows the currently assigned combinations of
       lengths and types.
 
                      +=============+================+
@@ -804,7 +794,7 @@ Table of Contents
 
    *  RSV: These bits are currently reserved for future use.
 
-2.2.2.   Address Header
+2.2.  Address Header
 
    The SCION address header has the following format:
 
@@ -863,50 +853,37 @@ Table of Contents
 
                       Table 4: Known Service Numbers
 
-   *Note:* For more information on addressing in SCION, see the
-   introduction of the SCION Control Plane Specification
-   ([I-D.scion-cp]).
+   *Note:* For more information on addressing in SCION, see the SCION
+   Control Plane Specification ([I-D.dekater-scion-controlplane]).
 
-2.2.3.   Path Header
+2.3.  Path Header
 
    The path header of a SCION packet differs for each SCION path type.
+   The path type is set in the PathType field of the SCION common
+   header.
 
-   *Note:* The path type is set in the PathType field of the SCION
-   common header.
+   SCION supports three path types:
 
-   Currently, SCION supports three path types:
+2.3.1.  Empty Path Type
 
-   *  The Empty path type (PathType=0).  For more information, see
-      Section 2.2.3.1.
-
-   *  The SCION path type (PathType=1).  This is the standard path type
-      in SCION.  For a detailed description, see Section 2.2.3.2.
-
-   *  The OneHopPath path type (PathType=2).  For more information, see
-      Section 2.2.3.3.
-
-2.2.3.1.   Empty Path Type
-
-   The Empty path type is used to send traffic within an AS.  It has no
-   additional fields, i.e. it consumes 0 bytes on the wire.
+   The Empty path type (PathType=0) is used to send traffic within an
+   AS.  It has no additional fields, i.e. it consumes 0 bytes on the
+   wire.
 
    One use case of the Empty path type lies in the context of link
    failure detection.  To this end, SCION uses the Bidirectional
-   Forwarding Detection (BFD) protocol ([RFC5880] and [RFC5881]).  BFD
-   is a protocol intended to detect faults in the bidirectional path
-   between two forwarding engines with typically very low latency.  It
+   Forwarding Detection (BFD) protocol ([RFC5880] and [RFC5881]).  It
    operates independently of media, data protocols, and routing
    protocols.  SCION uses the Empty path type, together with OneHopPath
    path type, to bootstrap BFD within SCION.  (For more information on
-   the OneHopPath path type, see Section 2.2.3.3.)
+   the OneHopPath path type, see Section 2.3.3.)  One use case of the
+   Empty path type lies in the context of link-failure detection
+   (Section 6.1).
 
-   One use case of the Empty path type lies in the context of
-   link-failure detection (Section 6.1).
+2.3.2.   SCION Path Type
 
-2.2.3.2.   SCION Path Type
-
-   This section specifies the standard SCION path type.  A SCION path
-   has the following layout:
+   The SCION path type (PathType=1) is the standard path type.  A SCION
+   path has the following layout:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -940,37 +917,37 @@ Table of Contents
    It consists of a path meta header, up to 3 Info Fields and up to 64
    Hop Fields.
 
-   *  The path meta header (PathMetaHdr) indicates the currently valid
-      Info Field and Hop Field while the packet is traversing the
-      network along the path, as well as the number of Hop Fields per
-      segment.
+   *  PathMetaHdr indicates the currently valid Info Field and Hop Field
+      while the packet is traversing the network along the path, as well
+      as the number of Hop Fields per segment.
 
-   *  The number of Info Fields (InfoField) equals the number of path
-      segments that the path contains - there is one Info Field per path
-      segment.  Each Info Field contains basic information about the
-      corresponding segment, such as a timestamp indicating the creation
-      time.  There are also two flags: one specifies whether the segment
-      is to be traversed in construction direction, the other whether
-      the first or last Hop Field in the segment represents a peering
-      Hop Field.
+   *  InfoField equals the number of path segments that the path
+      contains - there is one Info Field per path segment.  Each Info
+      Field contains basic information about the corresponding segment,
+      such as a timestamp indicating the creation time.  There are also
+      two flags: one specifies whether the segment is to be traversed in
+      construction direction, the other whether the first or last Hop
+      Field in the segment represents a peering Hop Field.
 
-   *  Each Hop Field (HopField) represents a hop through an AS on the
-      path, with the ingress and egress interface identifiers for this
-      AS.  This information is authenticated with a Message
-      Authentication Code (MAC) to prevent forgery.
+   *  HopField represents a hop through an AS on the path, with the
+      ingress and egress interface identifiers for this AS.  This
+      information is authenticated with a Message Authentication Code
+      (MAC) to prevent forgery.
 
    The SCION header is created by extracting the required Info Fields
    and Hop Fields from the corresponding path segments.  The process of
    extracting is illustrated in Figure 7 below.  Note that ASes at the
-   joints of multiple segments are represented by two Hop Fields.  Be
-   aware that these Hop Fields are not equal!  In the Hop Field that
-   represents the last Hop in the first segment (seen in the direction
-   of travel), only the ingress interface will be specified.  However,
-   in the hop Field that represents the first hop in the second segment
-   (also in the direction of travel), only the egress interface will be
-   defined.  Thus, the two Hop Fields for this one AS build a full hop
-   through the AS, specifying both the ingress and egress interface.  As
-   such, they bring the two adjacent segments together.
+   intersection of multiple segments are represented by two Hop Fields.
+   Be aware that these Hop Fields are not equal!
+
+   In the Hop Field that represents the last Hop in the first segment
+   (seen in the direction of travel), only the ingress interface will be
+   specified.  However, in the hop Field that represents the first hop
+   in the second segment (also in the direction of travel), only the
+   egress interface will be defined.  Thus, the two Hop Fields for this
+   one AS build a full hop through the AS, specifying both the ingress
+   and egress interface.  As such, they bring the two adjacent segments
+   together.
 
                       +-----------------+
                       |    ISD Core     |
@@ -1033,7 +1010,7 @@ Table of Contents
 
                     Figure 7: Path construction example
 
-2.2.3.2.1.   Path Meta Header Field
+2.3.2.1.  Path Meta Header Field
 
    The 4-byte Path Meta Header field (PathMetaHdr) defines meta
    information about the SCION path that is contained in the path
@@ -1049,11 +1026,11 @@ Table of Contents
 
    *  C (urrINF): Specifies a 2-bits index (0-based) pointing to the
       current Info Field for the packet on its way through the network.
-      For details, see Section 2.2.3.2.2 below.
+      For details, see Section 2.3.2.2 below.
 
    *  CurrHF: Specifies a 6-bits index (0-based) pointing to the current
       Hop Field for the packet on its way through the network.  For
-      details, see Section 2.2.3.2.2 below.  Note that the CurrHF index
+      details, see Section 2.3.2.2 below.  Note that the CurrHF index
       MUST point to a Hop Field that is part of the current path
       segment, as indicated by the CurrINF index.
 
@@ -1078,7 +1055,7 @@ Table of Contents
 
    *  RSV: Unused and reserved for future use.
 
-2.2.3.2.2.   Path Offset Calculations
+2.3.2.2.  Path Offset Calculations
 
    The path offset calculations are used by the SCION border routers to
    determine the Info Field and Hop Field that are currently valid for
@@ -1095,28 +1072,28 @@ Table of Contents
    to the end of the address header) are now calculated as:
 
       B = byte
-      InfoFieldOffset = 4B + 8B.CurrINF
-      HopFieldOffset = 4B + 8B.NumINF + 12B.CurrHF
+      InfoFieldOffset = 4B + 8B * CurrINF
+      HopFieldOffset = 4B + 8B.NumINF + 12B * CurrHF
 
    To check that the current Hop Field is in the segment of the current
    Info Field, the CurrHF needs to be compared to the SegLen fields of
    the current and preceding Info Fields.
 
-2.2.3.2.3.   Info Field
+2.3.2.3.   Info Field
 
    The 8-byte Info Field (InfoField) has the following format:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |r r r r r r P C|      RSV      |             Acc               |
+   |    RSV    |P|C|      RSV      |             Acc               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |                           Timestamp                           |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
             Figure 9: SCION path type - Format of the Info Field
 
-   *  r: The r bits are unused and reserved for future use.
+   *  RSV: Unused and reserved for future use.
 
    *  P: Peering flag.  If the flag has value "1", the segment
       represented by this Info Field contains a peering Hop Field, which
@@ -1128,11 +1105,9 @@ Table of Contents
       arranged in the direction they have been constructed during
       beaconing.
 
-   *  RSV: Unused and reserved for future use.
-
-   *  Acc: This updatable field/counter is REQUIRED for calculating the
-      MAC in the data plane.  Acc stands for "Accumulator".  For more
-      details, see Section 4.1.
+   *  Acc: Accumulator.  This updatable field/counter is REQUIRED for
+      calculating the MAC in the data plane.  For more details, see
+      Section 4.1.
 
    *  Timestamp: Timestamp created by the initiator of the corresponding
       beacon.  The timestamp is defined as the number of seconds elapsed
@@ -1146,14 +1121,14 @@ Table of Contents
       "future" if it is later than the locally available current time
       plus 337.5 seconds (i.e. the minimum time to live of a hop).
 
-2.2.3.2.4.  Hop Field
+2.3.2.4.  Hop Field
 
    The 12-byte Hop Field (HopField) has the following format:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |r r r r r r I E|    ExpTime    |           ConsIngress         |
+   |    RSV    |I|E|    ExpTime    |           ConsIngress         |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |        ConsEgress             |                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
@@ -1162,30 +1137,21 @@ Table of Contents
 
             Figure 10: SCION path type - Format of the Hop Field
 
-   *  r: The r bits are unused and reserved for future use.
+   *  RSV: Unused and reserved for future use.
 
-   *  I: The ConsIngress Router Alert flag.  If the ConsIngress Router
-      Alert flag has value "1", the ingress router (in construction
-      direction) will treat the payload of the packet as a message to
-      itself and attempt to process it according to the value of the
-      NextHdr field.  Such messages include Traceroute Requests
-      (Section 5.7.1).
+   *  I: The Ingress Router Alert flag.  If this has value "1", the
+      ingress router SHOULD process the L4 payload in the packet.
 
-   *  E: The ConsEgress Router Alert flag.  If the ConsEgress Router
-      Alert flag has value "1", the egress router (in construction
-      direction) will treat the payload of the packet as a message to
-      itself and attempt to process it according to the value of the
-      NextHdr field.  Such messages include Traceroute Requests
-      (Section 5.7.1).
+   *  E: The Egress Router Alert flag.  If this has value "1", the
+      egress router SHOULD process the L4 payload in the packet.
 
-   *  ExpTime: Expiration time of a Hop Field.  The field is 1-byte
-      long, thus there are 256 different values available to express an
-      expiration time.  The expiration time specified in this field is
-      relative.  An absolute expiration time in seconds is computed in
-      combination with the Timestamp field (from the corresponding Info
-      Field), as follows:
+   *  ExpTime: Expiration time of a Hop Field.  This field is 1-byte
+      long, and the expiration time specified in this field is relative.
+      An absolute expiration time in seconds is computed in combination
+      with the Timestamp field (from the corresponding Info Field), as
+      follows:
 
-      -  Timestamp + (1 + ExpTime) * (24 hours/256)
+      -  Timestamp + (1 + ExpTime) * (3600/256)
 
    *  ConsIngress, ConsEgress: The 16-bits ingress/egress interface IDs
       in construction direction, that is, the direction of beaconing.
@@ -1194,40 +1160,40 @@ Table of Contents
       Hop Field.  For details on how this MAC is calculated, see
       Section 4.1.1.
 
-   The two Router Alert flags are commonly named ConsIngress and
-   ConsEgress as a reminder that they request an action by the router
-   owning the Ingress or Egress interfaces when the packet is traveling
-   in the _construction direction_ of the path segment (i.e. the
-   direction of beaconing).  When the packet is traveling in the
-   opposite direction the meanings are reversed.  These _flags_ (i.e.
-   single bit) are not to be confused with the ConsIngress and
-   ConsEgress _fields_ which designate the interfaces for the purpose of
-   forwarding the packet and are always set, regardless of any router
-   alert.
+   The Ingress Router (respectively Egress Router) is the router owning
+   the Ingress interface (respectively, Egress interface) when the
+   packet is traveling in the _construction direction_ of the path
+   segment (i.e. the direction of beaconing).  When the packet is
+   traveling in the opposite direction, the meanings are reversed.
+
+   Processing the L4 payload in the packet means that the router will
+   treat the payload of the packet as a message to itself and parse it
+   according to the value of the NextHdr field.  Such messages include
+   Traceroute Requests (Section 5.7.1)
 
    A sender cannot rely on multiple routers retrieving and processing
    the payload even if it sets multiple router alert flags.  This is
-   use-case dependent: In the case of Traceroute informational messages,
+   use-case dependent: In the case of traceroute informational messages,
    for example, the router for which the traceroute request is intended
    will process the request (if the corresponding Router Alert flag is
    set to "1") and reply to it without further forwarding the request
    along the path.  Use cases that require multiple routers/hops on the
-   path to process a packet have to instead rely on a hop-by-hop
-   extension (see Section 2.3).  For general information on router
-   alerts, see [RFC2711].
+   path to process a packet SHOULD rely on a hop-by-hop extension (see
+   Section 2.4).  For general information on router alerts, see
+   [RFC2711].
 
-2.2.3.3.  One-Hop Path Type
+2.3.3.  One-Hop Path Type
 
-   The one-hop path type OneHopPath is currently used to bootstrap
-   beaconing between neighboring ASes.  This is necessary, as neighbor
-   ASes do not have a forwarding path yet before beaconing is started.
+   The OneHopPath path type (PathType=2) is currently used to bootstrap
+   beaconing between neighboring ASes.  This is necessary as neighbor
+   ASes do not have a forwarding path before beaconing is started.
 
    A one-hop path has exactly one Info Field and two Hop Fields with the
    specialty that the second Hop Field is not known a priori, but is
    instead created by the ingress SCION border router of the neighboring
    AS while processing the one-hop path.  Any entity with access to the
    forwarding key of the source endpoint AS can create a valid info and
-   Hop Field as described in Section 2.2.3.2.3 and Section 2.2.3.2.4,
+   Hop Field as described in Section 2.3.2.3 and Section 2.3.2.4,
    respectively.
 
    Upon receiving a packet containing a one-hop path, the ingress border
@@ -1256,11 +1222,12 @@ Table of Contents
 
               Figure 11: Layout of the SCION one-hop path type
 
-2.2.3.4.  Path Reversal
+2.3.4.  Path Reversal
 
-   When a destination endpoint receives a SCION packet, it can use the
+   When a destination endpoint receives a SCION packet, it MAY use the
    path information in the SCION header for sending the reply packets.
-   For this, the destination endpoint MUST perform the following steps:
+   To reverse a path, the destination endpoint MUST perform the
+   following steps:
 
    1.  Reverse the order of the Info Fields;
 
@@ -1275,29 +1242,24 @@ Table of Contents
 
        *  Reverse the order of the non-zero SegLen fields.
 
-       *Note:* For more information on the PathMetaHdr field, see
-       Section 2.2.3.2.1.
+2.4.  Extension Headers
 
-2.3.  Extension Headers
-
-   This section specifies the SCION extension headers.  SCION currently
-   provides two types of extension headers: the Hop-by-Hop (HBH) Options
-   header and the End-to-End (E2E) Options header.
+   SCION provides two types of extension headers:
 
    *  The Hop-by-Hop Options header is used to carry OPTIONAL
       information that MAY be examined and processed by every SCION
       router along a packet's delivery path.  The Hop-by-Hop Options
       header is identified by value "200" in the NextHdr field of the
-      SCION common header (see Section 2.2.1).
+      SCION common header (see Section 2.1).
 
    *  The End-to-End Options header is used to carry OPTIONAL
       information that MAY be examined and processed by the sender and/
-      or the receiver of the packet.  The End-to-End Options header is
-      identified by value "201" in the NextHdr field of the SCION common
-      header (see Section 2.2.1).
+      or the receiving endpoints of the packet.  The End-to-End Options
+      header is identified by value "201" in the NextHdr field of the
+      SCION common header (see Section 2.1).
 
-   If both headers are present, the HBH Options header MUST come before
-   the E2E Options header.
+   If both headers are present, the Hop-by-Hop Options header MUST come
+   before the End-to-End Options header.
 
    *Note:* The SCION extension headers are defined and used based on and
    similar to the IPv6 extensions as specified in section 4 of
@@ -1306,10 +1268,8 @@ Table of Contents
    4.3 in the RFC) and Destination Options Header (section 4.6),
    respectively.
 
-2.3.1.   Format of the SCION Options Headers
-
-   The SCION Hop-by-Hop Options and End-to-End Options headers have the
-   following format:
+   The SCION Hop-by-Hop Options and End-to-End Options headers are
+   aligned to 4 bytes and have the following format:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1337,11 +1297,9 @@ Table of Contents
       to-End Options header is an integer multiple of 4 bytes.  This can
       be achieved by using options of type 0 or 1 (see Table 4) . The
       Options field contains one or more Type-Length-Value (TLV) encoded
-      options.  For details, see Section 2.3.1.1.
+      options.  For details, see Section 2.4.1.
 
-   The Hop-by-Hop/End-to-End Options header is aligned to 4 bytes.
-
-2.3.1.1.   Options Field
+2.4.1.  Options Field
 
    The Options field of the Hop-by-Hop Options and the End-to-End
    Options headers carries a variable number of options that are type-
@@ -1364,9 +1322,9 @@ Table of Contents
              +=========+====================================+
              | Decimal | Option Type                        |
              +=========+====================================+
-             | 0       | Pad1 (see Section 2.3.1.1.1)       |
+             | 0       | Pad1 (see Section 2.4.1.1)         |
              +---------+------------------------------------+
-             | 1       | PadN (see Section 2.3.1.1.2)       |
+             | 1       | PadN (see Section 2.4.1.2)         |
              +---------+------------------------------------+
              | 2       | SCION Packet Authenticator Option. |
              |         | Only used by the End-to-End        |
@@ -1410,7 +1368,7 @@ Table of Contents
    details, see below.  All SCION implementations MUST recognize these
    padding options.
 
-2.3.1.1.1.   Pad1 Option
+2.4.1.1.   Pad1 Option
 
    Alignment requirement: none.
 
@@ -1427,11 +1385,9 @@ Table of Contents
 
    The Pad1 option is used to insert 1 byte of padding into the Options
    field of an extension header.  If more than one byte of padding is
-   required, the PadN option SHOULD be used, rather than multiple Pad1
-   options.  See the next section for more information on the PadN
-   option.
+   required, the PadN option MUST be used.
 
-2.3.1.1.2.   PadN Option
+2.4.1.2.   PadN Option
 
    Alignment requirement: none.
 
@@ -1450,9 +1406,7 @@ Table of Contents
    the OptDataLen field contains the value N-2, and the OptData consists
    of N-2 zero-valued bytes.
 
-2.4.  Upper-Layer Protocol Issues
-
-2.4.1.   Pseudo Header for Upper-Layer Checksum
+2.5.   Pseudo Header for Upper-Layer Checksum
 
    Any transport or other upper-layer protocol that includes addresses
    from the SCION header in the checksum computation MUST use the
@@ -1500,26 +1454,26 @@ Table of Contents
 3.  Life of a SCION Data Packet
 
    This section gives a high-level description of the life cycle of a
-   SCION packet: How it is crafted at its source endpoint, passes
-   through a number of routers, and finally reaches its destination
-   endpoint.  It is assumed that both source and destination are native
-   SCION endpoints (i.e., they both run a native SCION network stack).
+   SCION packet: how it is created at its source endpoint, passes
+   through a number of SCION routers, and finally reaches its
+   destination endpoint.  It is assumed that both source and destination
+   are native SCION endpoints (i.e. they both run a native SCION network
+   stack).
 
-   To keep it brief, the example illustrates an intra-ISD case, i.e.,
-   all communication happens within a single ISD.  As the sample ISD
-   only consists of one core AS, the end-to-end path only includes an
-   up-path and down-path segment.  In the case of inter-ISD forwarding,
-   the complete end-to-end path from source endpoint to destination
-   endpoint would always require a core-path segment, too.  But this
-   makes no difference for the forwarding process, which works the same
-   in an intra- and inter-ISD context.  We therefore abstain from
-   describing the inter-ISD forwarding.
+   This example illustrates an intra-ISD case, i.e. all communication
+   happening within a single ISD.  As the sample ISD only consists of
+   one core AS, the end-to-end path only includes an up-path and down-
+   path segment.  In the case of inter-ISD forwarding, the complete end-
+   to-end path from source endpoint to destination endpoint would always
+   require a core path segment as well, although this makes no
+   difference for the forwarding process which works the same in an
+   intra-ISD and inter-ISD context.
 
 3.1.   Description
 
                        +--------------------+
                        |                    |
-                       |        AS 1        |
+                       |        AS1         |
                        |                    |
                        |                    |
                        |     198.51.100.4 .-+. i1b (1-1,198.51.100.17)
@@ -1535,8 +1489,8 @@ Table of Contents
    +------( R1 )--------+                |       `-+'         |
    |       `-+'         |                |         |192.0.2.34|
    |         |203.0.113.17               |         |          |
-   |         |          |                |         |    AS 3  |
-   |         |    AS 2  |                |         |          |
+   |         |          |                |         |    AS3   |
+   |         |    AS2   |                |         |          |
    |         |          |                |       +---+        |
    |       +---+        |                |       | B |        |
    |       | A |        |                |       +---+        |
@@ -1546,96 +1500,86 @@ Table of Contents
    +--------------------+
 
         Figure 17: Sample topology to illustrate the life cycle of a
-       SCION packet.  AS 1 is the core AS of ISD 1, and AS 2 and AS 3
-                        are non-core ASes of ISD 1.
+      SCION packet.  AS1 is the core AS of ISD 1, and AS2 and AS3 are
+                          non-core ASes of ISD 1.
 
    Based on the network topology in Figure 17 above, this example shows
-   the path of a SCION packet sent from source endpoint A to destination
-   endpoint B, and how it will be processed by each router on the path.
-   This is done by means of simplified snapshots of the packet header
-   after each such processing step.  These snapshots, which are depicted
-   in tables, show the most relevant information of the header, i.e.,
-   the SCION path and IP encapsulation for local communication.
+   the path of a SCION packet sent from its source at Endpoint A to its
+   destination at Endpoint B, and how it will be processed by each
+   router on the path using simplified snapshots of the packet header
+   after each processing step.  These snapshots, which are depicted in
+   tables, show the most relevant information of the header, i.e. the
+   SCION path and IP encapsulation for local communication.
 
 3.2.   Creating an End-to-End SCION Forwarding Path
 
-   In this example, source endpoint A in AS 2 wants to send a data
-   packet to destination endpoint B in AS 3.  Both AS 2 and AS 3 are
-   part of ISD 1.  To create an end-to-end SCION forwarding path, source
-   endpoint A first requests its own AS-2 control service for up-
-   segments to the core AS in its ISD.  The AS-2 control service will
-   return up-segments from AS 2 to the ISD core.  Endpoint A will also
-   query its AS-2 control service for a down-segment from its ISD core
-   AS to AS 3, in which destination endpoint B is located.  The AS-2
-   control service (possibly after connecting to the core control
-   service) will return down-segments from the ISD core down to AS 3.
+   In this example, Endpoint A in AS2 wants to send a data packet to
+   Endpoint B in AS3.  Both AS2 and AS3 are part of ISD 1.  To create an
+   end-to-end SCION forwarding path, Endpoint A first requests its own
+   AS2 control service for up segments to the core AS in its ISD.  The
+   AS2 control service will return up segments from AS2 to the ISD core.
+   Endpoint A will also query its AS2 control service for a down segment
+   from its ISD core AS to AS3, in which Endpoint B is located.  The AS2
+   control service will return down segments from the ISD core down to
+   AS3.
 
    *Note:* For more details on the lookup of path segments, see the
    section "Path Lookup" in the Control Plane specification
-   ([I-D.scion-cp]).
+   ([I-D.dekater-scion-controlplane]).
 
-   Based on its own selection criteria, source endpoint A selects the
-   up-segment (0,i2a)(i1a,0) and the down-segment (0,i1b)(i3a,0) from
-   the path segments returned by its own AS-2 control service.  The path
+   Based on its own selection criteria, Endpoint A selects the up
+   segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the
+   path segments returned by its own AS2 control service.  The path
    segments consist of Hop Fields that carry the ingress and egress
    interfaces of each AS (e.g., i2a, i1a, ...), as described in detail
-   in Section 2.1 - (x,y) represents one Hop Field.
+   in Section 2 - (x,y) represents one Hop Field.
 
    To obtain an end-to-end forwarding path from the source AS to the
-   destination AS, source endpoint A combines the two path segments into
-   the resulting SCION forwarding path, which contains the two Info
-   Fields _IF1_ and _IF2_ and the Hop Fields (0,i2a), (i1a,0), (0,i1b),
-   and (i3a,0).
+   destination AS, Endpoint A combines the two path segments into the
+   resulting SCION forwarding path, which contains the two Info Fields
+   _IF1_ and _IF2_ and the Hop Fields (0,i2a), (i1a,0), (0,i1b), and
+   (i3a,0).
 
-   *Note:* As this brief sample path does not contain a core-segment,
+   *Note:* As this brief sample path does not contain a core segment,
    the end-to-end path only consists of two path segments.
 
-   Source endpoint A now adds this end-to-end forwarding path to the
-   header of the packet that A wants to send to destination endpoint B,
-   and starts transferring the packet.  The following section describes
-   what happens with the SCION packet header on the packet's way from A
-   to B.
+   Endpoint A now adds this end-to-end forwarding path to the header of
+   the packet that it wants to send to Endpoint B, and starts
+   transferring the packet.
 
 3.3.   Step-by-Step Explanation
 
-   This section explains the packet header modifications at each router,
-   based on the network topology in Figure 17 above.  Each step includes
-   a table that represents a simplified snapshot of the packet header at
-   the end of this specific step.  Regarding the notation used in the
-   figure/tables, each SRC and DST entry should be read as router (or
-   endpoint) followed by its address.  The current Info Field (with
-   metadata on the current path segment) in the SCION header is depicted
-   italic/cursive in the tables.  The current Hop Field, representing
-   the current AS, is shown bold.  The snapshot tables also include
-   references to IP/UDP addresses.
-
-   *Note:* In this context, a border router is called *ingress* border
-   router when it refers to an entrance border router to an AS, as seen
-   from the direction of travel of the SCION packet.  So in the context
-   here, the ingress border router is the _(packet) incoming_ border
-   router.  A border router is called *egress* border router when it
-   refers to an exit border router of an AS, as seen from the direction
-   of travel of the SCION packet.  So in this context, the egress border
-   router is the _(packet) leaving_ border router.
+   This section explains what happens with the SCION packet header at
+   each router, based on the network topology in described Figure 17
+   above.  Each step includes a table that represents a simplified
+   snapshot of the packet header at the end of this specific step.
+   Regarding the notation used in the figure/tables, each source and
+   destination entry should be read as router (or endpoint) followed by
+   its address.  The current Info Field (with metadata on the current
+   path segment) in the SCION header is depicted as italic/cursive in
+   the tables.  The current Hop Field, representing the current AS, is
+   shown bold.  The snapshot tables also include references to IP/UDP
+   addresses.  In this context, words "ingress" and "egress" refer to
+   the direction of travel of SCION data packets.
 
    *  _Step 1_
-      *A->R1*: The SCION-enabled source endpoint A in AS 2 creates a new
-      SCION packet destined for destination endpoint B in AS 3, with
-      payload P.  Endpoint A sends the packet (for the chosen forwarding
-      path) to the next SCION router as provided by its control service,
-      which is in this case R1.  A encapsulates the SCION packet into an
-      underlay UDP/IPv4 header for the local delivery to R1, utilizing
-      AS 2's internal routing protocol.  The current Info Field is
-      _IF1_. Upon receiving the packet, R1 will forward the packet on
-      the egress interface that endpoint A has included into the first
-      Hop Field of the SCION header.
+      *A->R1*: The SCION-enabled Endpoint A in AS2 creates a new SCION
+      packet destined for destination endpoint B in AS3, with payload P.
+      Endpoint A sends the packet (for the chosen forwarding path) to
+      the next SCION router as provided by its control service, which is
+      in this case Router 1.  Endpoint A encapsulates the SCION packet
+      into an underlay UDP/IPv4 header for the local delivery to Router
+      1, utilizing AS2's internal routing protocol.  The current Info
+      Field is _IF1_. Upon receiving the packet, Router 1 will forward
+      the packet on the egress interface that endpoint A has included
+      into the first Hop Field of the SCION header.
 
         +============+===========================================+
         | A -> R1    |                                           |
         +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source endpoint A) |
+        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
         +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest. endpoint B)    |
+        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
         +------------+-------------------------------------------+
         |            | PATH =                                    |
         +------------+-------------------------------------------+
@@ -1645,9 +1589,9 @@ Table of Contents
         +------------+-------------------------------------------+
         | UDP        | P_S = 30041, P_D = 30041                  |
         +------------+-------------------------------------------+
-        | IP         | SRC = 203.0.113.6 (endpoint A)            |
+        | IP         | SRC = 203.0.113.6 (Endpoint A)            |
         +------------+-------------------------------------------+
-        |            | DST = 203.0.113.17 (router R1)            |
+        |            | DST = 203.0.113.17 (Router 1)             |
         +------------+-------------------------------------------+
         | Link layer | SRC=A, DST=R1                             |
         +------------+-------------------------------------------+
@@ -1655,16 +1599,14 @@ Table of Contents
                     Table 6: Snapshot header - step 1
 
    *  _Step 2_
-      *R1->R2*: Router R1 inspects the SCION header and considers the
+      *R1->R2*: Router 1 inspects the SCION header and considers the
       relevant Info Field of the specified SCION path, which is the Info
       Field indicated by the current Info Field pointer.  In this case,
       it is the first Info Field _IF1_. The current Hop Field is the
-      first Hop Field (0,i2a), which instructs router R1 to forward the
+      first Hop Field (0,i2a), which instructs router 1 to forward the
       packet on its interface i2a.  After reading the current Hop Field,
-      R1 moves the pointer forward by one position to the second Hop
-      Field (i1a,0).  Note that, at this point, no underlay IP header is
-      necessary, since the routers R1 and R2 are directly connected over
-      layer 2.
+      Router 1 moves the pointer forward by one position to the second
+      Hop Field (i1a,0).
 
       *Note:* Although technically there is no need for a UDP/IP
       underlay if two routers are directly connected, the SCION
@@ -1674,9 +1616,9 @@ Table of Contents
         +============+===========================================+
         | R1 -> R2   |                                           |
         +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source endpoint A) |
+        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
         +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest. endpoint B)    |
+        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
         +------------+-------------------------------------------+
         |            | PATH =                                    |
         +------------+-------------------------------------------+
@@ -1690,24 +1632,24 @@ Table of Contents
                     Table 7: Snapshot header - step 2
 
    *  _Step 3_
-      *R2->R3*: When receiving the packet, router R2 of core AS 1 checks
+      *R2->R3*: When receiving the packet, Router 2 of Core AS1 checks
       whether the packet has been received through the ingress interface
       i1a as specified by the current Hop Field.  Otherwise, the packet
-      is dropped by router R2.  The router notices that it has consumed
+      is dropped by Router 2.  The router notices that it has consumed
       the last Hop Field of the current path segment, and hence moves
       the pointer from the current Info Field to the next Info Field
       _IF2_. The corresponding current Hop Field is (0,i1b), which
-      contains egress interface i1b.  R2 maps the i1b interface ID to
-      egress router R3, it therefore encapsulates the SCION packet
-      inside an intra-AS underlay IP packet with the address of R3 as
-      the underlay destination.
+      contains egress interface i1b.  Router maps the i1b interface ID
+      to egress Router 3, it therefore encapsulates the SCION packet
+      inside an intra-AS underlay IP packet with the address of Router 3
+      as the underlay destination.
 
         +============+===========================================+
         | R2 -> R3   |                                           |
         +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source endpoint A) |
+        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
         +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest. endpoint B)    |
+        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
         +------------+-------------------------------------------+
         |            | PATH =                                    |
         +------------+-------------------------------------------+
@@ -1717,9 +1659,9 @@ Table of Contents
         +------------+-------------------------------------------+
         | UDP        | P_S = 30041, P_D = 30041                  |
         +------------+-------------------------------------------+
-        | IP         | SRC = 198.51.100.1 (router R2)            |
+        | IP         | SRC = 198.51.100.1 (Router 2)             |
         +------------+-------------------------------------------+
-        |            | DST = 198.51.100.4 (router R3)            |
+        |            | DST = 198.51.100.4 (Router 3)             |
         +------------+-------------------------------------------+
         | Link layer | SRC=R2, DST=R3                            |
         +------------+-------------------------------------------+
@@ -1727,17 +1669,17 @@ Table of Contents
                     Table 8: Snapshot header - step 3
 
    *  _Step 4_
-      *R3->R4*: Router R3 inspects the current Hop Field in the SCION
+      *R3->R4*: Router 3 inspects the current Hop Field in the SCION
       header, uses interface i1b to forward the packet to its neighbor
-      SCION router R4 of AS 3, and moves the current hop-field pointer
-      forward.  It adds an IP header to reach R4.
+      SCION-enabled Router 4 of AS3, and moves the current hop-field
+      pointer forward.  It adds an IP header to reach Router 4.
 
         +============+===========================================+
         | R3 -> R4   |                                           |
         +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source endpoint A) |
+        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
         +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest. endpoint B)    |
+        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
         +------------+-------------------------------------------+
         |            | PATH =                                    |
         +------------+-------------------------------------------+
@@ -1747,9 +1689,9 @@ Table of Contents
         +------------+-------------------------------------------+
         | UDP        | P_S = 30041, P_D = 30041                  |
         +------------+-------------------------------------------+
-        | IP         | SRC = 1-1,198.51.100.17 (router R3)       |
+        | IP         | SRC = 1-1,198.51.100.17 (Router 3)        |
         +------------+-------------------------------------------+
-        |            | DST = 1-3,198.51.100.18 (router R4)       |
+        |            | DST = 1-3,198.51.100.18 (Router 4)        |
         +------------+-------------------------------------------+
         | Link layer | SRC=R3, DST=R4                            |
         +------------+-------------------------------------------+
@@ -1757,24 +1699,24 @@ Table of Contents
                     Table 9: Snapshot header - step 4
 
    *  _Step 5_
-      *R4->B*: SCION router R4 first checks whether the packet has been
-      received through the ingress interface i3a as specified by the
-      current Hop Field.  R4 will then also realize, based on the fields
-      CurrHF and SegLen in the SCION header, that the packet has reached
-      the last hop in its SCION path.  Therefore, instead of stepping up
-      the pointers to the next info or Hop Field, router R4 inspects the
-      SCION destination address and extracts the endpoint address
-      192.0.2.7.  It creates a fresh underlay UDP/IP header with this
-      address as destination and with itself as source.  The intra-
-      domain forwarding can now deliver the packet to destination
-      endpoint B.
+      *R4->B*: SCION-enabled Router 4 first checks whether the packet
+      has been received through the ingress interface i3a as specified
+      by the current Hop Field.  Router 4 will then also realize, based
+      on the fields CurrHF and SegLen in the SCION header, that the
+      packet has reached the last hop in its SCION path.  Therefore,
+      instead of stepping up the pointers to the next Info Field or Hop
+      Field, Router 4 inspects the SCION destination address and
+      extracts the endpoint address 192.0.2.7.  It creates a fresh
+      underlay UDP/IP header with this address as destination and with
+      itself as source.  The intra-domain forwarding can now deliver the
+      packet to its destination at Endpoint B.
 
         +============+===========================================+
         | R4 -> B    |                                           |
         +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source endpoint A) |
+        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
         +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest. endpoint B)    |
+        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
         +------------+-------------------------------------------+
         |            | PATH =                                    |
         +------------+-------------------------------------------+
@@ -1784,35 +1726,35 @@ Table of Contents
         +------------+-------------------------------------------+
         | UDP        | P_S = 30041, P_D = 30041                  |
         +------------+-------------------------------------------+
-        | IP         | SRC = 192.0.2.34 (router R4)              |
+        | IP         | SRC = 192.0.2.34 (Router 4)               |
         +------------+-------------------------------------------+
-        |            | DST = 192.0.2.7 (endpoint B)              |
+        |            | DST = 192.0.2.7 (Endpoint B)              |
         +------------+-------------------------------------------+
         | Link layer | SRC=R4, DST=B                             |
         +------------+-------------------------------------------+
 
                     Table 10: Snapshot header - step 5
 
-   When destination endpoint B wants to respond to source endpoint A, it
+   When destination Endpoint B wants to respond to source Endpoint A, it
    can just swap the source and destination addresses in the SCION
-   header, reverse the SCION path, and set the pointers to the info and
-   Hop Fields at the beginning of the reversed path (see also
-   Section 2.2.3.4).
+   header, reverse the SCION path, and set the pointers to the Info
+   Fields and Hop Fields at the beginning of the reversed path (see also
+   Section 2.3.4).
 
 4.  Path Authorization
 
    Path authorization guarantees that data packets always traverse the
    network along paths segments authorized by all on-path ASes in the
-   control plane.  In contrast to the IP-based Internet, where
-   forwarding decisions are made by routers based on locally stored
-   information, SCION routers base their forwarding decisions purely on
-   the forwarding information carried in the packet header and set by
+   control plane.  In contrast to the IP-based Internet where forwarding
+   decisions are made by routers based on locally stored information,
+   SCION routers base their forwarding decisions purely on the
+   forwarding information carried in the packet header and set by
    endpoints.
 
    SCION uses cryptographic mechanisms to efficiently provide path
    authorization.  The mechanisms are based on _symmetric_ cryptography
    in the form of Message Authentication Codes (MACs) in the data plane
-   to secure forwarding information encoded in Hop Fields.  This chapter
+   to secure forwarding information encoded in Hop Fields.  This section
    first explains how Hop Field MACs are computed, then how they are
    validated as they traverse the network.
 
@@ -1823,41 +1765,41 @@ Table of Contents
    only its own hop information but also an aggregation of all upstream
    hops.  This section describes how this works.
 
-4.1.1.   Hop Field MAC Computation
+4.1.1.   Hop Field MAC Overview
 
    The MAC in the Hop Fields of a SCION path has two purposes:
 
-   *  Preventing malicious endpoints from illegally adding, removing, or
-      reordering hops within a path segment created during beaconing in
-      the control plane.  In particular, preventing path splicing, i.e.
-      the combination of parts of different valid path segments into a
-      new, unauthorized, path segment.
+   *  Preventing malicious endpoints from adding, removing or reordering
+      hops within a path segment created during beaconing in the control
+      plane.  In particular, preventing path splicing, i.e. the
+      combination of parts of different valid path segments into a new
+      and unauthorized path segment.
 
    *  Authentication of the information contained in the Hop Field
       itself, in particular the ExpTime, ConsIngress, and ConsEgress.
 
-   To fulfill the above purposes, the MAC for the Hop Field of AS_i
-   includes both the components of the current Hop Field HF_i and an
-   aggregation of the path segment identifier and all preceding Hop
-   Fields/entries in the path segment.  The aggregation is a 16-bit XOR-
-   sum of the path segment identifier and the Hop Field MACs.
+   To fulfill these purposes, the MAC for the Hop Field of AS_i includes
+   both the components of the current Hop Field HF_i and an aggregation
+   of the path segment identifier and all preceding Hop Fields/entries
+   in the path segment.  The aggregation is a 16-bit XOR-sum of the path
+   segment identifier and the Hop Field MACs.
 
-   When originating a path-segment construction beacon PCB in the
-   *control plane*, a core AS chooses a random 16-bit value as segment
+   When originating a path segment construction beacon PCB in the
+   control plane, a core AS chooses a random 16-bit value as segment
    identifier SegID for the path segment and includes it in the PCB's
    Segment Info component.  In the control plane, each AS_i on the path
-   segment computes the MAC for the current hop HF_i, based on the value
-   of SegID and the MACs of the preceding hop entries.  Here, the full
-   XOR-sum is computed explicitly.
+   segment computes the MAC for the current HF_i, based on the value of
+   SegID and the MACs of the preceding hop entries.  Here, the full XOR-
+   sum is computed explicitly.
 
-   For high-speed packet processing in the *data plane*, computing even
+   For high-speed packet processing in the data plane, computing even
    cheap operations such as the XOR-sum over a variable number of inputs
    is complicated, in particular for hardware router implementations.
-   To avoid this overhead for the MAC-chaining in path authorization in
-   the data plane, the XOR-sum is tracked incrementally for each (of the
-   up to three) path segments in a path, as a separate, updatable
-   accumulator field Acc. The routers update the accumulator field Acc
-   by adding/subtracting only a single 16-bit value each.
+   To avoid this overhead for the MAC chaining in path authorization in
+   the data plane, the XOR-sum is tracked incrementally for each of the
+   path segments in a path as a separate, updatable Accumulator Field
+   Acc. The routers update Acc by adding/subtracting only a single
+   16-bit value each.
 
    When combining path segments to create a path to the destination
    endpoint, the source endpoint MUST also initialize the value of
@@ -1867,14 +1809,14 @@ Table of Contents
    traversed.
 
    The aggregated 16-bit path segment identifier and preceding MACs
-   prevents the splicing parts of different path segments, unless there
-   is a per-chance collision of the Acc value among compatible path
-   segments in on AS.  See Section 7.1.3 for more details.
+   prevent splicing of different path segments unless there is a
+   collision of the Acc value among compatible path segments in an AS.
+   See Section 7.1.3 for more details.
 
-   In the following, the computation of the Hop Field MAC as well as the
-   accumulator field Acc is explained.
+4.1.1.1.   Hop Field MAC - Calculation
 
-4.1.1.1.   Hop Field MAC - Definition
+   The Hop Field MAC is generally calculated at a current AS_i as
+   follows:
 
    *  Consider a path segment with "n" hops, containing ASes AS_0, ... ,
       AS_(n-1), with forwarding keys K_0, ... , K_(n-1) in this order.
@@ -1882,8 +1824,6 @@ Table of Contents
    *  AS_0 is the core AS that created the PCB representing the path
       segment and that added a random initial 16-bit segment identifier
       SegID to the Segment Info field of the PCB.
-
-   The MAC_i of the Hop Field of AS_i is now calculated as:
 
    MAC_i =
    Ck_i (SegID XOR MAC_0 [:2] ... XOR MAC_(i-1) [:2], Timestamp,
@@ -1919,49 +1859,30 @@ Table of Contents
 
 4.1.1.2.   Accumulator Acc - Definition
 
-   The accumulator Acc_i is an updatable counter introduced in the data
+   The Accumulator Acc_i is an updatable counter introduced in the data
    plane to avoid the overhead caused by MAC-chaining for path
    authorization.  This is achieved by incrementally tracking the XOR-
    sum of the previous MACs as a separate, updatable accumulator field
    Acc, which is part of the path segment's Info Field InfoField in the
-   packet header (see also Section 2.2.3.2.3).  Routers update this
-   field by adding/subtracting only a single 16-bit value each.
+   packet header (see also Section 2.3.2.3).  Routers update this field
+   by adding/subtracting only a single 16-bit value each.
 
-    0                   1                   2                   3
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |r r r r r r P C|      RSV      |             Acc               |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                           Timestamp                           |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-        Figure 18: The Info Field of a specific path segment in the
-         packet header, with the updatable accumulator field `Acc`.
-
-   This is how it works:
-
-   Section 4.1.1.1 defines MAC_i as follows:
-
-   MAC_i =
-   Ck_i (SegID XOR MAC_0 [:2] ... XOR MAC_(i-1) [:2], Timestamp,
-   ExpTime_i, ConsIngress_i, ConsEgress_i)
-
-   In the data plane, the expression SegID XOR MAC_0 [:2] ... XOR
-   MAC_i-1 [:2] is replaced by Acc_i.  This results in the following
-   alternative procedure for the computation of MAC_i used in the data
-   plane:
+   Section 4.1.1.1 provides a general formula to compute MAC_i, but at
+   each SCION router the expression SegID XOR MAC_0 [:2] ... XOR MAC_i-1
+   [:2] is replaced by Acc_i.  This results in the following alternative
+   procedure for the computation of MAC_i at SCION routers:
 
    MAC_i = Ck_i (Acc_i, Timestamp, ExpTime_i, ConsIngress_i,
    ConsEgress_i)
 
-   During forwarding in the data plane, each AS_i updates the Acc field
-   in the packet header, such, that it contains the correct input value
-   of the Accumulator Acc for the next AS in the path segment to be able
-   to calculate the MAC over its Hop Field.  Note that the correct input
-   value of the Acc field depends on the direction of travel.
+   During forwarding, SCION routers at each AS_i update the Acc field in
+   the packet header so that it contains the correct input value of Acc
+   for the next AS in the path segment to be able to calculate the MAC
+   over its Hop Field.  Note that the correct input value of the Acc
+   field depends on the direction of travel.
 
-   The value of the accumulator Acc_(i+1) is calculated based on the
-   following definition (in the direction of beaconing):
+   The value of Acc_(i+1) is calculated based on the following
+   definition (in the direction of beaconing):
 
    Acc_(i+1) = Acc_i XOR MAC_i [:2]
 
@@ -1974,17 +1895,18 @@ Table of Contents
 
    The algorithm used to compute the Hop Field MAC is an AS-specific
    choice.  The operator of an AS can freely choose any MAC algorithm
-   without outside coordination.  However, the control service and
-   routers of the AS do need to agree on the algorithm used.  All
-   control service and router implementations MUST support the Default
-   Hop Field MAC algorithm described below.
+   and the control service and routers of the AS do need to agree on the
+   algorithm used, but all implementations MUST support the Default Hop
+   Field MAC algorithm described below.
 
    The default MAC algorithm is AES-CMAC ([RFC4493]) truncated to
    48-bits, computed over the Info Field and the first 6 bytes of the
-   Hop Field, with flags and reserved fields zeroed out.  The input is
+   Hop Field with flags and reserved fields zeroed out.  The input is
    padded to 16 bytes.  The _first_ 6 bytes of the AES-CMAC output are
-   used as resulting Hop Field MAC.  Figure 19 below shows the layout of
-   the input data to calculate the Hop Field MAC.
+   used as resulting Hop Field MAC.
+
+   Figure 18 below shows the layout of the input data to calculate the
+   Hop Field MAC.
 
 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1998,59 +1920,64 @@ Table of Contents
 |          ConsEgress           |               0               |      |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
 
-     Figure 19: Input data to calculate the Hop Field MAC for the
+     Figure 18: Input data to calculate the Hop Field MAC for the
                    default hop-field MAC algorithm
 
 4.1.1.4.  Alternative Hop Field MAC Algorithms
 
    For alternative algorithms, the following requirements MUST all be
-   met: - The Hop Field MAC field is computed as a function of the
-   secret forwarding key, the Acc, Timestamp fields of the Info Field
-   and the ExpTime, ConsIngress and ConsEgress fields of the Hop Field.
-   Function is used in the mathematical sense, that is, for any values
-   of these inputs there is exactly one result. - The algorithm returns
-   an unforgable 48-bit value.  Unforgable specifically means
-   "existentially unforgable under a chosen message attack"
-   ([CRYPTOBOOK]).  Informally, this means an attacker without access to
-   the secret key has no computationally efficient means to create a
-   valid MAC for some attacker chosen input values, even if it has
-   access to an "oracle" providing a valid MAC for any other input
-   values. - The truncation of the result value to the first 2 bytes /
-   16 bits of the result value: - is not degenerate, i.e. any small
-   change in any input value SHOULD have an "avalanche effect" on these
-   bits, and - is roughly uniformly distributed when considering all
-   possible input values.
+   met:
 
-   This additional requirment is naturally satisfied for MAC algorithms
+   *  The Hop Field MAC field is computed as a function of the secret
+      forwarding key, the Acc and Timestamp fields of the Info Field,
+      and the ExpTime, ConsIngress and ConsEgress fields of the Hop
+      Field.  Function is used in the mathematical sense that for for
+      any values of these inputs there is exactly one result.
+
+   *  The algorithm returns an unforgable 48-bit value.  Unforgable
+      specifically means "existentially unforgable under a chosen
+      message attack" ([CRYPTOBOOK]).  Informally, this means an
+      attacker without access to the secret key has no computationally
+      efficient means to create a valid MAC for some attacker chosen
+      input values, even if it has access to an "oracle" providing a
+      valid MAC for any other input values.
+
+   *  The truncation of the result value to the first 16 bits of the
+      result value:
+
+      -  is not degenerate, i.e. any small change in any input value
+         SHOULD have an "avalanche effect" on these bits, and
+
+      -  is roughly uniformly distributed when considering all possible
+         input values.
+
+   This additional requirement is naturally satisfied for MAC algorithms
    based on typical block ciphers or hash algorithms.  It ensures that
    the MAC chaining via the Acc field is not degenerate.
 
-4.1.2.   Peering Links
+4.1.2.   Peering Link MAC Computation
 
-   The above described computation of a Hop Field MAC does not apply to
-   a peering Hop Field, i.e., to a Hop Field that allows transiting from
-   a child interface/link to a peering interface/link.
+   The Hop Field MAC computation described in Section 4.1.1.1 does not
+   apply to a peering Hop Field, i.e. to a Hop Field that allows
+   transiting from a child interface/link to a peering interface/link.
 
    The reason for this is that the MACs of the Hop Fields "after" the
    peering Hop Field (in beaconing direction) are not chained to the MAC
    of the peering Hop Field, but to the MAC of the main Hop Field in the
    corresponding AS entry.  To make this work, the MAC of the peering
    Hop Field is also chained to the MAC of the main Hop Field - this
-   allows to validate the chained MAC for both the peering Hop Field and
-   the following Hop Fields, by using the same Acc field value.
+   allows for the validation of the chained MAC for both the peering Hop
+   Field and the following Hop Fields by using the same Acc field value.
 
-   This results in the following definition for the calculation of the
-   MAC for a peering Hop Field.
-
-   The Control Plane Internet-Draft defines a peering Hop Field as
-   follows:
+   The peering Hop Field is defined as follows:
 
    Hop Field^Peer_i = (ExpTime^Peer_i, ConsIngress^Peer_i,
    ConsEgress^Peer_i, MAC^Peer_i)
 
-   This definition, the general definition of a Hop Field MAC and the
-   explanation above leads to the following definition of the MAC for a
-   peering Hop Field^Peer_i:
+   See [I-D.dekater-scion-controlplane] for more information.
+
+   This results in the calculation of the MAC for the peering Hop
+   Field^Peer_i as follows:
 
    MAC^Peer_i =
    Ck^Peer_i (SegID XOR MAC_0 [:2] ... XOR MAC_i [:2], Timestamp,
@@ -2061,29 +1988,21 @@ Table of Contents
    calculation of the MAC for the main Hop Field itself only the XOR-sum
    of the _previous_ MACs is used).
 
-   *Note:* The Control-Plane Internet-Draft is available here:
-   [I-D.scion-cp].
-
 4.2.   Path Initialization and Packet Processing
 
-   As is described in Section 2.1, the path header of the data-plane
-   packets only contains a sequence of Info Fields and Hop Fields
-   without any additional data from the corresponding PCBs.  Also, the
-   SCION path does not contain any AS numbers (except for the source and
-   destination ASes), and there is no field explicitly defining the type
+   As described in Section 2, the path header of the data plane packets
+   only contains a sequence of Info Fields and Hop Fields without any
+   additional data from the corresponding PCBs.  The SCION path also
+   does not contain any AS numbers - except for the source and
+   destination ASes - and there is no field explicitly defining the type
    of each segment (up, core, or down).  This chapter describes the
-   required steps for the source endpoint and each SCION router to
-   ensure that a data packet only traverses authorized segments.  The
-   chapter first specifies the initialization of a path at the source
-   endpoint, followed by the steps that the SCION routers needs to
-   perform when a data-plane packet traverses an AS on its way to the
-   destination.
+   required steps for the source endpoint and SCION routers to
+   respectively craft and forward a data packet.
 
 4.2.1.   Initialization at Source Endpoint
 
-   The source endpoint needs to initialize a path correctly for the
-   SCION routers to be able to verify the Hop Fields in the data plane.
-   To this end, the source endpoint MUST perform the following steps:
+   The source endpoint MUST perform the following steps to correctly
+   initialize a path:
 
    1.  Combine the preferred end-to-end path from the path segments
        obtained during path lookup.
@@ -2091,41 +2010,29 @@ Table of Contents
    2.  Extract the Info Fields and Hop Fields from the different path
        segments that together build the end-to-end path to the
        destination endpoint.  Then insert the relevant information from
-       the path segments' info and Hop Fields into the corresponding
-       InfoFields and Hopfields, respectively, in the data packet
-       header.
+       the Info Fields and Hop Fields into the corresponding InfoFields
+       and Hopfields in the data packet header.
 
    3.  Each 8-byte Info Field InfoField in the packet header contains
        the updatable Acc field as well as a Peering flag P and a
-       Construction Direction flag C (see also Section 2.2.3.2.3).  As a
+       Construction Direction flag C (see also Section 2.3.2.3).  As a
        next step in the path initialization process, the source MUST
        correctly set the flags and the Acc field of all InfoFields
        included in the path, according to the following rules:
 
-       *Note:* As already stated above, the type of segment is not
-       visible directly in the forwarding path but can be inferred from
-       flags and other information.  See also Section 4.2.2.
-
        *  The Construction Direction flag C MUST be set to "1" whenever
           the corresponding segment is traversed in construction
           direction, i.e., for down-path segments and potentially for
-          core-segments.  It MUST be set to "0" for up-path segments and
-          "reversed" core-segments.
+          core segments.  It MUST be set to "0" for up-path segments and
+          "reversed" core segments.
 
-       *  The Peering flag P MUST be set to "1" for up- and down-
-          segments if, and only if, the path contains a peering Hop
-          Field.
-
-       *  The field Acc field is an updatable field.  It is used to
-          compute the MAC over the current Hop Field.  The value of the
-          field Acc field corresponds to the value of the Accumulator
-          Acc_i for AS_i.  It is initialized based on the location of
-          the sender in relation to path construction.
+       *  The Peering flag P MUST be set to "1" for up-segments and
+          down-segments if the path contains a peering Hop Field.
 
        The following InfoField settings are possible, based on the
-       following possible use cases:
+       following cases:
 
-       *  *Use case 1*
+       *  *Case 1*
           The path segment is traversed in construction direction and
           includes no peering Hop Field.  It starts at the _i_-th AS of
           the full segment discovered in beaconing.  In this case:
@@ -2137,7 +2044,7 @@ Table of Contents
           -  The value of the Acc = Acc_i.  For more details, see
              Section 4.1.1.2.
 
-       *  *Use case 2*
+       *  *Case 2*
           The path segment is traversed in construction direction and
           includes a peering Hop Field (which is the first Hop Field of
           the segment).  It starts at the _i_-th AS of the full segment
@@ -2150,7 +2057,7 @@ Table of Contents
           -  The value of the Acc = Acc_(i+1).  For more details, see
              Section 4.1.1.2.
 
-       *  *Use case 3*
+       *  *UCase 3*
           The path segment is traversed against construction direction.
           The full segment has "n" hops.  In this case:
 
@@ -2166,22 +2073,20 @@ Table of Contents
 
    4.  Besides setting the flags and the Acc field, the source endpoint
        MUST also set the pointers in the CurrInf and CurrHF fields of
-       the Path Meta Header PathMetaHdr (see Section 2.2.3.2.1).  As the
+       the Path Meta Header PathMetaHdr (see Section 2.3.2.1).  As the
        source endpoint builds the starting point of the forwarding, both
        pointers MUST be set to "0".
 
 4.2.2.   Processing at Routers
 
-   During forwarding, each AS_i verifies the path contained in the
-   packet header with the help of the current value of the MAC in the
-   current Hop Field, and the current value of the Accumulator in the
-   Acc field of the current Info Field.  Additionally, each AS has to
-   correctly set the value of the Accumulator in the Acc field for the
-   next AS to be able to verify its Hop Field.  The exact operations
-   differ based on the location of the AS on the path.
+   During forwarding, each SCION router verifies the path contained in
+   the packet header.  Each SCION router also MUST correctly verify or
+   set the value of the Accumulator in the Acc field for the next AS to
+   be able to verify its Hop Field.  The exact operations differ based
+   on the location of the AS on the path.
 
    The processing of SCION packets for ASes where a peering link is
-   crossed between path segments is special cased.  A path containing a
+   crossed between path segments is a special case.  A path containing a
    peering link contains exactly two path segments, one against
    construction direction (up) and one in construction direction (down).
    On the path segment against construction direction (up), the peering
@@ -2189,19 +2094,10 @@ Table of Contents
    (down), the peering Hop Field is the first hop of the segment.
 
    The following sections describe the tasks to be performed by the
-   ingress and egress border router of each on-path AS.  Each operation
-   is described from the perspective of AS_i, where i belongs to [0 ...
-   n-1], and n == the number of ASes in the path segment (counted from
-   the first AS in the beaconing direction).
-
-   *Note:* In this context, a border router is called *ingress* border
-   router when it refers to an entrance border router to an AS, as seen
-   from the direction of travel of the SCION packet.  So in the context
-   here, the ingress border router is the _(packet) incoming_ border
-   router.  A border router is called *egress* border router when it
-   refers to an exit border router of an AS, as seen from the direction
-   of travel of the SCION packet.  So in this context, the egress border
-   router is the _(packet) leaving_ border router.
+   ingress and egress border routers (see ) of each on-path AS.  Each
+   operation is described from the perspective of AS_i, where i belongs
+   to [0 ... n-1], and n == the number of ASes in the path segment
+   (counted from the first AS in the beaconing direction).
 
    The following figure provides a simplified representation of the
    processing at routers both in construction direction and against
@@ -2236,217 +2132,188 @@ direction
                                                             construction
                                                                direction
 
-     Figure 20: A simplified representation of the processing at
+     Figure 19: A simplified representation of the processing at
                      routers in both directions.
 
-4.2.2.1.  Steps Ingress Border Router
+4.2.2.1.  Steps at Ingress Border Router
 
-   This section describes the steps that a SCION ingress border router
-   MUST perform when it receives a SCION packet.
+   A SCION ingress border router MUST perform the following steps when
+   it receives a SCION packet:
 
    1.  Check that the interface through which the packet was received is
        equal to the ingress interface in the current Hop Field.  If not,
        the router MUST drop the packet.
 
    2.  Check if the current Hop Field is expired or originated in the
-       future.  That is, the current Info Field MUST NOT have a
-       timestamp in the future, as defined in Section 2.2.3.2.3.  If
-       either is true, the router MUST drop the packet.
+       future, i.e. the current Info Field MUST NOT have a timestamp in
+       the future, as defined in Section 2.3.2.3.  If either is true,
+       the router MUST drop the packet.
 
-   3.  The next steps depend on the direction of travel and whether this
-       segment includes a peering Hop Field.  Both features are
-       indicated by the settings of the Construction Direction flag C
-       and the Peering flag P in the current Info Field.  Therefore,
-       check the settings of both flags.  The following combinations are
-       possible:
+   The next steps depend on the direction of travel and whether this
+   segment includes a peering Hop Field.  Both features are indicated by
+   the settings of the Construction Direction flag C and the Peering
+   flag P in the current Info Field, so the settings of both flags MUST
+   be checked.  The following combinations are possible:
 
-       *  The packet traverses the path segment in *construction
-          direction* (C = "1" and P = "0" or "1").  In this case,
-          proceed with step 4.
+   *  The packet traverses the path segment in *construction direction*
+      (C = "1" and P = "0" or "1").  In this case, proceed with step 4.
 
-       *  The packet traverses the path segment *against construction
-          direction* (C = "0").  The following use cases are possible:
+   *  The packet traverses the path segment *against construction
+      direction* (C = "0").  The following cases are possible:
 
-          -  *Use case 1*
-             The path segment includes *no peering Hop Field* (P = "0").
-             In this case, the ingress border router MUST take the
-             following step(s):
+      -  *Case 1*
+         The path segment includes *no peering Hop Field* (P = "0").  In
+         this case, the ingress border router MUST take the following
+         step(s):
 
-             o  Compute the value of the Accumulator Acc as follows:
+         o  Compute the value of the Accumulator Acc as follows:
 
-                Acc = Acc_(i+1) XOR MAC_i
-                where
-                Acc_(i+1) = the current value of the field Acc in the
-                current Info Field
-                MAC_i = the value of MAC_i in the current Hop Field
-                representing AS_i
+            Acc = Acc_(i+1) XOR MAC_i
+            where
+            Acc_(i+1) = the current value of the field Acc in the
+            current Info Field
+            MAC_i = the value of MAC_i in the current Hop Field
+            representing AS_i
 
-                *Note:* In the case described here the packet travels
-                against direction of beaconing.  That is, the packet
-                comes from AS_(i+1) and is going to enter AS_i.  This
-                means that the Acc field of this incoming packet
-                represents the value of Accumulator Acc_(i+1).  However,
-                to compute the MAC_i for the current AS_i, we need the
-                value of Accumulator Acc_i (see Section 4.1.1.2).
-                Because the border router knows that the formula for
-                Acc_(i+1) = Acc_i XOR MAC_i [:2] (see also
-                Section 4.1.1.2), and because the values of Acc_(i+1)
-                and MAC_i are known, the router will be able to recover
-                the value Acc_i based on the just-mentioned formula for
-                Acc.
+            *Note:* In the case described here, the packet travels
+            against direction of beaconing, i.e. the packet comes from
+            AS_(i+1) and will enter AS_i.  This means that the Acc field
+            of this incoming packet represents the value of Acc_(i+1),
+            but to compute the MAC_i for the current AS_i, we need the
+            value of Acc_i (see Section 4.1.1.2).  As the border router
+            knows that the formula for Acc_(i+1) = Acc_i XOR MAC_i [:2]
+            (see also Section 4.1.1.2), and because the values of
+            Acc_(i+1) and MAC_i are known, the router will be able to
+            recover the value Acc_i based on the aforementioned formula
+            for Acc.
 
-             o  Replace the current value of the field Acc in the
-                current Info Field with the newly calculated value of
-                Acc.
+         o  Replace the current value of the field Acc in the current
+            Info Field with the newly calculated value of Acc.
 
-             o  Compute the MAC^Verify_i over the Hop Field of the
-                current AS_i.  For this, use the formula in
-                Section 4.1.1.1, but replace SegID XOR MAC_0[:2] ... XOR
-                MAC_i-1 [:2] in the formula with the value of the
-                accumulator Acc as just set in the Acc field in the
-                current Info Field.
+         o  Compute the MAC^Verify_i over the Hop Field of the current
+            AS_i.  For this, use the formula in Section 4.1.1.1, but
+            replace SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2] in the
+            formula with the value of Acc as just set in the Acc field
+            in the current Info Field.
 
-             o  Check that the MAC_i in the current Hop Field matches
-                the just-calculated MAC^Verify_i.  If yes, it is fine.
-                Otherwise, drop the packet.
+         o  If the MAC_i in the current Hop Field does not match the
+            just calculated MAC^Verify_i, drop the packet.
 
-             o  Check whether the current Hop Field is the last Hop
-                Field in the path segment.  For this, look at the value
-                of the current SegLen and other metadata in the path
-                meta header.  If yes, increment both CurrInf and CurrHF
-                in the path meta header.  Proceed with step 4.
+         o  If the current Hop Field is the last Hop Field in the path
+            segment as determined by the value of the current SegLen and
+            other metadata in the path meta header, increment both
+            CurrInf and CurrHF in the path meta header.  Proceed with
+            step 4.
 
-          -  *Use case 2*
-             The path segment includes a *peering Hop Field* (P = "1"),
-             but the current hop is *not* the peering hop, that is, the
-             current Hop Field is *not* the _last_ Hop Field of the
-             segment, seen from the direction of travel - this can be
-             determined by looking at the value of the current SegLen
-             and other metadata in the path meta header.  In this case,
-             the ingress border router needs to perform the steps
-             previously described for the path segment without peering
-             Hop Field.  However, the border router MUST NOT increment
-             CurrInf and MUST NOT increment CurrHF in the path meta
-             header.  Proceed with step 4.
+      -  *Case 2*
+         The path segment includes a *peering Hop Field* (P = "1"), but
+         the current hop is *not* the peering hop, i.e. the current Hop
+         Field is *not* the _last_ Hop Field of the segment, as
+         determined by the value of the current SegLen and other
+         metadata in the path meta header.  In this case, the ingress
+         border router needs to perform the steps previously described
+         for the path segment without peering Hop Field, but the border
+         router MUST NOT increment CurrInf and MUST NOT increment CurrHF
+         in the path meta header.  Proceed with step 4.
 
-          -  *Use case 3*
-             The path segment includes a *peering Hop Field* (P = "1"),
-             and the current Hop Field _is_ the peering Hop Field.  This
-             would be the case if the current Hop Field is the _last_
-             Hop Field of the segment, seen from the direction of travel
-             - to find out whether this is true, check the value of the
-             current SegLen and other metadata in the path meta header.
-             In this case, the ingress border router MUST take the
-             following step(s):
+      -  *Case 3*
+         The path segment includes a *peering Hop Field* (P = "1"), and
+         the current Hop Field _is_ the peering Hop Field.  This would
+         be the case if the current Hop Field is the _last_ Hop Field of
+         the segment, as determined by the value of the current SegLen
+         and other metadata in the path meta header.  In this case, the
+         ingress border router MUST take the following step(s):
 
-             o  Compute MAC^Peer_i.  For this, use the formula in
-                Section 4.1.2, but replace SegID XOR MAC_0[:2] ... XOR
-                MAC_i [:2] in the formula with the value of the
-                accumulator Acc as set in the Acc field in the current
-                Info Field (this is the value of the accumulator Acc as
-                it comes with the packet).
+         o  Compute MAC^Peer_i.  For this, use the formula in
+            Section 4.1.2, but replace SegID XOR MAC_0[:2] ... XOR MAC_i
+            [:2] in the formula with the value of Acc as set in the Acc
+            field in the current Info Field (this is the value of Acc as
+            it comes with the packet).
 
-             o  Check that the MAC_i in the current Hop Field matches
-                the just-calculated MAC^Peer_i.  If yes, it is fine.
-                Otherwise, drop the packet.
+         o  If the MAC_i in the current Hop Field does not match the
+            just calculated MAC^Peer_i, drop the packet.
 
-             o  Increment both CurrInf and CurrHF in the path meta
-                header.  Proceed with step 4.
+         o  Increment both CurrInf and CurrHF in the path meta header.
+            Proceed with step 4.
 
-   4.  Forward the packet to the egress border router (based on the
+   1.  Forward the packet to the egress border router (based on the
        egress interface ID in the current Hop Field) or to the
        destination endpoint, if this is the destination AS.
 
-   *Note:* For more information on the path meta header, see
-   Section 2.2.3.2.1.
+4.2.2.2.  Steps at Egress Border Router
 
-4.2.2.2.  Steps Egress Border Router
+   A SCION egress border router MUST perform the following steps when it
+   receives a SCION packet:
 
-   This section describes the steps that a SCION egress border router
-   MUST perform when it receives a SCION packet.
+   1.  Check the settings of the Construction Direction flag C and the
+       Peering flag P in the currently valid Info Field.  The following
+       cases are possible:
 
-   1.  Parse the SCION packet.
-
-   2.  The next steps depend on the direction of travel and whether this
-       segment includes a peering link.  Both features are indicated by
-       the settings of the Construction Direction flag C and the Peering
-       flag P in the currently valid Info Field.  Therefore, first check
-       the settings of both flags.  The following use cases are
-       possible:
-
-       *  *Use case 1*
+       *  *Case 1*
           The packet traverses the path segment in *construction
           direction* (C = "1").  The path segment either includes *no
-          peering Hop Field* (P = "0"), or the path segment does include
-          a *peering Hop Field* (P = "1"), but the current hop is *not*
-          the peering hop, that is, the current Hop Field is *not* the
-          _first_ Hop Field of the segment, seen from the direction of
-          travel.  To check whether this is true, look at the value of
-          the current SegLen and other metadata in the path meta header.
-          In this case, the egress border router MUST take the following
-          step(s):
+          peering Hop Field* (P = "0") or the path segment does include
+          a *peering Hop Field* (P = "1"), but the current hop is not
+          the peering hop, i.e. the current Hop Field is *not* the
+          _first_ Hop Field of the segment, as determined by the value
+          of the current SegLen and other metadata in the path meta
+          header.  In this case, the egress border router MUST take the
+          following step(s):
 
           -  Compute MAC^Verify_i over the Hop Field of the current
              AS_i.  For this, use the formula in Section 4.1.1.1, but
              replace SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2] in the
-             formula with the value of the accumulator Acc as set in the
-             Acc field in the current Info Field.
+             formula with the value of Acc as set in the Acc field in
+             the current Info Field.
 
-          -  Check that the just-calculated MAC^Verify_i matches MAC_i
-             in the Hop Field of the current AS_i.  If yes, it is fine.
-             Otherwise, drop the packet.
+          -  If the just calculated MAC^Verify_i does not match the
+             MAC_i in the Hop Field of the current AS_i, drop the
+             packet.
 
           -  Compute the value of Acc_(i+1).  For this, use the formula
              in Section 4.1.1.2.  Replace Acc_i in the formula with the
-             current value of the accumulator Acc as set in the Acc
-             field of the current Info Field.
+             current value of Acc as set in the Acc field of the current
+             Info Field.
 
           -  Replace the value of the Acc field in the current Info
-             Field with the just-calculated value of Acc_(i+1).
+             Field with the just calculated value of Acc_(i+1).
 
-          -  Proceed with step 3.
-
-       *  *Use case 2*
+       *  *Case 2*
           The packet traverses the path segment in *construction
-          direction* (C = "1").  The path segment includes a *peering
-          Hop Field* (P = "1"), and the current Hop Field _is_ the
-          peering Hop Field.  This would be the case if the current Hop
-          Field is the _first_ Hop Field of the segment, seen from the
-          direction of travel - to find out whether this is true, check
-          the value of the current SegLen and other metadata in the path
-          meta header.  In this case, the egress border router MUST take
-          the following steps:
+          direction* (C = "1") where the path segment includes a
+          *peering Hop Field* (P = "1") and the current Hop Field _is_
+          the peering Hop Field.  This would be the case if the current
+          Hop Field is the _first_ Hop Field of the segment, as
+          determined by the value of the current SegLen and other
+          metadata in the path meta header.  In this case, the egress
+          border router MUST take the following steps:
 
           -  Compute MAC^Peer_i.  For this, use the formula in
              Section 4.1.2, but replace SegID XOR MAC_0 [:2] ... XOR
              MAC_i [:2] with the value in the Acc field of the current
              Info Field.
 
-          -  Check that the MAC_i in the Hop Field of the current AS_i
-             matches the just-calculated MAC^Peer_i.  If yes, it is fine
-             - proceed with step 3.  Otherwise, drop the packet.
+          -  If the MAC_i in the Hop Field of the current AS_i does not
+             match the just calculated MAC^Peer_i, drop the packet.
 
-       *  *Use case 3*
+       *  *Case 3*
           The packet traverses the path segment *against construction
           direction* (C = "0" and P = "0" or "1").  In this case,
-          proceed with the next step, step 3.
+          proceed with Step 3.
 
-   3.  Increment CurrHF in the path meta header.
+   2.  Increment CurrHF in the path meta header.
 
-   4.  Forward the packet to the neighbor AS.
-
-   *Note:* For more information on the path meta header, see
-   Section 2.2.3.2.1.
+   3.  Forward the packet to the neighbor AS.
 
 4.2.2.3.  Effects of Clock Inaccuracy
 
    A PCB originated by a given control service is used to construct data
    plane paths.  Specifically, the timestamp in the Info Field and the
    expiry time of Hop Fields are used for Hop Field MAC computation, see
-   Section 4.1.1, which is used to validate paths at each on-path SCION
-   router.  A segment's originating control service and the routers that
-   the segment refers to all have different clocks.  Their differences
-   affect the validation process:
+   Section 4.1.1.1, which is used to validate paths at each on-path
+   SCION router.  A segment's originating control service and the
+   routers that the segment refers to all have different clocks.  Their
+   differences affect the validation process:
 
    *  A fast clock at origination or a slow clock at validation will
       yield a lengthened expiration time for hops, and possibly an
@@ -2460,9 +2327,9 @@ direction
    propagated at a configurable interval (typically, one minute).  As a
    result of this and the way they are iteratively constructed, PCBs
    with N hops may become available for path construction up to N
-   intervals (so typically N minutes) after origination.  This creates a
+   intervals (so typically N minutes) after origination which creates a
    constraint on the expiration of hops.  Hops of the minimal expiration
-   time (337.5 seconds - see Section 2.2.3.2.4) would render useless any
+   time (337.5 seconds - see Section 2.3.2.4) would render useless any
    path segment longer than 5 hops.  For this reason, it is unadvisable
    to create hops with a short expiration time.  The norm is 6 hours.
 
@@ -2471,7 +2338,7 @@ direction
 
    Each administrator of SCION control services and routers is
    responsible for maintaining sufficient clock accuracy.  No particular
-   method is assumed by this specification.
+   method is assumed for this.
 
 5.  SCMP
 
@@ -2510,7 +2377,7 @@ direction
        |                         (variable length)                     |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 21: SCMP message format
+                       Figure 20: SCMP message format
 
    _Type_ indicates the type of SCMP message.  Its value determines the
    format of the info and data block.
@@ -2600,7 +2467,7 @@ direction
    sum of the entire SCMP message, starting with the SCMP message type
    field, and prepended with a "pseudo-header" consisting of the SCION
    address header and the layer-4 protocol type as defined in
-   Section 2.4.1.
+   Section 2.5.
 
 5.5.  Processing Rules
 
@@ -2691,7 +2558,7 @@ direction
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 22: External-interface-down-format
+                 Figure 21: External-interface-down-format
 
     +==============+==================================================+
     | SCMP Fields  |                                                  |
@@ -2743,7 +2610,7 @@ direction
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 23: internal-connectivity-down-format
+                Figure 22: internal-connectivity-down-format
 
     +=============+==================================================+
     | SCMP Fields |                                                  |
@@ -2795,7 +2662,7 @@ direction
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 24: traceroute-request-format
+                    Figure 23: traceroute-request-format
 
              +=============+=================================+
              | SCMP Fields |                                 |
@@ -2847,7 +2714,7 @@ direction
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 25: traceroute-reply-format
+                     Figure 24: traceroute-reply-format
 
     +==============+==================================================+
     | SCMP Fields  |                                                  |
@@ -2906,7 +2773,7 @@ direction
    [RFC5880].
 
    More information is available on one-hop and empty paths in
-   Section 2.2.3.3 and Section 2.2.3.1.
+   Section 2.3.3 and Section 2.3.1.
 
    The protocol between peers is as descibed in [RFC5880].  To
    summarize: if a node does not receive a BFD message from its peer at
@@ -2944,7 +2811,7 @@ direction
    This section describes the possible security risks and attacks that
    SCION's data plane may be prone to, and how these attacks may be
    mitigated.  It first discusses security risks that pertain to path
-   authorization, followed by a section on other forwarding-related
+   authorization, followed by a section on other forwarding related
    security considerations.
 
 7.1.  Path Authorization
@@ -2954,24 +2821,23 @@ direction
    always traverse the network along path segments authorized in the
    control plane by all on-path ASes.  This section discusses how an
    adversary may attempt to violate the path-authorization property, as
-   well as SCION's prevention mechanisms to these attacks; either an
-   attacker can attempt to create unauthorized Hop Fields, or they can
-   attempt to create illegitimate paths assembled from authentic
-   individual Hop Fields.
+   well as SCION's prevention mechanisms; either an attacker can attempt
+   to create unauthorized Hop Fields, or they can attempt to create
+   illegitimate paths assembled from authentic individual Hop Fields.
 
-   The main protection mechanism here is the Hop Field MAC (see
-   Section 4.1), authenticating the Hop Field content, consisting of
-   ingress/egress interface identifiers, creation and expiration
-   timestamp and, virtually, the preceding Hop Field MACs in the path
-   segment.  Recall that each Hop Field MAC is computed using the
-   respective AS's secret forwarding key, which is shared across the
-   SCION routers and control plane services within each AS.
+   The main protection mechanism is the Hop Field MAC (see Section 4.1)
+   that authenticates the Hop Field content comprised of ingress/egress
+   interface identifiers, creation and expiration timestamp and the
+   preceding Hop Field MACs in the path segment.  Each Hop Field MAC is
+   computed using the secret forwarding key of the respective AS, which
+   is shared across the SCION routers and control plane services within
+   each AS.
 
 7.1.1.  Forwarding key compromise
 
-   For the current default MAC algorithm, AES-CMAC truncated to 48 bits,
-   key recovery attacks from (any number of) known plaintext/MAC
-   combinations is computationally infeasible, as far as publicly known.
+   For the current default MAC algorithm - AES-CMAC truncated to 48 bits
+   - key recovery attacks from (any number of) known plaintext/MAC
+   combinations is computationally infeasible as far as publicly known.
    In addition, the MAC algorithm can be freely chosen by each AS,
    enabling algorithmic agility for MAC computations.  Should a MAC
    algorithm be discovered to be weak or insecure, each AS can quickly
@@ -2981,28 +2847,28 @@ direction
    A more realistic risk to the secrecy of the forwarding key is
    exfiltration from a compromised router or control plane service.  An
    AS can optionally rotate its forwarding key at regular intervals to
-   limit the exposure after a temporary device compromise.  However, as
-   is perhaps self-evident, such a key rotation scheme cannot mitigate
-   the impact of an undiscovered, permanent compromise of a device.
+   limit the exposure after a temporary device compromise.  However,
+   such a key rotation scheme cannot mitigate the impact of an
+   undiscovered compromise of a device.
 
    When an AS's forwarding key is compromised, an attacker can forge Hop
-   Field MACs, undermining path authorization.  Recall that path
-   segments are checked for validity and policy compliance during the
-   path discovery phase, and during forwarding, routers only validate
-   the MAC and basic validity of the current the Hop Field.
-   Consequently, creating fraudulent Hop Fields with valid MACs allows
-   an attacker to bypass most path segment validity checks, and to
-   create path segments that violate the AS's local policy and/or
-   general path segment validity requirements.  In particular, an
-   attacker could create paths that include loops (limited by the
-   maximum number of Hop Fields of a path).
+   Field MACs and undermine path authorization.  As path segments are
+   checked for validity and policy compliance during the path discovery
+   phase and during forwarding, routers only validate the MAC and basic
+   validity of the current the Hop Field.  Consequently, creating
+   fraudulent Hop Fields with valid MACs allows an attacker to bypass
+   most path segment validity checks and to create path segments that
+   violate the AS's local policy and/or general path segment validity
+   requirements.  In particular, an attacker could create paths that
+   include loops (limited by the maximum number of Hop Fields of a
+   path).
 
    Unless an attacker has access to the forwarding keys of all ASes on
    the illegitimate path it wants to fabricate, it will need to splice
    fragments of two legitimate path segments with an illegitimate Hop
    Field.  For this, it needs to create a Hop Field with a MAC that fits
    into the MAC chain expected by the second path segment fragment.  The
-   only input that the attacker can vary relatively freely is the 8 bit
+   only input that the attacker can vary relatively freely is the 8-bit
    ExpTime, but the resulting MAC needs to match a specific 16 bit Acc
    value.  While there is a low probability of this working for a
    specific attempt (1/256), the attack will succeed eventually if the
@@ -3011,90 +2877,94 @@ direction
 
    While a forwarding key compromise and the resulting loss of path
    authorization is a serious degradation of SCION's routing security
-   properties, this does not affect, for example, access control or data
-   security for the hosts in the affected AS.  Unauthorized paths are
-   available to the attacker, but the routing of packets from legitimate
-   senders is not affected.
+   properties, this does not affect access control or data security for
+   the hosts in the affected AS.  Unauthorized paths are available to
+   the attacker, but the routing of packets from legitimate senders is
+   not affected.
 
 7.1.2.  Forging Hop Field MAC
 
-   As a second method to break path authorization is to directly forge a
-   Hop Field in an online attack, using the router as an oracle to
-   determine the validity of the Hop Field MAC.  The adversary needs to
-   send one packet per guess for verification.  For a 6-byte MAC, the
-   adversary would need an expected 2^47 (~140 trillion) tries to
-   successfully forge the MAC of a single Hop Field.  As the router only
-   checks MACs during the encoded validity period of the Hop Field,
-   which is limited by the packet header format to at most 24 hours,
-   these tries need to occur in a limited time period.  This results in
-   a seemingly infeasible number of ~1.6e9 guesses per second.  In the
-   unlikely case that an online brute-force attack succeeds, the
+   Another method to break path authorization is to directly forge a Hop
+   Field in an online attack, using the router as an oracle to determine
+   the validity of the Hop Field MAC.  The adversary needs to send one
+   packet per guess for verification and for 6-byte MAC, an adversary
+   would need an expected 2^47 (~140 trillion) tries to successfully
+   forge the MAC of a single Hop Field.
+
+   As the router only checks MACs during the encoded validity period of
+   the Hop Field, which is limited by the packet header format to at
+   most 24 hours, these tries need to occur in a limited time period.
+   This results in a seemingly infeasible number of ~1.6e9 guesses per
+   second.
+
+   In the unlikely case that an online brute-force attack succeeds, the
    obtained Hop Field can be used until its inevitable expiration after
    the just mentioned 24 hour limit.
 
 7.1.3.  Path Splicing
 
-   In a path-splicing attack, an adversary source endpoint takes valid
+   In a path splicing attack, an adversary source endpoint takes valid
    Hop Fields of multiple path segments and splices them together to
    obtain a new unauthorized path.
 
-   Two candidates path segments for splicing must have at least one AS
-   interface in common as a connection point.  The path segments must
-   have the same origination timestamp, as this is directly protected by
-   the Hop Field MAC.  This can occur by chance, or if the two candidate
-   path segments were originated as the same segment that then diverged
-   and converged back.  Finally, the Hop Field MAC protects the 16-bit
-   aggregation of path segment identifier and preceding MACs.  For
-   details, see Section 4.1.  This MAC chaining prevents splicing even
-   in the case that the AS interface and segment timestamp match.
+   Candidate path segments for splicing must have at least one AS
+   interface in common as a connection point, and the same origination
+   timestamp as this is directly protected by the Hop Field MAC.  This
+   can occur by chance or if the two candidate path segments were
+   originated as the same segment that diverged and converged back.
+
+   The Hop Field MAC protects the 16-bit aggregation of path segment
+   identifier and preceding MACs, see Section 4.1.  This MAC chaining
+   prevents splicing even in the case that the AS interface and segment
+   timestamp match.
 
    As the segment identifier and aggregation of preceding MACs is only
-   16-bits wide, per-chance collision among compatible path segments can
-   occur.  With typical network sizes and numbers of paths of today,
-   such collisions might occur rarely.  Successful path splicing would
-   allow an attacker to briefly use a path that violates an ASes path
-   policy, e.g. making a special transit link available to a customer AS
-   that is not billed accordingly, or violate general path segment
-   validity requirements.  In particular, a spliced path segment could
-   traverse one or multiple links twice.  However, creating a loop
-   traversing a link an arbitrary number of times would involve multiple
-   path splices and therefore multiple random collisions happening
-   simultaneously, which is exceedingly unlikely.  A wider security
-   margin against path splicing could be obtained by increasing the
-   width of the segment identifier / Acc field, e.g. by extending it
-   into the 8-bit reserved field next to it in the Info Field.
+   16-bits wide, a chance collision among compatible path segments can
+   occur rarely.  Successful path splicing would allow an attacker to
+   briefly use a path that violates an ASes path policy, e.g. making a
+   special transit link available to a customer AS that is not billed
+   accordingly, or violate general path segment validity requirements.
+   In particular, a spliced path segment could traverse one or multiple
+   links twice.  However, creating a loop traversing a link an arbitrary
+   number of times would involve multiple path splices and therefore
+   multiple random collisions happening simultaneously, which is
+   exceedingly unlikely.  A wider security margin against path splicing
+   could be obtained by increasing the width of the segment identifier /
+   Acc field, e.g. by extending it into the 8-bit reserved field next to
+   it in the Info Field.
 
 7.2.   On-Path Attacks
 
    When an adversary sits on the path between the source and destination
    endpoint, it is able to intercept the data packets that are being
-   forwarded.  This would allow the adversary to hijack traffic onto a
-   path that is different from the intended one selected by the source
+   forwarded and would allow the adversary to hijack traffic onto a path
+   that is different from the intended one selected by the source
    endpoint.  Possible on-path attacks in the data plane are
-   modifications of the SCION path header and SCION address header.  In
-   addition, an on-path adversary can always simply drop packets.  This
-   kind of attack is fundamental and generally cannot be prevented.
-   However, in this case, the endpoint can use SCION's path-awareness to
+   modifications of the SCION path header and SCION address header, or
+   by simply dropping packets.  This kind of attack generally cannot be
+   prevented, although anendpoint can use SCION's path awareness to
    immediately select an alternate path if available.
 
 7.2.1.  Modification of the Path Header
 
-   An on-path adversary could modify the SCION path header, and replace
+   An on-path adversary could modify the SCION path header and replace
    the remaining part of path segments to the destination with different
-   segments.  Such replaced segments must include authorized segments,
-   as otherwise the packet would be simply dropped on its way to the
-   destination.  The already traversed portion of the current segment
-   and past segments can also be modified by the adversary (for
-   instance, deleting and adding valid and invalid Hop Fields).  On
-   reply packets from the destination, the adversary can transparently
-   revert the changes to the path header again.  For instance, if an
-   adversary M is an intermediate AS on the path of a packet from A to
-   B, then M can replace the packet’s past path (leading up to, but not
-   including M).  The new path may not be a valid end-to-end path.
-   However, when B reverses the path and sends a reply packet, that
-   packet would go via M, which can then transparently change the
-   invalid path back to the valid path to A.  In addition, the endpoint
-   address header can also be modified.
+   segments.  Such replaced segments must include authorized segments as
+   otherwise the packet would be simply dropped on its way to the
+   destination.
+
+   The already traversed portion of the current segment and past
+   segments can also be modified by the adversary (e.g. by deleting and
+   adding valid and invalid Hop Fields).  On reply packets from the
+   destination, the adversary can transparently revert the changes to
+   the path header again.  For instance, if an adversary M is an
+   intermediate AS on the path of a packet from A to B, then M can
+   replace the packet’s past path (leading up to, but not including M)
+   where the new path may not be a valid end-to-end path.  However, when
+   B reverses the path and sends a reply packet, that packet would go
+   via M which can then transparently change the invalid path back to
+   the valid path to A.  In addition, the endpoint address header can
+   also be modified.
 
    Modifications of the SCION path and address header can be discovered
    by the destination endpoint by a data integrity protection system.
@@ -3118,44 +2988,43 @@ direction
 
 7.3.  Off-Path Attacks
 
-   SCION's path-awareness limits the abilities of an off-path adversary
-   to influence forwarding in the data plane.  Once a packet is "in
-   flight", it will follow its set route, no matter what an adversary
-   may do.  An adversary can attempt to disrupt the connectivity of said
-   path by flooding a link with excessive traffic (see Section 7.4
-   below).  After detecting congestion, the endpoint can switch to
-   another, non-congested path for subsequent packets.
+   SCION's path awareness limits the abilities of an off-path adversary
+   to influence forwarding in the data plane.  Once a packet is en-route
+   it will follow its determined path regardless of the actions of the
+   adversary.  An adversary can attempt to disrupt the connectivity of
+   the path by flooding a link with excessive traffic (see Section 7.4
+   below), but after detecting congestion, the endpoint can switch to
+   another non-congested path for subsequent packets.
 
 7.4.  Volumetric Denial of Service Attacks
 
    An adversary can attempt to disrupt the connectivity of a network
    path by flooding a link with excessive traffic.  In this case, the
-   endpoint can switch to another, non-congested path for subsequent
+   endpoint can switch to another non-congested path for subsequent
    packets.
 
    SCION provides protection against certain reflection-based DoS
    attacks.  Here, the adversary sends requests to a server with the
-   source address set to the address of the victim.  The server will
-   send a reply, typically larger than the request, to the victim.  As
-   long as the attacker and the victim are located in different ASes,
-   this can be prevented in SCION.  The reply packets are simply
-   returned along reversed path to the actual sender, regardless of the
-   source address information.  Thus, the reflected will be forwarded to
-   the attackers AS (where it will be discarded because the destination
-   AS does not match).
+   source address set to the address of the victim, and the server will
+   send a reply that is typically larger than the request to the victim.
+   This can be prevented in SCION as long as the attacker and the victim
+   are located in different ASes as the reply packets are simply
+   returned along reversed path to the actual sender regardless of the
+   source address information.  Thus, the reply packets will be
+   forwarded to the attacker's AS where they will be discarded because
+   the destination AS does not match.
 
-   On the flip side, the path choice of the endpoint may possibly be
-   exploited by an attacker to create intermittent congestion with
-   relatively low send rate; the attacker can abuse the latency
-   differences of the available paths, sending at precisely timed
-   intervals to cause short, synchronized bursts of packets near the
-   victim.
+   However, the path choice of the endpoint may possibly be exploited by
+   an attacker to create intermittent congestion with a relatively low
+   send rate.  The attacker can exploit the latency differences of the
+   available paths, sending at precisely timed intervals to cause short,
+   synchronized bursts of packets near the victim.
 
-   *Note* that SCION does not protect against two other types of DoS
-   attacks, namely transport protocol attacks and application layer
-   attacks.  Such attacks are out of SCION's scope.  However, the
-   additional information contained in the SCION header enables more
-   targeted filtering, e.g., by ISD, AS or path length.
+   *Note* SCION does not protect against two other types of DoS attacks,
+   namely transport protocol attacks and application layer attacks.
+   Such attacks are out of SCION's scope although additional information
+   contained in the SCION header enables more targeted filtering, e.g.
+   by ISD, AS or path length.
 
 8.  Interoperability: SCION IP Gateway
 
@@ -3197,15 +3066,19 @@ direction
 
 10.1.  Normative References
 
-   [I-D.scion-cp]
+   [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
-              Plane", 2024, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-controlplane/>.
+              Plane", Work in Progress, Internet-Draft, draft-dekater-
+              scion-controlplane-05, 21 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-controlplane-05>.
 
-   [I-D.scion-cppki]
+   [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
-              Plane PKI", 2024, <https://datatracker.ietf.org/doc/draft-
-              dekater-scion-pki/>.
+              Plane PKI", Work in Progress, Internet-Draft, draft-
+              dekater-scion-pki-06, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-pki-06>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
