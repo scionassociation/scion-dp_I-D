@@ -1321,9 +1321,7 @@ Each administrator of SCION control services and routers is responsible for main
 
 # SCMP {#scmp}
 
-## Introduction
-
-The SCION Control Message Protocol (SCMP) is analogous to the Internet Control Message Protocol (ICMP). It provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, an optimization for end hosts to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
+The SCION Control Message Protocol (SCMP) is analogous to the Internet Control Message Protocol (ICMP). It provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
 
 This document specifies only messages RECOMMENDED for the purposes of path diagnosis and recovery. An extended specification, still a work in progress, can be found in {{SCMP}}.
 
@@ -1346,17 +1344,17 @@ The messages have the following general format:
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-21 title="SCMP message format"}
+{: #figure-scmp-format title="SCMP message format"}
 
-*Type* indicates the type of SCMP message. Its value determines the format of the info and data block.
+- `Type`: indicates the type of SCMP message. Its value determines the format of the info and data block.
 
-*Code* provides additional granularity to the SCMP type.
+- `Code`: provides additional granularity to the SCMP type.
 
-*Checksum* is used to detect data corruption.
+- `Checksum`: is used to detect data corruption.
 
-*InfoBlock* is an optional field of variable length. The format is dependent on the message type.
+- `InfoBlock` is an optional field of variable length. The format is dependent on the message type.
 
-*DataBlock* is an optional field of variable length. The format is dependent on the message type.
+- `DataBlock` is an optional field of variable length. The format is dependent on the message type.
 
 ## Message Types
 
@@ -1396,8 +1394,7 @@ This specification defines the message formats for the following SCMP messages:
 {: title="type values"}
 
 Type values 100, 101, 200, and 201 are reserved for private experimentation.
-They are not intended for general use. Any wide-scale and/or uncontrolled usage
-should obtain a real allocation.
+They are not intended for general use.
 
 Type values 127 and 255 are reserved for future expansion of in case of a
 shortage of type values.
