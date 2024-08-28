@@ -81,8 +81,8 @@ Table of Contents
      1.1.  Terminology
      1.2.  Conventions and Definitions
      1.3.  Overview
-       1.3.1.   Inter- and Intra-Domain Forwarding
-       1.3.2.   Intra-Domain Forwarding Process
+       1.3.1.  Inter- and Intra-Domain Forwarding
+       1.3.2.  Intra-Domain Forwarding Process
        1.3.3.  Configuration
      1.4.  Path Construction (Segment Combinations)
      1.5.  Path Authorization
@@ -91,23 +91,23 @@ Table of Contents
      2.2.  Address Header
      2.3.  Path Header
        2.3.1.  Empty Path Type
-       2.3.2.   SCION Path Type
+       2.3.2.  SCION Path Type
        2.3.3.  One-Hop Path Type
        2.3.4.  Path Reversal
      2.4.  Extension Headers
        2.4.1.  Options Field
-     2.5.   Pseudo Header for Upper-Layer Checksum
+     2.5.  Pseudo Header for Upper-Layer Checksum
    3.  Life of a SCION Data Packet
-     3.1.   Description
-     3.2.   Creating an End-to-End SCION Forwarding Path
-     3.3.   Step-by-Step Explanation
+     3.1.  Description
+     3.2.  Creating an End-to-End SCION Forwarding Path
+     3.3.  Step-by-Step Explanation
    4.  Path Authorization
      4.1.  Authorizing Segments through Chained MACs
-       4.1.1.   Hop Field MAC Overview
-       4.1.2.   Peering Link MAC Computation
-     4.2.   Path Initialization and Packet Processing
-       4.2.1.   Initialization at Source Endpoint
-       4.2.2.   Processing at Routers
+       4.1.1.  Hop Field MAC Overview
+       4.1.2.  Peering Link MAC Computation
+     4.2.  Path Initialization and Packet Processing
+       4.2.1.  Initialization at Source Endpoint
+       4.2.2.  Processing at Routers
    5.  SCMP
      5.1.  Introduction
      5.2.  General Format
@@ -130,7 +130,7 @@ Table of Contents
        7.1.1.  Forwarding key compromise
        7.1.2.  Forging Hop Field MAC
        7.1.3.  Path Splicing
-     7.2.   On-Path Attacks
+     7.2.  On-Path Attacks
        7.2.1.  Modification of the Path Header
      7.3.  Off-Path Attacks
      7.4.  Volumetric Denial of Service Attacks
@@ -141,7 +141,7 @@ Table of Contents
      10.2.  Informative References
    Acknowledgments
    Assigned SCION Protocol Numbers
-      Considerations
+     Considerations
      Assignment
    Authors' Addresses
 
@@ -367,7 +367,7 @@ Table of Contents
       simply access the next hop from the packet header after having
       verified the authenticity of the Hop Field's MAC.
 
-1.3.1.   Inter- and Intra-Domain Forwarding
+1.3.1.  Inter- and Intra-Domain Forwarding
 
    As SCION is an inter-domain network architecture, it is not concerned
    with intra-domain forwarding.  This corresponds to the general
@@ -399,7 +399,7 @@ Table of Contents
    located in different ASes to communicate with each other via SCION
    ([RFC1918]).
 
-1.3.2.   Intra-Domain Forwarding Process
+1.3.2.  Intra-Domain Forwarding Process
 
    The full forwarding process for a packet transiting an intermediate
    AS consists of the following steps.
@@ -880,7 +880,7 @@ Table of Contents
    Empty path type lies in the context of link-failure detection
    (Section 6.1).
 
-2.3.2.   SCION Path Type
+2.3.2.  SCION Path Type
 
    The SCION path type (PathType=1) is the standard path type.  A SCION
    path has the following layout:
@@ -1079,7 +1079,7 @@ Table of Contents
    Info Field, the CurrHF needs to be compared to the SegLen fields of
    the current and preceding Info Fields.
 
-2.3.2.3.   Info Field
+2.3.2.3.  Info Field
 
    The 8-byte Info Field (InfoField) has the following format:
 
@@ -1368,7 +1368,7 @@ Table of Contents
    details, see below.  All SCION implementations MUST recognize these
    padding options.
 
-2.4.1.1.   Pad1 Option
+2.4.1.1.  Pad1 Option
 
    Alignment requirement: none.
 
@@ -1387,7 +1387,7 @@ Table of Contents
    field of an extension header.  If more than one byte of padding is
    required, the PadN option MUST be used.
 
-2.4.1.2.   PadN Option
+2.4.1.2.  PadN Option
 
    Alignment requirement: none.
 
@@ -1406,7 +1406,7 @@ Table of Contents
    the OptDataLen field contains the value N-2, and the OptData consists
    of N-2 zero-valued bytes.
 
-2.5.   Pseudo Header for Upper-Layer Checksum
+2.5.  Pseudo Header for Upper-Layer Checksum
 
    Any transport or other upper-layer protocol that includes addresses
    from the SCION header in the checksum computation MUST use the
@@ -1469,7 +1469,7 @@ Table of Contents
    difference for the forwarding process which works the same in an
    intra-ISD and inter-ISD context.
 
-3.1.   Description
+3.1.  Description
 
                        +--------------------+
                        |                    |
@@ -1511,7 +1511,7 @@ Table of Contents
    tables, show the most relevant information of the header, i.e. the
    SCION path and IP encapsulation for local communication.
 
-3.2.   Creating an End-to-End SCION Forwarding Path
+3.2.  Creating an End-to-End SCION Forwarding Path
 
    In this example, Endpoint A in AS2 wants to send a data packet to
    Endpoint B in AS3.  Both AS2 and AS3 are part of ISD 1.  To create an
@@ -1547,7 +1547,7 @@ Table of Contents
    the packet that it wants to send to Endpoint B, and starts
    transferring the packet.
 
-3.3.   Step-by-Step Explanation
+3.3.  Step-by-Step Explanation
 
    This section explains what happens with the SCION packet header at
    each router, based on the network topology in described Figure 17
@@ -1765,7 +1765,7 @@ Table of Contents
    only its own hop information but also an aggregation of all upstream
    hops.  This section describes how this works.
 
-4.1.1.   Hop Field MAC Overview
+4.1.1.  Hop Field MAC Overview
 
    The MAC in the Hop Fields of a SCION path has two purposes:
 
@@ -1813,7 +1813,7 @@ Table of Contents
    collision of the Acc value among compatible path segments in an AS.
    See Section 7.1.3 for more details.
 
-4.1.1.1.   Hop Field MAC - Calculation
+4.1.1.1.  Hop Field MAC - Calculation
 
    The Hop Field MAC is generally calculated at a current AS_i as
    follows:
@@ -1857,7 +1857,7 @@ Table of Contents
    of the MACs is non-degenerate and roughly uniformly distributed (see
    Section 4.1.1.4).
 
-4.1.1.2.   Accumulator Acc - Definition
+4.1.1.2.  Accumulator Acc - Definition
 
    The Accumulator Acc_i is an updatable counter introduced in the data
    plane to avoid the overhead caused by MAC-chaining for path
@@ -1891,7 +1891,7 @@ Table of Contents
    *  MAC_i [:2] = The Hop Field MAC for the current AS_i, truncated to
       2 bytes
 
-4.1.1.3.   Default Hop Field MAC Algorithm
+4.1.1.3.  Default Hop Field MAC Algorithm
 
    The algorithm used to compute the Hop Field MAC is an AS-specific
    choice.  The operator of an AS can freely choose any MAC algorithm
@@ -1955,7 +1955,7 @@ Table of Contents
    based on typical block ciphers or hash algorithms.  It ensures that
    the MAC chaining via the Acc field is not degenerate.
 
-4.1.2.   Peering Link MAC Computation
+4.1.2.  Peering Link MAC Computation
 
    The Hop Field MAC computation described in Section 4.1.1.1 does not
    apply to a peering Hop Field, i.e. to a Hop Field that allows
@@ -1988,7 +1988,7 @@ Table of Contents
    calculation of the MAC for the main Hop Field itself only the XOR-sum
    of the _previous_ MACs is used).
 
-4.2.   Path Initialization and Packet Processing
+4.2.  Path Initialization and Packet Processing
 
    As described in Section 2, the path header of the data plane packets
    only contains a sequence of Info Fields and Hop Fields without any
@@ -1999,7 +1999,7 @@ Table of Contents
    required steps for the source endpoint and SCION routers to
    respectively craft and forward a data packet.
 
-4.2.1.   Initialization at Source Endpoint
+4.2.1.  Initialization at Source Endpoint
 
    The source endpoint MUST perform the following steps to correctly
    initialize a path:
@@ -2077,7 +2077,7 @@ Table of Contents
        source endpoint builds the starting point of the forwarding, both
        pointers MUST be set to "0".
 
-4.2.2.   Processing at Routers
+4.2.2.  Processing at Routers
 
    During forwarding, each SCION router verifies the path contained in
    the packet header.  Each SCION router also MUST correctly verify or
@@ -2933,7 +2933,7 @@ direction
    Acc field, e.g. by extending it into the 8-bit reserved field next to
    it in the Info Field.
 
-7.2.   On-Path Attacks
+7.2.  On-Path Attacks
 
    When an adversary sits on the path between the source and destination
    endpoint, it is able to intercept the data packets that are being
@@ -3176,7 +3176,7 @@ Assigned SCION Protocol Numbers
 
    This appendix lists the assigned SCION protocol numbers.
 
- Considerations
+Considerations
 
    SCION attempts to take the IANA's assigned Internet protocol numbers
    into consideration.  Widely employed protocols have the same protocol
