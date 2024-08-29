@@ -190,8 +190,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Path Transparency**: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.
 
-**Peering Link**: A link between two SCION border routers of different ASes, where at least one of the two ASes is not a core AS. Two peering ASes may be in different ISDs. A peering link can be seen as a shortcut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
-
+**Peering Link**: A link between two SCION border routers of different ASes that can be used as a shortcut. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments. It is possible to construct a path out of only two partial segments which top-most hops are joined by a peering link. Two peering ASes may be in different ISDs and may exist between any ASes, including core ASes.
 
 ## Conventions and Definitions
 
@@ -255,7 +254,7 @@ Segments cannot be combined arbitrarily. To construct a valid forwarding path, t
 - If an up segment is present, it MUST be the first segment in the path.
 - If a down segment is present, it MUST be the last segment in the path.
 - If there are two path segments (one up and one down segment) that both announce the same peering link, then a shortcut via this peering link is possible.
-- If there are two path segments (one up and one down segment) that share a common ancestor AS (in the direction of beaconing), then a shortcut via this common ancestor AS is possible.
+- If there are two path segments (one up and one down segment) that share a common ancestor AS (in the direction of beaconing), then a shortcut via this common ancestor AS is possible. The Up-then-Down constraint still applies.
 - Additionally, all segments without any peering possibility MUST consist of at least two Hop Fields.
 
 **Note:** The type of segment is known to the endpoint but is not visible in the path header of data packets. Therefore, a SCION router needs to explicitly verify that these rules were followed correctly.
@@ -340,7 +339,6 @@ Valid path segment combinations:
 - **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
 - **AS shortcut** (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS and can even be in different ISDs (if the AS at the intersection is part of multiple ISDs).
 - **On-path** (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.
-
 
 ## Path Authorization
 
