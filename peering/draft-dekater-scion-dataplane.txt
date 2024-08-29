@@ -2201,21 +2201,19 @@ direction
 
       -  *Case 2*
          The path segment includes a *peering Hop Field* (P = "1"), but
-         the current hop is *not* the peering hop, i.e. the current Hop
-         Field is *not* the _last_ Hop Field of the segment, as
-         determined by the value of the current SegLen and other
-         metadata in the path meta header.  In this case, the ingress
-         border router needs to perform the steps previously described
-         for the path segment without peering Hop Field, but the border
-         router MUST NOT increment CurrInf and MUST NOT increment CurrHF
-         in the path meta header.  Proceed with step 4.
+         the current hop is *not* the peering hop (i.e. the current hop
+         is *neither* the last hop of the first segment *nor* the first
+         hop of the second segment).  In this case, the ingress border
+         router needs to perform the steps previously described for the
+         path segment without peering Hop Field, but the border router
+         MUST NOT increment CurrInf and MUST NOT increment CurrHF in the
+         path meta header.  Proceed with step 4.
 
       -  *Case 3*
          The path segment includes a *peering Hop Field* (P = "1"), and
-         the current Hop Field _is_ the peering Hop Field.  This would
-         be the case if the current Hop Field is the _last_ Hop Field of
-         the segment, as determined by the value of the current SegLen
-         and other metadata in the path meta header.  In this case, the
+         the current Hop Field _is_ the peering Hop Field. (i.e. the
+         current hop is *either* the last hop of the first segment *or*
+         the first hop of the second segment).  In this case, the
          ingress border router MUST take the following step(s):
 
          o  Compute MAC^Peer_i.  For this, use the formula in
@@ -2248,11 +2246,10 @@ direction
           direction* (C = "1").  The path segment either includes *no
           peering Hop Field* (P = "0") or the path segment does include
           a *peering Hop Field* (P = "1"), but the current hop is not
-          the peering hop, i.e. the current Hop Field is *not* the
-          _first_ Hop Field of the segment, as determined by the value
-          of the current SegLen and other metadata in the path meta
-          header.  In this case, the egress border router MUST take the
-          following step(s):
+          the peering hop (i.e. the current hop is *neither* the last
+          hop of the first segment *nor* the first hop of the second
+          segment).  In this case, the egress border router MUST take
+          the following step(s):
 
           -  Compute MAC^Verify_i over the Hop Field of the current
              AS_i.  For this, use the formula in Section 4.1.1.1, but
@@ -2276,11 +2273,10 @@ direction
           The packet traverses the path segment in *construction
           direction* (C = "1") where the path segment includes a
           *peering Hop Field* (P = "1") and the current Hop Field _is_
-          the peering Hop Field.  This would be the case if the current
-          Hop Field is the _first_ Hop Field of the segment, as
-          determined by the value of the current SegLen and other
-          metadata in the path meta header.  In this case, the egress
-          border router MUST take the following steps:
+          the peering Hop Field (i.e. the current hop is *either* the
+          last hop of the first segment *or* the first hop of the second
+          segment).  In this case, the egress border router MUST take
+          the following steps:
 
           -  Compute MAC^Peer_i.  For this, use the formula in
              Section 4.1.2, but replace SegID XOR MAC_0 [:2] ... XOR
