@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 1 March 2025                                            S. Hitz
+Expires: 3 March 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                          28 August 2024
+                                                          30 August 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 March 2025.
+   This Internet-Draft will expire on 3 March 2025.
 
 Copyright Notice
 
@@ -2392,8 +2392,6 @@ direction
    This specification defines the message formats for the following SCMP
    messages:
 
-   *SCMP error messages*:
-
          +======+===============================================+
          | Type | Meaning                                       |
          +======+===============================================+
@@ -2418,9 +2416,7 @@ direction
          | 127  | Reserved for expansion of SCMP error messages |
          +------+-----------------------------------------------+
 
-                          Table 11: type values
-
-   *SCMP informational messages*:
+                      Table 11: error messages types
 
      +======+=======================================================+
      | Type | Meaning                                               |
@@ -2441,13 +2437,12 @@ direction
      | 255  | Reserved for expansion of SCMP informational messages |
      +------+-------------------------------------------------------+
 
-                          Table 12: type values
+                  Table 12: informational messages types
 
    Type values 100, 101, 200, and 201 are reserved for private
-   experimentation.  They are not intended for general use.
+   experimentation.
 
-   Type values 127 and 255 are reserved for future expansion of in case
-   of a shortage of type values.
+   All other values are reserved for future use.
 
 5.3.  Checksum Calculation
 
