@@ -3428,19 +3428,19 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
 </div>
 <ul class="normal">
 <li class="normal" id="section-5.1-4.1">
-            <p id="section-5.1-4.1.1"><code>Type</code>: indicates the type of SCMP message. Its value determines the format of the info and data block.<a href="#section-5.1-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-4.1.1"><code>Type</code>: it indicates the type of SCMP message. Its value determines the format of the info and data block.<a href="#section-5.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-4.2">
-            <p id="section-5.1-4.2.1"><code>Code</code>: provides additional granularity to the SCMP type.<a href="#section-5.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-4.2.1"><code>Code</code>: it provides additional granularity to the SCMP type.<a href="#section-5.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-4.3">
-            <p id="section-5.1-4.3.1"><code>Checksum</code>: is used to detect data corruption.<a href="#section-5.1-4.3.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-4.3.1"><code>Checksum</code>: it is used to detect data corruption.<a href="#section-5.1-4.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-4.4">
-            <p id="section-5.1-4.4.1"><code>InfoBlock</code> is an optional field of variable length. The format is dependent on the message type.<a href="#section-5.1-4.4.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-4.4.1"><code>InfoBlock</code>: optional field of variable length. The format is dependent on the message type.<a href="#section-5.1-4.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-4.5">
-            <p id="section-5.1-4.5.1"><code>DataBlock</code> is an optional field of variable length. The format is dependent on the message type.<a href="#section-5.1-4.5.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-4.5.1"><code>DataBlock</code>: optional field of variable length. The format is dependent on the message type.<a href="#section-5.1-4.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -3999,7 +3999,7 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
         <h3 id="name-authentication">
 <a href="#section-5.7" class="section-number selfRef">5.7. </a><a href="#name-authentication" class="section-name selfRef">Authentication</a>
         </h3>
-<p id="section-5.7-1">Authentication of SCMP packets is not specified. In a context where endpoints may depend on SCMP messages (at least <span><a href="#external-interface-down" class="internal xref">External Interface Down</a> (<a href="#external-interface-down" class="auto internal xref">Section 5.5.2</a>)</span> and <span><a href="#internal-connectivity-down" class="internal xref">Internal Connectivity Down</a> (<a href="#internal-connectivity-down" class="auto internal xref">Section 5.5.3</a>)</span>) for reliable operations, this is recognized as a problem and is being addressed.<a href="#section-5.7-1" class="pilcrow">¶</a></p>
+<p id="section-5.7-1">Authentication of SCMP packets is not specified here. In current deployments is still experimental. Endpoints should therefore validate link down messages (<span><a href="#external-interface-down" class="internal xref">External Interface Down</a> (<a href="#external-interface-down" class="auto internal xref">Section 5.5.2</a>)</span> and <span><a href="#internal-connectivity-down" class="internal xref">Internal Connectivity Down</a> (<a href="#internal-connectivity-down" class="auto internal xref">Section 5.5.3</a>)</span>) with additional signals for reliable operations.<a href="#section-5.7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

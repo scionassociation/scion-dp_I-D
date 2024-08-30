@@ -2368,17 +2368,17 @@ direction
 
                        Figure 20: SCMP message format
 
-   *  Type: indicates the type of SCMP message.  Its value determines
+   *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the info and data block.
 
-   *  Code: provides additional granularity to the SCMP type.
+   *  Code: it provides additional granularity to the SCMP type.
 
-   *  Checksum: is used to detect data corruption.
+   *  Checksum: it is used to detect data corruption.
 
-   *  InfoBlock is an optional field of variable length.  The format is
+   *  InfoBlock: optional field of variable length.  The format is
       dependent on the message type.
 
-   *  DataBlock is an optional field of variable length.  The format is
+   *  DataBlock: optional field of variable length.  The format is
       dependent on the message type.
 
 5.2.  Message Types
@@ -2725,11 +2725,11 @@ direction
 
 5.7.  Authentication
 
-   Authentication of SCMP packets is not specified.  In a context where
-   endpoints may depend on SCMP messages (at least External Interface
-   Down (Section 5.5.2) and Internal Connectivity Down (Section 5.5.3))
-   for reliable operations, this is recognized as a problem and is being
-   addressed.
+   Authentication of SCMP packets is not specified here.  In current
+   deployments is still experimental.  Endpoints should therefore
+   validate link down messages (External Interface Down (Section 5.5.2)
+   and Internal Connectivity Down (Section 5.5.3)) with additional
+   signals for reliable operations.
 
 6.  Failure To Forward
 
