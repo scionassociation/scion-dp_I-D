@@ -1362,7 +1362,6 @@ SCMP messages are grouped into two classes: error messages and informational mes
 
 This specification defines the message formats for the following SCMP messages:
 
-**SCMP error messages**:
 
 |Type | Meaning                                                   |
 |-----+-----------------------------------------------------------|
@@ -1377,9 +1376,8 @@ This specification defines the message formats for the following SCMP messages:
 |101  | Private Experimentation                                   |
 |     |                                                           |
 |127  | Reserved for expansion of SCMP error messages             |
-{: title="type values"}
+{: title="error messages types"}
 
-**SCMP informational messages**:
 
 | Type | Meaning                                                  |
 |------+----------------------------------------------------------|
@@ -1391,13 +1389,11 @@ This specification defines the message formats for the following SCMP messages:
 | 201  | Private Experimentation                                  |
 |      |                                                          |
 | 255  | Reserved for expansion of SCMP informational messages    |
-{: title="type values"}
+{: title="informational messages types"}
 
 Type values 100, 101, 200, and 201 are reserved for private experimentation.
-They are not intended for general use.
 
-Type values 127 and 255 are reserved for future expansion of in case of a
-shortage of type values.
+All other values are reserved for future use.
 
 ## Checksum Calculation
 
