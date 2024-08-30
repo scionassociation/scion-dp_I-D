@@ -1346,15 +1346,15 @@ The messages have the following general format:
 ~~~~
 {: #figure-scmp-format title="SCMP message format"}
 
-- `Type`: indicates the type of SCMP message. Its value determines the format of the info and data block.
+- `Type`: it indicates the type of SCMP message. Its value determines the format of the info and data block.
 
-- `Code`: provides additional granularity to the SCMP type.
+- `Code`: it provides additional granularity to the SCMP type.
 
-- `Checksum`: is used to detect data corruption.
+- `Checksum`: it is used to detect data corruption.
 
-- `InfoBlock` is an optional field of variable length. The format is dependent on the message type.
+- `InfoBlock`: optional field of variable length. The format is dependent on the message type.
 
-- `DataBlock` is an optional field of variable length. The format is dependent on the message type.
+- `DataBlock`: optional field of variable length. The format is dependent on the message type.
 
 ## Message Types
 
@@ -1615,7 +1615,7 @@ The identifier is set to the identifier value from the [Traceroute Request messa
 
 ## Authentication
 
-Authentication of SCMP packets is not specified. In a context where endpoints may depend on SCMP messages (at least [External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) for reliable operations, this is recognized as a problem and is being addressed.
+Authentication of SCMP packets is not specified here. In current deployments is still experimental. Endpoints should therefore validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations.
 
 # Failure To Forward
 
