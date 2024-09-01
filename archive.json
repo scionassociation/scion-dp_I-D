@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-29T00:00:53.514722+00:00",
+  "timestamp": "2024-09-01T00:00:49.559728+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -915,7 +915,7 @@
       ],
       "body": "In section 1.4 we write: \r\n\r\n> The type of segment is known to the endpoint but is not visible\r\nis the path header of data packets. **Therefore, a SCION router needs\r\nto explicitly verify that these rules were followed correctly.**\r\n\r\nthis sentence actually comes from the book section \"5.5 Path Construction (Segment Combinations)\". \r\n\r\n\r\nWe then describe checks at routers in 4.2.2.   Processing at Routers and there is no mention that routers verify any of the rules in 1.4. \r\n\r\n@jiceatscion do you know if routers do any checks at all? If not, we should just remove the second sentence I guess.",
       "createdAt": "2024-08-25T11:42:57Z",
-      "updatedAt": "2024-08-26T09:05:49Z",
+      "updatedAt": "2024-08-30T14:24:35Z",
       "closedAt": null,
       "comments": [
         {
@@ -924,6 +924,13 @@
           "body": "If my reading of the code is correct, these checks are implemented. Albeit\r\nnot exactly mapping 1:1 with how the rules are written:\r\nThere is no explicit check that the first segment is up, the second core,\r\nand the third is down. Instead, there is a check on each segment change\r\nthat the ingress links are either:\r\nchild to core or core to child or child to child. Without a segment change,\r\nthe code also rejects valley-use of peering-links or hair-pin segments. I think that ends-up\r\nenforcing the rules since any rule-breaking path would end-up containing a\r\nsegment change that fails those checks. Code here:\r\nhttps://github.com/scionproto/scion/blob/4c929f6b440c568663b4194c125df15cad544bb4/router/dataplane.go#L1552\r\n\r\n\r\nOn Sun, Aug 25, 2024 at 1:43\u202fPM Nicola Rustignoli ***@***.***>\r\nwrote:\r\n\r\n> In section 1.4 we write:\r\n>\r\n> The type of segment is known to the endpoint but is not visible\r\n> is the path header of data packets.\r\n> *Therefore, a SCION router needs to explicitly verify that these rules\r\n> were followed correctly.*\r\n>\r\n> this sentence actually comes from the book section \"5.5 Path Construction\r\n> (Segment Combinations)\".\r\n>\r\n> We then describe checks at routers in 4.2.2. Processing at Routers and\r\n> there is no mention that routers verify any of the rules in 1.4.\r\n>\r\n> @jiceatscion <https://github.com/jiceatscion> do you know if routers do\r\n> any checks at all?\r\n>\r\n> \u2014\r\n> Reply to this email directly, view it on GitHub\r\n> <https://github.com/scionassociation/scion-dp_I-D/issues/52>, or\r\n> unsubscribe\r\n> <https://github.com/notifications/unsubscribe-auth/BBLEYOBP5XUSMQ3SRWJ2AEDZTG7NNAVCNFSM6AAAAABNCO5KKCVHI2DSMVQWIX3LMV43ASLTON2WKOZSGQ4DKMJZHE3DKMQ>\r\n> .\r\n> You are receiving this because you were mentioned.Message ID:\r\n> ***@***.***>\r\n>\r\n\r\n\r\n-- \r\n\r\nJEAN-CHRISTOPHE HUGLY\r\n\r\nSoftware Engineer\r\n\r\n\r\n +41 79 455 68 69\r\n***@***.*** ***@***.***>\r\n scion.org <http://www.scion.org/>\r\n SCION Association <https://www.linkedin.com/company/scion-association/>\r\n\r\n\r\n<https://www.scion.org/>\r\n",
           "createdAt": "2024-08-26T09:03:26Z",
           "updatedAt": "2024-08-26T09:05:49Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I proposed #61 based on your inputs, feel free to review and modify ",
+          "createdAt": "2024-08-30T14:24:34Z",
+          "updatedAt": "2024-08-30T14:24:34Z"
         }
       ]
     },
@@ -961,7 +968,7 @@
       ],
       "body": "IMHO use of the `FlowID` field is underspecified in the draft. This is all we say:\r\n> - `FlowID`: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources MUST set this field.\r\n \r\n Context: \r\nin https://github.com/scionproto/scion/issues/3714 @shitz says: \r\n> Note, the QoS and FlowID fields where moved to the first line of the common header. This is to be in line with the IPv6 header from which we borrow the specifications of these two fields.\r\n \r\n I have some questions: \r\n*  What value should the source use and why?\r\n* Is this the same as IPv6 Flow Labels? If yes, shall we just use the same naming  (Flow ID --> Flow Label)?\r\n*  Can we refer to the rules for IPv6 FLow Labels (e.g. [rfc2460](https://datatracker.ietf.org/doc/html/rfc2460) section 6 )?\r\n\r\n@oncilla do you have some background on this? ",
       "createdAt": "2024-08-25T12:23:01Z",
-      "updatedAt": "2024-08-26T08:52:02Z",
+      "updatedAt": "2024-08-30T14:48:06Z",
       "closedAt": null,
       "comments": [
         {
@@ -970,6 +977,13 @@
           "body": "> What value should the source use and why?\r\n\r\nA random value per flow of traffic that the source creates.\r\n\r\nThe exact mechanism to choose such a value is protocol dependent.\r\nE.g., QUIC has some guidance: https://datatracker.ietf.org/doc/html/rfc9000#section-9.7\r\n\r\nIn general, I think we should define something similar to https://datatracker.ietf.org/doc/html/rfc6437\r\nand the source should be compliant with it.\r\n\r\n> Is this the same as IPv6 Flow Labels? If yes, shall we just use the same naming (Flow ID --> Flow Label)?\r\n\r\nIt is yes, and we can rename if that makes things easier, IMO.\r\n\r\n> Can we refer to the rules for IPv6 FLow Labels (e.g. [rfc2460](https://datatracker.ietf.org/doc/html/rfc2460) section 6 )?\r\n\r\nI would rather refer to https://datatracker.ietf.org/doc/html/rfc6437\r\n",
           "createdAt": "2024-08-26T08:52:00Z",
           "updatedAt": "2024-08-26T08:52:00Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks a lot for the clarifications! So we can add a reference to [rfc6437](https://datatracker.ietf.org/doc/html/rfc6437), and in this case I'll also reuse the name \"Flow Label\", it will be clearer given the direct reference to the RFC.\r\n\r\n",
+          "createdAt": "2024-08-30T14:48:04Z",
+          "updatedAt": "2024-08-30T14:48:04Z"
         }
       ]
     },
@@ -4117,21 +4131,122 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Follow up to #49.  Contributes to #36 ",
+      "body": "Follow up to #49.  Contributes to #36 \r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-dataplane&url_2=https://scionassociation.github.io/scion-dp_I-D/scmp_review/draft-dekater-scion-dataplane.txt)",
       "createdAt": "2024-08-28T15:11:21Z",
-      "updatedAt": "2024-08-28T15:11:21Z",
+      "updatedAt": "2024-08-30T15:16:05Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "scmp_review",
-      "headRefOid": "e1b2434dc520fa2e924e6f15c91653cbc49033a7",
+      "headRefOid": "f830277855739ac89c1d48c33ae43353dbcb90b0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I had an overall look at SCMP, I have some questions: \r\n- Shall we also describe echo messages at this point?\r\n- Section \"## Processing Rules\" has wording that could be imprived\r\n  - Why 1232 bytes ? What if there is a lower MTU for whatever reason?\r\n- We need to add about SMP authentication in security considerations",
+          "createdAt": "2024-08-30T14:58:29Z",
+          "updatedAt": "2024-08-30T15:08:10Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786HGWFm",
+          "commit": {
+            "abbreviatedOid": "f830277"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "@jiceatscion what do you think about my comments?  I feel SCMP still needs some work..",
+          "createdAt": "2024-08-28T15:12:54Z",
+          "updatedAt": "2024-08-30T15:16:05Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "@jiceatscion why did you remove the InfoBlock and Datablock from the figure? They are now in the description and not in the figure, and it feels somehow inconsistent",
+              "createdAt": "2024-08-28T15:12:54Z",
+              "updatedAt": "2024-08-30T15:16:05Z"
+            },
+            {
+              "originalPosition": 69,
+              "body": "> The checksum is the 16-bit one's complement of the one's complement sum of the\r\nentire SCMP message, \r\n\r\nWhat does it mean? Can it be said in a less intricate way?",
+              "createdAt": "2024-08-30T14:59:15Z",
+              "updatedAt": "2024-08-30T15:16:05Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 60,
+      "id": "PR_kwDOKYa7785504Y-",
+      "title": "Clarify the validity of peering links",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/60",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In anticipation of the TC or Adrian confirming the irrelevance of the Core-Core peering prohibition, removed the associated language in the draft and explicitly state that Core-Core peering is possible. Also clarified that this still does not permit valley paths.\r\n\r\nAlso clarified the rules applied by a router to determine if a hop is peering hop.\r\n\r\nFixes to #56 \r\n\r\n- [ ] If merged, it must be replicated across drafts\r\n",
+      "createdAt": "2024-08-29T12:33:28Z",
+      "updatedAt": "2024-08-29T19:50:13Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "peering",
+      "headRefOid": "2596019b9f5533b78245b1621c6fd6d84d18b7f8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 61,
+      "id": "PR_kwDOKYa77855-9xW",
+      "title": "clarify router checks",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/61",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #52\r\n\r\n@jiceatscion this is based on your comment, what do you think? It is a quick & dirty change for now, it might need a bit of polishing",
+      "createdAt": "2024-08-30T14:24:01Z",
+      "updatedAt": "2024-08-30T14:28:26Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "router_checks",
+      "headRefOid": "fa1eddf84d7387ba35268cc85abea9d0cf5dfbe4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786HdBau",
+          "commit": {
+            "abbreviatedOid": "fa1eddf"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-08-30T14:28:26Z",
+          "updatedAt": "2024-08-30T14:28:26Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
