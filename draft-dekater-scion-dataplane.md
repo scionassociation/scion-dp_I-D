@@ -1250,9 +1250,10 @@ A SCION ingress border router MUST perform the following steps when it receives 
 2. If there is a segment switch at the current router, check that the ingress and egress interface links are either:
 
   - Both core
-  - Parent-Child or viceversa
-  - Peering
-Such link types are further defined in {{I-D.dekater-scion-controlplane}} section "Paths and Links". This check avoids valley-use of peering-links or hair-pin segments.
+  - Parent-child or vice-versa
+  - Peering-child or vice-versa
+
+Link types above are defined in {{I-D.dekater-scion-controlplane}} section "Paths and Links". This check prevents valley-use of peering-links or hair-pin segments.
 3. Check if the current Hop Field is expired or originated in the future, i.e. the current Info Field MUST NOT have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 
 The next steps depend on the direction of travel and whether this segment includes a peering Hop Field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current Info Field, so the settings of both flags MUST be checked. The following combinations are possible:
