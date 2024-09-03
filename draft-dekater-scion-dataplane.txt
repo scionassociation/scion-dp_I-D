@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 27 February 2025                                        S. Hitz
+Expires: 7 March 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                          26 August 2024
+                                                        3 September 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 February 2025.
+   This Internet-Draft will expire on 7 March 2025.
 
 Copyright Notice
 
@@ -498,10 +498,10 @@ Table of Contents
    *  Additionally, all segments without any peering possibility MUST
       consist of at least two Hop Fields.
 
-   *Note:* The type of segment is known to the endpoint but is not
-   visible in the path header of data packets.  Therefore, a SCION
-   router needs to explicitly verify that these rules were followed
-   correctly.
+   Note that the type of segment is known to the endpoint but it is not
+   explicitly visible in the path header of data packets.  Therefore, a
+   SCION router needs to explicitly verify that these rules were
+   followed correctly by performing checks described in Section 4.2.2.1.
 
    Besides enabling the enforcement of path policies, the above rules
    also protect the economic interest of ASes as they prevent building
@@ -2136,10 +2136,21 @@ direction
        equal to the ingress interface in the current Hop Field.  If not,
        the router MUST drop the packet.
 
-   2.  Check if the current Hop Field is expired or originated in the
-       future, i.e. the current Info Field MUST NOT have a timestamp in
-       the future, as defined in Section 2.3.2.3.  If either is true,
-       the router MUST drop the packet.
+   2.  If there is a segment switch at the current router, check that
+       the ingress and egress interface links are either:
+
+   *  Both core
+
+   *  Parent-child or vice-versa
+
+   *  Peering-child or vice-versa
+
+   Link types above are defined in [I-D.dekater-scion-controlplane]
+   section "Paths and Links".  This check prevents valley-use of
+   peering-links or hair-pin segments. 3.  Check if the current Hop
+   Field is expired or originated in the future, i.e. the current Info
+   Field MUST NOT have a timestamp in the future, as defined in
+   Section 2.3.2.3.  If either is true, the router MUST drop the packet.
 
    The next steps depend on the direction of travel and whether this
    segment includes a peering Hop Field.  Both features are indicated by
