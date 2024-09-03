@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 3 March 2025                                            S. Hitz
+Expires: 7 March 2025                                            S. Hitz
                                                          Anapaya Systems
-                                                          30 August 2024
+                                                        3 September 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 March 2025.
+   This Internet-Draft will expire on 7 March 2025.
 
 Copyright Notice
 
@@ -2369,17 +2369,14 @@ direction
                        Figure 20: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
-      the format of the info and data block.
+      the format of the type-dependent block.
 
    *  Code: it provides additional granularity to the SCMP type.
 
    *  Checksum: it is used to detect data corruption.
 
-   *  InfoBlock: optional field of variable length.  The format is
-      dependent on the message type.
-
-   *  DataBlock: optional field of variable length.  The format is
-      dependent on the message type.
+   *  Type-dependent Block: optional field of variable length which
+      format is dependent on the message type.
 
 5.2.  Message Types
 
