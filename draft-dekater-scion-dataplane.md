@@ -1346,15 +1346,13 @@ The messages have the following general format:
 ~~~~
 {: #figure-scmp-format title="SCMP message format"}
 
-- `Type`: it indicates the type of SCMP message. Its value determines the format of the info and data block.
+- `Type`: it indicates the type of SCMP message. Its value determines the format of the type-dependent block.
 
 - `Code`: it provides additional granularity to the SCMP type.
 
 - `Checksum`: it is used to detect data corruption.
 
-- `InfoBlock`: optional field of variable length. The format is dependent on the message type.
-
-- `DataBlock`: optional field of variable length. The format is dependent on the message type.
+- `Type-dependent Block`: optional field of variable length which format is dependent on the message type.
 
 ## Message Types
 
