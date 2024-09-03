@@ -4,8 +4,9 @@
 
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
-Intended status: Informational                         SCION Association
-Expires: 7 March 2025                                            S. Hitz
+Intended status: Informational                               J. C. Hugly
+Expires: 7 March 2025                                  SCION Association
+                                                                 S. Hitz
                                                          Anapaya Systems
                                                         3 September 2024
 
@@ -868,17 +869,8 @@ Table of Contents
 
    The Empty path type (PathType=0) is used to send traffic within an
    AS.  It has no additional fields, i.e. it consumes 0 bytes on the
-   wire.
-
-   One use case of the Empty path type lies in the context of link
-   failure detection.  To this end, SCION uses the Bidirectional
-   Forwarding Detection (BFD) protocol ([RFC5880] and [RFC5881]).  It
-   operates independently of media, data protocols, and routing
-   protocols.  SCION uses the Empty path type, together with OneHopPath
-   path type, to bootstrap BFD within SCION.  (For more information on
-   the OneHopPath path type, see Section 2.3.3.)  One use case of the
-   Empty path type lies in the context of link-failure detection
-   (Section 6.1).
+   wire.  One use case of the Empty path type lies in the context of
+   link-failure detection (Section 6.1).
 
 2.3.2.   SCION Path Type
 
@@ -3166,14 +3158,14 @@ direction
 Acknowledgments
 
    Many thanks go to Matthias Frei (SCION Association), Juan A.  Garcia
-   Prado (ETH Zurich), Kevin Meynell (SCION Association) and Jean-
-   Christophe Hugly (SCION Association) for reviewing this document.  We
-   are also very grateful to Adrian Perrig (ETH Zurich), for providing
-   guidance and feedback about each aspect of SCION.  Finally, we are
-   indebted to the SCION development teams of Anapaya and ETH Zurich,
-   for their practical knowledge and for the documentation about the
-   SCION Data Plane, as well as to the authors of [CHUAT22] - the book
-   is an important source of input and inspiration for this draft.
+   Prado (ETH Zurich) and Kevin Meynell (SCION Association) for
+   reviewing this document.  We are also very grateful to Adrian Perrig
+   (ETH Zurich), for providing guidance and feedback about each aspect
+   of SCION.  Finally, we are indebted to the SCION development teams of
+   Anapaya and ETH Zurich, for their practical knowledge and for the
+   documentation about the SCION Data Plane, as well as to the authors
+   of [CHUAT22] - the book is an important source of input and
+   inspiration for this draft.
 
 Assigned SCION Protocol Numbers
 
@@ -3233,6 +3225,11 @@ Authors' Addresses
    Nicola Rustignoli
    SCION Association
    Email: nic@scion.org
+
+
+   Jean-Christophe Hugly
+   SCION Association
+   Email: jch@scion.org
 
 
    Samuel Hitz
