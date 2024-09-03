@@ -28,6 +28,11 @@ author:
      org: SCION Association
      email: nic@scion.org
 
+ -   ins: J. C. Hugly
+     name: Jean-Christophe Hugly
+     org: SCION Association
+     email: jch@scion.org
+
  -   ins: S. Hitz
      name: Samuel Hitz
      org: Anapaya Systems
@@ -494,8 +499,6 @@ SCION supports three path types:
 ### Empty Path Type {#empty}
 
 The `Empty` path type (`PathType=0`) is used to send traffic within an AS. It has no additional fields, i.e. it consumes 0 bytes on the wire.
-
-One use case of the `Empty` path type lies in the context of link failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ({{RFC5880}} and {{RFC5881}}). It operates independently of media, data protocols, and routing protocols. SCION uses the `Empty` path type, together with `OneHopPath` path type, to bootstrap BFD within SCION. (For more information on the `OneHopPath` path type, see [](#onehop).)
 One use case of the `Empty` path type lies in the context of [link-failure detection](#scion-bfd).
 
 ### SCION Path Type {#scion-path-type}
@@ -1750,7 +1753,7 @@ The SCION AS and ISD number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Kevin Meynell (SCION Association) and Jean-Christophe Hugly (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Assigned SCION Protocol Numbers {#protnum}
