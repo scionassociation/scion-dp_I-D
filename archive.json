@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-03T00:00:39.356365+00:00",
+  "timestamp": "2024-09-05T00:00:51.008486+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -905,7 +905,7 @@
       "id": "I_kwDOKYa7786UISMk",
       "title": "Clarify wether routers perform checks on segment types (up/down/core)",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/52",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -915,8 +915,8 @@
       ],
       "body": "In section 1.4 we write: \r\n\r\n> The type of segment is known to the endpoint but is not visible\r\nis the path header of data packets. **Therefore, a SCION router needs\r\nto explicitly verify that these rules were followed correctly.**\r\n\r\nthis sentence actually comes from the book section \"5.5 Path Construction (Segment Combinations)\". \r\n\r\n\r\nWe then describe checks at routers in 4.2.2.   Processing at Routers and there is no mention that routers verify any of the rules in 1.4. \r\n\r\n@jiceatscion do you know if routers do any checks at all? If not, we should just remove the second sentence I guess.",
       "createdAt": "2024-08-25T11:42:57Z",
-      "updatedAt": "2024-08-30T14:24:35Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-03T10:03:36Z",
+      "closedAt": "2024-09-03T10:03:36Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -1028,9 +1028,9 @@
         "needs-discussion",
         "design"
       ],
-      "body": "We currently say that peering links are only possible if one of the two ASes is not core, but there is an open discussion. \r\n\r\n- [ ] Clarify wether peering links between core ASes are possible following https://github.com/scionproto/scion/issues/4484\r\n- [ ] We might need to say more explicitly how a router can determine whether the current hop is a peering hop. We now only mention this in \"Steps at Egress Border Router\" and I feel text is not too clear: ` This would be the case if the current Hop Field is the *first* Hop Field of the segment, `",
+      "body": "We currently say that peering links are only possible if one of the two ASes is not core, but there is an open discussion. \r\n\r\n- [x] Clarify wether peering links between core ASes are possible following https://github.com/scionproto/scion/issues/4484\r\n- [ ] We might need to say more explicitly how a router can determine whether the current hop is a peering hop. We now only mention this in \"Steps at Egress Border Router\" and I feel text is not too clear: ` This would be the case if the current Hop Field is the *first* Hop Field of the segment, `",
       "createdAt": "2024-08-25T16:29:19Z",
-      "updatedAt": "2024-08-25T16:29:19Z",
+      "updatedAt": "2024-09-03T08:36:59Z",
       "closedAt": null,
       "comments": []
     }
@@ -4100,26 +4100,42 @@
       "id": "PR_kwDOKYa77855i3xc",
       "title": "fix bfd description in empty path, add JC as author",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/58",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Clarification to #37 ",
       "createdAt": "2024-08-27T09:44:20Z",
-      "updatedAt": "2024-08-27T10:18:03Z",
+      "updatedAt": "2024-09-03T11:25:42Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "bfd-fix",
       "headRefOid": "5a9f27276f3310eaa3b7d5f388171040e4bb3e36",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-09-03T11:25:38Z",
+      "mergedAt": "2024-09-03T11:25:38Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "967778b54aae92e2465217740e59042f25934fca"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786HukgZ",
+          "commit": {
+            "abbreviatedOid": "5a9f272"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-09-03T11:14:01Z",
+          "updatedAt": "2024-09-03T11:14:01Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 59,
@@ -4133,13 +4149,13 @@
       "labels": [],
       "body": "Follow up to #49.  Contributes to #36 \r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-dataplane&url_2=https://scionassociation.github.io/scion-dp_I-D/scmp_review/draft-dekater-scion-dataplane.txt)",
       "createdAt": "2024-08-28T15:11:21Z",
-      "updatedAt": "2024-08-30T15:16:05Z",
+      "updatedAt": "2024-09-04T15:43:53Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "scmp_review",
-      "headRefOid": "f830277855739ac89c1d48c33ae43353dbcb90b0",
+      "headRefOid": "798a4e5c292e821f06e7e45ad6fa6bc49b9468d8",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4148,9 +4164,9 @@
         {
           "author": "nicorusti",
           "authorAssociation": "MEMBER",
-          "body": "I had an overall look at SCMP, I have some questions: \r\n- Shall we also describe echo messages at this point?\r\n- Section \"## Processing Rules\" has wording that could be imprived\r\n  - Why 1232 bytes ? What if there is a lower MTU for whatever reason?\r\n- We need to add about SMP authentication in security considerations",
+          "body": "I had an overall look at SCMP, I have some questions: \r\n- Shall we also describe echo messages at this point?\r\n- Section \"## Processing Rules\" has wording that could be imprived\r\n  - Why 1232 bytes ? What if there is a lower MTU for whatever reason? --> Check IPv6 minimum MTU, related to https://github.com/scionassociation/scion-dp_I-D/issues/39 \r\n- We need to add about SMP authentication in security considerations\r\n- We should say traceroute can be used for geofencing (check with @oncilla )",
           "createdAt": "2024-08-30T14:58:29Z",
-          "updatedAt": "2024-08-30T15:08:10Z"
+          "updatedAt": "2024-09-03T09:23:47Z"
         }
       ],
       "reviews": [
@@ -4179,6 +4195,146 @@
               "updatedAt": "2024-08-30T15:16:05Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786HwwBT",
+          "commit": {
+            "abbreviatedOid": "479d493"
+          },
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-09-03T14:54:52Z",
+          "updatedAt": "2024-09-03T14:54:52Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "This is taken word for word from https://www.rfc-editor.org/rfc/rfc4443.html#section-2.3",
+              "createdAt": "2024-09-03T14:54:52Z",
+              "updatedAt": "2024-09-03T14:54:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Hw8M0",
+          "commit": {
+            "abbreviatedOid": "e1b2434"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-09-03T15:14:18Z",
+          "updatedAt": "2024-09-03T15:14:18Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "I thought I'd removed it from the text as well. The two blocks description serve no purpose. I've deleted the reference.",
+              "createdAt": "2024-09-03T15:14:18Z",
+              "updatedAt": "2024-09-03T15:14:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Hw_IK",
+          "commit": {
+            "abbreviatedOid": "479d493"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-09-03T15:18:56Z",
+          "updatedAt": "2024-09-03T15:18:56Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "What I plagiarized was actually this: https://docs.scion.org/en/latest/protocols/scmp.html#checksum-calculation :-)\r\n",
+              "createdAt": "2024-09-03T15:18:56Z",
+              "updatedAt": "2024-09-03T15:18:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786H6Lgk",
+          "commit": {
+            "abbreviatedOid": "479d493"
+          },
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-09-04T13:15:37Z",
+          "updatedAt": "2024-09-04T13:15:38Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "Yes, and now guess where that was plagiarized from :) ",
+              "createdAt": "2024-09-04T13:15:37Z",
+              "updatedAt": "2024-09-04T13:15:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786H6SwP",
+          "commit": {
+            "abbreviatedOid": "479d493"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-09-04T13:24:01Z",
+          "updatedAt": "2024-09-04T13:24:01Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "Of course. What I meant is that we have quite a precedent for that phrasing. 200 years from now it might be on T-shirts. Nico, can we keep it?",
+              "createdAt": "2024-09-04T13:24:01Z",
+              "updatedAt": "2024-09-04T13:24:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786H6ZtN",
+          "commit": {
+            "abbreviatedOid": "479d493"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-09-04T13:31:54Z",
+          "updatedAt": "2024-09-04T13:31:54Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "How about SCION day swag? \r\n![image](https://github.com/user-attachments/assets/acf17993-96b8-41ad-aadb-a2f8ecffaf2c)\r\n",
+              "createdAt": "2024-09-04T13:31:54Z",
+              "updatedAt": "2024-09-04T13:33:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786H72YC",
+          "commit": {
+            "abbreviatedOid": "479d493"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-09-04T15:43:52Z",
+          "updatedAt": "2024-09-04T15:43:53Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "Hahaha.. well, if this wording is also used in in [rfc4443.html#section-2.3](https://www.rfc-editor.org/rfc/rfc4443.html#section-2.3), let's leave it!",
+              "createdAt": "2024-09-04T15:43:52Z",
+              "updatedAt": "2024-09-04T15:43:53Z"
+            }
+          ]
         }
       ]
     },
@@ -4192,9 +4348,9 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "In anticipation of the TC or Adrian confirming the irrelevance of the Core-Core peering prohibition, removed the associated language in the draft and explicitly state that Core-Core peering is possible. Also clarified that this still does not permit valley paths.\r\n\r\nAlso clarified the rules applied by a router to determine if a hop is peering hop.\r\n\r\nFixes to #56 \r\n\r\n- [ ] If merged, it must be replicated across drafts\r\n",
+      "body": "In anticipation of the TC or Adrian confirming the irrelevance of the Core-Core peering prohibition, removed the associated language in the draft and explicitly state that Core-Core peering is possible. Also clarified that this still does not permit valley paths.\r\n\r\nAlso clarified the rules applied by a router to determine if a hop is peering hop.\r\n\r\nFixes to #56 \r\n\r\n- [ ] ~If merged, it must be replicated across drafts~\r\n",
       "createdAt": "2024-08-29T12:33:28Z",
-      "updatedAt": "2024-08-29T19:50:13Z",
+      "updatedAt": "2024-09-03T08:39:47Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
@@ -4205,7 +4361,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Apparently, the CP draft does not need any change: \r\n```\r\n   *  _Peering_ links exist between ASes with a (settlement-free or\r\n      paid) peering relationship.  They can be established between any\r\n      two ASes (core or non-core).  Peering links can cross ISD\r\n      boundaries.\r\n  ```",
+          "createdAt": "2024-09-03T08:39:46Z",
+          "updatedAt": "2024-09-03T08:39:46Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -4213,24 +4377,26 @@
       "id": "PR_kwDOKYa77855-9xW",
       "title": "clarify router checks",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/61",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #52\r\n\r\n@jiceatscion this is based on your comment, what do you think? It is a quick & dirty change for now, it might need a bit of polishing",
       "createdAt": "2024-08-30T14:24:01Z",
-      "updatedAt": "2024-08-30T14:28:26Z",
+      "updatedAt": "2024-09-03T10:03:39Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "router_checks",
-      "headRefOid": "fa1eddf84d7387ba35268cc85abea9d0cf5dfbe4",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "84fd2f7ea627fc78190b8b48ceedcd8885f2bab9",
+      "closedAt": "2024-09-03T10:03:35Z",
+      "mergedAt": "2024-09-03T10:03:35Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "1d66aa0f733d1cc0a349cad736dfa9d12591afac"
+      },
       "comments": [],
       "reviews": [
         {
