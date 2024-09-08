@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-05T00:00:51.008486+00:00",
+  "timestamp": "2024-09-08T00:00:37.176074+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -642,9 +642,17 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nRelated issues: \r\n* CP draft: https://github.com/scionassociation/scion-cp_I-D/issues/57 \r\n* Implementations: https://github.com/scionproto/scion/issues/2608 \r\n\r\nAlso: \r\n- [ ] Add discussion about fragmentation\r\n- [ ] Adapt this text  in the Common Header  paragraph` The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. `",
       "createdAt": "2024-07-23T14:58:19Z",
-      "updatedAt": "2024-08-27T09:55:32Z",
+      "updatedAt": "2024-09-05T10:00:42Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Here's what I think we could say:\r\n\r\nFragmentation:\r\n* At the UDP/SCION layer: no fragmentation ever. Like IPV6.\r\n* In the underlay network. SCION is agnostic to datagram fragmentation by the underlay UDP layer. The option to fragment datagrams on a particular inter-AS link. Is the joint decision (not recommended) of the administrators of the two ASes involved. The decision to fragment datagrams at intra-AS interfaces is the decision of that AS' administrator.\r\n\r\nMTU:\r\n* SCION assumes that the underlay network supports a minimum MTU of 1280, regardless of whether it is IPV6 or IPV4.\r\n* The MTU of an entire path is defined as the MIN of the MTUs of the links traversed by that path. The control plane makes that number available as part of each segment's metadata.\r\n* SCION assumes that the MTU of a path segment remains correct for the life time of that segment.\r\n* The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the underlying link-layer in either direction.\r\n* Intra-AS network MTUs are a result of the network configuration of each AS and therefore predictable.\r\n* Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.\r\n* Although that isn't a normal use case, SCION allows inter-AS links to be routed through multiple IP routers, not necessarily under the control of either AS' administrator. In that case, the link's MTU MUST be configured statically to a conservative value. 1280 is a safe value. The same approach applies to all cases where MTUs cannot be assumed to be stable.\r\n",
+          "createdAt": "2024-09-05T10:00:41Z",
+          "updatedAt": "2024-09-05T10:00:41Z"
+        }
+      ]
     },
     {
       "number": 40,
@@ -1002,7 +1010,7 @@
       ],
       "body": "In 3. Life of a SCION Data Packet we have a L2 link between R1, R2. Is this something that comes from the book or is this actually possible today? Can any of the implementations actually support this?\r\n\r\n\r\nI feel there are some missing pieces: \r\n* We'd need an [Assigned Protocol Number](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml) that can be used by L2\r\n* Is there any need for a L2 discovery mechanism?\r\n\r\n@jiceatscion \r\n",
       "createdAt": "2024-08-25T14:15:37Z",
-      "updatedAt": "2024-08-26T12:01:54Z",
+      "updatedAt": "2024-09-06T10:16:43Z",
       "closedAt": null,
       "comments": [
         {
@@ -1011,6 +1019,27 @@
           "body": "@jiceatscion confirmed he has not heard of instances of this. I think we can remove L2 from the text.",
           "createdAt": "2024-08-26T12:01:53Z",
           "updatedAt": "2024-08-26T12:01:53Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "For good measure I forwarded that question to the community; just in case someone has been toying with that.\r\n",
+          "createdAt": "2024-09-05T11:33:30Z",
+          "updatedAt": "2024-09-05T11:33:30Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> * Is there any need for a L2 discovery mechanism?\r\n\r\nI suppose it is not needed. The inter-as links are manually configured anyway. So, we would use layer2 addresses directly in the config. I guess some discovery protocol would allow to use only the ISD/AS in the link configs, thus avoiding the reliance on a somewhat inconstant MAC address. Broadcasting *any* empty path packet (BFD packet, say) would probably do the trick. All-in-all it looks like an easy thing to try.",
+          "createdAt": "2024-09-05T11:43:08Z",
+          "updatedAt": "2024-09-05T11:43:08Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "So, I just heard from Jelte Van Bommel at netsec. They have done that, using MPLS as their L2. He said, ethernet would work all the same. So.... may be we need to say something about that in the drafts.\r\n\r\nExplanations from Jelte:\r\n\r\n> It's based on the opensource implementation yes. The code for handling the raw sockets is a bit of work, it's all syscalls, but the interface I have for it is close to the interface for the regular IP/UDP BatchConn, so quite easy to drop in. Currently ~ +1.6k loc. We kept the existing ip/udp underlay as well, so there's definitely some duplicated code (you could build it on top of the raw underlay, but you lose some hw optimization). The only \"issues\" are that when sending out a packet you would now need to know the dst l2 addr, rather than IP and you don't have arp, so this information has to go to in some sort of config (we just keep a yaml file). I don't know about the performance yet\r\n\r\n\r\nRegarding protocol numbers, that's not IANA. For Ethernet it'd be \"IEEE Registration Authority\". No shortage of unused Ethertypes. Since this is for use in a point-to-point manner, a local convention is all it takes anyway.\r\n\r\nMy conclusion:\r\nI don't see anything in-there that contradicts the spec. I think we should leave the suggestion in the draft. It's a good thing to highlight IP-free inter-as links. It makes the benefits and usage-pattern of SCION a lot clearer.\r\n",
+          "createdAt": "2024-09-05T11:56:53Z",
+          "updatedAt": "2024-09-06T10:16:43Z"
         }
       ]
     },
@@ -3678,7 +3707,7 @@
       "labels": [],
       "body": "Basic description pulled from different sources. Do we need to describe the encapsulation/framing protocol in detail here?\r\nIs this section in the right place in the I-D?\r\n\r\nResolves #40 ",
       "createdAt": "2024-08-06T08:17:22Z",
-      "updatedAt": "2024-08-26T15:52:15Z",
+      "updatedAt": "2024-09-07T08:11:07Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "351994e4d26a027f80cc861ee4a5c0f60ba49213",
@@ -3691,7 +3720,15 @@
       "mergeCommit": {
         "oid": "1f615a44fb8a3221a3068e2e59a7c0f673bb5484"
       },
-      "comments": [],
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "> From: Harald Alvestrand <harald@alvestrand.no>\nDate: 7 September 2024 at 02:16:59 CEST\nTo: Nicola Rustignoli <nic@scion.org>, Eliot Lear <lear@lear.ch>\nCc: draft-dekater-scion-controlplane@ietf.org, Kevin Meynell <kme@scion.org>, Dominik Roos <roos@anapaya.net>\nSubject: Re: [RFC-Ed-Board] SCION - some initial thoughts\n\n\ufeff\n> I still don't think you have enough info on the IP gateway.\n\n> In particular - does the IP gateway pair (entry + exit) act like a NAT box, matching the source address in the source domain to the gateway address in the destination domain, or is it an one-way tunnel of unchanged bits?\n\n> In both cases - where are the IP addresses (or equivalent) carried through the tunnel? As part of the SCION address (as the presence of those forms of address in the endpoint scheme seems to indicate), or as part of the packet?\n\n> And if the addresses are mapped, who takes care of the payload modifications that any NAT needs to do?\n\nHarald\n",
+          "createdAt": "2024-09-07T08:10:36Z",
+          "updatedAt": "2024-09-07T08:11:07Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOKYa7786EacvL",
@@ -4149,7 +4186,7 @@
       "labels": [],
       "body": "Follow up to #49.  Contributes to #36 \r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-dataplane&url_2=https://scionassociation.github.io/scion-dp_I-D/scmp_review/draft-dekater-scion-dataplane.txt)",
       "createdAt": "2024-08-28T15:11:21Z",
-      "updatedAt": "2024-09-04T15:43:53Z",
+      "updatedAt": "2024-09-05T08:49:35Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
@@ -4167,6 +4204,20 @@
           "body": "I had an overall look at SCMP, I have some questions: \r\n- Shall we also describe echo messages at this point?\r\n- Section \"## Processing Rules\" has wording that could be imprived\r\n  - Why 1232 bytes ? What if there is a lower MTU for whatever reason? --> Check IPv6 minimum MTU, related to https://github.com/scionassociation/scion-dp_I-D/issues/39 \r\n- We need to add about SMP authentication in security considerations\r\n- We should say traceroute can be used for geofencing (check with @oncilla )",
           "createdAt": "2024-08-30T14:58:29Z",
           "updatedAt": "2024-09-03T09:23:47Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": ">     * Shall we also describe echo messages at this point?\r\nI see no reason to.\r\n\r\n>     * Section \"## Processing Rules\" has wording that could be imprived\r\nAnything specific?\r\n\r\nWorking on the rest.\r\n",
+          "createdAt": "2024-09-05T08:26:35Z",
+          "updatedAt": "2024-09-05T08:26:35Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": ">       * Why 1232 bytes ? What if there is a lower MTU for whatever reason? --> Check IPv6 minimum MTU \r\n\r\nHere's sortta why:\r\nIPV6 requires a minimum 1280 bytes MTU. The IPV6 HDR is 40 bytes (if no extensions). Since we send SCMP packets over UDP, that's another 8. 1280-40-8 = 1232. Now, that only makes sense over V6 links. I presume that for V4 links the author assumed we would rely on either UDP fragmentation or non-stupid MTU. It is widely accepted that no IPV4 router in use today has links with MTU below 1280. So, it makes sense to use 1280 from V6 as the only floor that maters.\r\n\r\nIn practice, this PR is yours, do you want me to create another PR to add this explanation?",
+          "createdAt": "2024-09-05T08:47:24Z",
+          "updatedAt": "2024-09-05T08:49:35Z"
         }
       ],
       "reviews": [
