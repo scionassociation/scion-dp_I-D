@@ -1379,8 +1379,8 @@ This specification defines the message formats for the following SCMP messages:
 
 | Type | Meaning                                                  |
 |------+----------------------------------------------------------|
-| 128  | Reserved for future use                                  |
-| 129  | Reserved for future use                                  |
+| 128  | [Echo Request](#echo-request)                            |
+| 129  | [Echo Reply](#echo-reply)                                |
 | 130  | [Traceroute Request](#traceroute-request)                |
 | 131  | [Traceroute Reply](#traceroute-reply)                    |
 | 200  | Private Experimentation                                  |
@@ -1412,6 +1412,8 @@ Implementations MUST respect the following rules when processing SCMP messages:
      - An SCMP error message.
      - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
 
+The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that, nowadays, this MTU can also be safely expected when using IPv4.
+
 ## Error Messages {#scmp-notification}
 
 ### Packet Too Big {#packet-too-big}
@@ -1431,9 +1433,9 @@ Implementations MUST respect the following rules when processing SCMP messages:
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{:figure-24 title="packet-too-big}
+{:figure-21 title="Packet-too-big format"}
 
-| SCMP Fields  |                                                     |
+| Name         | Value                                               |
 |--------------+-----------------------------------------------------|
 | Type         | 2                                                   |
 | Code         | 0                                                   |
@@ -1469,9 +1471,9 @@ underlay.
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-22 title="External-interface-down-format"}
+{: #figure-22 title="External-interface-down format"}
 
-| SCMP Fields  |                                                               |
+| Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
 | Type         | 5                                                             |
 | Code         | 0                                                             |
@@ -1514,9 +1516,9 @@ Recipients can use this information to route around broken data-plane links.
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-23 title="internal-connectivity-down-format"}
+{: #figure-23 title="Internal-connectivity-down format"}
 
-| SCMP Fields  |                                                               |
+| Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
 | Type         | 6                                                             |
 | Code         | 0                                                             |
@@ -1539,6 +1541,64 @@ AS.
 
 ## Informational Messages {#scmp-information}
 
+### Echo Request {#echo-request}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | Data...
+    +-+-+-+-+-
+
+~~~~
+{: #figure-26 title="Echo-request format"}
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 128                                                           |
+| Code         | 0                                                             |
+| Identifier   | A 16-bit identifier to aid matching replies with requests     |
+| Sequence Nr. | A 16-bit sequence number to aid matching replies with requests|
+| Data         | Variable length of arbitrary data                             |
+{: title="field values"}
+
+Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
+
+### Echo Reply {#echo-reply}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | Data...
+    +-+-+-+-+-
+
+~~~~
+{: #figure-27 title="Echo-reply format"}
+
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 129                                                           |
+| Code         | 0                                                             |
+| Identifier   | The identifier of the Echo Request                            |
+| Sequence Nr. | The sequence number of the Echo Request                       |
+| Data         | The data of the Echo Request                                  |
+
+Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
+
+The data received in the SCMP Echo Request message MUST be returned entirely and unmodified in the SCMP Echo Reply message.
+
 ### Traceroute Request {#traceroute-request}
 
 ~~~~
@@ -1560,9 +1620,9 @@ AS.
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-24 title="traceroute-request-format"}
+{: #figure-24 title="Traceroute-request format"}
 
-| SCMP Fields  |                                                               |
+| Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
 | Type         | 130                                                           |
 | Code         | 0                                                             |
@@ -1596,9 +1656,9 @@ A border router is alerted of a Traceroute Request message through the ConsIngre
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-25 title="traceroute-reply-format"}
+{: #figure-25 title="Traceroute-reply format"}
 
-| SCMP Fields                                                                  |
+| Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
 | Type         | 131                                                           |
 | Code         | 0                                                             |
