@@ -5,9 +5,9 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                         SCION Association
-Expires: 7 March 2025                                            S. Hitz
+Expires: 14 March 2025                                           S. Hitz
                                                          Anapaya Systems
-                                                        3 September 2024
+                                                       10 September 2024
 
 
                             SCION Data Plane
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 March 2025.
+   This Internet-Draft will expire on 14 March 2025.
 
 Copyright Notice
 
@@ -118,8 +118,10 @@ Table of Contents
        5.5.2.  External Interface Down
        5.5.3.  Internal Connectivity Down
      5.6.  Informational Messages
-       5.6.1.  Traceroute Request
-       5.6.2.  Traceroute Reply
+       5.6.1.  Echo Request
+       5.6.2.  Echo Reply
+       5.6.3.  Traceroute Request
+       5.6.4.  Traceroute Reply
      5.7.  Authentication
    6.  Failure To Forward
      6.1.  Link Failure Detection - BFD
@@ -2418,13 +2420,13 @@ direction
      +======+=======================================================+
      | Type | Meaning                                               |
      +======+=======================================================+
-     | 128  | Reserved for future use                               |
+     | 128  | Echo Request (Section 5.6.1)                          |
      +------+-------------------------------------------------------+
-     | 129  | Reserved for future use                               |
+     | 129  | Echo Reply (Section 5.6.2)                            |
      +------+-------------------------------------------------------+
-     | 130  | Traceroute Request (Section 5.6.1)                    |
+     | 130  | Traceroute Request (Section 5.6.3)                    |
      +------+-------------------------------------------------------+
-     | 131  | Traceroute Reply (Section 5.6.2)                      |
+     | 131  | Traceroute Reply (Section 5.6.4)                      |
      +------+-------------------------------------------------------+
      | 200  | Private Experimentation                               |
      +------+-------------------------------------------------------+
@@ -2483,6 +2485,12 @@ direction
       -  A packet which source address does not uniquely identify a
          single node.  E.g., an IPv4 or IPv6 multicast address.
 
+   The maximum size 1232 bytes is chosen so that the entire datagram, if
+   encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header
+   excluded). 1280 bytes is the minimum MTU required by IPv6 and it is
+   assumed that, nowadays, this MTU can also be safely expected when
+   using IPv4.
+
 5.5.  Error Messages
 
 5.5.1.  Packet Too Big
@@ -2499,18 +2507,19 @@ direction
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-   +=============+=====================================================+
-   | SCMP Fields |                                                     |
-   +=============+=====================================================+
-   | Type        | 2                                                   |
-   +-------------+-----------------------------------------------------+
-   | Code        | 0                                                   |
-   +-------------+-----------------------------------------------------+
-   | MTU         | The Maximum Transmission                            |
-   |             | Unit of the next-hop link.                          |
-   +-------------+-----------------------------------------------------+
+                      Figure 21: Packet-too-big format
 
-                           Table 13: field values
+      +======+=====================================================+
+      | Name | Value                                               |
+      +======+=====================================================+
+      | Type | 2                                                   |
+      +------+-----------------------------------------------------+
+      | Code | 0                                                   |
+      +------+-----------------------------------------------------+
+      | MTU  | The Maximum Transmission Unit of the next-hop link. |
+      +------+-----------------------------------------------------+
+
+                          Table 13: field values
 
    A *Packet Too Big* message SHOULD be originated by a router in
    response to a packet that cannot be forwarded because the packet is
@@ -2538,10 +2547,10 @@ direction
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 21: External-interface-down-format
+                 Figure 22: External-interface-down format
 
     +==============+==================================================+
-    | SCMP Fields  |                                                  |
+    | Name         | Value                                            |
     +==============+==================================================+
     | Type         | 5                                                |
     +--------------+--------------------------------------------------+
@@ -2590,25 +2599,25 @@ direction
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 22: internal-connectivity-down-format
+                Figure 23: Internal-connectivity-down format
 
-    +=============+==================================================+
-    | SCMP Fields |                                                  |
-    +=============+==================================================+
-    | Type        | 6                                                |
-    +-------------+--------------------------------------------------+
-    | Code        | 0                                                |
-    +-------------+--------------------------------------------------+
-    | ISD         | The 16-bit ISD identifier of the SCMP originator |
-    +-------------+--------------------------------------------------+
-    | AS          | The 48-bit AS identifier of the SCMP originator  |
-    +-------------+--------------------------------------------------+
-    | Ingress ID  | The interface ID of the ingress link.            |
-    +-------------+--------------------------------------------------+
-    | Egress ID   | The interface ID of the egress link.             |
-    +-------------+--------------------------------------------------+
+     +============+==================================================+
+     | Name       | Value                                            |
+     +============+==================================================+
+     | Type       | 6                                                |
+     +------------+--------------------------------------------------+
+     | Code       | 0                                                |
+     +------------+--------------------------------------------------+
+     | ISD        | The 16-bit ISD identifier of the SCMP originator |
+     +------------+--------------------------------------------------+
+     | AS         | The 48-bit AS identifier of the SCMP originator  |
+     +------------+--------------------------------------------------+
+     | Ingress ID | The interface ID of the ingress link.            |
+     +------------+--------------------------------------------------+
+     | Egress ID  | The interface ID of the egress link.             |
+     +------------+--------------------------------------------------+
 
-                          Table 15: field values
+                           Table 15: field values
 
    A *Internal Connectivity Down* message SHOULD be originated by a
    router in response to a packet that cannot be forwarded inside the AS
@@ -2624,7 +2633,79 @@ direction
 
 5.6.  Informational Messages
 
-5.6.1.  Traceroute Request
+5.6.1.  Echo Request
+
+        0                   1                   2                   3
+        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |     Type      |     Code      |          Checksum             |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |           Identifier          |        Sequence Number        |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       | Data...
+       +-+-+-+-+-
+
+                       Figure 24: Echo-request format
+
+             +============+=================================+
+             | Name       | Value                           |
+             +============+=================================+
+             | Type       | 128                             |
+             +------------+---------------------------------+
+             | Code       | 0                               |
+             +------------+---------------------------------+
+             | Identifier | A 16-bit identifier to aid      |
+             |            | matching replies with requests  |
+             +------------+---------------------------------+
+             | Sequence   | A 16-bit sequence number to aid |
+             | Nr.        | matching replies with requests  |
+             +------------+---------------------------------+
+             | Data       | Variable length of arbitrary    |
+             |            | data                            |
+             +------------+---------------------------------+
+
+                          Table 16: field values
+
+   Every node SHOULD implement a SCMP Echo responder function that
+   receives Echo Requests and originates corresponding Echo replies.
+
+5.6.2.  Echo Reply
+
+        0                   1                   2                   3
+        0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |     Type      |     Code      |          Checksum             |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       |           Identifier          |        Sequence Number        |
+       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+       | Data...
+       +-+-+-+-+-
+
+                        Figure 25: Echo-reply format
+
+        +==============+=========================================+
+        | Name         | Value                                   |
+        +==============+=========================================+
+        | Type         | 129                                     |
+        +--------------+-----------------------------------------+
+        | Code         | 0                                       |
+        +--------------+-----------------------------------------+
+        | Identifier   | The identifier of the Echo Request      |
+        +--------------+-----------------------------------------+
+        | Sequence Nr. | The sequence number of the Echo Request |
+        +--------------+-----------------------------------------+
+        | Data         | The data of the Echo Request            |
+        +--------------+-----------------------------------------+
+
+                                 Table 17
+
+   Every node SHOULD implement a SCMP Echo responder function that
+   receives Echo Requests and originates corresponding Echo replies.
+
+   The data received in the SCMP Echo Request message MUST be returned
+   entirely and unmodified in the SCMP Echo Reply message.
+
+5.6.3.  Traceroute Request
 
         0                   1                   2                   3
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -2642,41 +2723,41 @@ direction
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 23: traceroute-request-format
+                    Figure 26: Traceroute-request format
 
-             +=============+=================================+
-             | SCMP Fields |                                 |
-             +=============+=================================+
-             | Type        | 130                             |
-             +-------------+---------------------------------+
-             | Code        | 0                               |
-             +-------------+---------------------------------+
-             | Identifier  | A 16-bit identifier to aid      |
-             |             | matching replies with requests  |
-             +-------------+---------------------------------+
-             | Sequence    | A 16-bit sequence number to aid |
-             | Nr.         | matching replies with request   |
-             +-------------+---------------------------------+
-             | ISD         | Place holder set to zero by     |
-             |             | SCMP sender                     |
-             +-------------+---------------------------------+
-             | AS          | Place holder set to zero by     |
-             |             | SCMP sender                     |
-             +-------------+---------------------------------+
-             | Interface   | Place holder set to zero by     |
-             | ID          | SCMP sender                     |
-             +-------------+---------------------------------+
+             +============+=================================+
+             | Name       | Value                           |
+             +============+=================================+
+             | Type       | 130                             |
+             +------------+---------------------------------+
+             | Code       | 0                               |
+             +------------+---------------------------------+
+             | Identifier | A 16-bit identifier to aid      |
+             |            | matching replies with requests  |
+             +------------+---------------------------------+
+             | Sequence   | A 16-bit sequence number to aid |
+             | Nr.        | matching replies with request   |
+             +------------+---------------------------------+
+             | ISD        | Place holder set to zero by     |
+             |            | SCMP sender                     |
+             +------------+---------------------------------+
+             | AS         | Place holder set to zero by     |
+             |            | SCMP sender                     |
+             +------------+---------------------------------+
+             | Interface  | Place holder set to zero by     |
+             | ID         | SCMP sender                     |
+             +------------+---------------------------------+
 
-                           Table 16: field values
+                          Table 18: field values
 
    A border router is alerted of a Traceroute Request message through
    the ConsIngress or ConsEgress Router Alert flag in the hop field that
    describes the traversal of that router in a packet's path.  Senders
    have to set these flags appropriately.  When such a packet is
    received, the border router SHOULD reply with a Traceroute Reply
-   message (Section 5.6.2).
+   message (Section 5.6.4).
 
-5.6.2.  Traceroute Reply
+5.6.4.  Traceroute Reply
 
         0                   1                   2                   3
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -2694,10 +2775,10 @@ direction
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 24: traceroute-reply-format
+                     Figure 27: Traceroute-reply format
 
     +==============+==================================================+
-    | SCMP Fields  |                                                  |
+    | Name         | Value                                            |
     +==============+==================================================+
     | Type         | 131                                              |
     +--------------+--------------------------------------------------+
@@ -2714,10 +2795,10 @@ direction
     | Interface ID | The interface ID of the SCMP originating router  |
     +--------------+--------------------------------------------------+
 
-                           Table 17: field values
+                           Table 19: field values
 
    The identifier is set to the identifier value from the Traceroute
-   Request message (Section 5.6.1).  The ISD and AS identifiers are set
+   Request message (Section 5.6.3).  The ISD and AS identifiers are set
    to the ISD-AS of the originating border router.
 
 5.7.  Authentication
@@ -3198,7 +3279,7 @@ Assignment
     | 255     |           | Reserved                                 |
     +---------+-----------+------------------------------------------+
 
-              Table 18: The assigned SCION protocol numbers
+              Table 20: The assigned SCION protocol numbers
 
 Authors' Addresses
 

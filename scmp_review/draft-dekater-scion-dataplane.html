@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 7 March 2025</td>
+<td class="center">Expires 14 March 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-09-03" class="published">3 September 2024</time>
+<time datetime="2024-09-10" class="published">10 September 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-03-07">7 March 2025</time></dd>
+<dd class="expires"><time datetime="2025-03-14">14 March 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 7 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1273,10 +1273,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-informational-messages" class="internal xref">Informational Messages</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6.2.1">
-                    <p id="section-toc.1-1.5.2.6.2.1.1"><a href="#section-5.6.1" class="auto internal xref">5.6.1</a>.  <a href="#name-traceroute-request" class="internal xref">Traceroute Request</a></p>
+                    <p id="section-toc.1-1.5.2.6.2.1.1"><a href="#section-5.6.1" class="auto internal xref">5.6.1</a>.  <a href="#name-echo-request" class="internal xref">Echo Request</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6.2.2">
-                    <p id="section-toc.1-1.5.2.6.2.2.1"><a href="#section-5.6.2" class="auto internal xref">5.6.2</a>.  <a href="#name-traceroute-reply" class="internal xref">Traceroute Reply</a></p>
+                    <p id="section-toc.1-1.5.2.6.2.2.1"><a href="#section-5.6.2" class="auto internal xref">5.6.2</a>.  <a href="#name-echo-reply" class="internal xref">Echo Reply</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6.2.3">
+                    <p id="section-toc.1-1.5.2.6.2.3.1"><a href="#section-5.6.3" class="auto internal xref">5.6.3</a>.  <a href="#name-traceroute-request" class="internal xref">Traceroute Request</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6.2.4">
+                    <p id="section-toc.1-1.5.2.6.2.4.1"><a href="#section-5.6.4" class="auto internal xref">5.6.4</a>.  <a href="#name-traceroute-reply" class="internal xref">Traceroute Reply</a></p>
 </li>
                 </ul>
 </li>
@@ -3527,22 +3533,26 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">128</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#echo-request" class="internal xref">Echo Request</a> (<a href="#echo-request" class="auto internal xref">Section 5.6.1</a>)</span>
+</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">129</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved for future use</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <span><a href="#echo-reply" class="internal xref">Echo Reply</a> (<a href="#echo-reply" class="auto internal xref">Section 5.6.2</a>)</span>
+</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">130</td>
               <td class="text-left" rowspan="1" colspan="1">
-                <span><a href="#traceroute-request" class="internal xref">Traceroute Request</a> (<a href="#traceroute-request" class="auto internal xref">Section 5.6.1</a>)</span>
+                <span><a href="#traceroute-request" class="internal xref">Traceroute Request</a> (<a href="#traceroute-request" class="auto internal xref">Section 5.6.3</a>)</span>
 </td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">131</td>
               <td class="text-left" rowspan="1" colspan="1">
-                <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply</a> (<a href="#traceroute-reply" class="auto internal xref">Section 5.6.2</a>)</span>
+                <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply</a> (<a href="#traceroute-reply" class="auto internal xref">Section 5.6.4</a>)</span>
 </td>
             </tr>
             <tr>
@@ -3609,6 +3619,7 @@ protocol type as defined in <a href="#pseudo" class="auto internal xref">Section
             </ul>
 </li>
         </ul>
+<p id="section-5.4-3">The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that, nowadays, this MTU can also be safely expected when using IPv4.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scmp-notification">
@@ -3621,7 +3632,8 @@ protocol type as defined in <a href="#pseudo" class="auto internal xref">Section
           <h4 id="name-packet-too-big">
 <a href="#section-5.5.1" class="section-number selfRef">5.5.1. </a><a href="#name-packet-too-big" class="section-name selfRef">Packet Too Big</a>
           </h4>
-<div class="alignLeft art-text artwork" id="section-5.5.1-1">
+<span id="name-packet-too-big-format"></span><figure id="figure-21">
+            <div class="alignLeft art-text artwork" id="section-5.5.1-1.1">
 <pre>
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -3635,8 +3647,11 @@ protocol type as defined in <a href="#pseudo" class="auto internal xref">Section
     |                    exceeding 1232 bytes.                      |
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-</pre><a href="#section-5.5.1-1" class="pilcrow">¶</a>
+</pre>
 </div>
+<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
+<a href="#name-packet-too-big-format" class="selfRef">Packet-too-big format</a>
+            </figcaption></figure>
 <span id="name-field-values"></span><table class="center" id="table-13">
             <caption>
 <a href="#table-13" class="selfRef">Table 13</a>:
@@ -3644,8 +3659,8 @@ protocol type as defined in <a href="#pseudo" class="auto internal xref">Section
             </caption>
 <thead>
               <tr>
-                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
-                <th class="text-left" rowspan="1" colspan="1"> </th>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
               </tr>
             </thead>
             <tbody>
@@ -3676,7 +3691,7 @@ underlay.<a href="#section-5.5.1-3" class="pilcrow">¶</a></p>
 <a href="#section-5.5.2" class="section-number selfRef">5.5.2. </a><a href="#name-external-interface-down" class="section-name selfRef">External Interface Down</a>
           </h4>
 <span id="name-external-interface-down-for"></span><div id="_figure-22">
-<figure id="figure-21">
+<figure id="figure-22">
             <div class="alignLeft art-text artwork" id="section-5.5.2-1.1">
 <pre>
      0                   1                   2                   3
@@ -3699,8 +3714,8 @@ underlay.<a href="#section-5.5.1-3" class="pilcrow">¶</a></p>
 
 </pre>
 </div>
-<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
-<a href="#name-external-interface-down-for" class="selfRef">External-interface-down-format</a>
+<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
+<a href="#name-external-interface-down-for" class="selfRef">External-interface-down format</a>
             </figcaption></figure>
 </div>
 <span id="name-field-values-2"></span><table class="center" id="table-14">
@@ -3710,8 +3725,8 @@ underlay.<a href="#section-5.5.1-3" class="pilcrow">¶</a></p>
             </caption>
 <thead>
               <tr>
-                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
-                <th class="text-left" rowspan="1" colspan="1"> </th>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
               </tr>
             </thead>
             <tbody>
@@ -3750,7 +3765,7 @@ The interface ID identifies the link of the originating AS that is down.<a href=
 <a href="#section-5.5.3" class="section-number selfRef">5.5.3. </a><a href="#name-internal-connectivity-down" class="section-name selfRef">Internal Connectivity Down</a>
           </h4>
 <span id="name-internal-connectivity-down-"></span><div id="_figure-23">
-<figure id="figure-22">
+<figure id="figure-23">
             <div class="alignLeft art-text artwork" id="section-5.5.3-1.1">
 <pre>
      0                   1                   2                   3
@@ -3777,8 +3792,8 @@ The interface ID identifies the link of the originating AS that is down.<a href=
 
 </pre>
 </div>
-<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
-<a href="#name-internal-connectivity-down-" class="selfRef">internal-connectivity-down-format</a>
+<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
+<a href="#name-internal-connectivity-down-" class="selfRef">Internal-connectivity-down format</a>
             </figcaption></figure>
 </div>
 <span id="name-field-values-3"></span><table class="center" id="table-15">
@@ -3788,8 +3803,8 @@ The interface ID identifies the link of the originating AS that is down.<a href=
             </caption>
 <thead>
               <tr>
-                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
-                <th class="text-left" rowspan="1" colspan="1"> </th>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
               </tr>
             </thead>
             <tbody>
@@ -3837,14 +3852,136 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
         <h3 id="name-informational-messages">
 <a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-informational-messages" class="section-name selfRef">Informational Messages</a>
         </h3>
-<div id="traceroute-request">
+<div id="echo-request">
 <section id="section-5.6.1">
+          <h4 id="name-echo-request">
+<a href="#section-5.6.1" class="section-number selfRef">5.6.1. </a><a href="#name-echo-request" class="section-name selfRef">Echo Request</a>
+          </h4>
+<span id="name-echo-request-format"></span><div id="_figure-26">
+<figure id="figure-24">
+            <div class="alignLeft art-text artwork" id="section-5.6.1-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | Data...
+    +-+-+-+-+-
+
+</pre>
+</div>
+<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
+<a href="#name-echo-request-format" class="selfRef">Echo-request format</a>
+            </figcaption></figure>
+</div>
+<span id="name-field-values-4"></span><table class="center" id="table-16">
+            <caption>
+<a href="#table-16" class="selfRef">Table 16</a>:
+<a href="#name-field-values-4" class="selfRef">field values</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">128</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Identifier</td>
+                <td class="text-left" rowspan="1" colspan="1">A 16-bit identifier to aid matching replies with requests</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Sequence Nr.</td>
+                <td class="text-left" rowspan="1" colspan="1">A 16-bit sequence number to aid matching replies with requests</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Data</td>
+                <td class="text-left" rowspan="1" colspan="1">Variable length of arbitrary data</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-5.6.1-3">Every node <span class="bcp14">SHOULD</span> implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.<a href="#section-5.6.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="echo-reply">
+<section id="section-5.6.2">
+          <h4 id="name-echo-reply">
+<a href="#section-5.6.2" class="section-number selfRef">5.6.2. </a><a href="#name-echo-reply" class="section-name selfRef">Echo Reply</a>
+          </h4>
+<span id="name-echo-reply-format"></span><div id="_figure-27">
+<figure id="figure-25">
+            <div class="alignLeft art-text artwork" id="section-5.6.2-1.1">
+<pre>
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    | Data...
+    +-+-+-+-+-
+
+</pre>
+</div>
+<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
+<a href="#name-echo-reply-format" class="selfRef">Echo-reply format</a>
+            </figcaption></figure>
+</div>
+<table class="center" id="table-17">
+            <caption><a href="#table-17" class="selfRef">Table 17</a></caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Type</td>
+                <td class="text-left" rowspan="1" colspan="1">129</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Code</td>
+                <td class="text-left" rowspan="1" colspan="1">0</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Identifier</td>
+                <td class="text-left" rowspan="1" colspan="1">The identifier of the Echo Request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Sequence Nr.</td>
+                <td class="text-left" rowspan="1" colspan="1">The sequence number of the Echo Request</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">Data</td>
+                <td class="text-left" rowspan="1" colspan="1">The data of the Echo Request</td>
+              </tr>
+            </tbody>
+          </table>
+<p id="section-5.6.2-3">Every node <span class="bcp14">SHOULD</span> implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.<a href="#section-5.6.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.6.2-4">The data received in the SCMP Echo Request message <span class="bcp14">MUST</span> be returned entirely and unmodified in the SCMP Echo Reply message.<a href="#section-5.6.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="traceroute-request">
+<section id="section-5.6.3">
           <h4 id="name-traceroute-request">
-<a href="#section-5.6.1" class="section-number selfRef">5.6.1. </a><a href="#name-traceroute-request" class="section-name selfRef">Traceroute Request</a>
+<a href="#section-5.6.3" class="section-number selfRef">5.6.3. </a><a href="#name-traceroute-request" class="section-name selfRef">Traceroute Request</a>
           </h4>
 <span id="name-traceroute-request-format"></span><div id="_figure-24">
-<figure id="figure-23">
-            <div class="alignLeft art-text artwork" id="section-5.6.1-1.1">
+<figure id="figure-26">
+            <div class="alignLeft art-text artwork" id="section-5.6.3-1.1">
 <pre>
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -3864,19 +4001,19 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
 
 </pre>
 </div>
-<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
-<a href="#name-traceroute-request-format" class="selfRef">traceroute-request-format</a>
+<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
+<a href="#name-traceroute-request-format" class="selfRef">Traceroute-request format</a>
             </figcaption></figure>
 </div>
-<span id="name-field-values-4"></span><table class="center" id="table-16">
+<span id="name-field-values-5"></span><table class="center" id="table-18">
             <caption>
-<a href="#table-16" class="selfRef">Table 16</a>:
-<a href="#name-field-values-4" class="selfRef">field values</a>
+<a href="#table-18" class="selfRef">Table 18</a>:
+<a href="#name-field-values-5" class="selfRef">field values</a>
             </caption>
 <thead>
               <tr>
-                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
-                <th class="text-left" rowspan="1" colspan="1"> </th>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
               </tr>
             </thead>
             <tbody>
@@ -3910,17 +4047,17 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
               </tr>
             </tbody>
           </table>
-<p id="section-5.6.1-3">A border router is alerted of a Traceroute Request message through the ConsIngress or ConsEgress Router Alert flag in the hop field that describes the traversal of that router in a packet's path. Senders have to set these flags appropriately. When such a packet is received, the border router <span class="bcp14">SHOULD</span> reply with a <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply message</a> (<a href="#traceroute-reply" class="auto internal xref">Section 5.6.2</a>)</span>.<a href="#section-5.6.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.6.3-3">A border router is alerted of a Traceroute Request message through the ConsIngress or ConsEgress Router Alert flag in the hop field that describes the traversal of that router in a packet's path. Senders have to set these flags appropriately. When such a packet is received, the border router <span class="bcp14">SHOULD</span> reply with a <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply message</a> (<a href="#traceroute-reply" class="auto internal xref">Section 5.6.4</a>)</span>.<a href="#section-5.6.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="traceroute-reply">
-<section id="section-5.6.2">
+<section id="section-5.6.4">
           <h4 id="name-traceroute-reply">
-<a href="#section-5.6.2" class="section-number selfRef">5.6.2. </a><a href="#name-traceroute-reply" class="section-name selfRef">Traceroute Reply</a>
+<a href="#section-5.6.4" class="section-number selfRef">5.6.4. </a><a href="#name-traceroute-reply" class="section-name selfRef">Traceroute Reply</a>
           </h4>
 <span id="name-traceroute-reply-format"></span><div id="_figure-25">
-<figure id="figure-24">
-            <div class="alignLeft art-text artwork" id="section-5.6.2-1.1">
+<figure id="figure-27">
+            <div class="alignLeft art-text artwork" id="section-5.6.4-1.1">
 <pre>
      0                   1                   2                   3
      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -3940,19 +4077,19 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
 
 </pre>
 </div>
-<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
-<a href="#name-traceroute-reply-format" class="selfRef">traceroute-reply-format</a>
+<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
+<a href="#name-traceroute-reply-format" class="selfRef">Traceroute-reply format</a>
             </figcaption></figure>
 </div>
-<span id="name-field-values-5"></span><table class="center" id="table-17">
+<span id="name-field-values-6"></span><table class="center" id="table-19">
             <caption>
-<a href="#table-17" class="selfRef">Table 17</a>:
-<a href="#name-field-values-5" class="selfRef">field values</a>
+<a href="#table-19" class="selfRef">Table 19</a>:
+<a href="#name-field-values-6" class="selfRef">field values</a>
             </caption>
 <thead>
               <tr>
-                <th class="text-left" rowspan="1" colspan="1">SCMP Fields</th>
-                <th class="text-left" rowspan="1" colspan="1"> </th>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Value</th>
               </tr>
             </thead>
             <tbody>
@@ -3986,7 +4123,7 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
               </tr>
             </tbody>
           </table>
-<p id="section-5.6.2-3">The identifier is set to the identifier value from the <span><a href="#traceroute-request" class="internal xref">Traceroute Request message</a> (<a href="#traceroute-request" class="auto internal xref">Section 5.6.1</a>)</span>. The ISD and AS identifiers are set to the ISD-AS of the originating border router.<a href="#section-5.6.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.6.4-3">The identifier is set to the identifier value from the <span><a href="#traceroute-request" class="internal xref">Traceroute Request message</a> (<a href="#traceroute-request" class="auto internal xref">Section 5.6.3</a>)</span>. The ISD and AS identifiers are set to the ISD-AS of the originating border router.<a href="#section-5.6.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4267,9 +4404,9 @@ In addition, the source SIG is responsible for SCION path selection.<a href="#se
         <h3 id="name-assignment">
 <a href="#name-assignment" class="section-name selfRef">Assignment</a>
         </h3>
-<span id="name-the-assigned-scion-protocol"></span><table class="center" id="table-18">
+<span id="name-the-assigned-scion-protocol"></span><table class="center" id="table-20">
           <caption>
-<a href="#table-18" class="selfRef">Table 18</a>:
+<a href="#table-20" class="selfRef">Table 20</a>:
 <a href="#name-the-assigned-scion-protocol" class="selfRef">The assigned SCION protocol numbers</a>
           </caption>
 <thead>
