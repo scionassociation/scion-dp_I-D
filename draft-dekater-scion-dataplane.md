@@ -976,7 +976,7 @@ This section explains what happens with the SCION packet header at each router, 
 
 - *Step 2* <br> **R1->R2**: Router 1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field *IF1*. The current Hop Field is the first Hop Field (0,i2a), which instructs router 1 to forward the packet on its interface i2a. After reading the current Hop Field, Router 1 moves the pointer forward by one position to the second Hop Field (i1a,0).
 
-  **Note:** Although technically there is no need for a UDP/IP underlay if two routers are directly connected, the SCION implementation always uses a UDP/IP underlay in practice. This is to enable a common interface for all routers.
+  The link shown here is an example of not using a UDP/IP underlay. Although most implementations use such an encapsulation, SCION only requires link-layer connectivity. What is used for one given inter-AS link is a function of the available implementations at each end, the available infrastructure, and the joint preference of the two ASes administrators.
 
 |  R1 -> R2                                                    |
 |------------+-------------------------------------------------|
