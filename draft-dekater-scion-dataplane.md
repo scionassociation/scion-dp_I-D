@@ -28,6 +28,11 @@ author:
      org: SCION Association
      email: nic@scion.org
 
+ -   ins: J. C. Hugly
+     name: Jean-Christophe Hugly
+     org: SCION Association
+     email: jch@scion.org
+
  -   ins: S. Hitz
      name: Samuel Hitz
      org: Anapaya Systems
@@ -258,7 +263,7 @@ Segments cannot be combined arbitrarily. To construct a valid forwarding path, t
 - If there are two path segments (one up and one down segment) that share a common ancestor AS (in the direction of beaconing), then a shortcut via this common ancestor AS is possible.
 - Additionally, all segments without any peering possibility MUST consist of at least two Hop Fields.
 
-**Note:** The type of segment is known to the endpoint but is not visible in the path header of data packets. Therefore, a SCION router needs to explicitly verify that these rules were followed correctly.
+Note that the type of segment is known to the endpoint but it is not explicitly visible in the path header of data packets. Therefore, a SCION router needs to explicitly verify that these rules were followed correctly by performing checks described in [](#process-router-ingress).
 
 Besides enabling the enforcement of path policies, the above rules also protect the economic interest of ASes as they prevent building "valley paths". A valley path contains ASes that do not profit economically from traffic on this route, with the name coming from the fact that such paths go "down" (following parent-child links) before going "up" (following child-parent links).
 
@@ -494,8 +499,6 @@ SCION supports three path types:
 ### Empty Path Type {#empty}
 
 The `Empty` path type (`PathType=0`) is used to send traffic within an AS. It has no additional fields, i.e. it consumes 0 bytes on the wire.
-
-One use case of the `Empty` path type lies in the context of link failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ({{RFC5880}} and {{RFC5881}}). It operates independently of media, data protocols, and routing protocols. SCION uses the `Empty` path type, together with `OneHopPath` path type, to bootstrap BFD within SCION. (For more information on the `OneHopPath` path type, see [](#onehop).)
 One use case of the `Empty` path type lies in the context of [link-failure detection](#scion-bfd).
 
 ### SCION Path Type {#scion-path-type}
@@ -1242,12 +1245,19 @@ direction
 {: #figure-19 title="A simplified representation of the processing at routers in both directions."}
 
 
-#### Steps at Ingress Border Router
+#### Steps at Ingress Border Router {#process-router-ingress}
 
 A SCION ingress border router MUST perform the following steps when it receives a SCION packet:
 
 1. Check that the interface through which the packet was received is equal to the ingress interface in the current Hop Field. If not, the router MUST drop the packet.
-2. Check if the current Hop Field is expired or originated in the future, i.e. the current Info Field MUST NOT have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
+2. If there is a segment switch at the current router, check that the ingress and egress interface links are either:
+
+  - Both core
+  - Parent-child or vice-versa
+  - Peering-child or vice-versa
+
+Link types above are defined in {{I-D.dekater-scion-controlplane}} section "Paths and Links". This check prevents valley-use of peering-links or hair-pin segments.
+3. Check if the current Hop Field is expired or originated in the future, i.e. the current Info Field MUST NOT have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 
 The next steps depend on the direction of travel and whether this segment includes a peering Hop Field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current Info Field, so the settings of both flags MUST be checked. The following combinations are possible:
 
@@ -1743,7 +1753,7 @@ The SCION AS and ISD number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Kevin Meynell (SCION Association) and Jean-Christophe Hugly (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Assigned SCION Protocol Numbers {#protnum}
