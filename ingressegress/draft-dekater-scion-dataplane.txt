@@ -1162,6 +1162,8 @@ Table of Contents
    segment (i.e. the direction of beaconing).  When the packet is
    traveling in the opposite direction, the meanings are reversed.
 
+   Router alert flags work similarly to [RFC2711] and allow a sender to
+   address a specific router on the path without knowing its address.
    Processing the L4 payload in the packet means that the router will
    treat the payload of the packet as a message to itself and parse it
    according to the value of the NextHdr field.  Such messages include
