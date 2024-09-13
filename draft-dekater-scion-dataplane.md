@@ -713,7 +713,7 @@ The 12-byte Hop Field (``HopField``) has the following format:
 
 The Ingress Router (respectively Egress Router) is the router owning the Ingress interface (respectively, Egress interface) when the packet is traveling in the *construction direction* of the path segment (i.e. the direction of beaconing). When the packet is traveling in the opposite direction, the meanings are reversed.
 
-Processing the L4 payload in the packet means that the router will treat the payload of the packet as a message to itself and parse it according to the value of the `NextHdr` field. Such messages include [Traceroute Requests](#traceroute-request)
+Router alert flags work similarly to {{RFC2711}} and allow a sender to address a specific router on the path without knowing its address. Processing the L4 payload in the packet means that the router will treat the payload of the packet as a message to itself and parse it according to the value of the `NextHdr` field. Such messages include [Traceroute Requests](#traceroute-request)
 
 Setting multiple router alert flags on a path SHOULD be avoided. This is because the router for which the corresponding Router Alert flag is set to "1" may process the request without further forwarding it along the path. Use cases that require multiple routers/hops on the path to process a packet SHOULD rely on a hop-by-hop extension (see [](#ext-header)).
 
