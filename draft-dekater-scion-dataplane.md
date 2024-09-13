@@ -702,8 +702,8 @@ The 12-byte Hop Field (``HopField``) has the following format:
 
 
 - `RSV`: Unused and reserved for future use.
-- `I`: The Ingress Router Alert flag. If this has value "1", the ingress router SHOULD process the L4 payload in the packet.
-- `E`: The Egress Router Alert flag. If this has value "1", the egress router SHOULD process the L4 payload in the packet.
+- `I`: The Ingress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of `ConsIngress`, the router SHOULD process the L4 payload in the packet.
+- `E`: The Egress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of `ConsEgress`, the router SHOULD process the L4 payload in the packet.
 - `ExpTime`: Expiration time of a Hop Field. This field is 1-byte long, and the expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the `Timestamp` field (from the corresponding Info Field), as follows:
 
   - `Timestamp` + (1 + `ExpTime`) * (3600/256)
