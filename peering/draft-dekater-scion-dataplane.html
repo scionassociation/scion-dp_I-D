@@ -7,6 +7,7 @@
 <title>SCION Data Plane</title>
 <meta content="Corine de Kater" name="author">
 <meta content="Nicola Rustignoli" name="author">
+<meta content="Jean-Christophe Hugly" name="author">
 <meta content="Samuel Hitz" name="author">
 <meta content="
        This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION data plane is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path. 
@@ -1027,11 +1028,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCION DP</td>
-<td class="right">August 2024</td>
+<td class="right">September 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 2 March 2025</td>
+<td class="center">Expires 18 March 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-08-29" class="published">29 August 2024</time>
+<time datetime="2024-09-14" class="published">14 September 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-03-02">2 March 2025</time></dd>
+<dd class="expires"><time datetime="2025-03-18">18 March 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1058,6 +1059,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </div>
 <div class="author">
       <div class="author-name">N. Rustignoli</div>
+<div class="org">SCION Association</div>
+</div>
+<div class="author">
+      <div class="author-name">J. C. Hugly</div>
 <div class="org">SCION Association</div>
 </div>
 <div class="author">
@@ -1103,7 +1108,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1534,7 +1539,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-1.4-3.6.1">Additionally, all segments without any peering possibility <span class="bcp14">MUST</span> consist of at least two Hop Fields.<a href="#section-1.4-3.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-1.4-4"><strong>Note:</strong> The type of segment is known to the endpoint but is not visible in the path header of data packets. Therefore, a SCION router needs to explicitly verify that these rules were followed correctly.<a href="#section-1.4-4" class="pilcrow">¶</a></p>
+<p id="section-1.4-4">Note that the type of segment is known to the endpoint but it is not explicitly visible in the path header of data packets. Therefore, a SCION router needs to explicitly verify that these rules were followed correctly by performing checks described in <a href="#process-router-ingress" class="auto internal xref">Section 4.2.2.1</a>.<a href="#section-1.4-4" class="pilcrow">¶</a></p>
 <p id="section-1.4-5">Besides enabling the enforcement of path policies, the above rules also protect the economic interest of ASes as they prevent building "valley paths". A valley path contains ASes that do not profit economically from traffic on this route, with the name coming from the fact that such paths go "down" (following parent-child links) before going "up" (following child-parent links).<a href="#section-1.4-5" class="pilcrow">¶</a></p>
 <p id="section-1.4-6"><a href="#_figure-1" class="auto internal xref">Figure 1</a> below shows valid segment combinations.<a href="#section-1.4-6" class="pilcrow">¶</a></p>
 <p id="section-1.4-7"><strong>Note:</strong> It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).<a href="#section-1.4-7" class="pilcrow">¶</a></p>
@@ -1688,7 +1693,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|Version|  TraffCl      |                FlowID                 |
+|Version|  TraffCl      |                Flow Label             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    NextHdr    |    HdrLen     |          PayloadLen           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -1708,7 +1713,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-2.1-3.2.1"><code>TrafficClass</code> (<code>TraffCl</code> in the image above): The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. The current use of the <code>TrafficClass</code> field for Differentiated Services and Explicit Congestion Notification is specified in <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span> and <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span>.<a href="#section-2.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.3">
-            <p id="section-2.1-3.3.1"><code>FlowID</code>: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources <span class="bcp14">MUST</span> set this field.<a href="#section-2.1-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.3.1"><code>Flow Label</code>: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources <span class="bcp14">MUST</span> set this field. This serves the same purpose as what <span>[<a href="#RFC6437" class="cite xref">RFC6437</a>]</span> describes for IPv6 and is used in the same manner. Notably, a Flow Label of zero does not imply that packet reordering is acceptable.<a href="#section-2.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.4">
             <p id="section-2.1-3.4.1"><code>NextHdr</code>: Encodes the type of the first header after the SCION header. This can be either a SCION extension or a Layer 4 protocol such as TCP or UDP. Values of this field respect the Assigned SCION Protocol Numbers (see <a href="#protnum" class="auto internal xref">Appendix "Assigned SCION Protocol Numbers"</a>).<a href="#section-2.1-3.4.1" class="pilcrow">¶</a></p>
@@ -1957,9 +1962,8 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           <h4 id="name-empty-path-type">
 <a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-empty-path-type" class="section-name selfRef">Empty Path Type</a>
           </h4>
-<p id="section-2.3.1-1">The <code>Empty</code> path type (<code>PathType=0</code>) is used to send traffic within an AS. It has no additional fields, i.e. it consumes 0 bytes on the wire.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.1-2">One use case of the <code>Empty</code> path type lies in the context of link failure detection. To this end, SCION uses the Bidirectional Forwarding Detection (BFD) protocol (<span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span> and <span>[<a href="#RFC5881" class="cite xref">RFC5881</a>]</span>). It operates independently of media, data protocols, and routing protocols. SCION uses the <code>Empty</code> path type, together with <code>OneHopPath</code> path type, to bootstrap BFD within SCION. (For more information on the <code>OneHopPath</code> path type, see <a href="#onehop" class="auto internal xref">Section 2.3.3</a>.)
-One use case of the <code>Empty</code> path type lies in the context of <span><a href="#scion-bfd" class="internal xref">link-failure detection</a> (<a href="#scion-bfd" class="auto internal xref">Section 6.1</a>)</span>.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-1">The <code>Empty</code> path type (<code>PathType=0</code>) is used to send traffic within an AS. It has no additional fields, i.e. it consumes 0 bytes on the wire.
+One use case of the <code>Empty</code> path type lies in the context of <span><a href="#scion-bfd" class="internal xref">link-failure detection</a> (<a href="#scion-bfd" class="auto internal xref">Section 6.1</a>)</span>.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scion-path-type">
@@ -2232,29 +2236,29 @@ One use case of the <code>Empty</code> path type lies in the context of <span><a
                 <p id="section-2.3.2.4-3.1.1"><code>RSV</code>: Unused and reserved for future use.<a href="#section-2.3.2.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.4-3.2">
-                <p id="section-2.3.2.4-3.2.1"><code>I</code>: The Ingress Router Alert flag. If this has value "1", the ingress router (in construction direction) <span class="bcp14">SHOULD</span> process the L4 payload in the packet. The construction direction is the direction of beaconing.<a href="#section-2.3.2.4-3.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.4-3.2.1"><code>I</code>: The Ingress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of <code>ConsIngress</code>, the router <span class="bcp14">SHOULD</span> process the L4 payload in the packet.<a href="#section-2.3.2.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.4-3.3">
-                <p id="section-2.3.2.4-3.3.1"><code>E</code>: The Egress Router Alert flag. If this has value "1", the egress router (in construction direction) <span class="bcp14">SHOULD</span> process the L4 payload in the packet.<a href="#section-2.3.2.4-3.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.4-3.3.1"><code>E</code>: The Egress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of <code>ConsEgress</code>, the router <span class="bcp14">SHOULD</span> process the L4 payload in the packet.<a href="#section-2.3.2.4-3.3.1" class="pilcrow">¶</a></p>
 </li>
-            </ul>
-<p id="section-2.3.2.4-4"><strong>Note:</strong> A sender cannot rely on multiple routers retrieving and processing the payload even if it sets multiple router alert flags. This is use-case dependent: In the case of traceroute informational messages, for example, the router for which the traceroute request is intended will process the request (if the corresponding Router Alert flag is set to "1") and reply to it without further forwarding the request along the path. Use cases that require multiple routers/hops on the path to process a packet <span class="bcp14">SHOULD</span> rely on a hop-by-hop extension (see <a href="#ext-header" class="auto internal xref">Section 2.4</a>). For general information on router alerts, see <span>[<a href="#RFC2711" class="cite xref">RFC2711</a>]</span>.<a href="#section-2.3.2.4-4" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.2.4-3.4">
+                <p id="section-2.3.2.4-3.4.1"><code>ExpTime</code>: Expiration time of a Hop Field. This field is 1-byte long, and the expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the <code>Timestamp</code> field (from the corresponding Info Field), as follows:<a href="#section-2.3.2.4-3.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.4-5.1">
-                <p id="section-2.3.2.4-5.1.1"><code>ExpTime</code>: Expiration time of a Hop Field. This field is 1-byte long, and the expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the <code>Timestamp</code> field (from the corresponding Info Field), as follows:<a href="#section-2.3.2.4-5.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.3.2.4-5.1.2.1">
-                    <p id="section-2.3.2.4-5.1.2.1.1"><code>Timestamp</code> + (1 + <code>ExpTime</code>) * (3600/256)<a href="#section-2.3.2.4-5.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.2.4-3.4.2.1">
+                    <p id="section-2.3.2.4-3.4.2.1.1"><code>Timestamp</code> + (1 + <code>ExpTime</code>) * (3600/256)<a href="#section-2.3.2.4-3.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="normal" id="section-2.3.2.4-5.2">
-                <p id="section-2.3.2.4-5.2.1"><code>ConsIngress</code>, <code>ConsEgress</code>: The 16-bits ingress/egress interface IDs in construction direction, that is, the direction of beaconing.<a href="#section-2.3.2.4-5.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.2.4-3.5">
+                <p id="section-2.3.2.4-3.5.1"><code>ConsIngress</code>, <code>ConsEgress</code>: The 16-bits ingress/egress interface IDs in construction direction, that is, the direction of beaconing.<a href="#section-2.3.2.4-3.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.2.4-5.3">
-                <p id="section-2.3.2.4-5.3.1"><code>MAC</code>: The 6-byte Message Authentication Code to authenticate the Hop Field. For details on how this MAC is calculated, see <a href="#hf-mac-overview" class="auto internal xref">Section 4.1.1</a>.<a href="#section-2.3.2.4-5.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.2.4-3.6">
+                <p id="section-2.3.2.4-3.6.1"><code>MAC</code>: The 6-byte Message Authentication Code to authenticate the Hop Field. For details on how this MAC is calculated, see <a href="#hf-mac-overview" class="auto internal xref">Section 4.1.1</a>.<a href="#section-2.3.2.4-3.6.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+<p id="section-2.3.2.4-4">The Ingress Router (respectively Egress Router) is the router owning the Ingress interface (respectively, Egress interface) when the packet is traveling in the <em>construction direction</em> of the path segment (i.e. the direction of beaconing). When the packet is traveling in the opposite direction, the meanings are reversed.<a href="#section-2.3.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.2.4-5">Router alert flags work similarly to <span>[<a href="#RFC2711" class="cite xref">RFC2711</a>]</span> and allow a sender to address a specific router on the path without knowing its address. Processing the L4 payload in the packet means that the router will treat the payload of the packet as a message to itself and parse it according to the value of the <code>NextHdr</code> field. Such messages include <span><a href="#traceroute-request" class="internal xref">Traceroute Requests</a> (<a href="#traceroute-request" class="auto internal xref">Section 5.7.1</a>)</span><a href="#section-2.3.2.4-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.2.4-6">Setting multiple router alert flags on a path <span class="bcp14">SHOULD</span> be avoided. This is because the router for which the corresponding Router Alert flag is set to "1" may process the request without further forwarding it along the path. Use cases that require multiple routers/hops on the path to process a packet <span class="bcp14">SHOULD</span> rely on a hop-by-hop extension (see <a href="#ext-header" class="auto internal xref">Section 2.4</a>).<a href="#section-2.3.2.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3243,7 +3247,7 @@ direction
 <a href="#name-a-simplified-representation" class="selfRef">A simplified representation of the processing at routers in both directions.</a>
             </figcaption></figure>
 </div>
-<div id="steps-at-ingress-border-router">
+<div id="process-router-ingress">
 <section id="section-4.2.2.1">
             <h5 id="name-steps-at-ingress-border-rou">
 <a href="#section-4.2.2.1" class="section-number selfRef">4.2.2.1. </a><a href="#name-steps-at-ingress-border-rou" class="section-name selfRef">Steps at Ingress Border Router</a>
@@ -3254,66 +3258,79 @@ direction
                 <p id="section-4.2.2.1-2.1.1">Check that the interface through which the packet was received is equal to the ingress interface in the current Hop Field. If not, the router <span class="bcp14">MUST</span> drop the packet.<a href="#section-4.2.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li id="section-4.2.2.1-2.2">
-                <p id="section-4.2.2.1-2.2.1">Check if the current Hop Field is expired or originated in the future, i.e. the current Info Field <span class="bcp14">MUST NOT</span> have a timestamp in the future, as defined in <a href="#inffield" class="auto internal xref">Section 2.3.2.3</a>. If either is true, the router <span class="bcp14">MUST</span> drop the packet.<a href="#section-4.2.2.1-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-4.2.2.1-2.2.1">If there is a segment switch at the current router, check that the ingress and egress interface links are either:<a href="#section-4.2.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
-<p id="section-4.2.2.1-3">The next steps depend on the direction of travel and whether this segment includes a peering Hop Field. Both features are indicated by the settings of the Construction Direction flag <code>C</code> and the Peering flag <code>P</code> in the current Info Field, so the settings of both flags <span class="bcp14">MUST</span> be checked. The following combinations are possible:<a href="#section-4.2.2.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.2.2.1-4.1">
-                <p id="section-4.2.2.1-4.1.1">The packet traverses the path segment in <strong>construction direction</strong> (<code>C</code> = "1" and <code>P</code> = "0" or "1"). In this case, proceed with step 4.<a href="#section-4.2.2.1-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.2.2.1-3.1">
+                <p id="section-4.2.2.1-3.1.1">Both core<a href="#section-4.2.2.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.2.2.1-4.2">
-                <p id="section-4.2.2.1-4.2.1">The packet traverses the path segment <strong>against construction direction</strong> (<code>C</code> = "0"). The following cases are possible:<a href="#section-4.2.2.1-4.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-4.2.2.1-3.2">
+                <p id="section-4.2.2.1-3.2.1">Parent-child or vice-versa<a href="#section-4.2.2.1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-4.2.2.1-3.3">
+                <p id="section-4.2.2.1-3.3.1">Peering-child or vice-versa<a href="#section-4.2.2.1-3.3.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-4.2.2.1-4">Link types above are defined in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span> section "Paths and Links". This check prevents valley-use of peering-links or hair-pin segments.
+3. Check if the current Hop Field is expired or originated in the future, i.e. the current Info Field <span class="bcp14">MUST NOT</span> have a timestamp in the future, as defined in <a href="#inffield" class="auto internal xref">Section 2.3.2.3</a>. If either is true, the router <span class="bcp14">MUST</span> drop the packet.<a href="#section-4.2.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.2.2.1-5">The next steps depend on the direction of travel and whether this segment includes a peering Hop Field. Both features are indicated by the settings of the Construction Direction flag <code>C</code> and the Peering flag <code>P</code> in the current Info Field, so the settings of both flags <span class="bcp14">MUST</span> be checked. The following combinations are possible:<a href="#section-4.2.2.1-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.2.2.1-4.2.2.1">
-                    <p id="section-4.2.2.1-4.2.2.1.1"><strong>Case 1</strong> <br> The path segment includes <strong>no peering Hop Field</strong> (<code>P</code> = "0"). In this case, the ingress border router <span class="bcp14">MUST</span> take the following step(s):<a href="#section-4.2.2.1-4.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.2.2.1-6.1">
+                <p id="section-4.2.2.1-6.1.1">The packet traverses the path segment in <strong>construction direction</strong> (<code>C</code> = "1" and <code>P</code> = "0" or "1"). In this case, proceed with step 4.<a href="#section-4.2.2.1-6.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-4.2.2.1-6.2">
+                <p id="section-4.2.2.1-6.2.1">The packet traverses the path segment <strong>against construction direction</strong> (<code>C</code> = "0"). The following cases are possible:<a href="#section-4.2.2.1-6.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.2.2.1-4.2.2.1.2.1">
-                        <p id="section-4.2.2.1-4.2.2.1.2.1.1">Compute the value of the Accumulator Acc as follows:<a href="#section-4.2.2.1-4.2.2.1.2.1.1" class="pilcrow">¶</a></p>
-<p id="section-4.2.2.1-4.2.2.1.2.1.2">
+<li class="normal" id="section-4.2.2.1-6.2.2.1">
+                    <p id="section-4.2.2.1-6.2.2.1.1"><strong>Case 1</strong> <br> The path segment includes <strong>no peering Hop Field</strong> (<code>P</code> = "0"). In this case, the ingress border router <span class="bcp14">MUST</span> take the following step(s):<a href="#section-4.2.2.1-6.2.2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.2.2.1-6.2.2.1.2.1">
+                        <p id="section-4.2.2.1-6.2.2.1.2.1.1">Compute the value of the Accumulator Acc as follows:<a href="#section-4.2.2.1-6.2.2.1.2.1.1" class="pilcrow">¶</a></p>
+<p id="section-4.2.2.1-6.2.2.1.2.1.2">
 Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
   where <br>
   Acc<sub>i+1</sub> = the current value of the field <code>Acc</code> in the current Info Field <br>
-  MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current Hop Field representing AS<sub>i</sub><a href="#section-4.2.2.1-4.2.2.1.2.1.2" class="pilcrow">¶</a></p>
-<p id="section-4.2.2.1-4.2.2.1.2.1.3"><strong>Note:</strong> In the case described here, the packet travels against direction of beaconing, i.e. the packet comes from AS<sub>i+1</sub> and will enter AS<sub>i</sub>. This means that the <code>Acc</code> field of this incoming packet represents the value of Acc<sub>i+1</sub>, but to compute the MAC<sub>i</sub> for the current AS<sub>i</sub>, we need the value of Acc<sub>i</sub> (see <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>). As the border router knows that the formula for Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> [:2] (see also <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>), and because the values of Acc<sub>i+1</sub> and MAC<sub>i</sub> are known, the router will be able to recover the value Acc<sub>i</sub> based on the aforementioned formula for Acc.<a href="#section-4.2.2.1-4.2.2.1.2.1.3" class="pilcrow">¶</a></p>
+  MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current Hop Field representing AS<sub>i</sub><a href="#section-4.2.2.1-6.2.2.1.2.1.2" class="pilcrow">¶</a></p>
+<p id="section-4.2.2.1-6.2.2.1.2.1.3"><strong>Note:</strong> In the case described here, the packet travels against direction of beaconing, i.e. the packet comes from AS<sub>i+1</sub> and will enter AS<sub>i</sub>. This means that the <code>Acc</code> field of this incoming packet represents the value of Acc<sub>i+1</sub>, but to compute the MAC<sub>i</sub> for the current AS<sub>i</sub>, we need the value of Acc<sub>i</sub> (see <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>). As the border router knows that the formula for Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> [:2] (see also <a href="#def-acc" class="auto internal xref">Section 4.1.1.2</a>), and because the values of Acc<sub>i+1</sub> and MAC<sub>i</sub> are known, the router will be able to recover the value Acc<sub>i</sub> based on the aforementioned formula for Acc.<a href="#section-4.2.2.1-6.2.2.1.2.1.3" class="pilcrow">¶</a></p>
 </li>
-                      <li class="normal" id="section-4.2.2.1-4.2.2.1.2.2">
-                        <p id="section-4.2.2.1-4.2.2.1.2.2.1">Replace the current value of the field <code>Acc</code> in the current Info Field with the newly calculated value of Acc.<a href="#section-4.2.2.1-4.2.2.1.2.2.1" class="pilcrow">¶</a></p>
+                      <li class="normal" id="section-4.2.2.1-6.2.2.1.2.2">
+                        <p id="section-4.2.2.1-6.2.2.1.2.2.1">Replace the current value of the field <code>Acc</code> in the current Info Field with the newly calculated value of Acc.<a href="#section-4.2.2.1-6.2.2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                      <li class="normal" id="section-4.2.2.1-4.2.2.1.2.3">
-                        <p id="section-4.2.2.1-4.2.2.1.2.3.1">Compute the MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in <a href="#hf-mac-calc" class="auto internal xref">Section 4.1.1.1</a>, but replace <code>SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]</code> in the formula with the value of Acc as just set in the <code>Acc</code> field in the current Info Field.<a href="#section-4.2.2.1-4.2.2.1.2.3.1" class="pilcrow">¶</a></p>
+                      <li class="normal" id="section-4.2.2.1-6.2.2.1.2.3">
+                        <p id="section-4.2.2.1-6.2.2.1.2.3.1">Compute the MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in <a href="#hf-mac-calc" class="auto internal xref">Section 4.1.1.1</a>, but replace <code>SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]</code> in the formula with the value of Acc as just set in the <code>Acc</code> field in the current Info Field.<a href="#section-4.2.2.1-6.2.2.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
-                      <li class="normal" id="section-4.2.2.1-4.2.2.1.2.4">
-                        <p id="section-4.2.2.1-4.2.2.1.2.4.1">If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Verify</sup><sub>i</sub>, drop the packet.<a href="#section-4.2.2.1-4.2.2.1.2.4.1" class="pilcrow">¶</a></p>
+                      <li class="normal" id="section-4.2.2.1-6.2.2.1.2.4">
+                        <p id="section-4.2.2.1-6.2.2.1.2.4.1">If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Verify</sup><sub>i</sub>, drop the packet.<a href="#section-4.2.2.1-6.2.2.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
-                      <li class="normal" id="section-4.2.2.1-4.2.2.1.2.5">
-                        <p id="section-4.2.2.1-4.2.2.1.2.5.1">If the current Hop Field is the last Hop Field in the path segment as determined by the value of the current <code>SegLen</code> and other metadata in the path meta header, increment both <code>CurrInf</code> and <code>CurrHF</code> in the path meta header. Proceed with step 4.<a href="#section-4.2.2.1-4.2.2.1.2.5.1" class="pilcrow">¶</a></p>
+                      <li class="normal" id="section-4.2.2.1-6.2.2.1.2.5">
+                        <p id="section-4.2.2.1-6.2.2.1.2.5.1">If the current Hop Field is the last Hop Field in the path segment as determined by the value of the current <code>SegLen</code> and other metadata in the path meta header, increment both <code>CurrInf</code> and <code>CurrHF</code> in the path meta header. Proceed with step 4.<a href="#section-4.2.2.1-6.2.2.1.2.5.1" class="pilcrow">¶</a></p>
 </li>
                     </ul>
 </li>
-                  <li class="normal" id="section-4.2.2.1-4.2.2.2">
-                    <p id="section-4.2.2.1-4.2.2.2.1"><strong>Case 2</strong> <br> The path segment includes a <strong>peering Hop Field</strong> (<code>P</code> = "1"), but the current hop is <strong>not</strong> the peering hop (i.e. the current hop is <strong>neither</strong> the last hop of the first segment <strong>nor</strong> the first hop of the second segment). In this case, the ingress border router needs to perform the steps previously described for the path segment without peering Hop Field, but the border router <span class="bcp14">MUST NOT</span> increment <code>CurrInf</code> and <span class="bcp14">MUST NOT</span> increment <code>CurrHF</code> in the path meta header. Proceed with step 4.<a href="#section-4.2.2.1-4.2.2.2.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-4.2.2.1-6.2.2.2">
+                    <p id="section-4.2.2.1-6.2.2.2.1"><strong>Case 2</strong> <br> The path segment includes a <strong>peering Hop Field</strong> (<code>P</code> = "1"), but the current hop is <strong>not</strong> the peering hop (i.e. the current hop is <strong>neither</strong> the last hop of the first segment <strong>nor</strong> the first hop of the second segment). In this case, the ingress border router needs to perform the steps previously described for the path segment without peering Hop Field, but the border router <span class="bcp14">MUST NOT</span> increment <code>CurrInf</code> and <span class="bcp14">MUST NOT</span> increment <code>CurrHF</code> in the path meta header. Proceed with step 4.<a href="#section-4.2.2.1-6.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-4.2.2.1-4.2.2.3">
-                    <p id="section-4.2.2.1-4.2.2.3.1"><strong>Case 3</strong> <br> The path segment includes a <strong>peering Hop Field</strong> (<code>P</code> = "1"), and the current Hop Field <em>is</em> the peering Hop Field. (i.e. the current hop is <strong>either</strong> the last hop of the first segment <strong>or</strong> the first hop of the second segment). In this case, the ingress border router <span class="bcp14">MUST</span> take the following step(s):<a href="#section-4.2.2.1-4.2.2.3.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-4.2.2.1-6.2.2.3">
+                    <p id="section-4.2.2.1-6.2.2.3.1"><strong>Case 3</strong> <br> The path segment includes a <strong>peering Hop Field</strong> (<code>P</code> = "1"), and the current Hop Field <em>is</em> the peering Hop Field. (i.e. the current hop is <strong>either</strong> the last hop of the first segment <strong>or</strong> the first hop of the second segment). In this case, the ingress border router <span class="bcp14">MUST</span> take the following step(s):<a href="#section-4.2.2.1-6.2.2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.2.2.1-4.2.2.3.2.1">
-                        <p id="section-4.2.2.1-4.2.2.3.2.1.1">Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in <a href="#peerlink" class="auto internal xref">Section 4.1.2</a>, but replace <code>SegID XOR MAC_0[:2] ... XOR MAC_i [:2]</code> in the formula with the value of Acc as set in the <code>Acc</code> field in the current Info Field (this is the value of Acc as it comes with the packet).<a href="#section-4.2.2.1-4.2.2.3.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.2.2.1-6.2.2.3.2.1">
+                        <p id="section-4.2.2.1-6.2.2.3.2.1.1">Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in <a href="#peerlink" class="auto internal xref">Section 4.1.2</a>, but replace <code>SegID XOR MAC_0[:2] ... XOR MAC_i [:2]</code> in the formula with the value of Acc as set in the <code>Acc</code> field in the current Info Field (this is the value of Acc as it comes with the packet).<a href="#section-4.2.2.1-6.2.2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                      <li class="normal" id="section-4.2.2.1-4.2.2.3.2.2">
-                        <p id="section-4.2.2.1-4.2.2.3.2.2.1">If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.<a href="#section-4.2.2.1-4.2.2.3.2.2.1" class="pilcrow">¶</a></p>
+                      <li class="normal" id="section-4.2.2.1-6.2.2.3.2.2">
+                        <p id="section-4.2.2.1-6.2.2.3.2.2.1">If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.<a href="#section-4.2.2.1-6.2.2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                      <li class="normal" id="section-4.2.2.1-4.2.2.3.2.3">
-                        <p id="section-4.2.2.1-4.2.2.3.2.3.1">Increment both <code>CurrInf</code> and <code>CurrHF</code> in the path meta header. Proceed with step 4.<a href="#section-4.2.2.1-4.2.2.3.2.3.1" class="pilcrow">¶</a></p>
+                      <li class="normal" id="section-4.2.2.1-6.2.2.3.2.3">
+                        <p id="section-4.2.2.1-6.2.2.3.2.3.1">Increment both <code>CurrInf</code> and <code>CurrHF</code> in the path meta header. Proceed with step 4.<a href="#section-4.2.2.1-6.2.2.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
                     </ul>
 </li>
                 </ul>
 </li>
             </ul>
-<ol start="1" type="1" class="normal type-1" id="section-4.2.2.1-5">
-<li id="section-4.2.2.1-5.1">
-                <p id="section-4.2.2.1-5.1.1">Forward the packet to the egress border router (based on the egress interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS.<a href="#section-4.2.2.1-5.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.2.2.1-7">
+<li id="section-4.2.2.1-7.1">
+                <p id="section-4.2.2.1-7.1.1">Forward the packet to the egress border router (based on the egress interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS.<a href="#section-4.2.2.1-7.1.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </section>
@@ -4191,6 +4208,10 @@ In addition, the source SIG is responsible for SCION path selection.<a href="#se
         <dd>
 <span class="refAuthor">Katz, D.</span> and <span class="refAuthor">D. Ward</span>, <span class="refTitle">"Bidirectional Forwarding Detection (BFD) for IPv4 and IPv6 (Single Hop)"</span>, <span class="seriesInfo">RFC 5881</span>, <span class="seriesInfo">DOI 10.17487/RFC5881</span>, <time datetime="2010-06" class="refDate">June 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5881">https://www.rfc-editor.org/rfc/rfc5881</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC6437">[RFC6437]</dt>
+        <dd>
+<span class="refAuthor">Amante, S.</span>, <span class="refAuthor">Carpenter, B.</span>, <span class="refAuthor">Jiang, S.</span>, and <span class="refAuthor">J. Rajahalme</span>, <span class="refTitle">"IPv6 Flow Label Specification"</span>, <span class="seriesInfo">RFC 6437</span>, <span class="seriesInfo">DOI 10.17487/RFC6437</span>, <time datetime="2011-11" class="refDate">November 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6437">https://www.rfc-editor.org/rfc/rfc6437</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
@@ -4250,7 +4271,7 @@ In addition, the source SIG is responsible for SCION path selection.<a href="#se
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich), Kevin Meynell (SCION Association) and Jean-Christophe Hugly (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span> - the book is an important source of input and inspiration for this draft.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="protnum">
@@ -4376,6 +4397,14 @@ In addition, the source SIG is responsible for SCION path selection.<a href="#se
 <div class="email">
 <span>Email:</span>
 <a href="mailto:nic@scion.org" class="email">nic@scion.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Jean-Christophe Hugly</span></div>
+<div dir="auto" class="left"><span class="org">SCION Association</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:jch@scion.org" class="email">jch@scion.org</a>
 </div>
 </address>
 <address class="vcard">
