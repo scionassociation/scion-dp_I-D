@@ -196,8 +196,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Path Transparency**: Path transparency is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.
 
-**Peering Link**: A link between two SCION border routers of different ASes, where at least one of the two ASes is not a core AS. Two peering ASes may be in different ISDs. A peering link can be seen as a shortcut on a normal path. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments.
-
+**Peering Link**: A link between two SCION border routers of different ASes that can be used as a shortcut. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments. It is possible to construct a path out of only two partial segments which top-most hops are joined by a peering link. Two peering ASes may be in different ISDs and may exist between any ASes, including core ASes.
 
 ## Conventions and Definitions
 
@@ -261,7 +260,7 @@ Segments cannot be combined arbitrarily. To construct a valid forwarding path, t
 - If an up segment is present, it MUST be the first segment in the path.
 - If a down segment is present, it MUST be the last segment in the path.
 - If there are two path segments (one up and one down segment) that both announce the same peering link, then a shortcut via this peering link is possible.
-- If there are two path segments (one up and one down segment) that share a common ancestor AS (in the direction of beaconing), then a shortcut via this common ancestor AS is possible.
+- If there are two path segments (one up and one down segment) that share a common ancestor AS (in the direction of beaconing), then a shortcut via this common ancestor AS is possible. The Up-then-Down constraint still applies.
 - Additionally, all segments without any peering possibility MUST consist of at least two Hop Fields.
 
 Note that the type of segment is known to the endpoint but it is not explicitly visible in the path header of data packets. Therefore, a SCION router needs to explicitly verify that these rules were followed correctly by performing checks described in [](#process-router-ingress).
@@ -346,7 +345,6 @@ Valid path segment combinations:
 - **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
 - **AS shortcut** (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS and can even be in different ISDs (if the AS at the intersection is part of multiple ISDs).
 - **On-path** (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.
-
 
 ## Path Authorization
 
@@ -1282,9 +1280,9 @@ The next steps depend on the direction of travel and whether this segment includ
     - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Verify</sup><sub>i</sub>, drop the packet.
     - If the current Hop Field is the last Hop Field in the path segment as determined by the value of the current `SegLen` and other metadata in the path meta header, increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
 
-  - **Case 2** <br> The path segment includes a **peering Hop Field** (`P` = "1"), but the current hop is **not** the peering hop, i.e. the current Hop Field is **not** the *last* Hop Field of the segment, as determined by the value of the current `SegLen` and other metadata in the path meta header. In this case, the ingress border router needs to perform the steps previously described for the path segment without peering Hop Field, but the border router MUST NOT increment `CurrInf` and MUST NOT increment `CurrHF` in the path meta header. Proceed with step 4.
+  - **Case 2** <br> The path segment includes a **peering Hop Field** (`P` = "1"), but the current hop is **not** the peering hop (i.e. the current hop is **neither** the last hop of the first segment **nor** the first hop of the second segment). In this case, the ingress border router needs to perform the steps previously described for the path segment without peering Hop Field, but the border router MUST NOT increment `CurrInf` and MUST NOT increment `CurrHF` in the path meta header. Proceed with step 4.
 
-  - **Case 3** <br> The path segment includes a **peering Hop Field** (`P` = "1"), and the current Hop Field *is* the peering Hop Field. This would be the case if the current Hop Field is the *last* Hop Field of the segment, as determined by the value of the current `SegLen` and other metadata in the path meta header. In this case, the ingress border router MUST take the following step(s):
+  - **Case 3** <br> The path segment includes a **peering Hop Field** (`P` = "1"), and the current Hop Field *is* the peering Hop Field (i.e. the current hop is **either** the last hop of the first segment **or** the first hop of the second segment). In this case, the ingress border router MUST take the following step(s):
 
     - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i [:2]` in the formula with the value of Acc as set in the `Acc` field in the current Info Field (this is the value of Acc as it comes with the packet).
     - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.
@@ -1299,14 +1297,14 @@ A SCION egress border router MUST perform the following steps when it receives a
 
 1. Check the settings of the Construction Direction flag `C` and the Peering flag `P` in the currently valid Info Field. The following cases are possible:
 
-   - **Case 1** <br> The packet traverses the path segment in **construction direction** (`C` = "1"). The path segment either includes **no peering Hop Field** (`P` = "0") or the path segment does include a **peering Hop Field** (`P` = "1"), but the current hop is not the peering hop, i.e. the current Hop Field is **not** the *first* Hop Field of the segment, as determined by the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router MUST take the following step(s):
+   - **Case 1** <br> The packet traverses the path segment in **construction direction** (`C` = "1"). The path segment either includes **no peering Hop Field** (`P` = "0") or the path segment does include a **peering Hop Field** (`P` = "1"), but the current hop is not the peering hop (i.e. the current hop is **neither** the last hop of the first segment **nor** the first hop of the second segment). In this case, the egress border router MUST take the following step(s):
 
      - Compute MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in [](#hf-mac-calc), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of Acc as set in the `Acc` field in the current Info Field.
      - If the just calculated MAC<sup>Verify</sup><sub>i</sub> does not match the MAC<sub>i</sub> in the Hop Field of the current AS<sub>i</sub>, drop the packet.
      - Compute the value of Acc<sub>i+1</sub>. For this, use the formula in [](#def-acc). Replace Acc<sub>i</sub> in the formula with the current value of Acc as set in the `Acc` field of the current Info Field.
      - Replace the value of the `Acc` field in the current Info Field with the just calculated value of Acc<sub>i+1</sub>.
 
-   - **Case 2** <br> The packet traverses the path segment in **construction direction** (`C` = "1") where the path segment includes a **peering Hop Field** (`P` = "1") and the current Hop Field *is* the peering Hop Field. This would be the case if the current Hop Field is the *first* Hop Field of the segment, as determined by the value of the current `SegLen` and other metadata in the path meta header. In this case, the egress border router MUST take the following steps:
+   - **Case 2** <br> The packet traverses the path segment in **construction direction** (`C` = "1") where the path segment includes a **peering Hop Field** (`P` = "1") and the current Hop Field *is* the peering Hop Field (i.e. the current hop is **either** the last hop of the first segment **or** the first hop of the second segment). In this case, the egress border router MUST take the following steps:
 
      - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0 [:2] ... XOR MAC_i [:2]` with the value in the `Acc` field of the current Info Field.
      - If the MAC<sub>i</sub> in the Hop Field of the current AS<sub>i</sub> does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.
