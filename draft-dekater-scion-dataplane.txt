@@ -678,7 +678,7 @@ Table of Contents
    0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |Version|  TraffCl      |                FlowID                 |
+   |Version|  TraffCl      |                Flow Label             |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |    NextHdr    |    HdrLen     |          PayloadLen           |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -697,9 +697,11 @@ Table of Contents
       the TrafficClass field for Differentiated Services and Explicit
       Congestion Notification is specified in [RFC2474] and [RFC3168].
 
-   *  FlowID: This 20-bit field labels sequences of packets to be
+   *  Flow Label: This 20-bit field labels sequences of packets to be
       treated in the network as a single flow.  Sources MUST set this
-      field.
+      field.  This serves the same purpose as what [RFC6437] describes
+      for IPv6 and is used in the same manner.  Notably, a Flow Label of
+      zero does not imply that packet reordering is acceptable.
 
    *  NextHdr: Encodes the type of the first header after the SCION
       header.  This can be either a SCION extension or a Layer 4
@@ -3119,6 +3121,11 @@ direction
               (BFD) for IPv4 and IPv6 (Single Hop)", RFC 5881,
               DOI 10.17487/RFC5881, June 2010,
               <https://www.rfc-editor.org/rfc/rfc5881>.
+
+   [RFC6437]  Amante, S., Carpenter, B., Jiang, S., and J. Rajahalme,
+              "IPv6 Flow Label Specification", RFC 6437,
+              DOI 10.17487/RFC6437, November 2011,
+              <https://www.rfc-editor.org/rfc/rfc6437>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
