@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 7 March 2025</td>
+<td class="center">Expires 18 March 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-09-03" class="published">3 September 2024</time>
+<time datetime="2024-09-14" class="published">14 September 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-03-07">7 March 2025</time></dd>
+<dd class="expires"><time datetime="2025-03-18">18 March 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1108,7 +1108,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 7 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2236,29 +2236,29 @@ One use case of the <code>Empty</code> path type lies in the context of <span><a
                 <p id="section-2.3.2.4-3.1.1"><code>RSV</code>: Unused and reserved for future use.<a href="#section-2.3.2.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.4-3.2">
-                <p id="section-2.3.2.4-3.2.1"><code>I</code>: The Ingress Router Alert flag. If this has value "1", the ingress router (in construction direction) <span class="bcp14">SHOULD</span> process the L4 payload in the packet. The construction direction is the direction of beaconing.<a href="#section-2.3.2.4-3.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.4-3.2.1"><code>I</code>: The Ingress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of <code>ConsIngress</code>, the router <span class="bcp14">SHOULD</span> process the L4 payload in the packet.<a href="#section-2.3.2.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.4-3.3">
-                <p id="section-2.3.2.4-3.3.1"><code>E</code>: The Egress Router Alert flag. If this has value "1", the egress router (in construction direction) <span class="bcp14">SHOULD</span> process the L4 payload in the packet.<a href="#section-2.3.2.4-3.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.4-3.3.1"><code>E</code>: The Egress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of <code>ConsEgress</code>, the router <span class="bcp14">SHOULD</span> process the L4 payload in the packet.<a href="#section-2.3.2.4-3.3.1" class="pilcrow">¶</a></p>
 </li>
-            </ul>
-<p id="section-2.3.2.4-4"><strong>Note:</strong> A sender cannot rely on multiple routers retrieving and processing the payload even if it sets multiple router alert flags. This is use-case dependent: In the case of traceroute informational messages, for example, the router for which the traceroute request is intended will process the request (if the corresponding Router Alert flag is set to "1") and reply to it without further forwarding the request along the path. Use cases that require multiple routers/hops on the path to process a packet <span class="bcp14">SHOULD</span> rely on a hop-by-hop extension (see <a href="#ext-header" class="auto internal xref">Section 2.4</a>). For general information on router alerts, see <span>[<a href="#RFC2711" class="cite xref">RFC2711</a>]</span>.<a href="#section-2.3.2.4-4" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.2.4-3.4">
+                <p id="section-2.3.2.4-3.4.1"><code>ExpTime</code>: Expiration time of a Hop Field. This field is 1-byte long, and the expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the <code>Timestamp</code> field (from the corresponding Info Field), as follows:<a href="#section-2.3.2.4-3.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.4-5.1">
-                <p id="section-2.3.2.4-5.1.1"><code>ExpTime</code>: Expiration time of a Hop Field. This field is 1-byte long, and the expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the <code>Timestamp</code> field (from the corresponding Info Field), as follows:<a href="#section-2.3.2.4-5.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.3.2.4-5.1.2.1">
-                    <p id="section-2.3.2.4-5.1.2.1.1"><code>Timestamp</code> + (1 + <code>ExpTime</code>) * (3600/256)<a href="#section-2.3.2.4-5.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.2.4-3.4.2.1">
+                    <p id="section-2.3.2.4-3.4.2.1.1"><code>Timestamp</code> + (1 + <code>ExpTime</code>) * (3600/256)<a href="#section-2.3.2.4-3.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="normal" id="section-2.3.2.4-5.2">
-                <p id="section-2.3.2.4-5.2.1"><code>ConsIngress</code>, <code>ConsEgress</code>: The 16-bits ingress/egress interface IDs in construction direction, that is, the direction of beaconing.<a href="#section-2.3.2.4-5.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.2.4-3.5">
+                <p id="section-2.3.2.4-3.5.1"><code>ConsIngress</code>, <code>ConsEgress</code>: The 16-bits ingress/egress interface IDs in construction direction, that is, the direction of beaconing.<a href="#section-2.3.2.4-3.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.2.4-5.3">
-                <p id="section-2.3.2.4-5.3.1"><code>MAC</code>: The 6-byte Message Authentication Code to authenticate the Hop Field. For details on how this MAC is calculated, see <a href="#hf-mac-overview" class="auto internal xref">Section 4.1.1</a>.<a href="#section-2.3.2.4-5.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.2.4-3.6">
+                <p id="section-2.3.2.4-3.6.1"><code>MAC</code>: The 6-byte Message Authentication Code to authenticate the Hop Field. For details on how this MAC is calculated, see <a href="#hf-mac-overview" class="auto internal xref">Section 4.1.1</a>.<a href="#section-2.3.2.4-3.6.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+<p id="section-2.3.2.4-4">The Ingress Router (respectively Egress Router) is the router owning the Ingress interface (respectively, Egress interface) when the packet is traveling in the <em>construction direction</em> of the path segment (i.e. the direction of beaconing). When the packet is traveling in the opposite direction, the meanings are reversed.<a href="#section-2.3.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.2.4-5">Router alert flags work similarly to <span>[<a href="#RFC2711" class="cite xref">RFC2711</a>]</span> and allow a sender to address a specific router on the path without knowing its address. Processing the L4 payload in the packet means that the router will treat the payload of the packet as a message to itself and parse it according to the value of the <code>NextHdr</code> field. Such messages include <span><a href="#traceroute-request" class="internal xref">Traceroute Requests</a> (<a href="#traceroute-request" class="auto internal xref">Section 5.7.1</a>)</span><a href="#section-2.3.2.4-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.2.4-6">Setting multiple router alert flags on a path <span class="bcp14">SHOULD</span> be avoided. This is because the router for which the corresponding Router Alert flag is set to "1" may process the request without further forwarding it along the path. Use cases that require multiple routers/hops on the path to process a packet <span class="bcp14">SHOULD</span> rely on a hop-by-hop extension (see <a href="#ext-header" class="auto internal xref">Section 2.4</a>).<a href="#section-2.3.2.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
