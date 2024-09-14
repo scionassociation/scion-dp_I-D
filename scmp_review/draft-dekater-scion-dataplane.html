@@ -1292,7 +1292,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.7">
-                <p id="section-toc.1-1.5.2.7.1"><a href="#section-5.7" class="auto internal xref">5.7</a>.  <a href="#name-authentication" class="internal xref">Authentication</a></p>
+                <p id="section-toc.1-1.5.2.7.1"><a href="#section-5.7" class="auto internal xref">5.7</a>.  <a href="#name-scmp-authentication" class="internal xref">SCMP Authentication</a></p>
 </li>
             </ul>
 </li>
@@ -3885,8 +3885,9 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     |           Identifier          |        Sequence Number        |
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    | Data...
-    +-+-+-+-+-
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 
 </pre>
 </div>
@@ -3947,8 +3948,8 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     |           Identifier          |        Sequence Number        |
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    | Data...
-    +-+-+-+-+-
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 </pre>
 </div>
@@ -4022,6 +4023,7 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
 <a href="#name-traceroute-request-format" class="selfRef">Traceroute-request format</a>
             </figcaption></figure>
 </div>
+<p id="section-5.6.3-2">Given a SCION path constituted of hop fields, traceroute allows to identify the corresponding on-path ISD-ASes.<a href="#section-5.6.3-2" class="pilcrow">¶</a></p>
 <span id="name-field-values-5"></span><table class="center" id="table-18">
             <caption>
 <a href="#table-18" class="selfRef">Table 18</a>:
@@ -4064,7 +4066,7 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
               </tr>
             </tbody>
           </table>
-<p id="section-5.6.3-3">A border router is alerted of a Traceroute Request message through the ConsIngress or ConsEgress Router Alert flag in the hop field that describes the traversal of that router in a packet's path. Senders have to set these flags appropriately. When such a packet is received, the border router <span class="bcp14">SHOULD</span> reply with a <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply message</a> (<a href="#traceroute-reply" class="auto internal xref">Section 5.6.4</a>)</span>.<a href="#section-5.6.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.6.3-4">A border router is alerted of a Traceroute Request message through the Ingress or Egress Router Alert flag set to 1 in the hop field that describes the traversal of that router in a packet's path (See <a href="#hopfld" class="auto internal xref">Section 2.3.2.4</a>). When such a packet is received, the border router <span class="bcp14">SHOULD</span> reply with a <span><a href="#traceroute-reply" class="internal xref">Traceroute Reply message</a> (<a href="#traceroute-reply" class="auto internal xref">Section 5.6.4</a>)</span>.<a href="#section-5.6.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="traceroute-reply">
@@ -4145,10 +4147,10 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
 </div>
 </section>
 </div>
-<div id="authentication">
+<div id="scmp-authentication">
 <section id="section-5.7">
-        <h3 id="name-authentication">
-<a href="#section-5.7" class="section-number selfRef">5.7. </a><a href="#name-authentication" class="section-name selfRef">Authentication</a>
+        <h3 id="name-scmp-authentication">
+<a href="#section-5.7" class="section-number selfRef">5.7. </a><a href="#name-scmp-authentication" class="section-name selfRef">SCMP Authentication</a>
         </h3>
 <p id="section-5.7-1">Authentication of SCMP packets is not specified here. In current deployments is still experimental. Endpoints should therefore validate link down messages (<span><a href="#external-interface-down" class="internal xref">External Interface Down</a> (<a href="#external-interface-down" class="auto internal xref">Section 5.5.2</a>)</span> and <span><a href="#internal-connectivity-down" class="internal xref">Internal Connectivity Down</a> (<a href="#internal-connectivity-down" class="auto internal xref">Section 5.5.3</a>)</span>) with additional signals for reliable operations.<a href="#section-5.7-1" class="pilcrow">¶</a></p>
 </section>
