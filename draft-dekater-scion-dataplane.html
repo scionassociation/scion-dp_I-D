@@ -2705,7 +2705,8 @@ One use case of the <code>Empty</code> path type lies in the context of <span><a
 <ul class="normal">
 <li class="normal" id="section-3.3-4.1">
             <p id="section-3.3-4.1.1"><em>Step 2</em> <br> <strong>R1-&gt;R2</strong>: Router 1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field <em>IF1</em>. The current Hop Field is the first Hop Field (0,i2a), which instructs router 1 to forward the packet on its interface i2a. After reading the current Hop Field, Router 1 moves the pointer forward by one position to the second Hop Field (i1a,0).<a href="#section-3.3-4.1.1" class="pilcrow">¶</a></p>
-<p id="section-3.3-4.1.2"><strong>Note:</strong> Although technically there is no need for a UDP/IP underlay if two routers are directly connected, the SCION implementation always uses a UDP/IP underlay in practice. This is to enable a common interface for all routers.<a href="#section-3.3-4.1.2" class="pilcrow">¶</a></p>
+<p id="section-3.3-4.1.2">
+The link shown here is an example of not using a UDP/IP underlay. Although most implementations use such an encapsulation, SCION only requires link-layer connectivity. What is used for one given inter-AS link is a function of the available implementations at each end, the available infrastructure, and the joint preference of the two ASes administrators.<a href="#section-3.3-4.1.2" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <span id="name-snapshot-header-step-2"></span><table class="center" id="table-7">

@@ -1606,10 +1606,12 @@ Table of Contents
       Router 1 moves the pointer forward by one position to the second
       Hop Field (i1a,0).
 
-      *Note:* Although technically there is no need for a UDP/IP
-      underlay if two routers are directly connected, the SCION
-      implementation always uses a UDP/IP underlay in practice.  This is
-      to enable a common interface for all routers.
+      The link shown here is an example of not using a UDP/IP underlay.
+      Although most implementations use such an encapsulation, SCION
+      only requires link-layer connectivity.  What is used for one given
+      inter-AS link is a function of the available implementations at
+      each end, the available infrastructure, and the joint preference
+      of the two ASes administrators.
 
         +============+===========================================+
         | R1 -> R2   |                                           |
