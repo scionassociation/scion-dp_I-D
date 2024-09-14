@@ -1563,8 +1563,9 @@ AS.
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     |           Identifier          |        Sequence Number        |
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    | Data...
-    +-+-+-+-+-
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 
 ~~~~
 {: #figure-26 title="Echo-request format"}
@@ -1591,8 +1592,8 @@ Every node SHOULD implement a SCMP Echo responder function that receives Echo Re
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     |           Identifier          |        Sequence Number        |
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    | Data...
-    +-+-+-+-+-
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
 {: #figure-27 title="Echo-reply format"}
@@ -1633,6 +1634,8 @@ The data received in the SCMP Echo Request message MUST be returned entirely and
 ~~~~
 {: #figure-24 title="Traceroute-request format"}
 
+Given a SCION path constituted of hop fields, traceroute allows to identify the corresponding on-path ISD-ASes.
+
 | Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
 | Type         | 130                                                           |
@@ -1644,7 +1647,7 @@ The data received in the SCMP Echo Request message MUST be returned entirely and
 | Interface ID | Place holder set to zero by SCMP sender                       |
 {: title="field values"}
 
-A border router is alerted of a Traceroute Request message through the ConsIngress or ConsEgress Router Alert flag in the hop field that describes the traversal of that router in a packet's path. Senders have to set these flags appropriately. When such a packet is received, the border router SHOULD reply with a [Traceroute Reply message](#traceroute-reply).
+A border router is alerted of a Traceroute Request message through the Ingress or Egress Router Alert flag set to 1 in the hop field that describes the traversal of that router in a packet's path (See [](#hopfld)). When such a packet is received, the border router SHOULD reply with a [Traceroute Reply message](#traceroute-reply).
 
 ### Traceroute Reply {#traceroute-reply}
 
@@ -1682,7 +1685,7 @@ A border router is alerted of a Traceroute Request message through the ConsIngre
 
 The identifier is set to the identifier value from the [Traceroute Request message](#traceroute-request). The ISD and AS identifiers are set to the ISD-AS of the originating border router.
 
-## Authentication
+## SCMP Authentication
 
 Authentication of SCMP packets is not specified here. In current deployments is still experimental. Endpoints should therefore validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations.
 
