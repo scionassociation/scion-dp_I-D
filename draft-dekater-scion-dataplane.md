@@ -1282,7 +1282,7 @@ The next steps depend on the direction of travel and whether this segment includ
 
   - **Case 2** <br> The path segment includes a **peering Hop Field** (`P` = "1"), but the current hop is **not** the peering hop (i.e. the current hop is **neither** the last hop of the first segment **nor** the first hop of the second segment). In this case, the ingress border router needs to perform the steps previously described for the path segment without peering Hop Field, but the border router MUST NOT increment `CurrInf` and MUST NOT increment `CurrHF` in the path meta header. Proceed with step 4.
 
-  - **Case 3** <br> The path segment includes a **peering Hop Field** (`P` = "1"), and the current Hop Field *is* the peering Hop Field. (i.e. the current hop is **either** the last hop of the first segment **or** the first hop of the second segment). In this case, the ingress border router MUST take the following step(s):
+  - **Case 3** <br> The path segment includes a **peering Hop Field** (`P` = "1"), and the current Hop Field *is* the peering Hop Field (i.e. the current hop is **either** the last hop of the first segment **or** the first hop of the second segment). In this case, the ingress border router MUST take the following step(s):
 
     - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i [:2]` in the formula with the value of Acc as set in the `Acc` field in the current Info Field (this is the value of Acc as it comes with the packet).
     - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.
