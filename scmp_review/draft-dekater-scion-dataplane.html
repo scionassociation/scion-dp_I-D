@@ -1696,7 +1696,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|Version|  TraffCl      |                FlowID                 |
+|Version|  TraffCl      |                Flow Label             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    NextHdr    |    HdrLen     |          PayloadLen           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -1716,7 +1716,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             <p id="section-2.1-3.2.1"><code>TrafficClass</code> (<code>TraffCl</code> in the image above): The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. The current use of the <code>TrafficClass</code> field for Differentiated Services and Explicit Congestion Notification is specified in <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span> and <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span>.<a href="#section-2.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.3">
-            <p id="section-2.1-3.3.1"><code>FlowID</code>: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources <span class="bcp14">MUST</span> set this field.<a href="#section-2.1-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.3.1"><code>Flow Label</code>: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources <span class="bcp14">MUST</span> set this field. This serves the same purpose as what <span>[<a href="#RFC6437" class="cite xref">RFC6437</a>]</span> describes for IPv6 and is used in the same manner. Notably, a Flow Label of zero does not imply that packet reordering is acceptable.<a href="#section-2.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.4">
             <p id="section-2.1-3.4.1"><code>NextHdr</code>: Encodes the type of the first header after the SCION header. This can be either a SCION extension or a Layer 4 protocol such as TCP or UDP. Values of this field respect the Assigned SCION Protocol Numbers (see <a href="#protnum" class="auto internal xref">Appendix "Assigned SCION Protocol Numbers"</a>).<a href="#section-2.1-3.4.1" class="pilcrow">¶</a></p>
@@ -2239,29 +2239,29 @@ One use case of the <code>Empty</code> path type lies in the context of <span><a
                 <p id="section-2.3.2.4-3.1.1"><code>RSV</code>: Unused and reserved for future use.<a href="#section-2.3.2.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.4-3.2">
-                <p id="section-2.3.2.4-3.2.1"><code>I</code>: The Ingress Router Alert flag. If this has value "1", the ingress router (in construction direction) <span class="bcp14">SHOULD</span> process the L4 payload in the packet. The construction direction is the direction of beaconing.<a href="#section-2.3.2.4-3.2.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.4-3.2.1"><code>I</code>: The Ingress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of <code>ConsIngress</code>, the router <span class="bcp14">SHOULD</span> process the L4 payload in the packet.<a href="#section-2.3.2.4-3.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-2.3.2.4-3.3">
-                <p id="section-2.3.2.4-3.3.1"><code>E</code>: The Egress Router Alert flag. If this has value "1", the egress router (in construction direction) <span class="bcp14">SHOULD</span> process the L4 payload in the packet.<a href="#section-2.3.2.4-3.3.1" class="pilcrow">¶</a></p>
+                <p id="section-2.3.2.4-3.3.1"><code>E</code>: The Egress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of <code>ConsEgress</code>, the router <span class="bcp14">SHOULD</span> process the L4 payload in the packet.<a href="#section-2.3.2.4-3.3.1" class="pilcrow">¶</a></p>
 </li>
-            </ul>
-<p id="section-2.3.2.4-4"><strong>Note:</strong> A sender cannot rely on multiple routers retrieving and processing the payload even if it sets multiple router alert flags. This is use-case dependent: In the case of traceroute informational messages, for example, the router for which the traceroute request is intended will process the request (if the corresponding Router Alert flag is set to "1") and reply to it without further forwarding the request along the path. Use cases that require multiple routers/hops on the path to process a packet <span class="bcp14">SHOULD</span> rely on a hop-by-hop extension (see <a href="#ext-header" class="auto internal xref">Section 2.4</a>). For general information on router alerts, see <span>[<a href="#RFC2711" class="cite xref">RFC2711</a>]</span>.<a href="#section-2.3.2.4-4" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.2.4-3.4">
+                <p id="section-2.3.2.4-3.4.1"><code>ExpTime</code>: Expiration time of a Hop Field. This field is 1-byte long, and the expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the <code>Timestamp</code> field (from the corresponding Info Field), as follows:<a href="#section-2.3.2.4-3.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.2.4-5.1">
-                <p id="section-2.3.2.4-5.1.1"><code>ExpTime</code>: Expiration time of a Hop Field. This field is 1-byte long, and the expiration time specified in this field is relative. An absolute expiration time in seconds is computed in combination with the <code>Timestamp</code> field (from the corresponding Info Field), as follows:<a href="#section-2.3.2.4-5.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.3.2.4-5.1.2.1">
-                    <p id="section-2.3.2.4-5.1.2.1.1"><code>Timestamp</code> + (1 + <code>ExpTime</code>) * (3600/256)<a href="#section-2.3.2.4-5.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.2.4-3.4.2.1">
+                    <p id="section-2.3.2.4-3.4.2.1.1"><code>Timestamp</code> + (1 + <code>ExpTime</code>) * (3600/256)<a href="#section-2.3.2.4-3.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="normal" id="section-2.3.2.4-5.2">
-                <p id="section-2.3.2.4-5.2.1"><code>ConsIngress</code>, <code>ConsEgress</code>: The 16-bits ingress/egress interface IDs in construction direction, that is, the direction of beaconing.<a href="#section-2.3.2.4-5.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.2.4-3.5">
+                <p id="section-2.3.2.4-3.5.1"><code>ConsIngress</code>, <code>ConsEgress</code>: The 16-bits ingress/egress interface IDs in construction direction, that is, the direction of beaconing.<a href="#section-2.3.2.4-3.5.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-2.3.2.4-5.3">
-                <p id="section-2.3.2.4-5.3.1"><code>MAC</code>: The 6-byte Message Authentication Code to authenticate the Hop Field. For details on how this MAC is calculated, see <a href="#hf-mac-overview" class="auto internal xref">Section 4.1.1</a>.<a href="#section-2.3.2.4-5.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-2.3.2.4-3.6">
+                <p id="section-2.3.2.4-3.6.1"><code>MAC</code>: The 6-byte Message Authentication Code to authenticate the Hop Field. For details on how this MAC is calculated, see <a href="#hf-mac-overview" class="auto internal xref">Section 4.1.1</a>.<a href="#section-2.3.2.4-3.6.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+<p id="section-2.3.2.4-4">The Ingress Router (respectively Egress Router) is the router owning the Ingress interface (respectively, Egress interface) when the packet is traveling in the <em>construction direction</em> of the path segment (i.e. the direction of beaconing). When the packet is traveling in the opposite direction, the meanings are reversed.<a href="#section-2.3.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.2.4-5">Router alert flags work similarly to <span>[<a href="#RFC2711" class="cite xref">RFC2711</a>]</span> and allow a sender to address a specific router on the path without knowing its address. Processing the L4 payload in the packet means that the router will treat the payload of the packet as a message to itself and parse it according to the value of the <code>NextHdr</code> field. Such messages include <span><a href="#traceroute-request" class="internal xref">Traceroute Requests</a> (<a href="#traceroute-request" class="auto internal xref">Section 5.6.3</a>)</span><a href="#section-2.3.2.4-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.2.4-6">Setting multiple router alert flags on a path <span class="bcp14">SHOULD</span> be avoided. This is because the router for which the corresponding Router Alert flag is set to "1" may process the request without further forwarding it along the path. Use cases that require multiple routers/hops on the path to process a packet <span class="bcp14">SHOULD</span> rely on a hop-by-hop extension (see <a href="#ext-header" class="auto internal xref">Section 2.4</a>).<a href="#section-2.3.2.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4338,6 +4338,10 @@ In addition, the source SIG is responsible for SCION path selection.<a href="#se
 <dt id="RFC5881">[RFC5881]</dt>
         <dd>
 <span class="refAuthor">Katz, D.</span> and <span class="refAuthor">D. Ward</span>, <span class="refTitle">"Bidirectional Forwarding Detection (BFD) for IPv4 and IPv6 (Single Hop)"</span>, <span class="seriesInfo">RFC 5881</span>, <span class="seriesInfo">DOI 10.17487/RFC5881</span>, <time datetime="2010-06" class="refDate">June 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5881">https://www.rfc-editor.org/rfc/rfc5881</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6437">[RFC6437]</dt>
+        <dd>
+<span class="refAuthor">Amante, S.</span>, <span class="refAuthor">Carpenter, B.</span>, <span class="refAuthor">Jiang, S.</span>, and <span class="refAuthor">J. Rajahalme</span>, <span class="refTitle">"IPv6 Flow Label Specification"</span>, <span class="seriesInfo">RFC 6437</span>, <span class="seriesInfo">DOI 10.17487/RFC6437</span>, <time datetime="2011-11" class="refDate">November 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6437">https://www.rfc-editor.org/rfc/rfc6437</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
