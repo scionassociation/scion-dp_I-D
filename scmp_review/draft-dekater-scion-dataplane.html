@@ -1297,13 +1297,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-failure-to-forward" class="internal xref">Failure To Forward</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-handling-link-failures" class="internal xref">Handling Link Failures</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-link-failure-detection-bfd" class="internal xref">Link Failure Detection - BFD</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-notification-scmp" class="internal xref">Notification - SCMP</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-link-failure-notification-s" class="internal xref">Link Failure Notification - SCMP</a></p>
 </li>
             </ul>
 </li>
@@ -4157,30 +4157,28 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
 </div>
 </section>
 </div>
-<div id="failure-to-forward">
+<div id="handling-link-failures">
 <section id="section-6">
-      <h2 id="name-failure-to-forward">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-failure-to-forward" class="section-name selfRef">Failure To Forward</a>
+      <h2 id="name-handling-link-failures">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-handling-link-failures" class="section-name selfRef">Handling Link Failures</a>
       </h2>
 <div id="scion-bfd">
 <section id="section-6.1">
         <h3 id="name-link-failure-detection-bfd">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-link-failure-detection-bfd" class="section-name selfRef">Link Failure Detection - BFD</a>
         </h3>
-<p id="section-6.1-1">One of the reasons not to forward a packet is the failure of the link through which the packet needs to egress. Whether such failures are detectable upon sending depends on the underlay protocol being used. In the case of UDP/IP, it is common for failures to go undetected. To detect link failures more reliably, SCION uses the Bidirectional Forwarding Detection (BFD) protocol (<span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span> and <span>[<a href="#RFC5881" class="cite xref">RFC5881</a>]</span>). BFD is a protocol intended to detect faults in the bidirectional path between two forwarding engines, with typically very low latency. It operates independently of media, data protocols, and routing protocols.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2">A SCION router monitor the links at each of its external interfaces by exchanging BFD messages with its peer. A SCION router monitors its connectivity with other routers in the same AS by exchanging BFD messages with them. A SCION BFD message is a SCION packet with a <code>NextHdr</code> value of <code>203</code> (<code>BFD/SCION</code>) and a path type of either <code>00</code> (<code>Empty</code> - used on internal links) or <code>2</code> (<code>OneHopPath</code> - used on inter-as links). The BFD header itself is a BFD Control Header as described in <span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span>.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.1-3">More information is available on one-hop and empty paths in <a href="#onehop" class="auto internal xref">Section 2.3.3</a> and <a href="#empty" class="auto internal xref">Section 2.3.1</a>.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.1-4">The protocol between peers is as descibed in <span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span>. To summarize: if a node does not receive a BFD message from its peer at some regular interval, it considers the link to be down (in both directions) until messages are received again.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.1-5">A SCION router should accept BFD connections from its peers and <span class="bcp14">SHOULD</span> establish BFD connections to its peers. While a link is considered to be down, a SCION router should drop packets that must egress via that link. In that case, it <span class="bcp14">SHOULD</span> send a <span><a href="#link-down-notification" class="internal xref">notification</a> (<a href="#link-down-notification" class="auto internal xref">Section 6.2</a>)</span> to the originator.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1-1">To detect link failures quickly and reliably, SCION uses the Bidirectional Forwarding Detection (BFD) protocol (<span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span>) on links between SCION routers. If a router does not receive a BFD message from its peer at some regular interval, it considers the link to be down (in both directions) until messages are received again.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">A SCION BFD message consists of a SCION packet with a <code>NextHdr</code> value of <code>203</code> (<code>BFD/SCION</code>) and a path type of either <code>00</code> (<code>Empty</code> - used on intra-AS links) or <code>2</code> (<code>OneHopPath</code> - used on inter-AS links). The BFD header itself is a BFD Control Header as described in <span>[<a href="#RFC5880" class="cite xref">RFC5880</a>]</span>. More information on one-hop and empty paths is available in <a href="#onehop" class="auto internal xref">Section 2.3.3</a> and <a href="#empty" class="auto internal xref">Section 2.3.1</a>.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">A SCION router <span class="bcp14">SHOULD</span> accept BFD connections from its peers and <span class="bcp14">SHOULD</span> attempt to establish BFD connections to its peers. While a link is considered to be down, a SCION router should drop packets destined to that link. In that case, it <span class="bcp14">SHOULD</span> send a <span><a href="#link-down-notification" class="internal xref">notification</a> (<a href="#link-down-notification" class="auto internal xref">Section 6.2</a>)</span> to the originator.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="link-down-notification">
 <section id="section-6.2">
-        <h3 id="name-notification-scmp">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-notification-scmp" class="section-name selfRef">Notification - SCMP</a>
+        <h3 id="name-link-failure-notification-s">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-link-failure-notification-s" class="section-name selfRef">Link Failure Notification - SCMP</a>
         </h3>
-<p id="section-6.2-1">If a failure to forward a packet is the result of a local condition, the path used by the packet is unusable. As a result, the originator cannot communicate with the recipient until the fault is repaired, the path expires, or a different path is used. SCION is designed so that a router cannot change the path followed by a packet. Only the originating endpoint can chose a different path. Therefore, to enable fast recovery, a router <span class="bcp14">SHOULD</span> notify the originator, via an <span><a href="#scmp-notification" class="internal xref">SCMP notifications</a> (<a href="#scmp-notification" class="auto internal xref">Section 5.5</a>)</span>, if the packet is dropped due to a local, non-transient, fault.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">Sending an SCMP error notification is never mandatory. To reduce exposure to denial-of-service attacks, a SCION router <span class="bcp14">SHOULD</span> restrict the amount of work done when dropping a packet. In most cases the packet <span class="bcp14">SHOULD</span> be dropped without performing any additional work. Rate-limiting the preparation and sending of recommended SCMP notifications (especially identical ones) is good practice. Rate limit policies are up to each AS' administrator.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">In SCION, an intermediate router cannot change the path followed by a packet, only the source endpoint can chose a different path. Therefore, to enable fast recovery, a router <span class="bcp14">SHOULD</span> signal forwarding failures to the source, via a <span><a href="#scmp-notification" class="internal xref">SCMP notification</a> (<a href="#scmp-notification" class="auto internal xref">Section 5.5</a>)</span>. This allows the source endpoint to quickly switch to a different path is used.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">Sending an SCMP error notification is <span class="bcp14">OPTIONAL</span>. Endpoints should therefore implement additional mechanisms to validate or detect link down signals. To reduce exposure to denial-of-service attacks, SCION routers <span class="bcp14">SHOULD</span> employ rate-limiting when sending of recommended SCMP notifications (especially identical ones). Rate limit policies are up to each AS' administrator.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
