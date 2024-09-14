@@ -2226,7 +2226,7 @@ direction
 
       -  *Case 3*
          The path segment includes a *peering Hop Field* (P = "1"), and
-         the current Hop Field _is_ the peering Hop Field. (i.e. the
+         the current Hop Field _is_ the peering Hop Field (i.e. the
          current hop is *either* the last hop of the first segment *or*
          the first hop of the second segment).  In this case, the
          ingress border router MUST take the following step(s):
