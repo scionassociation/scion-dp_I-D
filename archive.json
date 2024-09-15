@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-12T00:00:53.588149+00:00",
+  "timestamp": "2024-09-15T00:00:36.215695+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -689,7 +689,7 @@
       "id": "I_kwDOKYa7786RBX7K",
       "title": "Clarify Interface IDs & ConsIngress/ConsEgress & Router Alert flags",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/41",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -699,10 +699,10 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "Current text is confusing\r\n\r\n#### TODOs: \r\n- [ ] Clarify use of the  ConsEgress Router Alert flag\r\n- [ ] ConsIngress and ConsEgress are just instances of interfaces Identifiers, we should make this clearer (e.g. when we define interface IDs). \r\n- [ ] ... (see feedback below)\r\n\r\n#### Reviewer feedback\r\n> Harald Alvestrand\r\nEndpoint addresses consist of an AS number, an interface ID, and a \u201cnext protocol\u201d address. This last is presumably only useful at SCION endpoints.\r\n\r\n> My answer:\r\nOne of the fields in a SCION address is the ISD (Isolation Domain) number, not the interface ID. We mention \"a complete SCION address is composed of the <ISD, AS, endpoint address>\u201d in section 1.3.1. The we show the  address header in 2.2.2. If this is too late in the draft, we could add some text earlier to clarify this. Interface IDs, instead, are part of hop fields (interface IDs are in the  the ConsIngress / ConsEgress). Perhaps the confusing fact is that the field is called ConsIngress/Egress. This is because  these fields refer to interface IDs in the direction the link was discovered during path construction (beaconing). \r\n\r\n> Harald Alvestrand\r\n> There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\n> Response: \r\nYou are probably referring to the ConsEgress Router Alert flag, right? Thank you for spotting this, the description should be extended. This is actually one bit, we\u2019ll add some explanation on this flag. (I see how the current description is somehow confusing). Besides that, ConsIngress and ConsEgress are just instances of interfaces Identifiers, we probably have to make this clearer. \r\nRegarding traceroute, this is an example of how this might be used (there is a SCON trace route application). As we don\u2019t describe it, I\u2019d remove it. \r\n\r\n> Eliot, 20.07.2024\r\n>   ConsIngress and ConsEgress require a lot more explanation if they're to be included.\r\n\r\n> Arald Alvestrand, 20.07\r\n>  There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\nNote: we use naming ConsIngress, ConsEgress because of https://github.com/scionproto/scion/issues/1479 \r\n\r\n",
+      "body": "Current text is confusing\r\n\r\n#### TODOs: \r\n- [x] Clarify use of the  ConsEgress Router Alert flag\r\n- [x] ConsIngress and ConsEgress are just instances of interfaces Identifiers, we should make this clearer (e.g. when we define interface IDs). \r\n- [x] ... (see feedback below)\r\n\r\n#### Reviewer feedback\r\n> Harald Alvestrand\r\nEndpoint addresses consist of an AS number, an interface ID, and a \u201cnext protocol\u201d address. This last is presumably only useful at SCION endpoints.\r\n\r\n> My answer:\r\nOne of the fields in a SCION address is the ISD (Isolation Domain) number, not the interface ID. We mention \"a complete SCION address is composed of the <ISD, AS, endpoint address>\u201d in section 1.3.1. The we show the  address header in 2.2.2. If this is too late in the draft, we could add some text earlier to clarify this. Interface IDs, instead, are part of hop fields (interface IDs are in the  the ConsIngress / ConsEgress). Perhaps the confusing fact is that the field is called ConsIngress/Egress. This is because  these fields refer to interface IDs in the direction the link was discovered during path construction (beaconing). \r\n\r\n> Harald Alvestrand\r\n> There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\n> Response: \r\nYou are probably referring to the ConsEgress Router Alert flag, right? Thank you for spotting this, the description should be extended. This is actually one bit, we\u2019ll add some explanation on this flag. (I see how the current description is somehow confusing). Besides that, ConsIngress and ConsEgress are just instances of interfaces Identifiers, we probably have to make this clearer. \r\nRegarding traceroute, this is an example of how this might be used (there is a SCON trace route application). As we don\u2019t describe it, I\u2019d remove it. \r\n\r\n> Eliot, 20.07.2024\r\n>   ConsIngress and ConsEgress require a lot more explanation if they're to be included.\r\n\r\n> Arald Alvestrand, 20.07\r\n>  There\u2019s a weakly described feature (which still gets 16 bits in the header!) called \u201cConsIngress\u201d and \u201cConsEgress\u201d, which says that \u201crouters will do L4 processing\u201d, without calling out what that is - Traceroute is briefly mentioned, but not to a degree that would allow implementation of whatever-it-is-supposed-to-be.\r\n\r\nNote: we use naming ConsIngress, ConsEgress because of https://github.com/scionproto/scion/issues/1479 \r\n\r\n",
       "createdAt": "2024-07-26T22:28:49Z",
-      "updatedAt": "2024-08-26T12:40:52Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-14T10:02:33Z",
+      "closedAt": "2024-09-14T10:02:13Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -975,7 +975,7 @@
       "id": "I_kwDOKYa7786UIW05",
       "title": "FlowID / IPv6 Flow Label",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/54",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -986,8 +986,8 @@
       ],
       "body": "IMHO use of the `FlowID` field is underspecified in the draft. This is all we say:\r\n> - `FlowID`: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources MUST set this field.\r\n \r\n Context: \r\nin https://github.com/scionproto/scion/issues/3714 @shitz says: \r\n> Note, the QoS and FlowID fields where moved to the first line of the common header. This is to be in line with the IPv6 header from which we borrow the specifications of these two fields.\r\n \r\n I have some questions: \r\n*  What value should the source use and why?\r\n* Is this the same as IPv6 Flow Labels? If yes, shall we just use the same naming  (Flow ID --> Flow Label)?\r\n*  Can we refer to the rules for IPv6 FLow Labels (e.g. [rfc2460](https://datatracker.ietf.org/doc/html/rfc2460) section 6 )?\r\n\r\n@oncilla do you have some background on this? ",
       "createdAt": "2024-08-25T12:23:01Z",
-      "updatedAt": "2024-09-10T09:32:59Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-14T10:04:24Z",
+      "closedAt": "2024-09-14T10:04:24Z",
       "comments": [
         {
           "author": "oncilla",
@@ -1010,7 +1010,7 @@
       "id": "I_kwDOKYa7786UIn1h",
       "title": "Life of a packet: is L2 link possible?",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/55",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1022,8 +1022,8 @@
       ],
       "body": "In 3. Life of a SCION Data Packet we have a L2 link between R1, R2. Is this something that comes from the book or is this actually possible today? Can any of the implementations actually support this?\r\n\r\n\r\nI feel there are some missing pieces: \r\n* We'd need an [Assigned Protocol Number](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml) that can be used by L2\r\n* Is there any need for a L2 discovery mechanism?\r\n\r\n@jiceatscion \r\n\r\nphrasing to be adjusted: \r\n\r\n```\r\n*Note:* Although technically there is no need for a UDP/IP\r\n      underlay if two routers are directly connected, the SCION\r\n      implementation always uses a UDP/IP underlay in practice.  This is\r\n      to enable a common interface for all routers.\r\n  ```\r\n",
       "createdAt": "2024-08-25T14:15:37Z",
-      "updatedAt": "2024-09-10T09:32:10Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-14T14:40:28Z",
+      "closedAt": "2024-09-14T14:40:28Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -1067,7 +1067,7 @@
       "id": "I_kwDOKYa7786UI6E8",
       "title": "Peering links clarifications",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/56",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -1076,10 +1076,10 @@
         "needs-discussion",
         "design"
       ],
-      "body": "We currently say that peering links are only possible if one of the two ASes is not core, but there is an open discussion. \r\n\r\n- [x] Clarify wether peering links between core ASes are possible following https://github.com/scionproto/scion/issues/4484\r\n- [ ] We might need to say more explicitly how a router can determine whether the current hop is a peering hop. We now only mention this in \"Steps at Egress Border Router\" and I feel text is not too clear: ` This would be the case if the current Hop Field is the *first* Hop Field of the segment, `",
+      "body": "We currently say that peering links are only possible if one of the two ASes is not core, but there is an open discussion. \r\n\r\n- [x] Clarify wether peering links between core ASes are possible following https://github.com/scionproto/scion/issues/4484\r\n- [x] We might need to say more explicitly how a router can determine whether the current hop is a peering hop. We now only mention this in \"Steps at Egress Border Router\" and I feel text is not too clear: ` This would be the case if the current Hop Field is the *first* Hop Field of the segment, `",
       "createdAt": "2024-08-25T16:29:19Z",
-      "updatedAt": "2024-09-03T08:36:59Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-14T14:36:53Z",
+      "closedAt": "2024-09-14T14:36:52Z",
       "comments": []
     }
   ],
@@ -4130,26 +4130,82 @@
       "id": "PR_kwDOKYa77855dwYf",
       "title": "Clarify the router alert flags and relationship to the ConsIngress/egress fields",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/57",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #41 ",
       "createdAt": "2024-08-26T16:59:16Z",
-      "updatedAt": "2024-08-28T13:58:35Z",
+      "updatedAt": "2024-09-14T10:02:20Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
+      "baseRefOid": "967778b54aae92e2465217740e59042f25934fca",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "ingressegress",
-      "headRefOid": "d8e9c136599370aeef9819a68a0020cdcaea1eeb",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "2199c4b4ed20083de8b481725ea8040ad4c15e61",
+      "closedAt": "2024-09-14T10:02:12Z",
+      "mergedAt": "2024-09-14T10:02:12Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "1b82c112ec1987c70e3b651d48902efcc8b4a494"
+      },
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Adopted your suggestions. You still need to approve. (if I'm not to use the red button).\r\n",
+          "createdAt": "2024-09-13T09:12:58Z",
+          "updatedAt": "2024-09-13T09:12:58Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786JLF4h",
+          "commit": {
+            "abbreviatedOid": "f99fa71"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "I proposed a few wording changes that I believe make the text clearer. Let me know what you think, and if you like them, feel free to merge ",
+          "createdAt": "2024-09-12T20:48:34Z",
+          "updatedAt": "2024-09-12T21:09:18Z",
+          "comments": [
+            {
+              "originalPosition": 56,
+              "body": "```suggestion\r\n- `I`: The Ingress Router Alert flag. If this has value \"1\" and the packet is received on the interface with ID  corresponding to the value of `ConsIngress`, the router SHOULD process the L4 payload in the packet.\r\n- `E`: The Egress Router Alert flag. If this has value \"1\" and the packet is received on the interface with ID  corresponding to the value of `ConsEgress`, the router SHOULD process the L4 payload in the packet.\r\n```\r\n\r\nI think here it is important to say that the flags refer to the construction direction. I proposed a wording",
+              "createdAt": "2024-09-12T20:48:34Z",
+              "updatedAt": "2024-09-12T21:09:18Z"
+            },
+            {
+              "originalPosition": 68,
+              "body": "```suggestion\r\nSetting multiple router alert flags on a path SHOULD be avoided. This is because the router for which the corresponding Router Alert flag is set to \"1\" may process the request without further forwarding it along the path. Use cases that require multiple routers/hops on the path to process a packet SHOULD rely on a hop-by-hop extension (see [](#ext-header)).\r\n```",
+              "createdAt": "2024-09-12T21:00:59Z",
+              "updatedAt": "2024-09-12T21:09:18Z"
+            },
+            {
+              "originalPosition": 66,
+              "body": "```suggestion\r\nRouter alert flags work similarly to {{RFC2711}} and allow a sender to address a specific router on the path without knowing its address. Processing the L4 payload in the packet means that the router will treat the payload of the packet as a message to itself and parse it according to the value of the `NextHdr` field. Such messages include [Traceroute Requests](#traceroute-request)\r\n```",
+              "createdAt": "2024-09-12T21:08:25Z",
+              "updatedAt": "2024-09-12T21:09:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786JWqc8",
+          "commit": {
+            "abbreviatedOid": "2199c4b"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-09-14T10:02:03Z",
+          "updatedAt": "2024-09-14T10:02:03Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 58,
@@ -4205,13 +4261,13 @@
       "labels": [],
       "body": "Follow up to #49.  Contributes to #36 \r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-dataplane&url_2=https://scionassociation.github.io/scion-dp_I-D/scmp_review/draft-dekater-scion-dataplane.txt)",
       "createdAt": "2024-08-28T15:11:21Z",
-      "updatedAt": "2024-09-10T16:16:42Z",
+      "updatedAt": "2024-09-14T14:07:02Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
+      "baseRefOid": "1e5971d688e9428d6726eabc2546a3303fc2f25c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "scmp_review",
-      "headRefOid": "981309f443dd07a37ed76a4b4c00d22e912b5e2a",
+      "headRefOid": "8ee4a98f2479ccabdb197a3293247fa8c6897f91",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4244,6 +4300,13 @@
           "body": "I added an explanation regarding 1232. Also added ping and fixed a cpl of table/figure issues.\r\n",
           "createdAt": "2024-09-10T16:16:41Z",
           "updatedAt": "2024-09-10T16:16:41Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Hi @jiceatscion , thanks a lot for your previous changes! \r\nI reworded the section about BDF and link failures, and I tried to make it a bit more concise. I also edited a couple of SCMP header figures. Could you have a quick look, and if ok, feel free to merge this :)  \r\n\r\nEdit: Last question: should we make  section 6 \"Handling Link Failures\" part of SCMP? IMHO it kind of belongs there rather than a separate section ",
+          "createdAt": "2024-09-14T14:05:58Z",
+          "updatedAt": "2024-09-14T14:07:02Z"
         }
       ],
       "reviews": [
@@ -4420,24 +4483,26 @@
       "id": "PR_kwDOKYa7785504Y-",
       "title": "Clarify the validity of peering links",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/60",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "In anticipation of the TC or Adrian confirming the irrelevance of the Core-Core peering prohibition, removed the associated language in the draft and explicitly state that Core-Core peering is possible. Also clarified that this still does not permit valley paths.\r\n\r\nAlso clarified the rules applied by a router to determine if a hop is peering hop.\r\n\r\nFixes to #56 \r\n\r\n- [ ] ~If merged, it must be replicated across drafts~\r\n",
       "createdAt": "2024-08-29T12:33:28Z",
-      "updatedAt": "2024-09-03T08:39:47Z",
+      "updatedAt": "2024-09-14T14:36:46Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "eeb53347f5328abcb2ffe9e0c4b856126b4f8550",
+      "baseRefOid": "1e5971d688e9428d6726eabc2546a3303fc2f25c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "peering",
-      "headRefOid": "2596019b9f5533b78245b1621c6fd6d84d18b7f8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "292b1d475b3199cb71c39a3734c647c929793508",
+      "closedAt": "2024-09-14T14:36:43Z",
+      "mergedAt": "2024-09-14T14:36:43Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "6eac45f112e5f876c356bdfaa796cd3be8e7aca7"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -4447,7 +4512,21 @@
           "updatedAt": "2024-09-03T08:39:46Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786JXH4a",
+          "commit": {
+            "abbreviatedOid": "292b1d4"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM, thanks a lot! ",
+          "createdAt": "2024-09-14T14:36:38Z",
+          "updatedAt": "2024-09-14T14:36:38Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 61,
@@ -4496,52 +4575,84 @@
       "id": "PR_kwDOKYa77856_-fe",
       "title": "layer2: rephrase the L2 AS-AS link description",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/62",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #55 ",
       "createdAt": "2024-09-10T15:15:55Z",
-      "updatedAt": "2024-09-10T15:15:56Z",
+      "updatedAt": "2024-09-14T14:40:29Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "967778b54aae92e2465217740e59042f25934fca",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "l2-link",
       "headRefOid": "9fc9abf558724539c6491c251a2ead6a24675b22",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-09-14T14:40:26Z",
+      "mergedAt": "2024-09-14T14:40:26Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "2b28edae7cf95183ae890597eca5dc4c0a430f9d"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786JXJjf",
+          "commit": {
+            "abbreviatedOid": "9fc9abf"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2024-09-14T14:40:13Z",
+          "updatedAt": "2024-09-14T14:40:13Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 63,
       "id": "PR_kwDOKYa77857KEdf",
       "title": "flow_label: rename flow ID to Flow Label and document by reference to RFC6437",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/63",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #54 ",
       "createdAt": "2024-09-11T12:44:39Z",
-      "updatedAt": "2024-09-11T12:44:40Z",
+      "updatedAt": "2024-09-14T10:04:26Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "967778b54aae92e2465217740e59042f25934fca",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "flow_label",
       "headRefOid": "c8518ebae1ca21a60c6dc10446147ad2d10592b8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-09-14T10:04:23Z",
+      "mergedAt": "2024-09-14T10:04:23Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "1e5971d688e9428d6726eabc2546a3303fc2f25c"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786JWqhR",
+          "commit": {
+            "abbreviatedOid": "c8518eb"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-09-14T10:04:06Z",
+          "updatedAt": "2024-09-14T10:04:06Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
