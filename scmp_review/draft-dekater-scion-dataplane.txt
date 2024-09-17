@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 18 March 2025                                 SCION Association
+Expires: 21 March 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                       14 September 2024
+                                                       17 September 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 March 2025.
+   This Internet-Draft will expire on 21 March 2025.
 
 Copyright Notice
 
@@ -2821,7 +2821,7 @@ direction
 5.7.  SCMP Authentication
 
    Authentication of SCMP packets is not specified here.  In current
-   deployments is still experimental.  Endpoints should therefore
+   deployments it is still experimental.  Endpoints should therefore
    validate link down messages (External Interface Down (Section 5.5.2)
    and Internal Connectivity Down (Section 5.5.3)) with additional
    signals for reliable operations.
