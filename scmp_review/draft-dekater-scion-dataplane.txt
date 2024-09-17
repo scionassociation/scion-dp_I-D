@@ -2860,7 +2860,7 @@ direction
    Sending an SCMP error notification is OPTIONAL.  Endpoints should
    therefore implement additional mechanisms to validate or detect link
    down signals.  To reduce exposure to denial-of-service attacks, SCION
-   routers SHOULD employ rate-limiting when sending of recommended SCMP
+   routers SHOULD employ rate-limiting when sending recommended SCMP
    notifications (especially identical ones).  Rate limit policies are
    up to each AS' administrator.
 
