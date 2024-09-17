@@ -1330,9 +1330,7 @@ Each administrator of SCION control services and routers is responsible for main
 
 # SCMP {#scmp}
 
-## Introduction
-
-The SCION Control Message Protocol (SCMP) is analogous to the Internet Control Message Protocol (ICMP). It provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, an optimization for end hosts to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
+The SCION Control Message Protocol (SCMP) is analogous to the Internet Control Message Protocol (ICMP). It provides functionality for network diagnostics, such as traceroute, and error messages that signal packet processing or network-layer problems. SCMP is a helpful tool for network diagnostics and, in the case of External Interface Down and Internal Connectivity Down messages, a signal for endpoints to detect network failures more rapidly and fail-over to different paths. However, SCION nodes should not strictly rely on the availability of SCMP, as this protocol may not be supported by all devices and/or may be subject to rate limiting.
 
 This document specifies only messages RECOMMENDED for the purposes of path diagnosis and recovery. An extended specification, still a work in progress, can be found in {{SCMP}}.
 
@@ -1355,17 +1353,15 @@ The messages have the following general format:
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-21 title="SCMP message format"}
+{: #figure-scmp-format title="SCMP message format"}
 
-*Type* indicates the type of SCMP message. Its value determines the format of the info and data block.
+- `Type`: it indicates the type of SCMP message. Its value determines the format of the type-dependent block.
 
-*Code* provides additional granularity to the SCMP type.
+- `Code`: it provides additional granularity to the SCMP type.
 
-*Checksum* is used to detect data corruption.
+- `Checksum`: it is used to detect data corruption.
 
-*InfoBlock* is an optional field of variable length. The format is dependent on the message type.
-
-*DataBlock* is an optional field of variable length. The format is dependent on the message type.
+- `Type-dependent Block`: optional field of variable length which format is dependent on the message type.
 
 ## Message Types
 
@@ -1373,7 +1369,6 @@ SCMP messages are grouped into two classes: error messages and informational mes
 
 This specification defines the message formats for the following SCMP messages:
 
-**SCMP error messages**:
 
 |Type | Meaning                                                   |
 |-----+-----------------------------------------------------------|
@@ -1388,28 +1383,24 @@ This specification defines the message formats for the following SCMP messages:
 |101  | Private Experimentation                                   |
 |     |                                                           |
 |127  | Reserved for expansion of SCMP error messages             |
-{: title="type values"}
+{: title="error messages types"}
 
-**SCMP informational messages**:
 
 | Type | Meaning                                                  |
 |------+----------------------------------------------------------|
-| 128  | Reserved for future use                                  |
-| 129  | Reserved for future use                                  |
+| 128  | [Echo Request](#echo-request)                            |
+| 129  | [Echo Reply](#echo-reply)                                |
 | 130  | [Traceroute Request](#traceroute-request)                |
 | 131  | [Traceroute Reply](#traceroute-reply)                    |
 | 200  | Private Experimentation                                  |
 | 201  | Private Experimentation                                  |
 |      |                                                          |
 | 255  | Reserved for expansion of SCMP informational messages    |
-{: title="type values"}
+{: title="informational messages types"}
 
 Type values 100, 101, 200, and 201 are reserved for private experimentation.
-They are not intended for general use. Any wide-scale and/or uncontrolled usage
-should obtain a real allocation.
 
-Type values 127 and 255 are reserved for future expansion of in case of a
-shortage of type values.
+All other values are reserved for future use.
 
 ## Checksum Calculation
 
@@ -1430,6 +1421,8 @@ Implementations MUST respect the following rules when processing SCMP messages:
      - An SCMP error message.
      - A packet which source address does not uniquely identify a single node. E.g., an IPv4 or IPv6 multicast address.
 
+The maximum size 1232 bytes is chosen so that the entire datagram, if encapsulated in UDP and IPv6, does not exceed 1280 bytes (L2 Header excluded). 1280 bytes is the minimum MTU required by IPv6 and it is assumed that, nowadays, this MTU can also be safely expected when using IPv4.
+
 ## Error Messages {#scmp-notification}
 
 ### Packet Too Big {#packet-too-big}
@@ -1449,9 +1442,9 @@ Implementations MUST respect the following rules when processing SCMP messages:
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{:figure-24 title="packet-too-big}
+{:figure-21 title="Packet-too-big format"}
 
-| SCMP Fields  |                                                     |
+| Name         | Value                                               |
 |--------------+-----------------------------------------------------|
 | Type         | 2                                                   |
 | Code         | 0                                                   |
@@ -1487,9 +1480,9 @@ underlay.
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-22 title="External-interface-down-format"}
+{: #figure-22 title="External-interface-down format"}
 
-| SCMP Fields  |                                                               |
+| Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
 | Type         | 5                                                             |
 | Code         | 0                                                             |
@@ -1532,9 +1525,9 @@ Recipients can use this information to route around broken data-plane links.
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-23 title="internal-connectivity-down-format"}
+{: #figure-23 title="Internal-connectivity-down format"}
 
-| SCMP Fields  |                                                               |
+| Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
 | Type         | 6                                                             |
 | Code         | 0                                                             |
@@ -1557,6 +1550,65 @@ AS.
 
 ## Informational Messages {#scmp-information}
 
+### Echo Request {#echo-request}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+~~~~
+{: #figure-26 title="Echo-request format"}
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 128                                                           |
+| Code         | 0                                                             |
+| Identifier   | A 16-bit identifier to aid matching replies with requests     |
+| Sequence Nr. | A 16-bit sequence number to aid matching replies with requests|
+| Data         | Variable length of arbitrary data                             |
+{: title="field values"}
+
+Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
+
+### Echo Reply {#echo-reply}
+
+~~~~
+
+     0                   1                   2                   3
+     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |     Type      |     Code      |          Checksum             |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |           Identifier          |        Sequence Number        |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                     Data (variable Len)                       |
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~~
+{: #figure-27 title="Echo-reply format"}
+
+
+| Name         | Value                                                         |
+|--------------+---------------------------------------------------------------|
+| Type         | 129                                                           |
+| Code         | 0                                                             |
+| Identifier   | The identifier of the Echo Request                            |
+| Sequence Nr. | The sequence number of the Echo Request                       |
+| Data         | The data of the Echo Request                                  |
+
+Every node SHOULD implement a SCMP Echo responder function that receives Echo Requests and originates corresponding Echo replies.
+
+The data received in the SCMP Echo Request message MUST be returned entirely and unmodified in the SCMP Echo Reply message.
+
 ### Traceroute Request {#traceroute-request}
 
 ~~~~
@@ -1578,9 +1630,11 @@ AS.
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-24 title="traceroute-request-format"}
+{: #figure-24 title="Traceroute-request format"}
 
-| SCMP Fields  |                                                               |
+Given a SCION path constituted of hop fields, traceroute allows to identify the corresponding on-path ISD-ASes.
+
+| Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
 | Type         | 130                                                           |
 | Code         | 0                                                             |
@@ -1591,7 +1645,7 @@ AS.
 | Interface ID | Place holder set to zero by SCMP sender                       |
 {: title="field values"}
 
-A border router is alerted of a Traceroute Request message through the ConsIngress or ConsEgress Router Alert flag in the hop field that describes the traversal of that router in a packet's path. Senders have to set these flags appropriately. When such a packet is received, the border router SHOULD reply with a [Traceroute Reply message](#traceroute-reply).
+A border router is alerted of a Traceroute Request message through the Ingress or Egress Router Alert flag set to 1 in the hop field that describes the traversal of that router in a packet's path (See [](#hopfld)). When such a packet is received, the border router SHOULD reply with a [Traceroute Reply message](#traceroute-reply).
 
 ### Traceroute Reply {#traceroute-reply}
 
@@ -1614,9 +1668,9 @@ A border router is alerted of a Traceroute Request message through the ConsIngre
     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~~
-{: #figure-25 title="traceroute-reply-format"}
+{: #figure-25 title="Traceroute-reply format"}
 
-| SCMP Fields                                                                  |
+| Name         | Value                                                         |
 |--------------+---------------------------------------------------------------|
 | Type         | 131                                                           |
 | Code         | 0                                                             |
@@ -1629,29 +1683,25 @@ A border router is alerted of a Traceroute Request message through the ConsIngre
 
 The identifier is set to the identifier value from the [Traceroute Request message](#traceroute-request). The ISD and AS identifiers are set to the ISD-AS of the originating border router.
 
-## Authentication
+## SCMP Authentication
 
-Authentication of SCMP packets is not specified. In a context where endpoints may depend on SCMP messages (at least [External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) for reliable operations, this is recognized as a problem and is being addressed.
+Authentication of SCMP packets is not specified here. In current deployments it is still experimental. Endpoints should therefore validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations.
 
-# Failure To Forward
+# Handling Link Failures
 
 ## Link Failure Detection - BFD {#scion-bfd}
 
-One of the reasons not to forward a packet is the failure of the link through which the packet needs to egress. Whether such failures are detectable upon sending depends on the underlay protocol being used. In the case of UDP/IP, it is common for failures to go undetected. To detect link failures more reliably, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ({{RFC5880}} and {{RFC5881}}). BFD is a protocol intended to detect faults in the bidirectional path between two forwarding engines, with typically very low latency. It operates independently of media, data protocols, and routing protocols.
+To detect link failures quickly and reliably, SCION uses the Bidirectional Forwarding Detection (BFD) protocol ({{RFC5880}}) on links between SCION routers. If a router does not receive a BFD message from its peer at some regular interval, it considers the link to be down (in both directions) until messages are received again.
 
-A SCION router monitor the links at each of its external interfaces by exchanging BFD messages with its peer. A SCION router monitors its connectivity with other routers in the same AS by exchanging BFD messages with them. A SCION BFD message is a SCION packet with a `NextHdr` value of `203` (`BFD/SCION`) and a path type of either `00` (`Empty` - used on internal links) or `2` (`OneHopPath` - used on inter-as links). The BFD header itself is a BFD Control Header as described in {{RFC5880}}.
+A SCION BFD message consists of a SCION packet with a `NextHdr` value of `203` (`BFD/SCION`) and a path type of either `00` (`Empty` - used on intra-AS links) or `2` (`OneHopPath` - used on inter-AS links). The BFD header itself is a BFD Control Header as described in {{RFC5880}}. More information on one-hop and empty paths is available in [](#onehop) and [](#empty).
 
-More information is available on one-hop and empty paths in [](#onehop) and [](#empty).
+A SCION router SHOULD accept BFD connections from its peers and SHOULD attempt to establish BFD connections to its peers. While a link is considered to be down, a SCION router should drop packets destined to that link. In that case, it SHOULD send a [notification](#link-down-notification) to the originator.
 
-The protocol between peers is as descibed in {{RFC5880}}. To summarize: if a node does not receive a BFD message from its peer at some regular interval, it considers the link to be down (in both directions) until messages are received again.
+## Link Failure Notification - SCMP {#link-down-notification}
 
-A SCION router should accept BFD connections from its peers and SHOULD establish BFD connections to its peers. While a link is considered to be down, a SCION router should drop packets that must egress via that link. In that case, it SHOULD send a [notification](#link-down-notification) to the originator.
+In SCION, an intermediate router cannot change the path followed by a packet, only the source endpoint can chose a different path. Therefore, to enable fast recovery, a router SHOULD signal forwarding failures to the source, via a [SCMP notification](#scmp-notification). This allows the source endpoint to quickly switch to a different path.
 
-## Notification - SCMP {#link-down-notification}
-
-If a failure to forward a packet is the result of a local condition, the path used by the packet is unusable. As a result, the originator cannot communicate with the recipient until the fault is repaired, the path expires, or a different path is used. SCION is designed so that a router cannot change the path followed by a packet. Only the originating endpoint can chose a different path. Therefore, to enable fast recovery, a router SHOULD notify the originator, via an [SCMP notifications](#scmp-notification), if the packet is dropped due to a local, non-transient, fault.
-
-Sending an SCMP error notification is never mandatory. To reduce exposure to denial-of-service attacks, a SCION router SHOULD restrict the amount of work done when dropping a packet. In most cases the packet SHOULD be dropped without performing any additional work. Rate-limiting the preparation and sending of recommended SCMP notifications (especially identical ones) is good practice. Rate limit policies are up to each AS' administrator.
+Sending an SCMP error notification is OPTIONAL. Endpoints should therefore implement additional mechanisms to validate or detect link down signals. To reduce exposure to denial-of-service attacks, SCION routers SHOULD employ rate-limiting when sending recommended SCMP notifications (especially identical ones). Rate limit policies are up to each AS' administrator.
 
 # Security Considerations
 
