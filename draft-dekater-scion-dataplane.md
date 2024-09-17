@@ -1687,7 +1687,7 @@ The identifier is set to the identifier value from the [Traceroute Request messa
 
 ## SCMP Authentication
 
-Authentication of SCMP packets is not specified here. In current deployments is still experimental. Endpoints should therefore validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations.
+Authentication of SCMP packets is not specified here. In current deployments it is still experimental. Endpoints should therefore validate link down messages ([External Interface Down](#external-interface-down) and [Internal Connectivity Down](#internal-connectivity-down)) with additional signals for reliable operations.
 
 # Handling Link Failures
 
