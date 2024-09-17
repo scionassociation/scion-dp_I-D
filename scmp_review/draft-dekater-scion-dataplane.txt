@@ -2855,8 +2855,7 @@ direction
    packet, only the source endpoint can chose a different path.
    Therefore, to enable fast recovery, a router SHOULD signal forwarding
    failures to the source, via a SCMP notification (Section 5.5).  This
-   allows the source endpoint to quickly switch to a different path is
-   used.
+   allows the source endpoint to quickly switch to a different path.
 
    Sending an SCMP error notification is OPTIONAL.  Endpoints should
    therefore implement additional mechanisms to validate or detect link
