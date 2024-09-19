@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 21 March 2025                                 SCION Association
+Expires: 23 March 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                       17 September 2024
+                                                       19 September 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 March 2025.
+   This Internet-Draft will expire on 23 March 2025.
 
 Copyright Notice
 
@@ -134,6 +134,7 @@ Table of Contents
        7.1.3.  Path Splicing
      7.2.  On-Path Attacks
        7.2.1.  Modification of the Path Header
+       7.2.2.  Modification of the Payload
      7.3.  Off-Path Attacks
      7.4.  Volumetric Denial of Service Attacks
    8.  Interoperability: SCION IP Gateway
@@ -3043,6 +3044,17 @@ direction
    path.  For this reason proof-of-transit, which would be required to
    detect such an attack, has marginal benefit in the context of SCION
    and it is not in scope for this document.
+
+7.2.2.  Modification of the Payload
+
+   An on-path attacker can modify the payload of a SCION packet.
+   Existing higher-layer protocols can easily defend against such an
+   attack without any cooperation by the SCION network.  For that
+   reason, payload integrity is not in scope for this specification.
+   However, there exists a proposal for an experimental extension to
+   authenticate addresses, provide integrity protection for payloads,
+   and replay protection: SPAO . This is still very experimental and it
+   not used in the production network.
 
 7.3.  Off-Path Attacks
 
