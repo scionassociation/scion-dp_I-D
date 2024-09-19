@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-17T00:00:35.633321+00:00",
+  "timestamp": "2024-09-19T00:00:50.701425+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -562,7 +562,7 @@
       "id": "I_kwDOKYa7786QfDAL",
       "title": "Clarify handling link failures",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/36",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -573,10 +573,10 @@
         "Prio 1",
         "needs-discussion"
       ],
-      "body": "Path revocation in case of link failures is not clear. We only mention something in controlplane-02 section 2.4:\r\n``` \r\nOn link failures, endpoints route around the failed link by switching to\r\ndifferent paths in the data plane.\r\n```\r\nWe should make this clearer in -dataplane too. \r\n\r\n#### TODO: \r\n- [x] scionassociation/scion-dp_I-D#37\r\n- [x] Clarify that endpoints are expected to handle failures (and why)\r\n- [x] Clarify when a SCMP [Interface Down](https://scion.docs.anapaya.net/en/latest/protocols/scmp.html#external-interface-down) message is sent or not,  and why (it _should_ be sent)\r\n- [x] Clarify that SCMP interface down is currently unauthenticated, but it should be\r\n- [ ] @nicorusti review https://github.com/scionassociation/scion-dp_I-D/pull/49/files \r\n- [ ] @nicorusti  Send email to Eliot, Harald and ask if external reference to SCMP is enough (within the context of link down messages)\r\n\r\n#### Feedback details\r\n> Harald Alvestrand <harald@alvestrand.no> \r\n Once sent, a packet\u2019s path cannot be changed; path changes are handled by routers discovering that the path no longer exists and (I assume, this is likely documented in -controlplane) sending an alert back \u201cdon\u2019t use this path\u201d.\r\n \r\n >  Form my lunch with Harald at IETF120: \r\nPath revocation in case of link down should be clarified, the mechanism to signal  endpoints how to react quickly to failures should be described better.   Right now the draft only hints to this. This topic is very relevant also for webRTC. I mentioned SCMP  Interface Down  messages: This has been a topic of discussion within the SCION community for a long time. Currently, in the deployment routers send a non-authenticated SCMP message, while it should be. There are some proposals to leverage the PKI to authenticate this. Harald proposed to  say out loud that we don\u2019t have support for authentication in current deployment but that this should be authenticated, showing this is a known problem. We should avoid saying in the draft that a feature exists but then it is not specified. Ok to say some problems still need to be solved but not yet a concern in current deployment. (he shared story about irc and ICMP destination unreachable)\r\n \r\n \r\n \r\n Relates to https://github.com/scionassociation/scion-research_I-D/issues/25",
+      "body": "Path revocation in case of link failures is not clear. We only mention something in controlplane-02 section 2.4:\r\n``` \r\nOn link failures, endpoints route around the failed link by switching to\r\ndifferent paths in the data plane.\r\n```\r\nWe should make this clearer in -dataplane too. \r\n\r\n#### TODO: \r\n- [x] scionassociation/scion-dp_I-D#37\r\n- [x] Clarify that endpoints are expected to handle failures (and why)\r\n- [x] Clarify when a SCMP [Interface Down](https://scion.docs.anapaya.net/en/latest/protocols/scmp.html#external-interface-down) message is sent or not,  and why (it _should_ be sent)\r\n- [x] Clarify that SCMP interface down is currently unauthenticated, but it should be\r\n- [x] @nicorusti review https://github.com/scionassociation/scion-dp_I-D/pull/49/files \r\n- [x] @nicorusti  Send email to Eliot, Harald and ask if external reference to SCMP is enough (within the context of link down messages)\r\n\r\n#### Feedback details\r\n> Harald Alvestrand <harald@alvestrand.no> \r\n Once sent, a packet\u2019s path cannot be changed; path changes are handled by routers discovering that the path no longer exists and (I assume, this is likely documented in -controlplane) sending an alert back \u201cdon\u2019t use this path\u201d.\r\n \r\n >  Form my lunch with Harald at IETF120: \r\nPath revocation in case of link down should be clarified, the mechanism to signal  endpoints how to react quickly to failures should be described better.   Right now the draft only hints to this. This topic is very relevant also for webRTC. I mentioned SCMP  Interface Down  messages: This has been a topic of discussion within the SCION community for a long time. Currently, in the deployment routers send a non-authenticated SCMP message, while it should be. There are some proposals to leverage the PKI to authenticate this. Harald proposed to  say out loud that we don\u2019t have support for authentication in current deployment but that this should be authenticated, showing this is a known problem. We should avoid saying in the draft that a feature exists but then it is not specified. Ok to say some problems still need to be solved but not yet a concern in current deployment. (he shared story about irc and ICMP destination unreachable)\r\n \r\n \r\n \r\n Relates to https://github.com/scionassociation/scion-research_I-D/issues/25",
       "createdAt": "2024-07-22T21:00:37Z",
-      "updatedAt": "2024-08-26T16:21:11Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-18T09:16:48Z",
+      "closedAt": "2024-09-18T09:16:48Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -584,6 +584,13 @@
           "body": "In the current implementation, a SCMP interface down is sent if BFD is enabled for the interface.  ",
           "createdAt": "2024-07-23T12:27:44Z",
           "updatedAt": "2024-07-23T12:27:44Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Looks like the last two remaining items have been addressed and that this can be closed, no?",
+          "createdAt": "2024-09-17T10:32:16Z",
+          "updatedAt": "2024-09-17T10:32:16Z"
         }
       ]
     },
@@ -642,7 +649,7 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nRelated issues: \r\n* CP draft: https://github.com/scionassociation/scion-cp_I-D/issues/57 \r\n* Implementations: https://github.com/scionproto/scion/issues/2608 \r\n\r\nAlso: \r\n- [ ] Add discussion about fragmentation\r\n- [ ] Adapt this text  in the Common Header  paragraph` The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. `",
       "createdAt": "2024-07-23T14:58:19Z",
-      "updatedAt": "2024-09-11T11:23:47Z",
+      "updatedAt": "2024-09-18T16:56:29Z",
       "closedAt": null,
       "comments": [
         {
@@ -651,6 +658,20 @@
           "body": "Here's what I think we could say:\r\n\r\nFragmentation:\r\n* At the UDP/SCION layer: no fragmentation ever. Even less than IPV6 (i.e. even the sending host can't fragment); the application must comply with the paths MTU.\r\n* In the underlay network. SCION is agnostic to datagram fragmentation by the underlay UDP layer.  The open source implementation does not change the system defaults regarding fragmentation and MTU discovery (under Linux  MTU discovery is on, UDP fragmentation is off). For inter-AS links, changing this default is the joint decision (not recommended) of the administrators of the two ASes involved. The decision to change this default for intra-AS interfaces is the decision of that AS' administrator.\r\n\r\nMTU:\r\n* SCION assumes that its layer 2 has a minimum MTU of 1232 (1280 - 48, assuming UDP/IPV6 encapsulation as the worst case). SCMP relies on this minimum. UDP/SCION takes advantage on any larger MTU configured.\r\n* The MTU of an entire path is defined as the MIN of the MTUs of the links traversed by that path. The control plane makes those numbers available in segment records.\r\n* SCION assumes that the MTU of a path segment remains correct for the life time of that segment.\r\n* The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the underlying link-layer in either direction.\r\n* Intra-AS network MTUs are a result of the network configuration of each AS and therefore predictable.\r\n* Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.\r\n* Although that isn't a normal use case, SCION allows inter-AS links to be routed through multiple IP routers, not necessarily under the control of either AS' administrator. In that case, the link's MTU MUST be configured statically to a conservative value. 1280 is a safe value. The same approach applies to all cases where MTUs cannot be assumed to be stable.\r\n",
           "createdAt": "2024-09-05T10:00:41Z",
           "updatedAt": "2024-09-11T11:23:47Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Let me know if the above proposal is reasonable enough to tentatively add it to the draft.",
+          "createdAt": "2024-09-17T10:33:37Z",
+          "updatedAt": "2024-09-17T10:33:37Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Looks good, thanks a lot for putting together a paragraph out of this! \r\nJust some minor comments: \r\n* SCION assumes that its ~layer 2~ --> underlay ?\r\n* On the last point (multiple ASes between two SCION routers): I'd say this is a special case and I'd not cover it in the draft\r\n\r\n ",
+          "createdAt": "2024-09-18T16:56:28Z",
+          "updatedAt": "2024-09-18T16:56:28Z"
         }
       ]
     },
@@ -815,9 +836,24 @@
       ],
       "body": "  #### Feedback\r\n> Harald 23.07.2024 \r\n> There\u2019s a nice description in the doc on how a man-in-the-middle attack could work; without alternate comms paths between entities, there seems to be no way to protect against those. \r\nHowever, there\u2019s no discussion on preserving the integrity of the payloads; perhaps intentionally, as the gateway process may have to mangle them (by checksum modification, if nothing else).\r\n\r\n> Response\r\nThe reason why we did not include this is that there is a proposal for an experimental extension ([SPAO](https://docs.scion.org/en/latest/protocols/authenticator-option.html)) to authenticate addresses, provide integrity protection for payloads, and replay protection. This is still very experimental and it not used in the production network, so we felt it was best to leave this out. We could add some text to explain why this property is not provided. ",
       "createdAt": "2024-07-26T22:37:32Z",
-      "updatedAt": "2024-07-30T09:15:32Z",
+      "updatedAt": "2024-09-18T17:09:33Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I would propose adding a sub-section of \"On-Path attacks\":\r\n\r\n### Payload modification\r\n\r\nIt is possible for an on-path attacker to modify the payload of a packet. The application layers can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. Yet, a standard and trusted payload integrity protection mechanism integral to SCION could be desirable. There exists a proposal for an experimental extension to authenticate addresses, provide integrity protection for payloads, and replay protection: [SPAO](https://docs.scion.org/en/latest/protocols/authenticator-option.html) . This is still very experimental and it not used in the production network.",
+          "createdAt": "2024-09-17T10:46:04Z",
+          "updatedAt": "2024-09-17T10:47:26Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Looks good, feel free to open a PR. \r\n\r\nIn the meanwhile, let me propose some slight rewording: \r\n\r\n> An on-path attacker may modify the payload of a SCION packet. Existing higher-layer protocols can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. There exists a proposal for an experimental extension to authenticate addresses, provide integrity protection for payloads, and replay protection: [SPAO](https://docs.scion.org/en/latest/protocols/authenticator-option.html) . This is still very experimental and it not used in the production network. ",
+          "createdAt": "2024-09-18T17:09:13Z",
+          "updatedAt": "2024-09-18T17:09:33Z"
+        }
+      ]
     },
     {
       "number": 45,
@@ -4254,24 +4290,26 @@
       "id": "PR_kwDOKYa77855uZrU",
       "title": "SCMP review",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/59",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Follow up to #49.  Contributes to #36 \r\n\r\n[Diff with last submission](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-dataplane&url_2=https://scionassociation.github.io/scion-dp_I-D/scmp_review/draft-dekater-scion-dataplane.txt)",
       "createdAt": "2024-08-28T15:11:21Z",
-      "updatedAt": "2024-09-14T14:07:02Z",
+      "updatedAt": "2024-09-18T16:41:42Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1e5971d688e9428d6726eabc2546a3303fc2f25c",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "scmp_review",
-      "headRefOid": "8ee4a98f2479ccabdb197a3293247fa8c6897f91",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "fac1ca6899d0bb5c97776c9469f823a7e2f17d7d",
+      "closedAt": "2024-09-17T09:46:12Z",
+      "mergedAt": "2024-09-17T09:46:12Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "375e24dd5683039c1a0bb1e5cb8ca6c70cd16df9"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -4307,6 +4345,13 @@
           "body": "Hi @jiceatscion , thanks a lot for your previous changes! \r\nI reworded the section about BDF and link failures, and I tried to make it a bit more concise. I also edited a couple of SCMP header figures. Could you have a quick look, and if ok, feel free to merge this :)  \r\n\r\nEdit: Last question: should we make  section 6 \"Handling Link Failures\" part of SCMP? IMHO it kind of belongs there rather than a separate section ",
           "createdAt": "2024-09-14T14:05:58Z",
           "updatedAt": "2024-09-14T14:07:02Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I disagree with merging link failures in SCMP. I think it was like that in some earlier iteration and it ends-up messy. SCMP is for many things besides link failure. Link failure is about more than SCMP (there's BFD too). So, neither is a proper subset of the other.",
+          "createdAt": "2024-09-17T09:43:06Z",
+          "updatedAt": "2024-09-17T09:43:06Z"
         }
       ],
       "reviews": [
@@ -4475,6 +4520,19 @@
               "updatedAt": "2024-09-04T15:43:53Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Jo3Ph",
+          "commit": {
+            "abbreviatedOid": "fac1ca6"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I made a couple of very minor changes, removed a stray preposition here, added a missing article there...\r\n",
+          "createdAt": "2024-09-17T09:45:55Z",
+          "updatedAt": "2024-09-17T09:45:55Z",
+          "comments": []
         }
       ]
     },
