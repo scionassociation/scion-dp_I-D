@@ -1762,6 +1762,9 @@ Modifications of the SCION path and address header can be discovered by the dest
 
 Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. However, such an attack is of little value. An on-path adversary may inspect/copy/disrupt its traffic without diverting it away from the sender-chosen path. For this reason proof-of-transit, which would be required to detect such an attack, has marginal benefit in the context of SCION and it is not in scope for this document.
 
+### Modification of the Payload
+
+An on-path attacker can modify the payload of a SCION packet. Existing higher-layer protocols can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. However, there exists a proposal for an experimental extension to authenticate addresses, provide integrity protection for payloads, and replay protection: SPAO . This is still very experimental and it not used in the production network.
 
 ## Off-Path Attacks
 
