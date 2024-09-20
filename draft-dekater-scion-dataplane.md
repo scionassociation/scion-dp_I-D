@@ -350,7 +350,6 @@ Valid path segment combinations:
 
 The SCION data plane provides *path authorization*. This property ensures that data packets always traverse the network using path segments that were explicitly authorized by the respective ASes and prevents endpoints from constructing unauthorized paths or paths containing loops. SCION uses symmetric cryptography in the form of Message Authentication Codes (MACs) to authenticate the information encoded in Hop Fields and such MACs are verified by routers at forwarding. For a detailed specification, see [](#path-auth).
 
-
 # SCION Header Specification {#header}
 
 The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an OPTIONAL extension header, see {{figure-2}} below.
@@ -1038,6 +1037,27 @@ This section explains what happens with the SCION packet header at each router, 
 
 When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also [](#reverse)).
 
+## Packet Fragmentation
+
+The UDP/SCION layer never fragments packets. Unlike IPV6, even the sending endpoint cannot fragment packets on behalf of applications. Applications need to comply with the MTU of the paths that they use.
+
+SCION is agnostic to datagram fragmentation by the underlay network layer (such as UDP/IP encapsulation). Implementations SHOULD allow MTU discovery to be enabled and fragmentation to be disabled (honoring the system defaults is normally sufficient). This is the RECOMMENDED setting. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
+
+## MTU
+
+SCION assumes that its underlay encapsulation (where used) or native link layer has a minimum MTU of 1232 (1280 - 48, assuming UDP/IPV6 encapsulation as the worst case). SCMP relies only on this minimum while UDP/SCION takes advantage of any larger MTU configured.
+
+The MTU of an entire path is defined as the MIN of the MTUs of the links traversed by that path. The control plane makes those numbers available in segment records. (See: {{I-D.dekater-scion-controlplane}}, Path MTU).
+
+The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the link's underlay encapsulation or native link-layer in either direction.
+
+SCION assumes that the MTUs of a path segment remains correct for the life time of that segment. This is generally a safe assumption because:
+
+* Intra-AS network MTUs are a result of the network configuration of each AS and therefore predictable.
+
+* Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.
+
+Although that isn't the main use case, SCION allows inter-AS links to be routed through multiple IP routers. In that case, the link's MTU MUST be configured statically to a conservative value. 1280 is a safe value. The same approach applies to all cases where MTUs cannot be assumed to be stable.
 
 # Path Authorization {#path-auth}
 
