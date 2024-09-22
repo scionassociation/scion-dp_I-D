@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-19T00:00:50.701425+00:00",
+  "timestamp": "2024-09-22T00:00:46.030154+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -649,7 +649,7 @@
       ],
       "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nRelated issues: \r\n* CP draft: https://github.com/scionassociation/scion-cp_I-D/issues/57 \r\n* Implementations: https://github.com/scionproto/scion/issues/2608 \r\n\r\nAlso: \r\n- [ ] Add discussion about fragmentation\r\n- [ ] Adapt this text  in the Common Header  paragraph` The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. `",
       "createdAt": "2024-07-23T14:58:19Z",
-      "updatedAt": "2024-09-18T16:56:29Z",
+      "updatedAt": "2024-09-20T10:36:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -672,6 +672,27 @@
           "body": "Looks good, thanks a lot for putting together a paragraph out of this! \r\nJust some minor comments: \r\n* SCION assumes that its ~layer 2~ --> underlay ?\r\n* On the last point (multiple ASes between two SCION routers): I'd say this is a special case and I'd not cover it in the draft\r\n\r\n ",
           "createdAt": "2024-09-18T16:56:28Z",
           "updatedAt": "2024-09-18T16:56:28Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Looks good, thanks a lot for putting together a paragraph out of this! Just some minor comments:\r\n> \r\n>     * SCION assumes that its ~layer 2~ --> underlay ?\r\n\r\nIn another issue, we have agreed that using un-encapsulated L2 was a valid scenario. As a result, an inter-AS link doesn't necessarily use an underlay network. From the P-o-V of SCION that is L2 either way. I admit that I have always been unsure how to designate encapsulation and tunneling layers with respect to the upper and lower layers: whatever L3 runs on top of could be called L2, but whatever encapsulates an L2 could be called L3. If there's a solid convention about this, I'll respect it.\r\n\r\n>     * On the last point (multiple ASes between two SCION routers): I'd say this is a special case and I'd not cover it in the draft\r\n\r\nNot \"multiple ASes\"; \"multiple IP routers\". It is true that ASes are supposed to connect at exchanges, with no routing, but we also know it's not the only use case by far. (The drafts, in my opinion, are too far from saying that this is wrong. May be that's what we should change. OTOH, that would be lying on the current state of deployments)\r\n",
+          "createdAt": "2024-09-19T09:12:19Z",
+          "updatedAt": "2024-09-19T09:12:19Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Regarding L2, maybe we just say lower layer? I am reluctant to use L2, as peple might think this is the MAC layer (which is not in many cases). \r\n\r\n> Not \"multiple ASes\"; \"multiple IP routers\". I\r\n\r\nYou mentioned `multiple IP routers, not necessarily under the control of either AS' administrator`, reading this I understand this is running the SCION link across multiple ASes (e.g. over Internet). Maybe you can just remove this wording and then it becomes clearer that you are just referring to multiple IP hops. Or remove the special case overall, as this is anyways an exception that IMHO should be avoided",
+          "createdAt": "2024-09-19T16:03:23Z",
+          "updatedAt": "2024-09-19T16:03:23Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Ok. Will rephrase as you suggested and make a PR.\r\n",
+          "createdAt": "2024-09-20T10:36:52Z",
+          "updatedAt": "2024-09-20T10:36:52Z"
         }
       ]
     },
@@ -824,7 +845,7 @@
       "id": "I_kwDOKYa7786RBZd4",
       "title": "Payload integrity discussion - add section in security considerations",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/44",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -836,8 +857,8 @@
       ],
       "body": "  #### Feedback\r\n> Harald 23.07.2024 \r\n> There\u2019s a nice description in the doc on how a man-in-the-middle attack could work; without alternate comms paths between entities, there seems to be no way to protect against those. \r\nHowever, there\u2019s no discussion on preserving the integrity of the payloads; perhaps intentionally, as the gateway process may have to mangle them (by checksum modification, if nothing else).\r\n\r\n> Response\r\nThe reason why we did not include this is that there is a proposal for an experimental extension ([SPAO](https://docs.scion.org/en/latest/protocols/authenticator-option.html)) to authenticate addresses, provide integrity protection for payloads, and replay protection. This is still very experimental and it not used in the production network, so we felt it was best to leave this out. We could add some text to explain why this property is not provided. ",
       "createdAt": "2024-07-26T22:37:32Z",
-      "updatedAt": "2024-09-18T17:09:33Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-19T17:35:07Z",
+      "closedAt": "2024-09-19T17:35:07Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -852,6 +873,13 @@
           "body": "Looks good, feel free to open a PR. \r\n\r\nIn the meanwhile, let me propose some slight rewording: \r\n\r\n> An on-path attacker may modify the payload of a SCION packet. Existing higher-layer protocols can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. There exists a proposal for an experimental extension to authenticate addresses, provide integrity protection for payloads, and replay protection: [SPAO](https://docs.scion.org/en/latest/protocols/authenticator-option.html) . This is still very experimental and it not used in the production network. ",
           "createdAt": "2024-09-18T17:09:13Z",
           "updatedAt": "2024-09-18T17:09:33Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I adopted your wording with two modifications:\r\n* \"may modify\" -> \"can modify\" (due to the loaded ietf meaning of \"may\"). \r\n* \"There exists\" -> \"However, there exists\".\r\n",
+          "createdAt": "2024-09-19T09:27:18Z",
+          "updatedAt": "2024-09-19T09:27:18Z"
         }
       ]
     },
@@ -4711,6 +4739,74 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 64,
+      "id": "PR_kwDOKYa77858AhSv",
+      "title": "security_considerations: payload modification",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/64",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #44 ",
+      "createdAt": "2024-09-19T09:33:25Z",
+      "updatedAt": "2024-09-19T17:35:12Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "375e24dd5683039c1a0bb1e5cb8ca6c70cd16df9",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "payload_integrity",
+      "headRefOid": "5173ceb620e4cba245cc9b2eda362547548461f2",
+      "closedAt": "2024-09-19T17:35:06Z",
+      "mergedAt": "2024-09-19T17:35:06Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "6f2163e8afb52f5a696033115b7f25c2302b2fe0"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786KC1QZ",
+          "commit": {
+            "abbreviatedOid": "5173ceb"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2024-09-19T16:04:04Z",
+          "updatedAt": "2024-09-19T16:04:04Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 65,
+      "id": "PR_kwDOKYa77858KGr5",
+      "title": "mtu: add clarifications",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/65",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #39 ",
+      "createdAt": "2024-09-20T11:55:08Z",
+      "updatedAt": "2024-09-20T11:55:09Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "6f2163e8afb52f5a696033115b7f25c2302b2fe0",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "dp_mtu",
+      "headRefOid": "92ea0f496f934ce48aa4cb6fba7b3248ef54b889",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
