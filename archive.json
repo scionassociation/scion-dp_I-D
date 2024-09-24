@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-22T00:00:46.030154+00:00",
+  "timestamp": "2024-09-24T00:00:49.488429+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -129,7 +129,7 @@
     {
       "number": 7,
       "id": "I_kwDOKYa7786BI0h8",
-      "title": "Clarify MACs (truncation, path splicing)",
+      "title": "Clarify MACs (truncation, path splicing), AES-CMAC as default algorithm",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/7",
       "state": "CLOSED",
       "author": "nicorusti",
@@ -143,7 +143,7 @@
       ],
       "body": "When dealing with security considerations #1  , we mention that chained MACs prevent path splicing attacks. This should be better explained, since in the draft we describe how chained MACs work, but not how they prevent path splicing. \r\n\r\n> From Joel Halpern\r\n> The use of only the lower two bytes of the cryptographic value for chaining seems odd.  If you need a 16 bit value, I would have assumed you would at least fold the entire 6 bit signature into thirds, so all the bits have an impact?\r\n\r\nRight, this depends on the MAC algorithm. Safely truncating requires certain MAC algorithms, e.g. ones that have properties of a pseudorandom function. We should clarify this.\r\n\r\n> Both the PCB authentication and the hop authentication use a mechanism that computes the signature over all previous hops.  This seems odd.  If each hop includes the previous hop, that seems to produce an immutable chain at lower cost.  At the very least, an explanation would seem called for.\r\n\r\nThis is to avoid certain path splicing attacks, we have a brief description in the data plane draft 5.1.3.  Path Splicing, but this can be extended. \r\n\r\n> <jmh>  A path splice would still make the following signature invalid.  But what I had missed is that it would not make the final signature invalid.  And you want validation at packet forwarding time to be fast.  Okay, I see why you are chaining them for the hop signature generation.  I guess for the PCB signature you either chain them at generation or you have to validate each one at PCB validation.  So again, I see why you are doing it this way.  A bit more explanation in the draft would be good.   Thanks.</jmh>\r\n\r\nIssue in CP:  https://github.com/scionassociation/scion-cp_I-D/issues/23 \r\n",
       "createdAt": "2024-03-04T11:06:10Z",
-      "updatedAt": "2024-06-28T07:11:19Z",
+      "updatedAt": "2024-09-23T08:46:56Z",
       "closedAt": "2024-06-28T07:11:19Z",
       "comments": []
     },
