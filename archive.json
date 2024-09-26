@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-24T00:00:49.488429+00:00",
+  "timestamp": "2024-09-26T00:00:38.518532+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -625,9 +625,9 @@
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
-      "body": "Following the first wave of ISE feedback, we did quite some work on the dataplane draft:\r\n\r\n[Changelog TODO link]()\r\n[Datatracker diff TODO link]\r\n",
+      "body": "Following the first wave of ISE feedback, we did quite some work on the dataplane draft. \r\n\r\nCan you provide your feedback on: \r\n\r\n- 8.  Interoperability: SCION IP Gateway\r\n- 6.  Handling Link Failures\r\n- 5 SCMP (needed to describe handling link failures)\r\n- Added section on SCION IP Gateway \r\n-  7.  Security Considerations\r\n\r\n\r\n\r\n\r\n\r\n[Changelog TODO link]()\r\n[Datatracker diff TODO link]\r\n",
       "createdAt": "2024-07-23T04:59:27Z",
-      "updatedAt": "2024-07-24T17:01:38Z",
+      "updatedAt": "2024-09-24T16:15:35Z",
       "closedAt": null,
       "comments": []
     },
