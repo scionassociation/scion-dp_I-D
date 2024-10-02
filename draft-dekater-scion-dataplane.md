@@ -1037,13 +1037,13 @@ This section explains what happens with the SCION packet header at each router, 
 
 When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also [](#reverse)).
 
-## Packet Fragmentation
+## Packet Fragmentation {#fragmentation}
 
 The UDP/SCION layer never fragments packets. Unlike IPV6, even the sending endpoint cannot fragment packets on behalf of applications. Applications need to comply with the MTU of the paths that they use.
 
 SCION is agnostic to datagram fragmentation by the underlay network layer (such as UDP/IP encapsulation). Implementations SHOULD allow MTU discovery to be enabled and fragmentation to be disabled (honoring the system defaults is normally sufficient). This is the RECOMMENDED setting. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
 
-## MTU
+## MTU  {#mtu}
 
 SCION assumes that its underlay encapsulation (where used) or native link layer has a minimum MTU of 1232 (1280 - 48, assuming UDP/IPV6 encapsulation as the worst case). SCMP relies only on this minimum while UDP/SCION takes advantage of any larger MTU configured.
 
@@ -1435,7 +1435,7 @@ Implementations MUST respect the following rules when processing SCMP messages:
 
    - If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
    - If an SCMP informational message of unknown type is received, it MUST be silently dropped.
-   - Every SCMP error message MUST include as much of the offending SCION packet as possible without making the error message packet - including the SCION header and all extension headers - exceed **1232 bytes**.
+   - Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers - MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see [](#mtu)).
    - In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
    - An SCMP error message MUST NOT be originated in response to any of the following:
      - An SCMP error message.
