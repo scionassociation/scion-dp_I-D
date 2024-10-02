@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 24 March 2025                                 SCION Association
+Expires: 5 April 2025                                  SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                       20 September 2024
+                                                          2 October 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 March 2025.
+   This Internet-Draft will expire on 5 April 2025.
 
 Copyright Notice
 
@@ -2532,9 +2532,9 @@ direction
       MUST be silently dropped.
 
    *  Every SCMP error message MUST include as much of the offending
-      SCION packet as possible without making the error message packet -
-      including the SCION header and all extension headers - exceed
-      *1232 bytes*.
+      SCION packet as possible.  The error message packet - including
+      the SCION header and all extension headers - MUST NOT exceed *1232
+      bytes* in order to fit into the minimum MTU (see Section 3.5).
 
    *  In case the implementation is required to pass an SCMP error
       message to the upper-layer process, the upper-layer protocol type
