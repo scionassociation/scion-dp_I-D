@@ -13,11 +13,11 @@
        This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION control plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION data plane is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path. 
        The SCION data plane fundamentally differs from today's IP-based data plane in that it is  path-aware : In SCION, interdomain forwarding directives are embedded in the packet header. This document provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers, which are additionally described. The document continues with the life cycle of a SCION packet while traversing the SCION Internet, followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. 
     " name="description">
-<meta content="xml2rfc 3.23.1" name="generator">
+<meta content="xml2rfc 3.23.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-dekater-scion-dataplane-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.23.1
+  xml2rfc 3.23.2
     Python 3.12.6
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 5 April 2025</td>
+<td class="center">Expires 6 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-10-02" class="published">2 October 2024</time>
+<time datetime="2024-10-03" class="published">3 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-04-05">5 April 2025</time></dd>
+<dd class="expires"><time datetime="2025-04-06">6 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1108,7 +1108,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 6 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1217,10 +1217,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-step-by-step-explanation" class="internal xref">Step-by-Step Explanation</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
-                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-packet-fragmentation" class="internal xref">Packet Fragmentation</a></p>
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-mtu" class="internal xref">MTU</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.5">
-                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-mtu" class="internal xref">MTU</a></p>
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="auto internal xref">3.5</a>.  <a href="#name-packet-fragmentation" class="internal xref">Packet Fragmentation</a></p>
 </li>
             </ul>
 </li>
@@ -2956,33 +2956,33 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
 <p id="section-3.3-12">When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also <a href="#reverse" class="auto internal xref">Section 2.3.4</a>).<a href="#section-3.3-12" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="fragmentation">
-<section id="section-3.4">
-        <h3 id="name-packet-fragmentation">
-<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-packet-fragmentation" class="section-name selfRef">Packet Fragmentation</a>
-        </h3>
-<p id="section-3.4-1">The UDP/SCION layer never fragments packets. Unlike IPV6, even the sending endpoint cannot fragment packets on behalf of applications. Applications need to comply with the MTU of the paths that they use.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.4-2">SCION is agnostic to datagram fragmentation by the underlay network layer (such as UDP/IP encapsulation). Implementations <span class="bcp14">SHOULD</span> allow MTU discovery to be enabled and fragmentation to be disabled (honoring the system defaults is normally sufficient). This is the <span class="bcp14">RECOMMENDED</span> setting. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="mtu">
-<section id="section-3.5">
+<section id="section-3.4">
         <h3 id="name-mtu">
-<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-mtu" class="section-name selfRef">MTU</a>
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-mtu" class="section-name selfRef">MTU</a>
         </h3>
-<p id="section-3.5-1">SCION assumes that its underlay encapsulation (where used) or native link layer has a minimum MTU of 1232 (1280 - 48, assuming UDP/IPV6 encapsulation as the worst case). SCMP relies only on this minimum while UDP/SCION takes advantage of any larger MTU configured.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
-<p id="section-3.5-2">The MTU of an entire path is defined as the MIN of the MTUs of the links traversed by that path. The control plane makes those numbers available in segment records. (See: <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>, Path MTU).<a href="#section-3.5-2" class="pilcrow">¶</a></p>
-<p id="section-3.5-3">The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the link's underlay encapsulation or native link-layer in either direction.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
-<p id="section-3.5-4">SCION assumes that the MTUs of a path segment remains correct for the life time of that segment. This is generally a safe assumption because:<a href="#section-3.5-4" class="pilcrow">¶</a></p>
+<p id="section-3.4-1">SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of <span>[<a href="#RFC2460" class="cite xref">RFC2460</a>]</span>), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-2">The MTU of a SCION path is defined as the minimum of the MTUs of the links traversed by that path. The control plane disseminates such values and makes them available to endpoints (see: <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>, Path MTU).<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.4-3">The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the link's underlay encapsulation or native link-layer in either direction.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.4-4">SCION assumes that the MTUs of a path segment remains correct for the life time of that segment. This is generally a safe assumption because:<a href="#section-3.4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.5-5.1">
-            <p id="section-3.5-5.1.1">Intra-AS network MTUs are a result of the network configuration of each AS and therefore predictable.<a href="#section-3.5-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.4-5.1">
+            <p id="section-3.4-5.1.1">Intra-AS network MTUs are a result of the network configuration of each AS and therefore predictable.<a href="#section-3.4-5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.5-5.2">
-            <p id="section-3.5-5.2.1">Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.<a href="#section-3.5-5.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.2">
+            <p id="section-3.4-5.2.1">Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.<a href="#section-3.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.5-6">Although that isn't the main use case, SCION allows inter-AS links to be routed through multiple IP routers. In that case, the link's MTU <span class="bcp14">MUST</span> be configured statically to a conservative value. 1280 is a safe value. The same approach applies to all cases where MTUs cannot be assumed to be stable.<a href="#section-3.5-6" class="pilcrow">¶</a></p>
+<p id="section-3.4-6">Although that isn't the main use case, SCION allows inter-AS links to be routed through multiple IP routers. In that case, the link's MTU <span class="bcp14">MUST</span> be configured statically to a conservative value. 1280 is a safe value. The same approach applies to all cases where MTUs cannot be assumed to be stable.<a href="#section-3.4-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="fragmentation">
+<section id="section-3.5">
+        <h3 id="name-packet-fragmentation">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-packet-fragmentation" class="section-name selfRef">Packet Fragmentation</a>
+        </h3>
+<p id="section-3.5-1">The UDP/SCION layer <span class="bcp14">MUST NOT</span> fragments packets, not even at the source endpoint. Applications <span class="bcp14">MUST</span> comply with the MTU of the paths that they use.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations <span class="bcp14">SHOULD</span> allow MTU discovery mechanisms such as <span>[<a href="#RFC4821" class="cite xref">RFC4821</a>]</span> to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3658,7 +3658,7 @@ protocol type as defined in <a href="#pseudo" class="auto internal xref">Section
             <p id="section-5.4-2.2.1">If an SCMP informational message of unknown type is received, it <span class="bcp14">MUST</span> be silently dropped.<a href="#section-5.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.4-2.3">
-            <p id="section-5.4-2.3.1">Every SCMP error message <span class="bcp14">MUST</span> include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers - <span class="bcp14">MUST NOT</span> exceed <strong>1232 bytes</strong> in order to fit into the minimum MTU (see <a href="#mtu" class="auto internal xref">Section 3.5</a>).<a href="#section-5.4-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-5.4-2.3.1">Every SCMP error message <span class="bcp14">MUST</span> include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers - <span class="bcp14">MUST NOT</span> exceed <strong>1232 bytes</strong> in order to fit into the minimum MTU (see <a href="#mtu" class="auto internal xref">Section 3.4</a>).<a href="#section-5.4-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.4-2.4">
             <p id="section-5.4-2.4.1">In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message <span class="bcp14">MUST</span> be silently dropped.<a href="#section-5.4-2.4.1" class="pilcrow">¶</a></p>
@@ -4362,6 +4362,10 @@ In addition, the source SIG is responsible for SCION path selection.<a href="#se
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC2460">[RFC2460]</dt>
+        <dd>
+<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">RFC 2460</span>, <span class="seriesInfo">DOI 10.17487/RFC2460</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2460">https://www.rfc-editor.org/rfc/rfc2460</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2474">[RFC2474]</dt>
         <dd>
 <span class="refAuthor">Nichols, K.</span>, <span class="refAuthor">Blake, S.</span>, <span class="refAuthor">Baker, F.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"Definition of the Differentiated Services Field (DS Field) in the IPv4 and IPv6 Headers"</span>, <span class="seriesInfo">RFC 2474</span>, <span class="seriesInfo">DOI 10.17487/RFC2474</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2474">https://www.rfc-editor.org/rfc/rfc2474</a>&gt;</span>. </dd>
@@ -4426,6 +4430,10 @@ In addition, the source SIG is responsible for SCION path selection.<a href="#se
 <dt id="RFC2711">[RFC2711]</dt>
         <dd>
 <span class="refAuthor">Partridge, C.</span> and <span class="refAuthor">A. Jackson</span>, <span class="refTitle">"IPv6 Router Alert Option"</span>, <span class="seriesInfo">RFC 2711</span>, <span class="seriesInfo">DOI 10.17487/RFC2711</span>, <time datetime="1999-10" class="refDate">October 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2711">https://www.rfc-editor.org/rfc/rfc2711</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4821">[RFC4821]</dt>
+        <dd>
+<span class="refAuthor">Mathis, M.</span> and <span class="refAuthor">J. Heffner</span>, <span class="refTitle">"Packetization Layer Path MTU Discovery"</span>, <span class="seriesInfo">RFC 4821</span>, <span class="seriesInfo">DOI 10.17487/RFC4821</span>, <time datetime="2007-03" class="refDate">March 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4821">https://www.rfc-editor.org/rfc/rfc4821</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9217">[RFC9217]</dt>
         <dd>

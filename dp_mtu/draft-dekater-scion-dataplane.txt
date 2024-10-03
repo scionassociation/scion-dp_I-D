@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 5 April 2025                                  SCION Association
+Expires: 6 April 2025                                  SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                          2 October 2024
+                                                          3 October 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 April 2025.
+   This Internet-Draft will expire on 6 April 2025.
 
 Copyright Notice
 
@@ -102,8 +102,8 @@ Table of Contents
      3.1.  Description
      3.2.  Creating an End-to-End SCION Forwarding Path
      3.3.  Step-by-Step Explanation
-     3.4.  Packet Fragmentation
-     3.5.  MTU
+     3.4.  MTU
+     3.5.  Packet Fragmentation
    4.  Path Authorization
      4.1.  Authorizing Segments through Chained MACs
        4.1.1.  Hop Field MAC Overview
@@ -1745,31 +1745,16 @@ Table of Contents
    Fields and Hop Fields at the beginning of the reversed path (see also
    Section 2.3.4).
 
-3.4.  Packet Fragmentation
+3.4.  MTU
 
-   The UDP/SCION layer never fragments packets.  Unlike IPV6, even the
-   sending endpoint cannot fragment packets on behalf of applications.
-   Applications need to comply with the MTU of the paths that they use.
+   SCION requires its underlay protocol to provide a minimum MTU of 1232
+   bytes.  This number results from 1280, the minimum IPv6 MTU as of
+   [RFC2460]), minus 48, assuming UDP/IPv6 as underlay.  Higher layer
+   protocols such as SCMP rely only on such minimum MTU.
 
-   SCION is agnostic to datagram fragmentation by the underlay network
-   layer (such as UDP/IP encapsulation).  Implementations SHOULD allow
-   MTU discovery to be enabled and fragmentation to be disabled
-   (honoring the system defaults is normally sufficient).  This is the
-   RECOMMENDED setting.  For inter-AS links, using a different
-   configuration is the joint decision of the administrators of the two
-   ASes involved.  For intra-AS interfaces using a different
-   configuration is the choice of that AS' administrator alone.
-
-3.5.  MTU
-
-   SCION assumes that its underlay encapsulation (where used) or native
-   link layer has a minimum MTU of 1232 (1280 - 48, assuming UDP/IPV6
-   encapsulation as the worst case).  SCMP relies only on this minimum
-   while UDP/SCION takes advantage of any larger MTU configured.
-
-   The MTU of an entire path is defined as the MIN of the MTUs of the
-   links traversed by that path.  The control plane makes those numbers
-   available in segment records.  (See:
+   The MTU of a SCION path is defined as the minimum of the MTUs of the
+   links traversed by that path.  The control plane disseminates such
+   values and makes them available to endpoints (see:
    [I-D.dekater-scion-controlplane], Path MTU).
 
    The MTU of each link may be discovered or administratively configured
@@ -1793,6 +1778,20 @@ Table of Contents
    MUST be configured statically to a conservative value. 1280 is a safe
    value.  The same approach applies to all cases where MTUs cannot be
    assumed to be stable.
+
+3.5.  Packet Fragmentation
+
+   The UDP/SCION layer MUST NOT fragments packets, not even at the
+   source endpoint.  Applications MUST comply with the MTU of the paths
+   that they use.
+
+   SCION is agnostic to datagram fragmentation by the underlay network
+   layer, (e.g. used for intra-AS communication).  Implementations
+   SHOULD allow MTU discovery mechanisms such as [RFC4821] to be enabled
+   in the underlay and avoid fragmentation.  For inter-AS links, using a
+   different configuration is the joint decision of the administrators
+   of the two ASes involved.  For intra-AS interfaces using a different
+   configuration is the choice of that AS' administrator alone.
 
 4.  Path Authorization
 
@@ -2534,7 +2533,7 @@ direction
    *  Every SCMP error message MUST include as much of the offending
       SCION packet as possible.  The error message packet - including
       the SCION header and all extension headers - MUST NOT exceed *1232
-      bytes* in order to fit into the minimum MTU (see Section 3.5).
+      bytes* in order to fit into the minimum MTU (see Section 3.4).
 
    *  In case the implementation is required to pass an SCMP error
       message to the upper-layer process, the upper-layer protocol type
@@ -3206,6 +3205,10 @@ direction
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC2460]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
+              (IPv6) Specification", RFC 2460, DOI 10.17487/RFC2460,
+              December 1998, <https://www.rfc-editor.org/rfc/rfc2460>.
+
    [RFC2474]  Nichols, K., Blake, S., Baker, F., and D. Black,
               "Definition of the Differentiated Services Field (DS
               Field) in the IPv4 and IPv6 Headers", RFC 2474,
@@ -3274,6 +3277,10 @@ direction
    [RFC2711]  Partridge, C. and A. Jackson, "IPv6 Router Alert Option",
               RFC 2711, DOI 10.17487/RFC2711, October 1999,
               <https://www.rfc-editor.org/rfc/rfc2711>.
+
+   [RFC4821]  Mathis, M. and J. Heffner, "Packetization Layer Path MTU
+              Discovery", RFC 4821, DOI 10.17487/RFC4821, March 2007,
+              <https://www.rfc-editor.org/rfc/rfc4821>.
 
    [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
               Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
