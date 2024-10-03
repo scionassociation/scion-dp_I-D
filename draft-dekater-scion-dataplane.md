@@ -1039,9 +1039,9 @@ When destination Endpoint B wants to respond to source Endpoint A, it can just s
 
 ## Packet Fragmentation {#fragmentation}
 
-The UDP/SCION layer never fragments packets. Unlike IPV6, even the sending endpoint cannot fragment packets on behalf of applications. Applications need to comply with the MTU of the paths that they use.
+The UDP/SCION layer MUST NOT fragments packets, not even at the source endpoint. Applications MUST comply with the MTU of the paths that they use.
 
-SCION is agnostic to datagram fragmentation by the underlay network layer (such as UDP/IP encapsulation). Implementations SHOULD allow MTU discovery to be enabled and fragmentation to be disabled (honoring the system defaults is normally sufficient). This is the RECOMMENDED setting. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
+SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations SHOULD allow MTU discovery mechanisms such as {{RFC4821}} to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
 
 ## MTU  {#mtu}
 
