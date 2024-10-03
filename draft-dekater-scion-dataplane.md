@@ -42,6 +42,7 @@ author:
 normative:
   I-D.dekater-scion-controlplane:
   I-D.dekater-scion-pki:
+  RFC2460:
   RFC2474:
   RFC3168:
   RFC4493:
@@ -90,6 +91,7 @@ informative:
   RFC1122:
   RFC1918:
   RFC2711:
+  RFC4821:
   RFC9217:
   RFC9473:
   SCMP:
@@ -350,7 +352,6 @@ Valid path segment combinations:
 
 The SCION data plane provides *path authorization*. This property ensures that data packets always traverse the network using path segments that were explicitly authorized by the respective ASes and prevents endpoints from constructing unauthorized paths or paths containing loops. SCION uses symmetric cryptography in the form of Message Authentication Codes (MACs) to authenticate the information encoded in Hop Fields and such MACs are verified by routers at forwarding. For a detailed specification, see [](#path-auth).
 
-
 # SCION Header Specification {#header}
 
 The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an OPTIONAL extension header, see {{figure-2}} below.
@@ -398,7 +399,7 @@ The SCION common header has the following packet format:
 {: #figure-3 title="The SCION common header packet format"}
 
 - `Version`: The version of the SCION common header. Currently, only version "0" is supported.
-- `TrafficClass` (`TraffCl` in the image above): The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. The current use of the `TrafficClass` field for Differentiated Services and Explicit Congestion Notification is specified in {{RFC2474}} and {{RFC3168}}.
+- `TrafficClass` (`TraffCl` in the image above): The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet might differ from the value sent by the packet's source. The current use of the `TrafficClass` field for Differentiated Services and Explicit Congestion Notification is specified in {{RFC2474}} and {{RFC3168}}.
 - `Flow Label`: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources MUST set this field. This serves the same purpose as what {{RFC6437}} describes for IPv6 and is used in the same manner. Notably, a Flow Label of zero does not imply that packet reordering is acceptable.
 - `NextHdr`: Encodes the type of the first header after the SCION header. This can be either a SCION extension or a Layer 4 protocol such as TCP or UDP. Values of this field respect the Assigned SCION Protocol Numbers (see [](#protnum)).
 - `HdrLen`: Specifies the entire length of the SCION header in bytes, i.e. the sum of the lengths of the common header, the address header, and the path header. The SCION header is aligned to a multiple of 4 bytes. The SCION header length is computed as `HdrLen` * 4 bytes. The 8 bits of the `HdrLen` field limit the SCION header to a maximum of 255 * 4 = 1020 bytes.
@@ -1038,6 +1039,27 @@ This section explains what happens with the SCION packet header at each router, 
 
 When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also [](#reverse)).
 
+## MTU  {#mtu}
+
+SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{RFC2460}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.
+
+The MTU of a SCION path is defined as the minimum of the MTUs of the links traversed by that path. The control plane disseminates such values and makes them available to endpoints (see: {{I-D.dekater-scion-controlplane}}, Path MTU).
+
+The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the link's underlay encapsulation or native link-layer in either direction.
+
+SCION assumes that the MTUs of a path segment remains correct for the life time of that segment. This is generally a safe assumption because:
+
+* Intra-AS network MTUs are a result of the network configuration of each AS and therefore predictable.
+
+* Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.
+
+Should the inter-AS link MTU be unpredictable (e.g. because the inter-AS link is deployed as an overlay), then the link's MTU MUST be configured statically to a conservative value. For a UDP/IP underlay, 1232 is a safe value.
+
+## Packet Fragmentation {#fragmentation}
+
+The SCION network layer does not support packet fragmentation; not even at the source endpoint. Upper layer protocols and applications MUST comply with the MTU of the paths that they use.
+
+SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations SHOULD allow MTU discovery mechanisms such as {{RFC4821}} to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
 
 # Path Authorization {#path-auth}
 
@@ -1415,7 +1437,7 @@ Implementations MUST respect the following rules when processing SCMP messages:
 
    - If an SCMP error message of unknown type is received at its destination, it MUST be passed to the upper-layer process that originated the packet that caused the error, if it can be identified.
    - If an SCMP informational message of unknown type is received, it MUST be silently dropped.
-   - Every SCMP error message MUST include as much of the offending SCION packet as possible without making the error message packet - including the SCION header and all extension headers - exceed **1232 bytes**.
+   - Every SCMP error message MUST include as much of the offending SCION packet as possible. The error message packet - including the SCION header and all extension headers - MUST NOT exceed **1232 bytes** in order to fit into the minimum MTU (see [](#mtu)).
    - In case the implementation is required to pass an SCMP error message to the upper-layer process, the upper-layer protocol type is extracted from the original packet in the body of the SCMP error message and used to select the appropriate process to handle the error. In case the upper-layer protocol type cannot be extracted from the SCMP error message body, the SCMP message MUST be silently dropped.
    - An SCMP error message MUST NOT be originated in response to any of the following:
      - An SCMP error message.
