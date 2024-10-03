@@ -47,7 +47,6 @@ normative:
   RFC4493:
   RFC5280:
   RFC5880:
-  RFC5881:
   RFC6437:
   RFC8200:
 
@@ -1845,28 +1844,29 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {: title="The assigned SCION protocol numbers"}
 
 
-# Appendix
+# Change Log
+{:numbered="false"}
 
-Changes from draft-dekater-scion-dataplane-02
+Changes from draft-dekater-scion-dataplane-02:
 
 - Added overview of SCION components to Introduction section.
-- Added RFC 2119-compliant terminology.
+- Added RFC2119 compliant terminology.
 - Added IANA Considerations.
 - Removed forward references.
 - General edits to make terminology consistent, remove duplication and rationalize text.
-- Added J. C. Hugly as author
+- Added J. C. Hugly as author.
 - Added section on SCMP (unauthenticated).
 - Added section on SCION IP Gateway.
 - Added to Payload Modification to Security Considerations.
-- Rename flow ID to Flow Label and document by reference to RFC6437.
+- Rename flow ID to Flow Label and document by reference to {{RFC6437}}.
 - Rephrased the Layer AS-AS link description.
 - Clarified router checks.
 - Clarified the validity of peering links.
 - Fixed BDF description in empty path.
-- Clarified the router alert flags and relationship to the ConsIngress/Egress fields. 
+- Clarified the router alert flags and relationship to the ConsIngress/Egress fields.
 - Changes to SCION Header Specification section.
 - Added mention of why proof of transit is not needed.
-- Introduced AES-CMAC as default MAC algorithm and elaborated on MAC chaining and path splicing. 
+- Introduced AES-CMAC as default MAC algorithm and elaborated on MAC chaining and path splicing.
 - Described the effects of clock drift.
 - Added service field table.
 - Clarified the computation of ExtLen.
