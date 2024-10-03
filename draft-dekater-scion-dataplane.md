@@ -1053,7 +1053,7 @@ SCION assumes that the MTUs of a path segment remains correct for the life time 
 
 * Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.
 
-Although that isn't the main use case, SCION allows inter-AS links to be routed through multiple IP routers. In that case, the link's MTU MUST be configured statically to a conservative value. 1280 is a safe value. The same approach applies to all cases where MTUs cannot be assumed to be stable.
+Should the inter-AS link MTU be unpredictable (e.g. because the inter-AS link is deployed as an overlay), then the link's MTU MUST be configured statically to a conservative value. For a UDP/IP underlay, 1232 is a safe value.
 
 ## Packet Fragmentation {#fragmentation}
 
