@@ -155,7 +155,9 @@ SCION relies on three main components:
 
 This document describes the SCION Data Plane component.
 
-The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. The aim of this document is to describe existing implementations and operational deployments.
+The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. The aim of this document is to describe existing implementations and operational deployments, and to introduce new concepts that can potentially address particular problems with the current Internet architecture.
+
+Note - this document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
 
 
 ## Terminology {#terms}
@@ -1841,3 +1843,31 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 | 254       |              | Use for experimentation and testing      |
 | 255       |              | Reserved                                 |
 {: title="The assigned SCION protocol numbers"}
+
+
+# Appendix
+
+Changes from draft-dekater-scion-dataplane-02
+
+- Added overview of SCION components to Introduction section.
+- Added RFC 2119-compliant terminology.
+- Added IANA Considerations.
+- Removed forward references.
+- General edits to make terminology consistent, remove duplication and rationalize text.
+- Added J. C. Hugly as author
+- Added section on SCMP (unauthenticated).
+- Added section on SCION IP Gateway.
+- Added to Payload Modification to Security Considerations.
+- Rename flow ID to Flow Label and document by reference to RFC6437.
+- Rephrased the Layer AS-AS link description.
+- Clarified router checks.
+- Clarified the validity of peering links.
+- Fixed BDF description in empty path.
+- Clarified the router alert flags and relationship to the ConsIngress/Egress fields. 
+- Changes to SCION Header Specification section.
+- Added mention of why proof of transit is not needed.
+- Introduced AES-CMAC as default MAC algorithm and elaborated on MAC chaining and path splicing. 
+- Described the effects of clock drift.
+- Added service field table.
+- Clarified the computation of ExtLen.
+- Clarified implications of AS forwarding key compromise.
