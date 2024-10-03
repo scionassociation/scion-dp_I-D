@@ -2973,7 +2973,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
             <p id="section-3.4-5.2.1">Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.<a href="#section-3.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.4-6">Although that isn't the main use case, SCION allows inter-AS links to be routed through multiple IP routers. In that case, the link's MTU <span class="bcp14">MUST</span> be configured statically to a conservative value. 1280 is a safe value. The same approach applies to all cases where MTUs cannot be assumed to be stable.<a href="#section-3.4-6" class="pilcrow">¶</a></p>
+<p id="section-3.4-6">Should the inter-AS link MTU be unpredictable (e.g. because the inter-AS link is deployed as an overlay), then the link's MTU <span class="bcp14">MUST</span> be configured statically to a conservative value. For a UDP/IP underlay, 1232 is a safe value.<a href="#section-3.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="fragmentation">
