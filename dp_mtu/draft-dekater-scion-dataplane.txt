@@ -698,9 +698,9 @@ Table of Contents
 
    *  TrafficClass (TraffCl in the image above): The 8-bit long
       identifier of the packet's class or priority.  The value of the
-      traffic class bits in a received packet or fragment might differ
-      from the value sent by the packet's source.  The current use of
-      the TrafficClass field for Differentiated Services and Explicit
+      traffic class bits in a received packet might differ from the
+      value sent by the packet's source.  The current use of the
+      TrafficClass field for Differentiated Services and Explicit
       Congestion Notification is specified in [RFC2474] and [RFC3168].
 
    *  Flow Label: This 20-bit field labels sequences of packets to be
