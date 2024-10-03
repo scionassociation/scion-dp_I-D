@@ -1780,9 +1780,9 @@ Table of Contents
 
 3.5.  Packet Fragmentation
 
-   The UDP/SCION layer MUST NOT fragments packets, not even at the
-   source endpoint.  Applications MUST comply with the MTU of the paths
-   that they use.
+   The SCION network layer does not support packet fragmentation; not
+   even at the source endpoint.  Upper layer protocols and applications
+   MUST comply with the MTU of the paths that they use.
 
    SCION is agnostic to datagram fragmentation by the underlay network
    layer, (e.g. used for intra-AS communication).  Implementations

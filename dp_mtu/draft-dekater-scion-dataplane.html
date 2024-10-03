@@ -2981,7 +2981,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
         <h3 id="name-packet-fragmentation">
 <a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-packet-fragmentation" class="section-name selfRef">Packet Fragmentation</a>
         </h3>
-<p id="section-3.5-1">The UDP/SCION layer <span class="bcp14">MUST NOT</span> fragments packets, not even at the source endpoint. Applications <span class="bcp14">MUST</span> comply with the MTU of the paths that they use.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-1">The SCION network layer does not support packet fragmentation; not even at the source endpoint. Upper layer protocols and applications <span class="bcp14">MUST</span> comply with the MTU of the paths that they use.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
 <p id="section-3.5-2">SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations <span class="bcp14">SHOULD</span> allow MTU discovery mechanisms such as <span>[<a href="#RFC4821" class="cite xref">RFC4821</a>]</span> to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
