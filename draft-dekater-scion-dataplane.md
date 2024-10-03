@@ -1045,7 +1045,7 @@ SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g.
 
 ## MTU  {#mtu}
 
-SCION assumes that its underlay encapsulation (where used) or native link layer has a minimum MTU of 1232 (1280 - 48, assuming UDP/IPV6 encapsulation as the worst case). SCMP relies only on this minimum while UDP/SCION takes advantage of any larger MTU configured.
+SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{rfc2460}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.
 
 The MTU of an entire path is defined as the MIN of the MTUs of the links traversed by that path. The control plane makes those numbers available in segment records. (See: {{I-D.dekater-scion-controlplane}}, Path MTU).
 
