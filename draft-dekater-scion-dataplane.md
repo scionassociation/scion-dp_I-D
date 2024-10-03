@@ -1057,7 +1057,7 @@ Should the inter-AS link MTU be unpredictable (e.g. because the inter-AS link is
 
 ## Packet Fragmentation {#fragmentation}
 
-The UDP/SCION layer MUST NOT fragments packets, not even at the source endpoint. Applications MUST comply with the MTU of the paths that they use.
+The SCION network layer does not support packet fragmentation; not even at the source endpoint. Upper layer protocols and applications MUST comply with the MTU of the paths that they use.
 
 SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations SHOULD allow MTU discovery mechanisms such as {{RFC4821}} to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
 
