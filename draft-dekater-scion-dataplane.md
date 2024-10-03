@@ -42,6 +42,7 @@ author:
 normative:
   I-D.dekater-scion-controlplane:
   I-D.dekater-scion-pki:
+  RFC2460:
   RFC2474:
   RFC3168:
   RFC4493:
@@ -90,6 +91,7 @@ informative:
   RFC1122:
   RFC1918:
   RFC2711:
+  RFC4821:
   RFC9217:
   RFC9473:
   SCMP:
@@ -1037,12 +1039,6 @@ This section explains what happens with the SCION packet header at each router, 
 
 When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also [](#reverse)).
 
-## Packet Fragmentation {#fragmentation}
-
-The UDP/SCION layer MUST NOT fragments packets, not even at the source endpoint. Applications MUST comply with the MTU of the paths that they use.
-
-SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations SHOULD allow MTU discovery mechanisms such as {{RFC4821}} to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
-
 ## MTU  {#mtu}
 
 SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{rfc2460}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.
@@ -1058,6 +1054,12 @@ SCION assumes that the MTUs of a path segment remains correct for the life time 
 * Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.
 
 Although that isn't the main use case, SCION allows inter-AS links to be routed through multiple IP routers. In that case, the link's MTU MUST be configured statically to a conservative value. 1280 is a safe value. The same approach applies to all cases where MTUs cannot be assumed to be stable.
+
+## Packet Fragmentation {#fragmentation}
+
+The UDP/SCION layer MUST NOT fragments packets, not even at the source endpoint. Applications MUST comply with the MTU of the paths that they use.
+
+SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations SHOULD allow MTU discovery mechanisms such as {{RFC4821}} to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
 
 # Path Authorization {#path-auth}
 
