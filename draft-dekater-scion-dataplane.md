@@ -1847,7 +1847,7 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 # Change Log
 {:numbered="false"}
 
-Changes from draft-dekater-scion-dataplane-02:
+Changes to the current draft:
 
 - Added overview of SCION components to Introduction section.
 - Added RFC2119 compliant terminology.
