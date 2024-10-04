@@ -4334,20 +4334,38 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
       <h2 id="name-interoperability-scion-ip-g">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-interoperability-scion-ip-g" class="section-name selfRef">Interoperability: SCION IP Gateway</a>
       </h2>
-<p id="section-8-1">The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support the use of applications that are not SCION enabled.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION endpoints from the perspective of the SCION network.<a href="#section-8-2" class="pilcrow">¶</a></p>
-<p id="section-8-3">An ingress SIG may choose to send SCION packets to an egress SIG in accordance with static IP routes, or by dynamically announcing IP prefixes to each other via a routing protocol. The ingress SIG is responsible for path selection to the egress SIG, and may also choose how to send SCION packets based on locally configured policies when multiple egress SIGs are available.<a href="#section-8-3" class="pilcrow">¶</a></p>
-<p id="section-8-4">A SIG is typically deployed inside the same AS internal network as its non-SCION hosts, or at the edge an enterprise network.<a href="#section-8-4" class="pilcrow">¶</a></p>
+<p id="section-8-1">The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge an enterprise network.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">Tunneling IP traffic over SCION requires a pair of SIGs and it involves the following steps:<a href="#section-8-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8-3">
+<li id="section-8-3.1">
+          <p id="section-8-3.1.1">A sender sends an IP packet towards an IP destination.<a href="#section-8-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-8-3.2">
+          <p id="section-8-3.2.1">The IP packet reaches a SIG in the sender’s network via standard IP routing.<a href="#section-8-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-8-3.3">
+          <p id="section-8-3.3.1">Based on the destination IP address, the source SIG determines the destination SIG's ISD-AS, endpoint address. To achieve this, SIGs may be pre-configured with static IP prefix to remote SIG SCION address mappings or they may speak a dynamic routing protocol with the corresponding remote SIG.<a href="#section-8-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-8-3.4">
+          <p id="section-8-3.4.1">The SIG encapsulates the original IP packet within a SCION packet and sends it to the remote SIG. If necessary, the source SIG performs a SCION path lookups and selects a SCION path to the destination SIG.<a href="#section-8-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-8-3.5">
+          <p id="section-8-3.5.1">The remote SIG receives the SCION packet and decapsulates the original IP packet. It then forwards the packet to the final IP destination using standard local IP routing.<a href="#section-8-3.5.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
 <div id="sig-framing">
 <section id="section-8.1">
         <h3 id="name-sig-framing">
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-sig-framing" class="section-name selfRef">SIG Framing</a>
         </h3>
-<p id="section-8.1-1">Each ingress SIG establishes a session to one or multiple egress SIGs and IP packets are encapsulated in SIG frames. There can be multiple IP packets in a single SIG frame, and a single IP packet can also be split into multiple SIG frames.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">SIG traffic <span class="bcp14">MAY</span> be sent over multiple SIG sessions, which <span class="bcp14">MAY</span> be used transport different classes of traffic (e.g. priority vs. normal.). Within each session there may be multiple streams which is useful to distinguish between traffic sent by different SIG instances. For example, if an ingress SIG is restarted, it will create a new Stream ID for each session so the egress SIG will know that the new frame with a new Stream ID does not carry trailing part of the unfinished IP packet from a different stream.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1-3">Each SIG frame has a sequence number is used by the egress SIG to reassemble the encapsulated IP packets.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.1-4">SIG framing within a SCION packet:<a href="#section-8.1-4" class="pilcrow">¶</a></p>
-<p id="section-8.1-5">+-----------------------+
+<p id="section-8.1-1">IP packets are encapsulated over SCION/UDP into SIG frames. There may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">A pair of SIGs establishes a SIG tunneling session. TODO: how?.  Within each session there may be multiple streams which is useful to distinguish between traffic sent by different SIG instances. For example, if an ingress SIG is restarted, it will create a new Stream ID for each session so the egress SIG will know that the new frame with a new Stream ID does not carry trailing part of the unfinished IP packet from a different stream.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.1-3">Each SIG frame has a sequence number is used by the egress SIG to reassemble the encapsulated IP packets within a stream.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<span id="name-sig-framing-within-a-scion-"></span><div id="_figure-28">
+<figure id="figure-28">
+          <div class="alignLeft art-text artwork" id="section-8.1-4.1">
+<pre>
++-----------------------+
 |         SCION         |
 +-----------------------+
 |          UDP          |
@@ -4355,7 +4373,14 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
 |    SIG frame header   |
 +-----------------------+
 |   SIG frame payload   |
-+-----------------------+<a href="#section-8.1-5" class="pilcrow">¶</a></p>
++-----------------------+
+
+</pre>
+</div>
+<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
+<a href="#name-sig-framing-within-a-scion-" class="selfRef">SIG framing within a SCION packet</a>
+          </figcaption></figure>
+</div>
 </section>
 </div>
 <div id="sig-frame-header">
@@ -4363,39 +4388,52 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
         <h3 id="name-sig-frame-header">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-sig-frame-header" class="section-name selfRef">SIG Frame Header</a>
         </h3>
-<p id="section-8.2-1">Each SIG Frame starts with SIG Frame Header with the following format:<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">0                   1                   2                   3
+<span id="name-sig-frame-header-format"></span><div id="_figure-29">
+<figure id="figure-29">
+          <div class="alignLeft art-text artwork" id="section-8.2-1.1">
+<pre>
+ 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |     Version   |    Session    |            Index              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|   Reserved (12 bits)    |          Stream (20 bits)           |
+|         Reserved        |               Stream                |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 +                       Sequence Number                         +
 |                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+<a href="#section-8.2-2" class="pilcrow">¶</a></p>
-<p id="section-8.2-3">All fields within SIG Frame Header are in network byte order.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
+<a href="#name-sig-frame-header-format" class="selfRef">SIG Frame Header format</a>
+          </figcaption></figure>
+</div>
+<p id="section-8.2-2">All fields within SIG Frame Header are in network byte order.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.2-4.1">
-            <p id="section-8.2-4.1.1">The Version Field indicates the SIG framing version. It must be set to zero.<a href="#section-8.2-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-8.2-3.1">
+            <p id="section-8.2-3.1.1"><code>Version</code> (8 bits) indicates the SIG framing version. It <span class="bcp14">MUST</span> be set to zero.<a href="#section-8.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.2-4.2">
-            <p id="section-8.2-4.2.1">The Session Field indicates the SIG session to be used.<a href="#section-8.2-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-8.2-3.2">
+            <p id="section-8.2-3.2.1"><code>Session</code> (8 bits) identifies a tunneling session between a pair of SIGs.<a href="#section-8.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.2-4.3">
-            <p id="section-8.2-4.3.1">The Index Field is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only a trailing part of an IP packet, the field must be set to 0xFFFF.<a href="#section-8.2-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-8.2-3.3">
+            <p id="section-8.2-3.3.1"><code>Index</code> (16 bits) is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only a trailing part of an IP packet, the field <span class="bcp14">MUST</span> be set to 0xFFFF.<a href="#section-8.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.2-4.4">
-            <p id="section-8.2-4.4.1">The Reserved Field is reserved and must be set to zero.<a href="#section-8.2-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-8.2-3.4">
+            <p id="section-8.2-3.4.1"><code>Reserved</code> (12 bits): it <span class="bcp14">MUST</span> be set to zero.<a href="#section-8.2-3.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.2-4.5">
-            <p id="section-8.2-4.5.1">The Stream Field, along with the session identifies a unique sequence of SIG frames.<a href="#section-8.2-4.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-8.2-3.5">
+            <p id="section-8.2-3.5.1"><code>Stream</code> (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the remote SIG, put into the same reassembly queue. There may be multiple streams per session.<a href="#section-8.2-3.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.2-4.6">
-            <p id="section-8.2-4.6.1">The Sequence Number Field indicates a position of the frame within a stream. Consecutive frames can be used to reassemble IP packets split among multiple frames.<a href="#section-8.2-4.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-8.2-3.6">
+            <p id="section-8.2-3.6.1"><code>Sequence Number</code> (64 bits) indicates the position of the frame within a stream. Consecutive frames can be used to reassemble IP packets split among multiple frames.<a href="#section-8.2-3.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-8.2-4">TODO:
+- how is the session established and teared down?
+- How is the stream ID set?<a href="#section-8.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sig-frame-payload">
