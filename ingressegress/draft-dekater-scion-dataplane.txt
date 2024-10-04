@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 17 March 2025                                 SCION Association
+Expires: 7 April 2025                                  SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                       13 September 2024
+                                                          4 October 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 March 2025.
+   This Internet-Draft will expire on 7 April 2025.
 
 Copyright Notice
 
@@ -1131,15 +1131,11 @@ Table of Contents
 
    *  RSV: Unused and reserved for future use.
 
-   *  I: The Ingress Router Alert flag.  If this has value "1" and the
-      packet is received on the interface with ID corresponding to the
-      value of ConsIngress, the router SHOULD process the L4 payload in
-      the packet.
+   *  I: The Ingress Router Alert flag.  If this has value "1", the
+      ingress router SHOULD process the L4 payload in the packet.
 
-   *  E: The Egress Router Alert flag.  If this has value "1" and the
-      packet is received on the interface with ID corresponding to the
-      value of ConsEgress, the router SHOULD process the L4 payload in
-      the packet.
+   *  E: The Egress Router Alert flag.  If this has value "1", the
+      egress router SHOULD process the L4 payload in the packet.
 
    *  ExpTime: Expiration time of a Hop Field.  This field is 1-byte
       long, and the expiration time specified in this field is relative.
@@ -1162,19 +1158,21 @@ Table of Contents
    segment (i.e. the direction of beaconing).  When the packet is
    traveling in the opposite direction, the meanings are reversed.
 
-   Router alert flags work similarly to [RFC2711] and allow a sender to
-   address a specific router on the path without knowing its address.
    Processing the L4 payload in the packet means that the router will
    treat the payload of the packet as a message to itself and parse it
    according to the value of the NextHdr field.  Such messages include
    Traceroute Requests (Section 5.7.1)
 
-   Setting multiple router alert flags on a path SHOULD be avoided.
-   This is because the router for which the corresponding Router Alert
-   flag is set to "1" may process the request without further forwarding
-   it along the path.  Use cases that require multiple routers/hops on
-   the path to process a packet SHOULD rely on a hop-by-hop extension
-   (see Section 2.4).
+   A sender cannot rely on multiple routers retrieving and processing
+   the payload even if it sets multiple router alert flags.  This is
+   use-case dependent: In the case of traceroute informational messages,
+   for example, the router for which the traceroute request is intended
+   will process the request (if the corresponding Router Alert flag is
+   set to "1") and reply to it without further forwarding the request
+   along the path.  Use cases that require multiple routers/hops on the
+   path to process a packet SHOULD rely on a hop-by-hop extension (see
+   Section 2.4).  For general information on router alerts, see
+   [RFC2711].
 
 2.3.3.  One-Hop Path Type
 
