@@ -48,7 +48,6 @@ normative:
   RFC4493:
   RFC5280:
   RFC5880:
-  RFC5881:
   RFC6437:
   RFC8200:
 
@@ -1810,10 +1809,61 @@ The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to supp
 
 An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION endpoints from the perspective of the SCION network.
 
-Each SIG establishes a session to one or multiple remote SIGs. Each pair of SIGs uses a common tunneling protocol. Each SIG may choose to send SCION packets to a remote SIG in accordance with static IP routes, or by dynamically announcing IP prefixes to each other via a routing protocol. Each SIG may also choose how to send SCION packets based on locally configured policies when multiple remote SIGs are available.
-In addition, the source SIG is responsible for SCION path selection.
+An ingress SIG may choose to send SCION packets to an egress SIG in accordance with static IP routes, or by dynamically announcing IP prefixes to each other via a routing protocol. The ingress SIG is responsible for path selection to the egress SIG, and may also choose how to send SCION packets based on locally configured policies when multiple egress SIGs are available.
 
-A SIG is typically deployed inside the same AS internal network as its non-SCION hosts. In an enterprise scenario, it is usually deployed at the edge of the enterprise network.
+A SIG is typically deployed inside the same AS internal network as its non-SCION hosts, or at the edge an enterprise network.
+
+## SIG Framing
+
+Each ingress SIG establishes a session to one or multiple egress SIGs and IP packets are encapsulated in SIG frames. There can be multiple IP packets in a single SIG frame, and a single IP packet can also be split into multiple SIG frames.
+
+SIG traffic MAY be sent over multiple SIG sessions, which MAY be used transport different classes of traffic (e.g. priority vs. normal.). Within each session there may be multiple streams which is useful to distinguish between traffic sent by different SIG instances. For example, if an ingress SIG is restarted, it will create a new Stream ID for each session so the egress SIG will know that the new frame with a new Stream ID does not carry trailing part of the unfinished IP packet from a different stream.
+
+Each SIG frame has a sequence number is used by the egress SIG to reassemble the encapsulated IP packets.
+
+SIG framing within a SCION packet:
+
++-----------------------+
+|         SCION         |
++-----------------------+
+|          UDP          |
++-----------------------+
+|    SIG frame header   |
++-----------------------+
+|   SIG frame payload   |
++-----------------------+
+
+## SIG Frame Header
+
+Each SIG Frame starts with SIG Frame Header with the following format:
+
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Version   |    Session    |            Index              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Reserved (12 bits)    |          Stream (20 bits)           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                       Sequence Number                         +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+All fields within SIG Frame Header are in network byte order.
+
+- The Version Field indicates the SIG framing version. It must be set to zero.
+- The Session Field indicates the SIG session to be used.
+- The Index Field is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only a trailing part of an IP packet, the field must be set to 0xFFFF.
+- The Reserved Field is reserved and must be set to zero.
+- The Stream Field, along with the session identifies a unique sequence of SIG frames.
+- The Sequence Number Field indicates a position of the frame within a stream. Consecutive frames can be used to reassemble IP packets split among multiple frames.
+
+## SIG Frame Payload
+
+The SIG frame payload may contain multiple IPv4 or IPv6 packets, or parts thereof. No other types of packets can be encapsulated and the packets are placed directly after one another with no padding.
+
+SIG uses the IPv4 or IPv6 'Payload Length Field to determine the size of the packet. To make the processing easier, it is REQUIRED that the fixed part of the IP header is in the frame where the IP packet begins. In other words, the initial fragment of an IPv4 packet must be at least 20 bytes long, whilst the initial fragment of an IPv6 packet must be at least 40 bytes long.
+
 
 # IANA Considerations
 
