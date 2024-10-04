@@ -1847,27 +1847,45 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 # Change Log
 {:numbered="false"}
 
-Changes to the current draft:
+Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-dataplane-03
+{:numbered="false"}
+
+Major changes:
+
+- Added section with SCMP specification
+- Added section on SCION IP Gateway
+- Added section on Handling Link Failures and BFD
+- Added sections on MTU and fragmentation
+- Clarified router checks in Processing at Routers
+- Security Considerations: add section on Payload Modifications
+
+Minor changes:
+
+- Clarified the router alert flags and relationship to the ConsIngress/Egress fields.
+- Clarifications in the SCION Header Specification section (router alert flags, service addresses, one-hop paths, text clarifications, validity of peering links)
+- Added mention of why proof of transit is not needed.
+- Rename flow ID to Flow Label and document by reference to {{RFC6437}}.
+- Added J. C. Hugly as author.
+- Introduced this change log
+
+## draft-dekater-scion-dataplane-02
+{:numbered="false"}
+
+Major changes:
 
 - Added overview of SCION components to Introduction section.
-- Added RFC2119 compliant terminology.
-- Added IANA Considerations.
+- Introduced AES-CMAC as default MAC algorithm and elaborated on MAC chaining and path splicing.
+- Added section to describe Effects of Clock Inaccuracy / time synchronization requirements
+- Added section to describe required router Configuration
+- Added service field table
+
+Minor changes:
+
 - Removed forward references.
 - General edits to make terminology consistent, remove duplication and rationalize text.
-- Added J. C. Hugly as author.
-- Added section on SCMP (unauthenticated).
-- Added section on SCION IP Gateway.
-- Added to Payload Modification to Security Considerations.
-- Rename flow ID to Flow Label and document by reference to {{RFC6437}}.
-- Rephrased the Layer AS-AS link description.
-- Clarified router checks.
-- Clarified the validity of peering links.
-- Fixed BDF description in empty path.
-- Clarified the router alert flags and relationship to the ConsIngress/Egress fields.
-- Changes to SCION Header Specification section.
-- Added mention of why proof of transit is not needed.
-- Introduced AES-CMAC as default MAC algorithm and elaborated on MAC chaining and path splicing.
-- Described the effects of clock drift.
-- Added service field table.
+- Added and capitalized RFC2119 compliant terminology.
+- Clarified implications of AS forwarding key compromise and path splicing in security considerations
 - Clarified the computation of ExtLen.
-- Clarified implications of AS forwarding key compromise.
+
