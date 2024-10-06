@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-03T00:00:47.486547+00:00",
+  "timestamp": "2024-10-06T00:00:46.552754+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -226,7 +226,7 @@
       "id": "I_kwDOKYa7786IuWFf",
       "title": "Extend introduction and remove/edit notes",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/10",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [
@@ -239,8 +239,8 @@
       ],
       "body": "The following text needs to be reworked as you are not publishing some of these:\r\n\r\n > \\*Note:\\* This is the very first version of the SCION Data Plane\r\n   document.  We are aware that the draft is far from perfect, and hope\r\n   to improve the content in later versions of the document.  To reach\r\n   this goal, any feedback is welcome and much appreciated.  Thanks!\r\n\r\n>  \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-cppki], and [I-D.scion-cp], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\n\r\n\r\nAlso, \r\n> From: Ron Bonica\r\n> The problem statement is weak. Before describing forwarding plane details, you need to tell the readers why they should deploy SCION. You say that the design advantages are:\r\n>  - It provides control and transparency over forwarding paths the endpoints.  \u2002\u2002\u2002\u2002\u2002\u2002\u2002\r\n>  -  It simplifies the packet-processing at routers: Instead of having to perform longest-prefix matching on IP addresses, which requires expensive hardware and substantial amounts of energy, a router can simply access the next hop from the packet header, after having verified the authenticity of the hop field's MAC.\r\n\r\n> \u2002\u2002\u2002\u2002\u2002\u2002Is there any benefit in switching, as opposed to routing, at the AS boundary? Yes, routing is expensive. But the router is already there. There is no incremental cost. By contrast, you would have to add a SCION device.\r\n> Is the real motivation to support new settlement models?\r\n\r\n\r\nSame issue in other drafts: \r\n- CPPKI  https://github.com/scionassociation/scion-cppki_I-D/issues/29\r\n- CP        https://github.com/scionassociation/scion-cp_I-D/issues/14",
       "createdAt": "2024-05-13T21:08:42Z",
-      "updatedAt": "2024-07-04T08:20:30Z",
-      "closedAt": "2024-07-04T08:20:30Z",
+      "updatedAt": "2024-10-03T14:53:30Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "nicorusti",
@@ -262,6 +262,13 @@
           "body": "This has been addressed in #24 and in other PRs for the other drafts.",
           "createdAt": "2024-07-04T08:20:30Z",
           "updatedAt": "2024-07-04T08:20:30Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Following discussion with Eliot, Clarify: \r\n\r\n- Should this be IETF work instead of ISE? \u2192 Make it clear why these documents are being published. Two reasons: documenting existing implementation, discuss where it is implemented. Bring new concepts to industry that can be further improved with future versions of this work (or versions that can be valuable over time). Don\u2019t make it looks like a standard.\r\n",
+          "createdAt": "2024-10-03T14:53:28Z",
+          "updatedAt": "2024-10-03T14:53:28Z"
         }
       ]
     },
@@ -636,7 +643,7 @@
       "id": "I_kwDOKYa7786QkTOn",
       "title": "Add discussion about MTU & fragmentation",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/39",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -647,10 +654,10 @@
         "enhancement",
         "Prio 1"
       ],
-      "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nRelated issues: \r\n* CP draft: https://github.com/scionassociation/scion-cp_I-D/issues/57 \r\n* Implementations: https://github.com/scionproto/scion/issues/2608 \r\n\r\nAlso: \r\n- [ ] Add discussion about fragmentation\r\n- [ ] Adapt this text  in the Common Header  paragraph` The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. `",
+      "body": "> Feedback Harald Alvestrand\r\n> The description of SCION refers to using UDP/IP as the internal substrate inside an AS, and as a framing protocol on inter-AS links. This means that the Internet MTU of 1500 bytes (1200 for IPv6) will be in effect.\r\nPath hops take 12 bytes + a couple of \u201csegment headers\u201d of 16 bytes - which means that a 10-hop, 3-segment path will take 168 bytes for the routing information. This is enough to reduce the MTU significantly, and the MTU will be unpredictable and maybe variable, since the path for a given packet may change dynamically.\r\n(The packet format, like UDP\u2019s, permits 68K-byte packets. However, fragmentation is A Thing.)\r\n\r\nRelated issues: \r\n* CP draft: https://github.com/scionassociation/scion-cp_I-D/issues/57 \r\n* Implementations: https://github.com/scionproto/scion/issues/2608 \r\n\r\nAlso: \r\n- [x] Add discussion about fragmentation\r\n- [x] Adapt this text  in the Common Header  paragraph` The value of the traffic class bits in a received packet or fragment might differ from the value sent by the packet's source. `",
       "createdAt": "2024-07-23T14:58:19Z",
-      "updatedAt": "2024-09-20T10:36:54Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-03T16:40:08Z",
+      "closedAt": "2024-10-03T16:40:08Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -712,9 +719,9 @@
         "Prio 1",
         "needs-discussion"
       ],
-      "body": "> Harald Alvestrand (meeting notes 26.07.2024)\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d must have enough information to make a connection over scion\r\n\r\n- [x] Prepare a description of the SIG (try in terms of functionality rather than how they work)\r\n- [x] Send text to Eliot\r\n- [ ] Decide if this needs to be a separate draft (or if it can be a paragraph in one of the other drafts)\r\n\r\n#### Feedback received:\r\n> Harald Alvestrand \r\nThe payload of a packet can be anything (does not affect SCION operation), but the header contains an integer saying which content it is, with the defined values being \u201cUDP\u201d, \u201cTCP\u201d, and some numbers for internal use. The process for constructing an IP packet from the SCION packet (or vice versa) is not described, but presumably involves mangling checksums - -dataplane describes a \u201cvirtual header\u201d for constructing the checksum of things that require it, which implies that a gateway to non-SCION IP would mangle checksums inside the UDP or TCP packet.\r\n(There are references in -overview to docs describing gateways. However, I can\u2019t see them at the moment.)\r\n\r\n>   My response: \r\nYes, we don\u2019t yet have a draft describing gateways in detail. There was [a presentation ](https://datatracker.ietf.org/meeting/118/materials/slides-118-panrg-operational-aspects-of-scion-00)by my co-author Sam Hitz at PANRG at 119 about it. Essentially gateways run an encapsulation protocol and exchange IP routes among each other. They use a custom protocol for that, so we felt for now it was best to leave this part out and treat gateways as a normal SCION endpoint. \r\nThis checksums is used, for example, by UDP on top of SCION. Gateways encapsulate the whole IP packet, so they don\u2019t mangle UDP/TCP checksums in them. However, the gateway encapsulation protocol itself runs on top of UDP on top of SCION, therefore there is a ckechsum in the encapsulating UDP packet, and this uses the \u201cvirtual header\u201d.\r\n\r\n> Lunch discussion\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d. The  must have enough information to make a connection over scion\r\n\r\n#### Potential sources: \r\n- [Anapaya Docs](https://docs.anapaya.net/en/latest/edge/configuration/scion-tunneling/#edge-tunneling-sgrp) for SGRP, tunneling, also called \"Prefix discovery\" in open source\r\n- [SCIONproto](https://docs.scion.org/en/latest/sig.html) for SIG framing \r\n- Scion book section  13.3 The SCION\u2013IP Gateway (SIG) \r\n- [component analysis draft](https://www.ietf.org/archive/id/draft-rustignoli-panrg-scion-components-03.txt) section 3.1",
+      "body": "> Harald Alvestrand (meeting notes 26.07.2024)\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d must have enough information to make a connection over scion\r\n\r\n- [x] Prepare a description of the SIG (try in terms of functionality rather than how they work)\r\n- [x] Send text to Eliot\r\n- [ ] Decide if this needs to be a separate draft (or if it can be a paragraph in one of the other drafts)\r\n\r\n#### Feedback received:\r\n> Harald Alvestrand \r\nThe payload of a packet can be anything (does not affect SCION operation), but the header contains an integer saying which content it is, with the defined values being \u201cUDP\u201d, \u201cTCP\u201d, and some numbers for internal use. The process for constructing an IP packet from the SCION packet (or vice versa) is not described, but presumably involves mangling checksums - -dataplane describes a \u201cvirtual header\u201d for constructing the checksum of things that require it, which implies that a gateway to non-SCION IP would mangle checksums inside the UDP or TCP packet.\r\n(There are references in -overview to docs describing gateways. However, I can\u2019t see them at the moment.)\r\n\r\n>   My response: \r\nYes, we don\u2019t yet have a draft describing gateways in detail. There was [a presentation ](https://datatracker.ietf.org/meeting/118/materials/slides-118-panrg-operational-aspects-of-scion-00)by my co-author Sam Hitz at PANRG at 119 about it. Essentially gateways run an encapsulation protocol and exchange IP routes among each other. They use a custom protocol for that, so we felt for now it was best to leave this part out and treat gateways as a normal SCION endpoint. \r\nThis checksums is used, for example, by UDP on top of SCION. Gateways encapsulate the whole IP packet, so they don\u2019t mangle UDP/TCP checksums in them. However, the gateway encapsulation protocol itself runs on top of UDP on top of SCION, therefore there is a ckechsum in the encapsulating UDP packet, and this uses the \u201cvirtual header\u201d.\r\n\r\n> Lunch discussion\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d. The  must have enough information to make a connection over scion\r\n\r\n#### Potential sources: \r\n- [Anapaya Docs](https://docs.anapaya.net/en/latest/edge/configuration/scion-tunneling/#edge-tunneling-sgrp) for SGRP, tunneling, also called \"Prefix discovery\" in open source\r\n- [SCIONproto](https://docs.scion.org/en/latest/sig.html) for SIG framing \r\n- Scion book section  13.3 The SCION\u2013IP Gateway (SIG) \r\n- [component analysis draft](https://www.ietf.org/archive/id/draft-rustignoli-panrg-scion-components-03.txt) section 3.1\r\n- https://github.com/scionproto/scion/issues/2948",
       "createdAt": "2024-07-26T22:05:22Z",
-      "updatedAt": "2024-09-10T09:17:42Z",
+      "updatedAt": "2024-10-04T08:20:15Z",
       "closedAt": null,
       "comments": [
         {
@@ -723,6 +730,13 @@
           "body": "\r\n> On 7 Sep 2024, at 02:16, Harald Alvestrand <harald@alvestrand.no> wrote:\r\n\r\n> I still don't think you have enough info on the IP gateway.\r\n\r\n> In particular - does the IP gateway pair (entry + exit) act like a NAT box, matching the source address in the source domain to the gateway address in the destination domain, or is it an one-way tunnel of unchanged bits?\r\n\r\n> In both cases - where are the IP addresses (or equivalent) carried through the tunnel? As part of the SCION address (as the presence of those forms of address in the endpoint scheme seems to indicate), or as part of the packet?\r\n\r\n> And if the addresses are mapped, who takes care of the payload modifications that any NAT needs to do?\r\n\r\n> Harald\r\n(I still haven't gotten around to reading the -controlplane and -pki drafts,  but I have not forgotten them...)",
           "createdAt": "2024-09-10T09:17:11Z",
           "updatedAt": "2024-09-10T09:17:11Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Feedback Eliot Lear call 3.10.2024\r\n\r\nSIG Description must clarify:\r\n*  how are packets directed to the GW?\r\n* How does GW know where to tunnel? \r\n* What happens at egress?\r\n* (mention multicast left as future work). \r\n\r\nShow fully flashed out config of how to have SCION nodes, a device in the middle, they did this with M-BONE. And the 6 bone to play with IPv6. If you have someone who wants to build an implementation, how can they test that it works and that they can interoperate. \r\nWhat do you have to do if you want to want to add a GW. Show a reference to what you can do (guide how to participate) e.g. to SCIONLab, not docs.scion.org. Goal; meet interop requirement. No Anapaya docs (but could be). Beginning as vendor implementation, intent is to offer to community for further improvement and potential standardization later on.",
+          "createdAt": "2024-10-03T14:51:15Z",
+          "updatedAt": "2024-10-03T14:51:15Z"
         }
       ]
     },
@@ -932,7 +946,9 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
+      "assignees": [
+        "nicorusti"
+      ],
       "labels": [
         "Prio 1",
         "needs-discussion",
@@ -940,9 +956,17 @@
       ],
       "body": "The upper layer checksum raises questions.. However this is used in the current implementation. \r\n\r\n- [ ] Can we adapt the text in the draft?\r\n- [ ] Respond to Harald Alvestrand and Mike Mc Bride\r\n\r\n\r\n\r\n> Harald Alvestrand\r\nSCION keeps accommodating the \u201cchecksum across layers 3 and 4\u201d. This was a bad idea in 1975, and keeps being a bad idea now. The idea should (in my opinion) be relegated to gateways and kept out of the core.\r\n\r\n> The payload of a packet can be anything (does not affect SCION operation), but the header contains an integer saying which content it is, with the defined values being \u201cUDP\u201d, \u201cTCP\u201d, and some numbers for internal use. The process for constructing an IP packet from the SCION packet (or vice versa) is not described, but presumably involves mangling checksums - -dataplane describes a \u201cvirtual header\u201d for constructing the checksum of things that require it, which implies that a gateway to non-SCION IP would mangle checksums inside the UDP or TCP packet.\r\n(There are references in -overview to docs des \r\n\r\n>  Mike McBride'\u00a0<mmcbride7@gmail.com>\r\nI discussed potential scion checksum issues (like why have them) with Eliot and understand that they\u2019ve been discussed with scion authors so won\u2019t get into that.\r\n \r\n \r\n ",
       "createdAt": "2024-08-07T16:00:48Z",
-      "updatedAt": "2024-08-07T16:03:14Z",
+      "updatedAt": "2024-10-03T15:11:14Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Discussion Eliot 3.10.2024: \r\n> (UDP/SCION) \u2192 Add a note that this has to not be done in potential future change.. This point needs to be re-evaluated in the future. ",
+          "createdAt": "2024-10-03T14:51:46Z",
+          "updatedAt": "2024-10-03T14:51:46Z"
+        }
+      ]
     },
     {
       "number": 48,
@@ -1144,6 +1168,27 @@
       "createdAt": "2024-08-25T16:29:19Z",
       "updatedAt": "2024-09-14T14:36:53Z",
       "closedAt": "2024-09-14T14:36:52Z",
+      "comments": []
+    },
+    {
+      "number": 66,
+      "id": "I_kwDOKYa7786Y18xM",
+      "title": "Add changelog in appendix",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/66",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti",
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "",
+      "createdAt": "2024-10-03T14:55:24Z",
+      "updatedAt": "2024-10-03T14:55:25Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -4787,26 +4832,394 @@
       "id": "PR_kwDOKYa77858KGr5",
       "title": "mtu: add clarifications",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/65",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #39 ",
       "createdAt": "2024-09-20T11:55:08Z",
-      "updatedAt": "2024-10-02T14:20:10Z",
+      "updatedAt": "2024-10-04T09:16:48Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "6f2163e8afb52f5a696033115b7f25c2302b2fe0",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "dp_mtu",
-      "headRefOid": "cdce98c0b10979ccb2d672b21a4d2c2a7d476a90",
+      "headRefOid": "b8a30b8afe91dd4fc6343bac6fe462e9b6759b47",
+      "closedAt": "2024-10-03T16:40:07Z",
+      "mergedAt": "2024-10-03T16:40:07Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "ab0bf8c9e5de1861244815e3011d5f7539d2688b"
+      },
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I proposed some changes.\r\n> \r\n> Also, would the # Fragmentation section be a better fit after the MTU section? I feel the MTU section has a lot of explanations that can provide more background for fragmentation\r\n\r\nDone.",
+          "createdAt": "2024-10-03T09:08:11Z",
+          "updatedAt": "2024-10-03T09:16:12Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786LpZko",
+          "commit": {
+            "abbreviatedOid": "cdce98c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "I proposed some changes. \r\n\r\nAlso, would the # Fragmentation section be a better fit after the MTU section? I feel the MTU section has a lot of explanations that can provide more background for fragmentation",
+          "createdAt": "2024-10-02T13:07:08Z",
+          "updatedAt": "2024-10-03T08:47:38Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\nThe UDP/SCION layer MUST NOT fragments packets, not even at the source endpoint. Applications MUST comply with the MTU of the paths that they use.\r\n\r\nSCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations SHOULD allow MTU discovery mechanisms such as {{RFC4821}} to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.\r\n```",
+              "createdAt": "2024-10-02T13:07:08Z",
+              "updatedAt": "2024-10-03T08:47:38Z"
+            },
+            {
+              "originalPosition": 16,
+              "body": "- I reworded the section a bit\r\n- As far as I understand, [Linux uses](https://www.kernel.org/doc/html/v5.8/networking/ip-sysctl.html)  RFC4821, so I added a reference to it. Do you agree, or are you aware of a better reference?\r\n- `The UDP/SCION layer MUST NOT fragments packets` how about other protocols on top of SCION (e.g. TCP/SCION`)? Should they also avoid fragmentation? If so, shall this text be more general?",
+              "createdAt": "2024-10-02T13:09:45Z",
+              "updatedAt": "2024-10-03T08:47:38Z"
+            },
+            {
+              "originalPosition": 20,
+              "body": "```suggestion\r\nSCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{rfc2460}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.\r\n```",
+              "createdAt": "2024-10-02T13:53:06Z",
+              "updatedAt": "2024-10-03T08:47:38Z"
+            },
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\r\nThe MTU of a SCION path is defined as the minimum of the MTUs of the links traversed by that path. The control plane disseminates such values and makes them available to endpoints (see: {{I-D.dekater-scion-controlplane}}, Path MTU).\r\n```",
+              "createdAt": "2024-10-02T14:20:09Z",
+              "updatedAt": "2024-10-03T08:47:38Z"
+            },
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\n```\r\nI think this is an exceptional case that would confuse readers and it could be omitted",
+              "createdAt": "2024-10-03T08:46:31Z",
+              "updatedAt": "2024-10-03T08:47:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Lxoay",
+          "commit": {
+            "abbreviatedOid": "cdce98c"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T09:02:30Z",
+          "updatedAt": "2024-10-03T09:02:31Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "This isn't an exceptional case. It is used heavily by some deployments such as scion lab. I agree that this is not a desirable configuration where security is the objective, but this is an important feature for experimental deployments. I do not think we should hide it. In fact, I think we should mention it somewhere outside the limited context of MTU.",
+              "createdAt": "2024-10-03T09:02:30Z",
+              "updatedAt": "2024-10-03T09:02:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Lxq4d",
+          "commit": {
+            "abbreviatedOid": "92ea0f4"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T09:07:28Z",
+          "updatedAt": "2024-10-03T09:07:28Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "I accepted your suggestion. I wouldn't bother with other protocols since they aren't specified anywhere (is there a TCP/SCION implementation?",
+              "createdAt": "2024-10-03T09:07:28Z",
+              "updatedAt": "2024-10-03T09:07:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Lx_Dy",
+          "commit": {
+            "abbreviatedOid": "92ea0f4"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T09:45:53Z",
+          "updatedAt": "2024-10-03T09:45:53Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Not sure, maybe we should completely omit details about higher layer protocols and just use a general: \r\n\r\n> Higher layer protocols MUST comply with the MTU of the paths that they use.",
+              "createdAt": "2024-10-03T09:45:53Z",
+              "updatedAt": "2024-10-03T09:45:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786LyOxh",
+          "commit": {
+            "abbreviatedOid": "cdce98c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T10:14:17Z",
+          "updatedAt": "2024-10-03T10:14:17Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "How about more generic phrasing: \r\n> Should the inter-AS link MTU be unpredictable (e.g. because the inter-AS link is deployed on top of an overlay), then the link's MTU MUST be configured statically to a conservative value. Experience shows that 1280 is a safe value.",
+              "createdAt": "2024-10-03T10:14:17Z",
+              "updatedAt": "2024-10-03T10:14:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786LydwE",
+          "commit": {
+            "abbreviatedOid": "bd58066"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T10:44:47Z",
+          "updatedAt": "2024-10-03T10:44:47Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "Sounds good. Done\r\n",
+              "createdAt": "2024-10-03T10:44:47Z",
+              "updatedAt": "2024-10-03T10:44:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Lyh6k",
+          "commit": {
+            "abbreviatedOid": "92ea0f4"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T10:54:14Z",
+          "updatedAt": "2024-10-03T10:54:14Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Mmm. May be. Fragmentation is actually an IP feature, which UDP may or may not rely on. SCION doesn't have any fragmentation support. So, we probably should just say that and do away with the MUST/MUST not when it comes to UDP/SCION? That would implicitly settle the question for other transports. So, how about:\r\n\"\r\nThe SCION network layer does not support any packet fragmentation; not even at the source endpoint. Upper layer protocols and applications MUST comply with the MTU of the paths that they use.\r\n\"\r\n",
+              "createdAt": "2024-10-03T10:54:14Z",
+              "updatedAt": "2024-10-03T10:59:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786L02kd",
+          "commit": {
+            "abbreviatedOid": "92ea0f4"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T15:00:27Z",
+          "updatedAt": "2024-10-03T15:00:27Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "I like it, short and clean. I committed it. Thank you!",
+              "createdAt": "2024-10-03T15:00:27Z",
+              "updatedAt": "2024-10-03T15:00:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786L06eJ",
+          "commit": {
+            "abbreviatedOid": "b8a30b8"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "Besides the small doubt above, LGTM :) Thanks! ",
+          "createdAt": "2024-10-03T15:06:31Z",
+          "updatedAt": "2024-10-03T15:09:06Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "@jiceatscion Do ypu know why we mention fragment here? I think we should not. \r\nThis text comes from https://github.com/scionproto/scion/blob/74878a477c7821fb66f8d6a39bdddced590bd91d/doc/protocols/scion-header.rst#L35 ",
+              "createdAt": "2024-10-03T15:06:31Z",
+              "updatedAt": "2024-10-03T15:09:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786L1sLC",
+          "commit": {
+            "abbreviatedOid": "b8a30b8"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-03T16:35:31Z",
+          "updatedAt": "2024-10-03T16:35:31Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "No idea. I have to assume that when that language was written the decision of whether there would be or would not be any packet fragmentation had not been made. I agree that we should delete these two words.\r\n",
+              "createdAt": "2024-10-03T16:35:31Z",
+              "updatedAt": "2024-10-03T16:35:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786L7J0_",
+          "commit": {
+            "abbreviatedOid": "b8a30b8"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-04T09:06:27Z",
+          "updatedAt": "2024-10-04T09:06:27Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "OK, can you also change this in scionproto?",
+              "createdAt": "2024-10-04T09:06:27Z",
+              "updatedAt": "2024-10-04T09:06:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786L7O2C",
+          "commit": {
+            "abbreviatedOid": "b8a30b8"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-04T09:16:48Z",
+          "updatedAt": "2024-10-04T09:16:48Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "Done. see https://github.com/scionproto/scion/pull/4635",
+              "createdAt": "2024-10-04T09:16:48Z",
+              "updatedAt": "2024-10-04T09:16:49Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 67,
+      "id": "PR_kwDOKYa77859hUCO",
+      "title": "Updated Intro and added Change Log in Appendix",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/67",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #66 ",
+      "createdAt": "2024-10-03T15:59:54Z",
+      "updatedAt": "2024-10-04T18:27:00Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "6f2163e8afb52f5a696033115b7f25c2302b2fe0",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "Intro_update",
+      "headRefOid": "13fbc53f5eaee2406eb47e775b756344abcd3a64",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786L_zP8",
+          "commit": {
+            "abbreviatedOid": "9d71f35"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "I added a couple of comments about the intro, let me know your thoughts @knmeynell \r\n\r\nI also reorganized the change log, perhaps we could follow the same structure for other drafts ",
+          "createdAt": "2024-10-04T17:48:15Z",
+          "updatedAt": "2024-10-04T18:26:32Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "Woult it be a better fit if we have these two lines in the beginning of the introduction (e.g line 136, after `... therefore not concerned with intra-domain forwarding.`\r\nThis way we five it more prominence and it does not get lost in the intro.",
+              "createdAt": "2024-10-04T17:48:15Z",
+              "updatedAt": "2024-10-04T18:26:32Z"
+            },
+            {
+              "originalPosition": 13,
+              "body": "Shall we mention SSFN or be more explicit about deployment?\r\n```suggestion\r\nThe SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.\r\n```",
+              "createdAt": "2024-10-04T17:55:04Z",
+              "updatedAt": "2024-10-04T18:26:32Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 68,
+      "id": "PR_kwDOKYa77859mxFe",
+      "title": "Expanded on SCION-IP Gateway",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/68",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #40 ",
+      "createdAt": "2024-10-04T10:46:45Z",
+      "updatedAt": "2024-10-04T17:17:23Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "ab0bf8c9e5de1861244815e3011d5f7539d2688b",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "SCION-IP_Gateway",
+      "headRefOid": "eca44dc25f21735cd6d4d90b08c31cdab63161da",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786L_WuK",
+          "commit": {
+            "abbreviatedOid": "4905aa8"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "I made a few changes: \r\n\r\n- step by step description of steps involved when forwarding traffic between two SIGs (based on https://docs.anapaya.net/en/latest/edge/configuration/scion-tunneling/#overview) \r\n- Fixing figures\r\n- Added some TODOs\r\n\r\n- [ ] @oncilla we felt we had to add more to address Harald and Eliot's concerns. Can you have an overall look at this section, and let us know if this is ok?\r\n- [ ] @jiceatscion can you help clarifying the frame fields? (e.g. correctness of field lengths, descriptions)\r\n- [ ] How are some fields set? How about sessions?\r\n- [ ] Also, shall we move the SIG section before security considerations? I think that section is always at the end",
+          "createdAt": "2024-10-04T17:17:23Z",
+          "updatedAt": "2024-10-04T17:17:23Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
