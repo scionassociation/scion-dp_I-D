@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 7 April 2025                                  SCION Association
+Expires: 10 April 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                          4 October 2024
+                                                          7 October 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 April 2025.
+   This Internet-Draft will expire on 10 April 2025.
 
 Copyright Notice
 
@@ -211,11 +211,13 @@ Table of Contents
    This document describes the SCION Data Plane component.
 
    The SCION architecture was initially developed outside of the IETF by
-   ETH Zurich with significant contributions from Anapaya Systems.  The
-   aim of this document is to describe existing implementations and
-   operational deployments, and to introduce new concepts that can
-   potentially address particular problems with the current Internet
-   architecture.
+   ETH Zurich with significant contributions from Anapaya Systems.  It
+   is deployed in the Swiss finance sector to provide resilient
+   connectivity between financial institutions.  The aim of this
+   document is to document the existing protocol specification as
+   deployed, and to introduce new concepts that can potentially be
+   further improved to address particular problems with the current
+   Internet architecture.
 
    Note - this document provides an extensive description of how the
    SCION Data Plane is implemented in order to facilitate understanding,
