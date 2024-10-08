@@ -42,6 +42,7 @@ author:
 normative:
   I-D.dekater-scion-controlplane:
   I-D.dekater-scion-pki:
+  I-D.dekater-panrg-scion-overview:
   RFC2460:
   RFC2474:
   RFC3168:
@@ -158,7 +159,7 @@ This document describes the SCION Data Plane component.
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
-Note - this document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
+Note - this document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process. This document should also be read in conjunction with {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}} and deprecates {{I-D.dekater-panrg-scion-overview}}.
 
 
 ## Terminology {#terms}
