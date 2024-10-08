@@ -155,7 +155,7 @@ SCION relies on three main components:
 
 *Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS.
 
-This document describes the SCION Data Plane component. This document should also be read in conjunction with {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}} and deprecates {{I-D.dekater-panrg-scion-overview}}.
+This document describes the SCION Data Plane component. It should be read in conjunction with {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}} and deprecates {{I-D.dekater-panrg-scion-overview}}.
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
