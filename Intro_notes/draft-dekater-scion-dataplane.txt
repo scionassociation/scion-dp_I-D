@@ -210,7 +210,10 @@ Table of Contents
    reuses existing intra-domain infrastructure to communicate to other
    SCION routers or SCION endpoints within its AS.
 
-   This document describes the SCION Data Plane component.
+   This document describes the SCION Data Plane component.  This
+   document should also be read in conjunction with
+   [I-D.dekater-scion-pki] and [I-D.dekater-scion-controlplane] and
+   deprecates [I-D.dekater-panrg-scion-overview].
 
    The SCION architecture was initially developed outside of the IETF by
    ETH Zurich with significant contributions from Anapaya Systems.  It
@@ -224,10 +227,7 @@ Table of Contents
    Note - this document provides an extensive description of how the
    SCION Data Plane is implemented in order to facilitate understanding,
    but could potentially be split into separate documents if considered
-   suitable for submission to the Internet Standards Process.  This
-   document should also be read in conjunction with
-   [I-D.dekater-scion-pki] and [I-D.dekater-scion-controlplane] and
-   deprecates [I-D.dekater-panrg-scion-overview].
+   suitable for submission to the Internet Standards Process.
 
 1.1.  Terminology
 
