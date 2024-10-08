@@ -1805,7 +1805,7 @@ However, the path choice of the endpoint may possibly be exploited by an attacke
 
 # Interoperability: SCION IP Gateway {#sig}
 
-The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge an enterprise network.
+The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network.
 
 Tunneling IP traffic over SCION requires a pair of SIGs and it involves the following steps:
 
@@ -1813,7 +1813,7 @@ Tunneling IP traffic over SCION requires a pair of SIGs and it involves the foll
 
 2. The IP packet reaches a SIG in the sender’s network via standard IP routing.
 
-3. Based on the destination IP address, the source SIG determines the destination SIG's ISD-AS, endpoint address. To achieve this, SIGs may be pre-configured with static IP prefix to remote SIG SCION address mappings or they may speak a dynamic routing protocol with the corresponding remote SIG.
+3. Based on the destination IP address, the source SIG determines the destination SIG's ISD-AS, endpoint address. To achieve this, SIGs may be pre-configured with static IP prefix to remote SIG SCION address mappings. Alternatively, a pair of SIGs may be configured to speak a dynamic routing protocol between each other. Choice of protocol is outside of the scope of this document and it is left up to implementors.
 
 4. The SIG encapsulates the original IP packet within a SCION packet and sends it to the remote SIG. If necessary, the source SIG performs a SCION path lookups and selects a SCION path to the destination SIG.
 
@@ -1825,7 +1825,7 @@ IP packets are encapsulated over SCION/UDP into SIG frames. There may be multipl
 
 A pair of SIGs establishes a SIG tunneling session. TODO: how?.  Within each session there may be multiple streams which is useful to distinguish between traffic sent by different SIG instances. For example, if an ingress SIG is restarted, it will create a new Stream ID for each session so the egress SIG will know that the new frame with a new Stream ID does not carry trailing part of the unfinished IP packet from a different stream.
 
-Each SIG frame has a sequence number is used by the egress SIG to reassemble the encapsulated IP packets within a stream.
+Each SIG frame has a sequence number that is used by the egress SIG to reassemble the encapsulated IP packets within a stream.
 
 ~~~~
 
@@ -1866,13 +1866,13 @@ All fields within SIG Frame Header are in network byte order.
 
 - `Version` (8 bits) indicates the SIG framing version. It MUST be set to zero.
 - `Session` (8 bits) identifies a tunneling session between a pair of SIGs.
-- `Index` (16 bits) is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only a trailing part of an IP packet, the field MUST be set to 0xFFFF.
+- `Index` (16 bits) is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only the middle or trailing part of an IP packet, the field MUST be set to 0xFFFF.
 - `Reserved` (12 bits): it MUST be set to zero.
 - `Stream` (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the remote SIG, put into the same reassembly queue. There may be multiple streams per session.
 - `Sequence Number` (64 bits) indicates the position of the frame within a stream. Consecutive frames can be used to reassemble IP packets split among multiple frames.
 
 TODO:
-- how is the session established and teared down?
+- how is the session established and torn down?
 - How is the stream ID set?
 
 ## SIG Frame Payload
