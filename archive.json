@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-06T00:00:46.552754+00:00",
+  "timestamp": "2024-10-08T00:00:46.281468+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -634,9 +634,17 @@
       "labels": [],
       "body": "Following the first wave of ISE feedback, we did quite some work on the dataplane draft. \r\n\r\nCan you provide your feedback on: \r\n\r\n- 8.  Interoperability: SCION IP Gateway\r\n- 6.  Handling Link Failures\r\n- 5 SCMP (needed to describe handling link failures)\r\n- Added section on SCION IP Gateway \r\n-  7.  Security Considerations\r\n\r\n\r\n\r\n\r\n\r\n[Changelog TODO link]()\r\n[Datatracker diff TODO link]\r\n",
       "createdAt": "2024-07-23T04:59:27Z",
-      "updatedAt": "2024-09-24T16:15:35Z",
+      "updatedAt": "2024-10-07T16:57:24Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "oncilla",
+          "authorAssociation": "NONE",
+          "body": "could you add the changelog diff link?",
+          "createdAt": "2024-10-07T16:57:23Z",
+          "updatedAt": "2024-10-07T16:57:23Z"
+        }
+      ]
     },
     {
       "number": 39,
@@ -5140,13 +5148,13 @@
       "labels": [],
       "body": "Resolves #66 ",
       "createdAt": "2024-10-03T15:59:54Z",
-      "updatedAt": "2024-10-04T18:27:00Z",
+      "updatedAt": "2024-10-07T09:01:16Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "6f2163e8afb52f5a696033115b7f25c2302b2fe0",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "Intro_update",
-      "headRefOid": "13fbc53f5eaee2406eb47e775b756344abcd3a64",
+      "headRefOid": "70b58feb4a584a9bdef7b45b3fccda705a09b98f",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -5178,6 +5186,26 @@
               "updatedAt": "2024-10-04T18:26:32Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJph6",
+          "commit": {
+            "abbreviatedOid": "9d71f35"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T09:00:19Z",
+          "updatedAt": "2024-10-07T09:00:19Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "I've no strong feelings about it. My own view is that you start with what you're proposing before going onto why you're proposing it, but if it clarifies intentions to the reviewers...",
+              "createdAt": "2024-10-07T09:00:19Z",
+              "updatedAt": "2024-10-07T09:00:19Z"
+            }
+          ]
         }
       ]
     },
@@ -5193,7 +5221,7 @@
       "labels": [],
       "body": "Resolves #40 ",
       "createdAt": "2024-10-04T10:46:45Z",
-      "updatedAt": "2024-10-04T17:17:23Z",
+      "updatedAt": "2024-10-07T09:49:02Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "ab0bf8c9e5de1861244815e3011d5f7539d2688b",
@@ -5217,6 +5245,239 @@
           "body": "I made a few changes: \r\n\r\n- step by step description of steps involved when forwarding traffic between two SIGs (based on https://docs.anapaya.net/en/latest/edge/configuration/scion-tunneling/#overview) \r\n- Fixing figures\r\n- Added some TODOs\r\n\r\n- [ ] @oncilla we felt we had to add more to address Harald and Eliot's concerns. Can you have an overall look at this section, and let us know if this is ok?\r\n- [ ] @jiceatscion can you help clarifying the frame fields? (e.g. correctness of field lengths, descriptions)\r\n- [ ] How are some fields set? How about sessions?\r\n- [ ] Also, shall we move the SIG section before security considerations? I think that section is always at the end",
           "createdAt": "2024-10-04T17:17:23Z",
           "updatedAt": "2024-10-04T17:17:23Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJglA",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T08:45:10Z",
+          "updatedAt": "2024-10-07T08:45:11Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "\"at the edge an enterprise network\" -> \"at the edge of an enterprise network\"",
+              "createdAt": "2024-10-07T08:45:11Z",
+              "updatedAt": "2024-10-07T08:45:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJiJF",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T08:47:52Z",
+          "updatedAt": "2024-10-07T08:47:52Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "\"with the corresponding remote SIG\" -> \"with other SIGs\". There cannot be a *corresponding* remote SIG until it has been found by way of said dynamic routing protocol or configuration (the latter removing the need to speak for that purpose).\r\n\r\nWe should also answer the implicit question \"what dynamic routing protocol would that be?\" by saying that we don't care and that it's up to the implementation of the family of SIGs being used.",
+              "createdAt": "2024-10-07T08:47:52Z",
+              "updatedAt": "2024-10-07T08:49:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJkzP",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T08:52:26Z",
+          "updatedAt": "2024-10-07T08:52:27Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "\"distinguish between traffic sent by different SIG instances\" -> does this mean \"different SIG /incarnations/ ?\"... that's what the following example seems to imply.\r\n",
+              "createdAt": "2024-10-07T08:52:26Z",
+              "updatedAt": "2024-10-07T08:52:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJlND",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T08:53:07Z",
+          "updatedAt": "2024-10-07T08:53:07Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "\"has a sequence number is used\" -> \"has a sequence number that is used\"",
+              "createdAt": "2024-10-07T08:53:07Z",
+              "updatedAt": "2024-10-07T08:53:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJm7f",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T08:56:00Z",
+          "updatedAt": "2024-10-07T08:56:01Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "Me no speak English good, but... \"established and teared down?\": isn't that supposed to be \"established and torn down\"?",
+              "createdAt": "2024-10-07T08:56:00Z",
+              "updatedAt": "2024-10-07T08:56:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJrLv",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T09:03:11Z",
+          "updatedAt": "2024-10-07T09:03:11Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Okay",
+              "createdAt": "2024-10-07T09:03:11Z",
+              "updatedAt": "2024-10-07T09:03:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJrbp",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T09:03:36Z",
+          "updatedAt": "2024-10-07T09:03:36Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "Okay",
+              "createdAt": "2024-10-07T09:03:36Z",
+              "updatedAt": "2024-10-07T09:03:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJr0t",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T09:04:18Z",
+          "updatedAt": "2024-10-07T09:04:18Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "'established and torn down' would be correct.",
+              "createdAt": "2024-10-07T09:04:18Z",
+              "updatedAt": "2024-10-07T09:04:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJvsE",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T09:11:03Z",
+          "updatedAt": "2024-10-07T09:11:03Z",
+          "comments": [
+            {
+              "originalPosition": 77,
+              "body": "\"if the frame contains only a trailing part of an IP packet\": I think it would be more accurate to say \"if the frame contains only the middle part of an IP packet\". It is more likely than the trailing part, so a more relevant example\". The case where it is the trailing part is a corner case; the packet would have to end exactly where the frame ends for there to be no beginning of packet there. That must happen a bit more often than chance alone, due to the fact that we can't fit a fragment shorter than 20 bytes at the end of a frame, but still a minority case, I think.\r\n",
+              "createdAt": "2024-10-07T09:11:03Z",
+              "updatedAt": "2024-10-07T09:11:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJxdL",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T09:14:08Z",
+          "updatedAt": "2024-10-07T09:14:08Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "I admit that I do not know exactly when/why new sessions are established. It is probably an important and not part of the wire format part of the protocol (so-called choreography) for inter-SIG compatibility. Should we attempt at describing it. I can research it in the code.",
+              "createdAt": "2024-10-07T09:14:08Z",
+              "updatedAt": "2024-10-07T09:14:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MJ7-J",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-07T09:32:27Z",
+          "updatedAt": "2024-10-07T09:32:28Z",
+          "comments": [
+            {
+              "originalPosition": 80,
+              "body": "Should we say what happens if a frame goes missing/re-ordered and the sequence cannot be re-assembled? The code we have in the OS impl is pretty rustic. It makes the optimistic assumption that this rarely happens and discards everything in its buffer when a gap appears (i.e. when a frame arrives that is not the next one in sequence). So just like IP fragmentation: fragment re-ordering is the death of the packet.\r\n",
+              "createdAt": "2024-10-07T09:32:27Z",
+              "updatedAt": "2024-10-07T09:32:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MKFcl",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Made some suggestions.",
+          "createdAt": "2024-10-07T09:49:02Z",
+          "updatedAt": "2024-10-07T09:49:02Z",
           "comments": []
         }
       ]
