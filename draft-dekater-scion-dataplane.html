@@ -1337,7 +1337,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-modification-of-the-path-he" class="internal xref">Modification of the Path Header</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
-                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-modification-of-the-payload" class="internal xref">Modification of the Payload</a></p>
+                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-payload-integrity" class="internal xref">Payload Integrity</a></p>
 </li>
                 </ul>
 </li>
@@ -2551,7 +2551,8 @@ One use case of the <code>Empty</code> path type lies in the context of <span><a
         <h3 id="name-pseudo-header-for-upper-lay">
 <a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-pseudo-header-for-upper-lay" class="section-name selfRef">Pseudo Header for Upper-Layer Checksum</a>
         </h3>
-<p id="section-2.5-1">Any transport or other upper-layer protocol that includes addresses from the SCION header in the checksum computation <span class="bcp14">MUST</span> use the following pseudo header:<a href="#section-2.5-1" class="pilcrow">¶</a></p>
+<p id="section-2.5-1">The SCION data plane does not provide payload integrity protection, as further clarified in <a href="#payload-integrity" class="auto internal xref">Section 7.2.2</a>.
+Should any transport or other upper-layer protocols compute a checksum of the SCION header, then they <span class="bcp14">SHOULD</span> use the following pseudo header:<a href="#section-2.5-1" class="pilcrow">¶</a></p>
 <span id="name-layout-of-the-pseudo-header"></span><div id="_figure-15">
 <figure id="figure-16">
           <div class="alignLeft art-text artwork" id="section-2.5-2.1">
@@ -2592,6 +2593,7 @@ One use case of the <code>Empty</code> path type lies in the context of <span><a
             <p id="section-2.5-3.3.1"><code>Next Header</code>: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also <a href="#protnum" class="auto internal xref">Appendix "Assigned SCION Protocol Numbers"</a>). This field can differ from the <code>NextHdr</code> field in the SCION common header, if extensions are present.<a href="#section-2.5-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-2.5-4">This pseudo-header is used in current implementations of UDP/SCION on top of SCION. However, checksums across layers are not recommended and should be re-evaluated in future evolutions.<a href="#section-2.5-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4303,10 +4305,10 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
 <p id="section-7.2.1-4">Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. However, such an attack is of little value. An on-path adversary may inspect/copy/disrupt its traffic without diverting it away from the sender-chosen path. For this reason proof-of-transit, which would be required to detect such an attack, has marginal benefit in the context of SCION and it is not in scope for this document.<a href="#section-7.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="modification-of-the-payload">
+<div id="payload-integrity">
 <section id="section-7.2.2">
-          <h4 id="name-modification-of-the-payload">
-<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-modification-of-the-payload" class="section-name selfRef">Modification of the Payload</a>
+          <h4 id="name-payload-integrity">
+<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-payload-integrity" class="section-name selfRef">Payload Integrity</a>
           </h4>
 <p id="section-7.2.2-1">An on-path attacker can modify the payload of a SCION packet. Existing higher-layer protocols can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. However, there exists a proposal for an experimental extension to authenticate addresses, provide integrity protection for payloads, and replay protection: SPAO . This is still very experimental and it not used in the production network.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
 </section>
