@@ -131,7 +131,7 @@ informative:
          ins: J. Kown
          name: Jonghoon Kwon
          org: ETH Zuerich
-		-
+        -
          ins: J. García-Pardo
          name: Juan A. García-Pardo
          org: ETH Zuerich
@@ -151,7 +151,7 @@ informative:
          ins: D. Hausheer
          name: David Hausheer
          org: Otto von Guericke University Magdeburg
-	    -
+        -
          ins: A. Perrig
          name: Adrian Perrig
          org: ETH Zuerich
