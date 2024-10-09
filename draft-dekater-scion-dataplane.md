@@ -40,8 +40,8 @@ author:
 
 
 normative:
-  I-D.dekater-scion-controlplane:
   I-D.dekater-scion-pki:
+  I-D.dekater-scion-controlplane:
   RFC2460:
   RFC2474:
   RFC3168:
@@ -52,6 +52,7 @@ normative:
   RFC8200:
 
 informative:
+  I-D.dekater-panrg-scion-overview:
   CHUAT22:
     title: "The Complete Guide to SCION"
     date: 2022
@@ -121,7 +122,43 @@ informative:
         -
          ins: V. Shoup
          name: Victor Shoup
-
+  SCIONLAB:
+    title: SCIONLAB - A Next-Generation Internet Testbed
+    date: 2020
+    target: https://ieeexplore.ieee.org/abstract/document/9259355
+    author:
+        -
+         ins: J. Kown
+         name: Jonghoon Kwon
+         org: ETH Zuerich
+        -
+         ins: J. García-Pardo
+         name: Juan A. García-Pardo
+         org: ETH Zuerich
+        -
+         ins: M. Legner
+         name: Markus Legner
+         org: ETH Zuerich
+        -
+         ins: F. Wirz
+         name: François Wirz
+         org: ETH Zuerich
+        -
+         ins: M. Frei
+         name: Matthias Frei
+         org: ETH Zuerich
+        -
+         ins: D. Hausheer
+         name: David Hausheer
+         org: Otto von Guericke University Magdeburg
+        -
+         ins: A. Perrig
+         name: Adrian Perrig
+         org: ETH Zuerich
+  SCIONLAB_WEBSITE:
+    title: SCIONLab website
+    date: 2024
+    target: https://www.scionlab.org/
 
 --- abstract
 
@@ -154,11 +191,12 @@ SCION relies on three main components:
 
 *Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS.
 
-This document describes the SCION Data Plane component.
+This document describes the SCION Data Plane component. It should be read in conjunction with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}.
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
-Note - this document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
+Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}.
+This document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
 
 
 ## Terminology {#terms}
@@ -1831,6 +1869,14 @@ The SCION AS and ISD number are SCION-specific numbers. They are currently alloc
 Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
+# Deployment Testing: SCIONLab
+{:numbered="false"}
+
+SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
+
+More information can be found at {{SCIONLAB_WEBSITE}} and in the {{SCIONLAB}} paper.
+
+
 # Assigned SCION Protocol Numbers {#protnum}
 {:numbered="false"}
 
@@ -1889,6 +1935,7 @@ Minor changes:
 - Clarifications in the SCION Header Specification section (router alert flags, service addresses, one-hop paths, text clarifications, validity of peering links)
 - Added mention of why proof of transit is not needed.
 - Rename flow ID to Flow Label and document by reference to {{RFC6437}}.
+- Added reference to SCIONLab as a testbed for implementors
 - Added J. C. Hugly as author.
 - Introduced this change log
 
