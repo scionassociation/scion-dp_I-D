@@ -1935,6 +1935,7 @@ Minor changes:
 - Clarifications in the SCION Header Specification section (router alert flags, service addresses, one-hop paths, text clarifications, validity of peering links)
 - Added mention of why proof of transit is not needed.
 - Rename flow ID to Flow Label and document by reference to {{RFC6437}}.
+- Added reference to SCIONLab as a testbed for implementors
 - Added J. C. Hugly as author.
 - Introduced this change log
 
