@@ -1874,7 +1874,7 @@ Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Z
 
 SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
 
-More information can be found at [https://www.scionlab.org] and in the {{SCIONLAB}} paper.
+More information can be found on the SCIONLab website (see https://www.scionlab.org) and in the {{SCIONLAB}} paper.
 
 
 # Assigned SCION Protocol Numbers {#protnum}
