@@ -224,7 +224,7 @@ As SCION is an inter-domain network architecture, it is not concerned with intra
 
 SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; re-using the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION.
 
-Although a complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple, the endpoint address is not used for inter-domain routing or forwarding. This implies that the endpoint addresses are not required to be globally unique or globally routable and can be selected independently by the corresponding ASes. This means, for example, that an endpoint identified by a link-local IPv6 address in the source AS can directly communicate with an endpoint identified by a globally routable IPv4 address via SCION. It is possible for two SCION hosts with the same IPv4 address 10.0.0.42 but located in different ASes to communicate with each other via SCION ({{RFC1918}}).
+A complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple. The ISD-AS part is used for inter-domain routing. The endpoint address part is only used for intra-domain forwarding at the source and destination ASes. This implies that endpoint addresses are only required to be globally unique within each SCION AS. This means, for example, that an endpoint running a SCION stack using a {{RFC1918}} could directly communicate with another SCION endpoint using a {{RFC1918}} endpoint address in a different SCION AS.
 
 
 ### Intra-Domain Forwarding Process
@@ -1891,6 +1891,7 @@ Minor changes:
 - Rename flow ID to Flow Label and document by reference to {{RFC6437}}.
 - Added J. C. Hugly as author.
 - Introduced this change log
+- Clarify addressing and avoid confusing claim of communication between two endpoints with the same IP (section 1.3.1)
 
 ## draft-dekater-scion-dataplane-02
 {:numbered="false"}
