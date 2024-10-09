@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 11 April 2025                                 SCION Association
+Expires: 12 April 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                          8 October 2024
+                                                          9 October 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 April 2025.
+   This Internet-Draft will expire on 12 April 2025.
 
 Copyright Notice
 
@@ -145,6 +145,7 @@ Table of Contents
      10.1.  Normative References
      10.2.  Informative References
    Acknowledgments
+   Deployment Testing: SCIONLab
    Assigned SCION Protocol Numbers
      Considerations
      Assignment
@@ -210,7 +211,9 @@ Table of Contents
    reuses existing intra-domain infrastructure to communicate to other
    SCION routers or SCION endpoints within its AS.
 
-   This document describes the SCION Data Plane component.
+   This document describes the SCION Data Plane component.  It should be
+   read in conjunction with the other components [I-D.dekater-scion-pki]
+   and [I-D.dekater-scion-controlplane].
 
    The SCION architecture was initially developed outside of the IETF by
    ETH Zurich with significant contributions from Anapaya Systems.  It
@@ -221,10 +224,14 @@ Table of Contents
    further improved to address particular problems with the current
    Internet architecture.
 
-   Note - this document provides an extensive description of how the
-   SCION Data Plane is implemented in order to facilitate understanding,
-   but could potentially be split into separate documents if considered
-   suitable for submission to the Internet Standards Process.
+   Note (to be removed before publication): this document, together with
+   the other components [I-D.dekater-scion-pki] and
+   [I-D.dekater-scion-controlplane], deprecates
+   [I-D.dekater-panrg-scion-overview].  This document provides an
+   extensive description of how the SCION Data Plane is implemented in
+   order to facilitate understanding, but could potentially be split
+   into separate documents if considered suitable for submission to the
+   Internet Standards Process.
 
 1.1.  Terminology
 
@@ -3270,6 +3277,13 @@ direction
               Boneh, D. and V. Shoup, "A Graduate Course in Applied
               Cryptography", 2023, <https://toc.cryptobook.us/>.
 
+   [I-D.dekater-panrg-scion-overview]
+              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
+              Overview", Work in Progress, Internet-Draft, draft-
+              dekater-panrg-scion-overview-06, 7 May 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              panrg-scion-overview-06>.
+
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
               DOI 10.17487/RFC1122, October 1989,
@@ -3296,6 +3310,14 @@ direction
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
               2023, <https://www.rfc-editor.org/rfc/rfc9473>.
 
+   [SCIONLAB] Kown, J., García-Pardo, J., Legner, M., Wirz, F., Frei,
+              M., Hausheer, D., and A. Perrig, "SCIONLAB - A Next-
+              Generation Internet Testbed", 2020,
+              <https://ieeexplore.ieee.org/abstract/document/9259355>.
+
+   [SCIONLAB_WEBSITE]
+              "SCIONLab website", 2024, <https://www.scionlab.org/>.
+
    [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2023,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
 
@@ -3310,6 +3332,16 @@ Acknowledgments
    documentation about the SCION Data Plane, as well as to the authors
    of [CHUAT22] - the book is an important source of input and
    inspiration for this draft.
+
+Deployment Testing: SCIONLab
+
+   SCIONLab is a global research network that is available to test the
+   SCION architecture.  You can create and use your ASes using your own
+   computation resources which allows you to gain real-world experience
+   of deploying and managing a SCION network.
+
+   More information can be found at [SCIONLAB_WEBSITE] and in the
+   [SCIONLAB] paper.
 
 Assigned SCION Protocol Numbers
 
@@ -3393,6 +3425,8 @@ draft-dekater-scion-dataplane-03
 
    *  Rename flow ID to Flow Label and document by reference to
       [RFC6437].
+
+   *  Added reference to SCIONLab as a testbed for implementors
 
    *  Added J.  C.  Hugly as author.
 
