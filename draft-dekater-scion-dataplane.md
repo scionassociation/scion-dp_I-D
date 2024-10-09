@@ -40,6 +40,8 @@ author:
 
 
 normative:
+  I-D.dekater-scion-pki:
+  I-D.dekater-scion-controlplane:
   RFC2460:
   RFC2474:
   RFC3168:
@@ -50,8 +52,6 @@ normative:
   RFC8200:
 
 informative:
-  I-D.dekater-scion-controlplane:
-  I-D.dekater-scion-pki:
   I-D.dekater-panrg-scion-overview:
   CHUAT22:
     title: "The Complete Guide to SCION"
