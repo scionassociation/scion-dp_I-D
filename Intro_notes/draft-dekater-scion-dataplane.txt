@@ -3426,6 +3426,8 @@ draft-dekater-scion-dataplane-03
    *  Rename flow ID to Flow Label and document by reference to
       [RFC6437].
 
+   *  Added reference to SCIONLab as a testbed for implementors
+
    *  Added J.  C.  Hugly as author.
 
    *  Introduced this change log
