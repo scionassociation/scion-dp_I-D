@@ -155,7 +155,10 @@ informative:
          ins: A. Perrig
          name: Adrian Perrig
          org: ETH Zuerich
-
+  SCIONLAB_WEBSITE:
+    title: SCIONLab website
+    date: 2024
+    target: https://www.scionlab.org/
 
 --- abstract
 
@@ -188,14 +191,11 @@ SCION relies on three main components:
 
 *Data Plane* - carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS.
 
-This document describes the SCION Data Plane component.
+This document describes the SCION Data Plane component. It should be read in conjunction with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}.
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
-The following text is to be removed before publication:
-
-This document should be read in conjunction with {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}} and deprecates {{I-D.dekater-panrg-scion-overview}}.
-
+Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}.
 This document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
 
 
@@ -1874,7 +1874,7 @@ Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Z
 
 SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
 
-More information can be found at [https://www.scionlab.org] and in the {{SCIONLAB}} paper.
+More information can be found at {{SCIONLAB_WEBSITE}} and in the {{SCIONLAB}} paper.
 
 
 # Assigned SCION Protocol Numbers {#protnum}
