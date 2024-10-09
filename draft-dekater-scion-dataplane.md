@@ -1820,10 +1820,14 @@ Tunneling IP traffic over SCION requires a pair of SIGs and it involves the foll
 5. The remote SIG receives the SCION packet and decapsulates the original IP packet. It then forwards the packet to the final IP destination using standard local IP routing.
 
 ## SIG Framing
+IP packets are encapsulated over SCION/UDP into SIG frames. While in principle, a pair of SIGs may use other tunneling protocols, existing deployments leverage SIG framing as described here.
+TODO: @oncilla @shitz could you say something about why this framing and not existing protocol? Is it because of MTU?
 
-IP packets are encapsulated over SCION/UDP into SIG frames. There may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.
-
-A pair of SIGs establishes a SIG tunneling session. TODO: how?.  Within each session there may be multiple streams which is useful to distinguish between traffic sent by different SIG instances. For example, if an ingress SIG is restarted, it will create a new Stream ID for each session so the egress SIG will know that the new frame with a new Stream ID does not carry trailing part of the unfinished IP packet from a different stream.
+There may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.
+A pair of SIGs establishes a SIG tunneling session.
+TODO: how are the sessions established? Is a session mapped to a single path?
+Within each session there may be multiple streams which is useful to distinguish between traffic sent by different SIG instances. For example, if an ingress SIG is restarted, it will create a new Stream ID for each session so the egress SIG will know that the new frame with a new Stream ID does not carry trailing part of the unfinished IP packet from a different stream.
+TODO: text above here seems contradicting. If a SIG is restarted, shouldn't it use a new session ID?
 
 Each SIG frame has a sequence number that is used by the egress SIG to reassemble the encapsulated IP packets within a stream.
 
@@ -1849,9 +1853,9 @@ Each SIG frame has a sequence number that is used by the egress SIG to reassembl
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Version   |    Session    |            Index              |
+|     Version   |  Session ID   |            Index              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|         Reserved        |               Stream                |
+|         Reserved        |             Stream ID               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 +                       Sequence Number                         +
@@ -1864,16 +1868,16 @@ Each SIG frame has a sequence number that is used by the egress SIG to reassembl
 
 All fields within SIG Frame Header are in network byte order.
 
-- `Version` (8 bits) indicates the SIG framing version. It MUST be set to zero.
-- `Session` (8 bits) identifies a tunneling session between a pair of SIGs.
+- `Version` (8 bits) indicates the SIG framing version. It MUST be set to zero if following this specification.
+- `Session ID` (8 bits) identifies a tunneling session between a pair of SIGs.
 - `Index` (16 bits) is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only the middle or trailing part of an IP packet, the field MUST be set to 0xFFFF.
 - `Reserved` (12 bits): it MUST be set to zero.
-- `Stream` (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the remote SIG, put into the same reassembly queue. There may be multiple streams per session.
+- `Stream ID` (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the remote SIG, put into the same reassembly queue. There may be multiple streams per session.
 - `Sequence Number` (64 bits) indicates the position of the frame within a stream. Consecutive frames can be used to reassemble IP packets split among multiple frames.
 
 TODO:
 - how is the session established and torn down?
-- How is the stream ID set?
+- How is the stream ID set randomly? Is it negotiated? Is it associated with a session? Does it have to be unique within a session? Is it unidirectional?
 
 ## SIG Frame Payload
 
