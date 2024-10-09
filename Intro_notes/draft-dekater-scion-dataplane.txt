@@ -145,6 +145,7 @@ Table of Contents
      10.1.  Normative References
      10.2.  Informative References
    Acknowledgments
+   Deployment Testing: SCIONLab
    Assigned SCION Protocol Numbers
      Considerations
      Assignment
@@ -3309,6 +3310,11 @@ direction
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
               2023, <https://www.rfc-editor.org/rfc/rfc9473>.
 
+   [SCIONLAB] García-Pardo, J., Legner, M., Wirz, F., Frei, M., and A.
+              Perrig, "SCIONLAB - A Next-Generation Internet Testbed",
+              2020,
+              <https://ieeexplore.ieee.org/abstract/document/9259355>.
+
    [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2023,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
 
@@ -3323,6 +3329,16 @@ Acknowledgments
    documentation about the SCION Data Plane, as well as to the authors
    of [CHUAT22] - the book is an important source of input and
    inspiration for this draft.
+
+Deployment Testing: SCIONLab
+
+   SCIONLab is a global research network that is available to test the
+   SCION architecture.  You can create and use your ASes using your own
+   computation resources which allows you to gain real-world experience
+   of deploying and managing a SCION network.
+
+   More information can be found at [https://www.scionlab.org] and in
+   the [SCIONLAB] paper.
 
 Assigned SCION Protocol Numbers
 
