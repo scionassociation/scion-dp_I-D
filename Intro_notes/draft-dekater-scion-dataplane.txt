@@ -3337,8 +3337,8 @@ Deployment Testing: SCIONLab
    computation resources which allows you to gain real-world experience
    of deploying and managing a SCION network.
 
-   More information can be found at [https://www.scionlab.org] and in
-   the [SCIONLAB] paper.
+   More information can be found on the SCIONLab website (see
+   https://www.scionlab.org) and in the [SCIONLAB] paper.
 
 Assigned SCION Protocol Numbers
 
