@@ -3204,6 +3204,20 @@ direction
 
 10.1.  Normative References
 
+   [I-D.dekater-scion-controlplane]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
+              Plane", Work in Progress, Internet-Draft, draft-dekater-
+              scion-controlplane-05, 21 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-controlplane-05>.
+
+   [I-D.dekater-scion-pki]
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
+              Plane PKI", Work in Progress, Internet-Draft, draft-
+              dekater-scion-pki-06, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-dekater-
+              scion-pki-06>.
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -3269,20 +3283,6 @@ direction
               dekater-panrg-scion-overview-06, 7 May 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
               panrg-scion-overview-06>.
-
-   [I-D.dekater-scion-controlplane]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
-              Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-05, 21 July 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-05>.
-
-   [I-D.dekater-scion-pki]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
-              Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-06, 8 July 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-06>.
 
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
