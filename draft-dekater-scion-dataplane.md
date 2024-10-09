@@ -40,6 +40,8 @@ author:
 
 
 normative:
+  I-D.dekater-scion-pki:
+  I-D.dekater-scion-controlplane:
   RFC2460:
   RFC2474:
   RFC3168:
@@ -50,8 +52,6 @@ normative:
   RFC8200:
 
 informative:
-  I-D.dekater-scion-controlplane:
-  I-D.dekater-scion-pki:
   I-D.dekater-panrg-scion-overview:
   CHUAT22:
     title: "The Complete Guide to SCION"
@@ -131,7 +131,7 @@ informative:
          ins: J. Kown
          name: Jonghoon Kwon
          org: ETH Zuerich
-		-
+        -
          ins: J. García-Pardo
          name: Juan A. García-Pardo
          org: ETH Zuerich
@@ -151,7 +151,7 @@ informative:
          ins: D. Hausheer
          name: David Hausheer
          org: Otto von Guericke University Magdeburg
-	    -
+        -
          ins: A. Perrig
          name: Adrian Perrig
          org: ETH Zuerich
