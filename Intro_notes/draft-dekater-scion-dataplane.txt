@@ -3310,11 +3310,6 @@ direction
               Properties", RFC 9473, DOI 10.17487/RFC9473, September
               2023, <https://www.rfc-editor.org/rfc/rfc9473>.
 
-   [SCIONLAB] Kown, J., García-Pardo, J., Legner, M., Wirz, F., Frei,
-              M., Hausheer, D., and A. Perrig, "SCIONLAB - A Next-
-              Generation Internet Testbed", 2020,
-              <https://ieeexplore.ieee.org/abstract/document/9259355>.
-
    [SCMP]     Anapaya, ETH, and SCION, "SCMP Documentation", 2023,
               <https://docs.scion.org/en/latest/protocols/scmp.html>.
 
@@ -3338,7 +3333,7 @@ Deployment Testing: SCIONLab
    of deploying and managing a SCION network.
 
    More information can be found on the SCIONLab website (see
-   https://www.scionlab.org) and in the [SCIONLAB] paper.
+   https://www.scionlab.org) and in the SCIONLAB paper.
 
 Assigned SCION Protocol Numbers
 
