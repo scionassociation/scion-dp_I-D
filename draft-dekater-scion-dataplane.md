@@ -122,6 +122,19 @@ informative:
         -
          ins: V. Shoup
          name: Victor Shoup
+  SCIONLAB:
+    title: SCIONLAB: A Next-Generation Internet Testbed
+    date: 2020
+    target: https://ieeexplore.ieee.org/abstract/document/9259355
+    author:
+        -
+         ins: J. Kown
+         name: Jonghoon Kwon
+		 org: ETH Zuerich
+        -
+         ins: J. García-Pardo
+         name: Juan A. García-Pardo
+		 org: ETH Zuerich
 
 
 --- abstract
@@ -1834,6 +1847,14 @@ The SCION AS and ISD number are SCION-specific numbers. They are currently alloc
 {:numbered="false"}
 
 Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association) for reviewing this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. Finally, we are indebted to the SCION development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+
+
+# Deployment Testing: SCIONLab
+{:numbered="false"}
+
+SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
+
+More information can be found at [https://www.scionlab.org] and in the {{SCIONLAB}} paper.
 
 
 # Assigned SCION Protocol Numbers {#protnum}
