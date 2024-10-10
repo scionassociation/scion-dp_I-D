@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 12 April 2025                                 SCION Association
+Expires: 13 April 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                          9 October 2024
+                                                         10 October 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 April 2025.
+   This Internet-Draft will expire on 13 April 2025.
 
 Copyright Notice
 
@@ -1458,7 +1458,7 @@ Table of Contents
 
    *  Upper-Layer Packet Length: The length of the upper-layer header
       and data.  Some upper-layer protocols define headers that carry
-      the length information explicitly (e.g., UDP).  This information
+      the length information explicitly (e.g.  UDP).  This information
       is used as the upper-layer packet length in the pseudo header for
       these protocols.  The remaining protocols, which do not carry the
       length information directly, use the value from the PayloadLen
@@ -1470,9 +1470,9 @@ Table of Contents
       SCION Protocol Numbers").  This field can differ from the NextHdr
       field in the SCION common header, if extensions are present.
 
-   This pseudo-header is used in current implementations of UDP/SCION on
-   top of SCION.  However, checksums across layers are not recommended
-   and should be re-evaluated in future evolutions.
+   This pseudo-header is used in current implementations of UDP on top
+   of SCION.  However, as checksums across layers are not recommended,
+   this should be re-evaluated in future revisions.
 
 3.  Life of a SCION Data Packet
 
