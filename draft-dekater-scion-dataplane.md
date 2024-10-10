@@ -932,10 +932,10 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 
 
 - `DstISD`, `SrcISD`, `DstAS`, `SrcAS`, `DstHostAddr`, `SrcHostAddr`: These values are taken from the SCION address header.
-- `Upper-Layer Packet Length`: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g., UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly, use the value from the `PayloadLen` field in the SCION common header, minus the sum of the extension header lengths.
+- `Upper-Layer Packet Length`: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g. UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly, use the value from the `PayloadLen` field in the SCION common header, minus the sum of the extension header lengths.
 - `Next Header`: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also [](#protnum)). This field can differ from the `NextHdr` field in the SCION common header, if extensions are present.
 
-This pseudo-header is used in current implementations of UDP/SCION on top of SCION. However, checksums across layers are not recommended and should be re-evaluated in future evolutions.
+This pseudo-header is used in current implementations of UDP on top of SCION. However, as checksums across layers are not recommended, this should be re-evaluated in future revisions.
 
 # Life of a SCION Data Packet
 
