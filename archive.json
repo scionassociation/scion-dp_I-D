@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-10T00:00:43.152599+00:00",
+  "timestamp": "2024-10-13T00:00:47.361630+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -874,9 +874,9 @@
         "Prio 2",
         "editorial"
       ],
-      "body": "Claims that SCION allows two hosts with the same IP to talk to each other, or a v4 to talk to a v6, are confusing. \r\n\r\n#### TODOs:\r\n- [ ] Reword section 1.3.1 to  make it clear that the two endpoints must both directly and natively connected to SCION to talk to each other.\r\n- ~Remove claim in -overview draft that IPv4 hosts can talk to IPv6 hosts (throws people off)~\r\n- ~Add note in the overview draft that this draft is NOT updated - look at ISE drafts~\r\n- [ ] ping harald\r\n\r\n#### Feedback \r\n> Harald 23.07.2024\r\nThe claim is made that \u201caddressing means that one can communicate between 10.1.1.1 in one AS and 10.1.1.1 in another AS\u201d - but since the IP/SCION mapping is not described, how this would be accomplished is not clear. Possibly it only works if the \u201c10.1.1.1\u201d entity is directly connected as a SCION node, so that the source address of the remote entity doesn\u2019t have to be represented in the destination domain?\r\n\r\n> Response\r\nYes, this claim refers to two \u201cnative\u201d SCION endpoints, meaning that they both run a SCION stack and therefore the SCION Address header would have different  source/destination ISD-AS. Since this refers to traffic between native endpoints, there is not really a mapping. I guess you got confused by the dataplane draft section 1.3.1. We can reword the section to  make it clear that the two endpoints ate both directly connected to SCION. ",
+      "body": "Claims that SCION allows two hosts with the same IP to talk to each other, or a v4 to talk to a v6, are confusing. \r\n\r\n#### TODOs:\r\n- [x] Reword section 1.3.1 to  make it clear that the two endpoints must both directly and natively connected to SCION to talk to each other.\r\n- ~Remove claim in -overview draft that IPv4 hosts can talk to IPv6 hosts (throws people off)~\r\n- ~Add note in the overview draft that this draft is NOT updated - look at ISE drafts~\r\n- [ ] ping harald\r\n\r\n#### Feedback \r\n> Harald 23.07.2024\r\nThe claim is made that \u201caddressing means that one can communicate between 10.1.1.1 in one AS and 10.1.1.1 in another AS\u201d - but since the IP/SCION mapping is not described, how this would be accomplished is not clear. Possibly it only works if the \u201c10.1.1.1\u201d entity is directly connected as a SCION node, so that the source address of the remote entity doesn\u2019t have to be represented in the destination domain?\r\n\r\n> Response\r\nYes, this claim refers to two \u201cnative\u201d SCION endpoints, meaning that they both run a SCION stack and therefore the SCION Address header would have different  source/destination ISD-AS. Since this refers to traffic between native endpoints, there is not really a mapping. I guess you got confused by the dataplane draft section 1.3.1. We can reword the section to  make it clear that the two endpoints ate both directly connected to SCION. ",
       "createdAt": "2024-07-26T22:34:46Z",
-      "updatedAt": "2024-10-09T17:26:15Z",
+      "updatedAt": "2024-10-10T13:33:51Z",
       "closedAt": "2024-10-09T17:26:15Z",
       "comments": []
     },
@@ -1215,6 +1215,26 @@
       "createdAt": "2024-10-03T14:55:24Z",
       "updatedAt": "2024-10-08T07:38:45Z",
       "closedAt": "2024-10-08T07:38:45Z",
+      "comments": []
+    },
+    {
+      "number": 73,
+      "id": "I_kwDOKYa7786Zsd24",
+      "title": "Remove mention of AS in multiple ISDs",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/73",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
+      "body": "From Harald https://github.com/scionassociation/standards/issues/105 \r\n> A couple of things are described either very briefly or inconsistently - for instance, the claim is made that \u201cone AS can be in multiple ISDs\u201d - yet the addressing consists of a 16 bit ISD number and a 48 bit AS number - it would seem that one AS in multiple ISDs would have to operate as if it was two ASes.\r\n\r\n```\r\n      the up and down segments do not need to originate from the same\r\n      core AS and can even be in different ISDs (if the AS at the\r\n      intersection is part of multiple ISDs).\r\n```",
+      "createdAt": "2024-10-10T11:32:20Z",
+      "updatedAt": "2024-10-10T11:32:20Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -5254,7 +5274,7 @@
       "labels": [],
       "body": "Resolves #40 ",
       "createdAt": "2024-10-04T10:46:45Z",
-      "updatedAt": "2024-10-09T14:41:35Z",
+      "updatedAt": "2024-10-11T13:18:48Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "ab0bf8c9e5de1861244815e3011d5f7539d2688b",
@@ -5812,6 +5832,64 @@
               "updatedAt": "2024-10-09T14:41:35Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786MtwrC",
+          "commit": {
+            "abbreviatedOid": "eca44dc"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-10T15:57:20Z",
+          "updatedAt": "2024-10-10T15:57:20Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "My notes, before I start forgetting... the code is tough read:\r\n\r\n* Sessions are unidirectional and initiated by senders upon discovering other gateways.\r\n* Gateway are discovered only in remote IAs that are statically configured.\r\n* The initiator gateway allocates one session per (receiverGateway, sessionPolicy) pair.\r\n* All initiated sessions have a unique ID that is simply incremented from 0. The numbering is re-done every time the set of remote gateways changes. To keep the numbers ~stable, the sessions are ordered by (policy>IA). I haven't searched for the effects of session re-IDing.\r\n* Since there are only 256 session IDs they are not necessarily unique, but they are unique within a given (initiator, receiver) pair, as long as there aren't 256+ session policies for a given remote IA.\r\n* From a given initiator to a given receiver, the traffic of all endpoint pairs is multiplexed on the same session.\r\n* All paths between two gateways can be used by any given one session.\r\n* All paths, regardless of session get their own sender, queue, and ~random streamID.\r\n* The receiver side just follows these. It will accept any connection (I haven't checked if sending IAs are checked against the static config).\r\n* The receiver side has one worker for each incoming session, that is each (sender gateway, sessionID) pair. It is created on the fly as needed.\r\n* Each worker keeps a different reassembly queue for each streamID, also created on-demand (but streams share the same worker task, unlike on the sending side).\r\n\r\nConclusion, regarding sessionID and StreamID. Each (sessionID, streamID) pair gets its own re-assembly queue. The pairs are ~unique within the context where it matters (one gateway->gateway pair) by virtue of sessionID being unique, but only approximately: there can be streamID collisions with P=O(10^-9) as long as there aren't too many paths. It might hurt a bit when that happens.\r\n",
+              "createdAt": "2024-10-10T15:57:20Z",
+              "updatedAt": "2024-10-10T16:01:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786M0zW2",
+          "commit": {
+            "abbreviatedOid": "aec94ef"
+          },
+          "author": "shitz",
+          "authorAssociation": "NONE",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-10-11T12:05:06Z",
+          "updatedAt": "2024-10-11T13:18:48Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "tunnelled -> tunneled",
+              "createdAt": "2024-10-11T12:05:07Z",
+              "updatedAt": "2024-10-11T13:18:48Z"
+            },
+            {
+              "originalPosition": 36,
+              "body": "> TODO: how are the sessions established? Is a session mapped to a single path?\r\n\r\nThe sessions are unidirectionally established by the sender. There is no session negotiation going on. \r\nWhether a session is mapped to a single path or not is an implementation detail. Streams can be used within a session to distinguish different packet flows. A single stream has a single reassembly queue and should be processed by a single core. Packets in a stream should not be distributed over multiple paths because that will lead to reordering and performance will drop.",
+              "createdAt": "2024-10-11T12:56:03Z",
+              "updatedAt": "2024-10-11T13:18:48Z"
+            },
+            {
+              "originalPosition": 80,
+              "body": "This is completely implementation specific. Just because the open-source implementation has a reassembly window of a single fragment doesn't mean that you could easily have implementations that for exmaple allow for up to N out-of-order fragments because they keep them in a buffer and reassemble the packet once all fragments have been received. I would not put this in the draft and state that it's implementation specific. This is even a completely local decision for each SIG.",
+              "createdAt": "2024-10-11T13:00:43Z",
+              "updatedAt": "2024-10-11T13:18:48Z"
+            },
+            {
+              "originalPosition": 87,
+              "body": "> how is the session established and torn down?\r\nAs stated above, there is no real session establishment. The sender chooses session ID, stream ID unilateraly. \r\n\r\n> How is the stream ID set randomly? Is it negotiated? Is it associated with a session? Does it have to be unique within a session? Is it unidirectional?\r\n\r\n1. Chosen unilaterally by the sender however it sees fit\r\n2. no\r\n3. (session id, stream id) tuple needs to be unique\r\n4. yes\r\n5. yes ",
+              "createdAt": "2024-10-11T13:14:48Z",
+              "updatedAt": "2024-10-11T13:18:48Z"
+            }
+          ]
         }
       ]
     },
@@ -6039,26 +6117,42 @@
       "id": "PR_kwDOKYa7785-IP7T",
       "title": "Incorporated minor change to pseudo header description.",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/72",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Follow up to #70 \r\nContributes to #47 ",
       "createdAt": "2024-10-09T20:34:31Z",
-      "updatedAt": "2024-10-09T20:34:32Z",
+      "updatedAt": "2024-10-10T13:42:18Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "61b84bae9c6531767d3b0807dfb29b73f9a7ab01",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "pseudo-header-patch",
       "headRefOid": "316a5b967a7f013b084cce565defdcf4568c17e1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-10-10T12:58:29Z",
+      "mergedAt": "2024-10-10T12:58:29Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "a5a2d7939b6fb929714c0ae490e3a4c673a2b13e"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786MqsSD",
+          "commit": {
+            "abbreviatedOid": "316a5b9"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-10T11:21:00Z",
+          "updatedAt": "2024-10-10T11:21:00Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
