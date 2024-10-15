@@ -1872,7 +1872,9 @@ All fields within SIG Frame Header are in network byte order.
 - `Index` (16 bits) is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only the middle or trailing part of an IP packet, the field MUST be set to 0xFFFF.
 - `Reserved` (12 bits): it MUST be set to zero.
 - `Stream ID` (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the remote SIG, put into the same reassembly queue. There may be multiple streams per session.
-- `Sequence Number` (64 bits) indicates the position of the frame within a stream. Consecutive frames can be used to reassemble IP packets split among multiple frames. In the rare event that a frame is delayed or lost and a frame other than the next expected one is received, any previously received frames pertaining to a yet incomplete IP packet, are discarded. Subsequent frames are discarded until one carries the beginning of an IP packet. Late frames (with a sequence number older than any non-discarded ones) are discarded as they necessarily belong to an already discarded IP packet."
+- `Sequence Number` (64 bits) indicates the position of the frame within a stream. Consecutive frames are used to reassemble IP packets split among multiple frames.
+
+SIGs MAY reorder received frames within a stream. Choice of frame reassembly window is left to implementations.
 
 The Session ID and Stream ID are chosen by the sender but the tuple MUST be unique within a session.
 
