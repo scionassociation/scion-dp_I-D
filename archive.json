@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-13T00:00:47.361630+00:00",
+  "timestamp": "2024-10-15T00:00:37.982872+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -5274,13 +5274,13 @@
       "labels": [],
       "body": "Resolves #40 ",
       "createdAt": "2024-10-04T10:46:45Z",
-      "updatedAt": "2024-10-11T13:18:48Z",
+      "updatedAt": "2024-10-14T20:43:11Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "ab0bf8c9e5de1861244815e3011d5f7539d2688b",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "SCION-IP_Gateway",
-      "headRefOid": "aec94ef81838719e5abfe751e5969e9eef0d2d60",
+      "headRefOid": "17bf3d57602fdce6676c2e78363150feda3dfd8e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
