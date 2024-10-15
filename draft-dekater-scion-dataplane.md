@@ -1821,7 +1821,7 @@ Tunneling IP traffic over SCION requires a pair of SIGs and it involves the foll
 
 ## SIG Framing
 
-IP packets are encapsulated over SCION/UDP into SIG frames. Whilst in principle, a pair of SIGs may use other tunneling protocols, existing deployments use SIG framing as described here. This is to provide independence from the SCION MTU which can increase and decrease over time, to provide fast detection of packet loss and subsequent recovery of decapsulation for packets that weren't lost, and support for multiple streams within a framing session such that the streams can be distributed to separate cores.
+IP packets are encapsulated over SCION/UDP into SIG frames. Whilst in principle, a pair of SIGs may use other tunneling protocols, existing deployments use SIG framing as described here. This is to provide independence from the underlying SCION path MTU which can increase and decrease over time, to provide fast detection of packet loss and subsequent recovery of decapsulation for packets that weren't lost, and support for multiple streams within a framing session such that the streams can be distributed to separate cores.
 
 There may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.
 A pair of SIGs establishes a SIG tunneling session which are is unidirectionally established by the sender. Whether a session is mapped to a single path or not is an implementation decision.
