@@ -4430,10 +4430,11 @@ A source SIG unidirectionally establishes a SIG tunneling session with a destina
             <p id="section-8.2-3.5.1"><code>Stream ID</code> (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the remote SIG, put into the same reassembly queue. There may be multiple streams per session.<a href="#section-8.2-3.5.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.2-3.6">
-            <p id="section-8.2-3.6.1"><code>Sequence Number</code> (64 bits) indicates the position of the frame within a stream. Consecutive frames can be used to reassemble IP packets split among multiple frames. In the rare event that a frame is delayed or lost and a frame other than the next expected one is received, any previously received frames pertaining to a yet incomplete IP packet, are discarded. Subsequent frames are discarded until one carries the beginning of an IP packet. Late frames (with a sequence number older than any non-discarded ones) are discarded as they necessarily belong to an already discarded IP packet."<a href="#section-8.2-3.6.1" class="pilcrow">¶</a></p>
+            <p id="section-8.2-3.6.1"><code>Sequence Number</code> (64 bits) indicates the position of the frame within a stream. Consecutive frames are used to reassemble IP packets split among multiple frames.<a href="#section-8.2-3.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-8.2-4">The Session ID and Stream ID are chosen by the sender but the tuple <span class="bcp14">MUST</span> be unique within a session.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-4">SIGs <span class="bcp14">MAY</span> reorder received frames within a stream. Choice of frame reassembly window is left to implementations.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-5">The Session ID and Stream ID are chosen by the sender but the tuple <span class="bcp14">MUST</span> be unique within a session.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sig-frame-payload">
