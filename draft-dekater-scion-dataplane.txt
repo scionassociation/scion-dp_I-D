@@ -635,8 +635,7 @@ Table of Contents
       shortcut.  In this case, a shorter path is made possible by
       removing the extraneous part of the path to the core.  Note that
       the up and down segments do not need to originate from the same
-      core AS and can even be in different ISDs (if the AS at the
-      intersection is part of multiple ISDs).
+      core AS.
 
    *  *On-path* (Case 5): In the case where the source's up segment
       contains the destination AS or the destination's down segment
