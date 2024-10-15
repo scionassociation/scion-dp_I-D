@@ -1847,14 +1847,86 @@ However, the path choice of the endpoint may possibly be exploited by an attacke
 
 # Interoperability: SCION IP Gateway {#sig}
 
-The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support the use of applications that are not SCION enabled.
+The SCION IP Gateway (SIG) enables IP packets to be tunneled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network.
 
-An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION endpoints from the perspective of the SCION network.
+Tunneling IP traffic over SCION requires a pair of SIGs and it involves the following steps:
 
-Each SIG establishes a session to one or multiple remote SIGs. Each pair of SIGs uses a common tunneling protocol. Each SIG may choose to send SCION packets to a remote SIG in accordance with static IP routes, or by dynamically announcing IP prefixes to each other via a routing protocol. Each SIG may also choose how to send SCION packets based on locally configured policies when multiple remote SIGs are available.
-In addition, the source SIG is responsible for SCION path selection.
+1. A sender sends an IP packet towards an IP destination.
 
-A SIG is typically deployed inside the same AS internal network as its non-SCION hosts. In an enterprise scenario, it is usually deployed at the edge of the enterprise network.
+2. The IP packet reaches a SIG in the sender’s network via standard IP routing.
+
+3. Based on the destination IP address, the source SIG determines the destination SIG's ISD-AS endpoint address. To achieve this, SIGs may be pre-configured with a static IP prefix to remote SIG SCION address mappings. Alternatively, a pair of SIGs may be configured to speak a dynamic routing protocol between each other. The choice of protocol is left up to implementors and is outside of the scope of this document.
+
+4. The SIG encapsulates the original IP packet within a SCION packet and sends it to the remote SIG. If necessary, the source SIG performs SCION path lookups and selects a SCION path to the destination SIG.
+
+5. The remote SIG receives the SCION packet and decapsulates the original IP packet. It then forwards the packet to the final IP destination using standard IP routing.
+
+## SIG Framing
+
+IP packets are encapsulated over SCION/UDP into SIG frames. Whilst in principle, a pair of SIGs may use other tunneling protocols, existing deployments use SIG framing as described here. This is to provide independence from the underlying SCION path MTU which can increase and decrease over time, to provide fast detection of packet loss and subsequent recovery of decapsulation for packets that weren't lost, and support for multiple streams within a framing session such that the streams can be distributed to separate cores.
+
+There may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.
+A source SIG unidirectionally establishes a SIG tunneling session with a destination SIG. A session may be mapped to one or multiple SCION paths, depending on implementors.
+
+Streams can be used within a session to distinguish between different packet flows. A single stream has a single reassembly queue and SHOULD be processed by a single core. Packets in a stream SHOULD NOT be distributed over multiple SCION paths to avoid reordering and therefore lower performance.
+
+Each SIG frame has a sequence number that is used by the egress SIG to reassemble the encapsulated IP packets within a stream.
+
+~~~~
+
++-----------------------+
+|         SCION         |
++-----------------------+
+|          UDP          |
++-----------------------+
+|    SIG frame header   |
++-----------------------+
+|   SIG frame payload   |
++-----------------------+
+
+~~~~
+{: #figure-28 title="SIG framing within a SCION packet"}
+
+## SIG Frame Header
+
+~~~~
+
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Version   |  Session ID   |            Index              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Reserved        |             Stream ID               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                       Sequence Number                         +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+~~~~
+{: #figure-29 title="SIG Frame Header format"}
+
+
+All fields within SIG Frame Header are in network byte order.
+
+- `Version` (8 bits) indicates the SIG framing version. It MUST be set to zero if following this specification.
+- `Session ID` (8 bits) identifies a tunneling session between a pair of SIGs.
+- `Index` (16 bits) is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only the middle or trailing part of an IP packet, the field MUST be set to 0xFFFF.
+- `Reserved` (12 bits): it MUST be set to zero.
+- `Stream ID` (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the remote SIG, put into the same reassembly queue. There may be multiple streams per session.
+- `Sequence Number` (64 bits) indicates the position of the frame within a stream. Consecutive frames are used to reassemble IP packets split among multiple frames.
+
+SIGs MAY reorder received frames within a stream. Choice of frame reassembly window is left to implementations.
+
+The Session ID and Stream ID are chosen by the sender but the tuple MUST be unique within a session.
+
+
+## SIG Frame Payload
+
+The SIG frame payload may contain multiple IPv4 or IPv6 packets, or parts thereof. No other types of packets can be encapsulated and the packets are placed directly after one another with no padding.
+
+SIG uses the IPv4 or IPv6 'Payload Length Field to determine the size of the packet. To make the processing easier, it is REQUIRED that the fixed part of the IP header is in the frame where the IP packet begins. In other words, the initial fragment of an IPv4 packet must be at least 20 bytes long, whilst the initial fragment of an IPv6 packet must be at least 40 bytes long.
+
 
 # IANA Considerations
 
