@@ -3195,10 +3195,10 @@ direction
    session such that the streams can be distributed to separate cores.
 
    There may be multiple IP packets in a single SIG frame, and a single
-   IP packet may be split into multiple SIG frames.  A pair of SIGs
-   establishes a SIG tunneling session which are is unidirectionally
-   established by the sender.  Whether a session is mapped to a single
-   path or not is an implementation decision.
+   IP packet may be split into multiple SIG frames.  A source SIG
+   unidirectionally establishes a SIG tunneling session with a
+   destination SIG.  A session may be mapped to one or multiple SCION
+   paths, depending on implementors.
 
    Streams can be used within a session to distinguish between different
    packet flows.  A single stream has a single reassembly queue and
