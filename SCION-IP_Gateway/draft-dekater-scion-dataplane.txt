@@ -3202,9 +3202,9 @@ direction
 
    Streams can be used within a session to distinguish between different
    packet flows.  A single stream has a single reassembly queue and
-   should be processed by a single core.  Packets in a stream should not
-   be distributed over multiple paths because that will lead to
-   reordering and performance will drop.
+   SHOULD be processed by a single core.  Packets in a stream SHOULD NOT
+   be distributed over multiple SCION paths to avoid reordering and
+   therefore lower performance.
 
    Each SIG frame has a sequence number that is used by the egress SIG
    to reassemble the encapsulated IP packets within a stream.
