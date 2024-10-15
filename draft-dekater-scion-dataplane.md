@@ -1826,7 +1826,7 @@ IP packets are encapsulated over SCION/UDP into SIG frames. Whilst in principle,
 There may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.
 A source SIG unidirectionally establishes a SIG tunneling session with a destination SIG. A session may be mapped to one or multiple SCION paths, depending on implementors.
 
-Streams can be used within a session to distinguish between different packet flows. A single stream has a single reassembly queue and should be processed by a single core. Packets in a stream should not be distributed over multiple paths because that will lead to reordering and performance will drop.
+Streams can be used within a session to distinguish between different packet flows. A single stream has a single reassembly queue and SHOULD be processed by a single core. Packets in a stream SHOULD NOT be distributed over multiple SCION paths to avoid reordering and therefore lower performance.
 
 Each SIG frame has a sequence number that is used by the egress SIG to reassemble the encapsulated IP packets within a stream.
 
