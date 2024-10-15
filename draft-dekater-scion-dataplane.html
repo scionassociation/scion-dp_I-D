@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 13 April 2025</td>
+<td class="center">Expires 18 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-10-10" class="published">10 October 2024</time>
+<time datetime="2024-10-15" class="published">15 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-04-13">13 April 2025</time></dd>
+<dd class="expires"><time datetime="2025-04-18">18 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1108,7 +1108,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1351,6 +1351,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-interoperability-scion-ip-g" class="internal xref">Interoperability: SCION IP Gateway</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-sig-framing" class="internal xref">SIG Framing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-sig-frame-header" class="internal xref">SIG Frame Header</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-sig-frame-payload" class="internal xref">SIG Frame Payload</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
@@ -4341,11 +4352,118 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
       <h2 id="name-interoperability-scion-ip-g">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-interoperability-scion-ip-g" class="section-name selfRef">Interoperability: SCION IP Gateway</a>
       </h2>
-<p id="section-8-1">The SCION IP Gateway (SIG) enables IP packets to be tunnelled over SCION to support the use of applications that are not SCION enabled.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">An ingress SIG encapsulates IP packets within SCION packets and sends them across a SCION network to an egress SIG. The egress SIG decapsulates the IP packets from the SCION packets and forwards them towards their destination IP address. The SIGs at either end of a tunnel act as routers from the perspective of IP, whilst acting as SCION endpoints from the perspective of the SCION network.<a href="#section-8-2" class="pilcrow">¶</a></p>
-<p id="section-8-3">Each SIG establishes a session to one or multiple remote SIGs. Each pair of SIGs uses a common tunneling protocol. Each SIG may choose to send SCION packets to a remote SIG in accordance with static IP routes, or by dynamically announcing IP prefixes to each other via a routing protocol. Each SIG may also choose how to send SCION packets based on locally configured policies when multiple remote SIGs are available.
-In addition, the source SIG is responsible for SCION path selection.<a href="#section-8-3" class="pilcrow">¶</a></p>
-<p id="section-8-4">A SIG is typically deployed inside the same AS internal network as its non-SCION hosts. In an enterprise scenario, it is usually deployed at the edge of the enterprise network.<a href="#section-8-4" class="pilcrow">¶</a></p>
+<p id="section-8-1">The SCION IP Gateway (SIG) enables IP packets to be tunneled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">Tunneling IP traffic over SCION requires a pair of SIGs and it involves the following steps:<a href="#section-8-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8-3">
+<li id="section-8-3.1">
+          <p id="section-8-3.1.1">A sender sends an IP packet towards an IP destination.<a href="#section-8-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-8-3.2">
+          <p id="section-8-3.2.1">The IP packet reaches a SIG in the sender’s network via standard IP routing.<a href="#section-8-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-8-3.3">
+          <p id="section-8-3.3.1">Based on the destination IP address, the source SIG determines the destination SIG's ISD-AS endpoint address. To achieve this, SIGs may be pre-configured with a static IP prefix to remote SIG SCION address mappings. Alternatively, a pair of SIGs may be configured to speak a dynamic routing protocol between each other. The choice of protocol is left up to implementors and is outside of the scope of this document.<a href="#section-8-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-8-3.4">
+          <p id="section-8-3.4.1">The SIG encapsulates the original IP packet within a SCION packet and sends it to the remote SIG. If necessary, the source SIG performs SCION path lookups and selects a SCION path to the destination SIG.<a href="#section-8-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-8-3.5">
+          <p id="section-8-3.5.1">The remote SIG receives the SCION packet and decapsulates the original IP packet. It then forwards the packet to the final IP destination using standard IP routing.<a href="#section-8-3.5.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+<div id="sig-framing">
+<section id="section-8.1">
+        <h3 id="name-sig-framing">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-sig-framing" class="section-name selfRef">SIG Framing</a>
+        </h3>
+<p id="section-8.1-1">IP packets are encapsulated over SCION/UDP into SIG frames. Whilst in principle, a pair of SIGs may use other tunneling protocols, existing deployments use SIG framing as described here. This is to provide independence from the underlying SCION path MTU which can increase and decrease over time, to provide fast detection of packet loss and subsequent recovery of decapsulation for packets that weren't lost, and support for multiple streams within a framing session such that the streams can be distributed to separate cores.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">There may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.
+A source SIG unidirectionally establishes a SIG tunneling session with a destination SIG. A session may be mapped to one or multiple SCION paths, depending on implementors.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.1-3">Streams can be used within a session to distinguish between different packet flows. A single stream has a single reassembly queue and <span class="bcp14">SHOULD</span> be processed by a single core. Packets in a stream <span class="bcp14">SHOULD NOT</span> be distributed over multiple SCION paths to avoid reordering and therefore lower performance.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">Each SIG frame has a sequence number that is used by the egress SIG to reassemble the encapsulated IP packets within a stream.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
+<span id="name-sig-framing-within-a-scion-"></span><div id="_figure-28">
+<figure id="figure-28">
+          <div class="alignLeft art-text artwork" id="section-8.1-5.1">
+<pre>
++-----------------------+
+|         SCION         |
++-----------------------+
+|          UDP          |
++-----------------------+
+|    SIG frame header   |
++-----------------------+
+|   SIG frame payload   |
++-----------------------+
+
+</pre>
+</div>
+<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
+<a href="#name-sig-framing-within-a-scion-" class="selfRef">SIG framing within a SCION packet</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="sig-frame-header">
+<section id="section-8.2">
+        <h3 id="name-sig-frame-header">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-sig-frame-header" class="section-name selfRef">SIG Frame Header</a>
+        </h3>
+<span id="name-sig-frame-header-format"></span><div id="_figure-29">
+<figure id="figure-29">
+          <div class="alignLeft art-text artwork" id="section-8.2-1.1">
+<pre>
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|     Version   |  Session ID   |            Index              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Reserved        |             Stream ID               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
++                       Sequence Number                         +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</pre>
+</div>
+<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
+<a href="#name-sig-frame-header-format" class="selfRef">SIG Frame Header format</a>
+          </figcaption></figure>
+</div>
+<p id="section-8.2-2">All fields within SIG Frame Header are in network byte order.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.2-3.1">
+            <p id="section-8.2-3.1.1"><code>Version</code> (8 bits) indicates the SIG framing version. It <span class="bcp14">MUST</span> be set to zero if following this specification.<a href="#section-8.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.2-3.2">
+            <p id="section-8.2-3.2.1"><code>Session ID</code> (8 bits) identifies a tunneling session between a pair of SIGs.<a href="#section-8.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.2-3.3">
+            <p id="section-8.2-3.3.1"><code>Index</code> (16 bits) is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only the middle or trailing part of an IP packet, the field <span class="bcp14">MUST</span> be set to 0xFFFF.<a href="#section-8.2-3.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.2-3.4">
+            <p id="section-8.2-3.4.1"><code>Reserved</code> (12 bits): it <span class="bcp14">MUST</span> be set to zero.<a href="#section-8.2-3.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.2-3.5">
+            <p id="section-8.2-3.5.1"><code>Stream ID</code> (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the remote SIG, put into the same reassembly queue. There may be multiple streams per session.<a href="#section-8.2-3.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-8.2-3.6">
+            <p id="section-8.2-3.6.1"><code>Sequence Number</code> (64 bits) indicates the position of the frame within a stream. Consecutive frames are used to reassemble IP packets split among multiple frames.<a href="#section-8.2-3.6.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-8.2-4">SIGs <span class="bcp14">MAY</span> reorder received frames within a stream. Choice of frame reassembly window is left to implementations.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-5">The Session ID and Stream ID are chosen by the sender but the tuple <span class="bcp14">MUST</span> be unique within a session.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sig-frame-payload">
+<section id="section-8.3">
+        <h3 id="name-sig-frame-payload">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-sig-frame-payload" class="section-name selfRef">SIG Frame Payload</a>
+        </h3>
+<p id="section-8.3-1">The SIG frame payload may contain multiple IPv4 or IPv6 packets, or parts thereof. No other types of packets can be encapsulated and the packets are placed directly after one another with no padding.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-2">SIG uses the IPv4 or IPv6 'Payload Length Field to determine the size of the packet. To make the processing easier, it is <span class="bcp14">REQUIRED</span> that the fixed part of the IP header is in the frame where the IP packet begins. In other words, the initial fragment of an IPv4 packet must be at least 20 bytes long, whilst the initial fragment of an IPv6 packet must be at least 40 bytes long.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="iana-considerations">
