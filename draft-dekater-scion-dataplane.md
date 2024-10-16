@@ -1871,9 +1871,9 @@ IP packets are encapsulated over SCION/UDP into SIG frames. Whilst in principle,
 
 There may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.
 
-The ingress SIG initiates unidirectional packet flows with the egress SIG simply by sending the corresponding SIG frames. There is no peamble. The egress SIG, should it accept the traffic, instanciates the necessary resources on-demand to process each flow. Each such flow forms an independent sequence of packets (a stream) ordered by an incrementing sequence number. Between a given SIG ingress/egress pair, a (session ID, stream ID) pair uniquely identifies a stream.
+The ingress SIG initiates unidirectional packet flows with the egress SIG simply by sending the corresponding SIG frames. There is no handshake. The egress SIG, should it accept the traffic, instanciates the necessary resources on-demand to process each flow. Each such flow forms an independent sequence of packets (a stream) ordered by an incrementing sequence number. Between a given SIG ingress/egress pair, a (session ID, stream ID) pair uniquely identifies a stream.
 
-To preserve performance, IP packets encapsulated in a single stream SHOULD NOT be re-ordered. To that end:
+To preserve performance, IP packets encapsulated in a single stream SHOULD leave the egress SIG in the order in which they entered it. To that end:
 
 - The ingress SIG SHOULD encapsulate IP packets that cannot be proven independent (e.g., with the same  IP 6-tuple) in the same stream.
 - The ingress SIG SHOULD encapsulate IP packets to a given stream in the order in which they were received.
@@ -1926,7 +1926,7 @@ All fields within SIG Frame Header are in network byte order.
 - `Stream ID` (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the egress SIG, put into the same reassembly queue. There may be multiple streams per session.
 - `Sequence Number` (64 bits) indicates the position of the frame within a stream. Consecutive frames of a given stream have consecutive sequence numbers. IP packets split among multiple frames are re-assembled by concatenating the payloads of consecutive frames.
 
-A SIG MAY drop frames. Sorting frames received out-of-order by the egress SIG is optional. The egress SIG SHOULD drop frames from a stream if unable to perform the sequence re-assembly.
+A SIG MAY drop frames. Buffering frames received out-of-order by the egress SIG is optional. The egress SIG SHOULD drop frames from a stream if unable to perform the sequence re-assembly.
 
 The Session ID and Stream ID are chosen by the sender but the tuple MUST be unique within a session.
 
