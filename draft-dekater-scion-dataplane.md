@@ -2030,7 +2030,6 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 Major changes:
 
-- Added Section on Header Overview in introduction
 - Added section with SCMP specification
 - Added section on SCION IP Gateway
 - Added section on Handling Link Failures and BFD
@@ -2040,6 +2039,7 @@ Major changes:
 
 Minor changes:
 
+- Added Figure on Header Overview in introduction
 - Clarified the router alert flags and relationship to the ConsIngress/Egress fields.
 - Clarifications in the SCION Header Specification section (router alert flags, service addresses, one-hop paths, text clarifications, validity of peering links)
 - Added mention of why proof of transit is not needed.
