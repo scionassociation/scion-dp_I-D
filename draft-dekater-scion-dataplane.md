@@ -260,19 +260,43 @@ This SCION design choice has the following advantages:
 
 As SCION is an inter-domain network architecture, it is not concerned with intra-domain forwarding. This corresponds to the general practice today where BGP and IP are used for inter-domain routing and forwarding, respectively, but ASes use an intra-domain protocol of their choice - for example OSPF or IS-IS for routing and IP, MPLS, and various Layer 2 protocols for forwarding. In fact, even if ASes use IP forwarding internally today, they typically encapsulate the original IP packet they receive at the edge of their network into another IP packet with the destination address set to the egress border router, to avoid full inter-domain forwarding tables at internal routers.
 
-SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; re-using the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION.
+SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; re-using the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION. In practice, in most existing SCION deployments, SCION routers communicate among themselves and with endpoints by enclosing the SCION header inside an UDP/IPv6 or UDP/IPv4 packet. The choice of using an UDP/IP as an intra-domain protocol between routers was driven by the need to maximize compatibility with existing networks. This does not exclude that a SCION packet may be enclosed directly on top of a L2 protocol, since the choice of intra-domain protocol is AS specific.
+
+{{figure-30}} shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is later presented in [](#life-of-a-packet). A list of currently used upper layer protocols on top of SCION is presented in [](#protnum).
+
+~~~~
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                             |
+|                             |
+|        Payload (L4)         |
+|                             |
+|                             |
+|                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                             |
+|            SCION            |
+|                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
+|             UDP             |                |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  Intra-domain  |
+|             IP              |                |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+    protocol    |
+|         Link Layer          |                |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
+~~~~
+{: #figure-30 title="The SCION header within the protocol stack in a typical deployment."}
 
 A complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple. The ISD-AS part is used for inter-domain routing. The endpoint address part is only used for intra-domain forwarding at the source and destination ASes. This implies that endpoint addresses are only required to be globally unique within each SCION AS. This means, for example, that an endpoint running a SCION stack using a {{RFC1918}} could directly communicate with another SCION endpoint using a {{RFC1918}} endpoint address in a different SCION AS.
 
 
 ### Intra-Domain Forwarding Process
 
-The full forwarding process for a packet transiting an intermediate AS consists of the following steps.
+When transiting an intermediate SCION AS, a packet gets forwarded by at most two SCION routers. The forwarding process consists of the following steps.
 
 1. The AS's SCION ingress router receives a SCION packet from the neighboring AS.
 2. The SCION router parses, validates, and authenticates the SCION header.
-3. The SCION router maps the egress interface ID in the current Hop Field of the SCION header to the destination address of the intra-domain protocol (e.g. MPLS or IP) on the egress border router.
-4. The packet is forwarded within the AS by routers and switches based on the header of the intra-domain protocol.
+3. The SCION router maps the egress interface ID in the current Hop Field of the SCION header to the destination address of the intra-domain protocol (e.g. MPLS or IP) of the egress border router.
+4. The packet is forwarded within the AS by SCION-unaware routers and switches based on the header of the intra-domain protocol.
 5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
 6. The last SCION router on the path forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
 
@@ -937,7 +961,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 
 This pseudo-header is used in current implementations of UDP on top of SCION. However, as checksums across layers are not recommended, this should be re-evaluated in future revisions.
 
-# Life of a SCION Data Packet
+# Life of a SCION Data Packet {#life-of-a-packet}
 
 This section gives a high-level description of the life cycle of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).
 
@@ -2006,6 +2030,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 Major changes:
 
+- Added Section on Header Overview in introduction
 - Added section with SCMP specification
 - Added section on SCION IP Gateway
 - Added section on Handling Link Failures and BFD
