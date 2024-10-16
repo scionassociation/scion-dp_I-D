@@ -1933,7 +1933,7 @@ The Session ID and Stream ID are chosen by the sender but the tuple MUST be uniq
 
 ## SIG Frame Payload
 
-The SIG frame payload may contain multiple IPv4 or IPv6 packets, or parts thereof. No other types of packets can be encapsulated and the packets are placed directly after one another with no padding.
+The SIG frame payload may contain multiple IPv4 or IPv6 packets, or parts thereof. No other types of packets can be encapsulated and the packets are placed directly after one another with no padding. Handling of multicast is not covered by this specification and it is left as future work.
 
 SIG uses the IPv4 or IPv6 'Payload Length Field to determine the size of the packet. To make the processing easier, it is REQUIRED that the fixed part of the IP header is in the frame where the IP packet begins. In other words, the initial fragment of an IPv4 packet must be at least 20 bytes long, whilst the initial fragment of an IPv6 packet must be at least 40 bytes long.
 
