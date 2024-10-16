@@ -1875,9 +1875,9 @@ The ingress SIG initiates unidirectional packet flows with the egress SIG simply
 
 To preserve performance, IP packets encapsulated in a single stream SHOULD NOT be re-ordered. To that end:
 
-- The ingress SIG SHOULD encapsulate IP packets that cannot be proven independent (for example with the same source, destination and traffic class) in the same stream.
+- The ingress SIG SHOULD encapsulate IP packets that cannot be proven independent (e.g., with the same  IP 6-tuple) in the same stream.
 - The ingress SIG SHOULD encapsulate IP packets to a given stream in the order in which they were received.
-- The ingress SIG SHOULD send all frames of a given stream over a the same SCION path.
+- The ingress SIG SHOULD send all frames of a given stream over the same SCION path.
 - The egress SIG SHOULD reassemble and forward packets from each stream, ordered by frame sequence number and packet within each frame.
 
 The session ID part of the (session ID, stream ID) pair is used to indicate traffic priority grouping. The egress SIG MAY dedicate processing resources to each session rather than to each individual stream.
