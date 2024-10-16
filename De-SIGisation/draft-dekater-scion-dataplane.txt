@@ -257,10 +257,8 @@ Table of Contents
    direction of travel of the SCION packet or to the direction of
    beaconing.
 
-   *Endpoint*: An endpoint is the start or the end of a SCION path.  For
-   example, an endpoint can be a host as defined in [RFC1122] or a SCION
-   IP gateway (Section 8) bridging a SCION and an IP domain.  This
-   definition is based on the definition in [RFC9473].
+   *Endpoint*: An endpoint is the start or the end of a SCION path, as
+   defined in [RFC9473].
 
    *Forwarding Key*: A forwarding key is a symmetric key that is shared
    between the control service (control plane) and the routers (data
