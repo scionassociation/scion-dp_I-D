@@ -3227,14 +3227,16 @@ direction
 
    The ingress SIG initiates unidirectional packet flows with the egress
    SIG simply by sending the corresponding SIG frames.  There is no
-   peamble.  The egress SIG, should it accept the traffic, instanciates
-   the necessary resources on-demand to process each flow.  Each such
-   flow forms an independent sequence of packets (a stream) ordered by
-   an incrementing sequence number.  Between a given SIG ingress/egress
-   pair, a (session ID, stream ID) pair uniquely identifies a stream.
+   handshake.  The egress SIG, should it accept the traffic,
+   instanciates the necessary resources on-demand to process each flow.
+   Each such flow forms an independent sequence of packets (a stream)
+   ordered by an incrementing sequence number.  Between a given SIG
+   ingress/egress pair, a (session ID, stream ID) pair uniquely
+   identifies a stream.
 
    To preserve performance, IP packets encapsulated in a single stream
-   SHOULD NOT be re-ordered.  To that end:
+   SHOULD leave the egress SIG in the order in which they entered it.
+   To that end:
 
    *  The ingress SIG SHOULD encapsulate IP packets that cannot be
       proven independent (e.g., with the same IP 6-tuple) in the same
@@ -3309,7 +3311,7 @@ direction
       frames are re-assembled by concatenating the payloads of
       consecutive frames.
 
-   A SIG MAY drop frames.  Sorting frames received out-of-order by the
+   A SIG MAY drop frames.  Buffering frames received out-of-order by the
    egress SIG is optional.  The egress SIG SHOULD drop frames from a
    stream if unable to perform the sequence re-assembly.
 
