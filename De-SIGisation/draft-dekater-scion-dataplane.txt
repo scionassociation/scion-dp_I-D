@@ -3390,7 +3390,7 @@ draft-dekater-scion-dataplane-03
 
    *  Added section with SCMP specification
 
-   *  Added section on SCION IP Gateway
+   *  Added short section on SCION IP Gateway
 
    *  Added section on Handling Link Failures and BFD
 
