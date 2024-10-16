@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 18 April 2025                                 SCION Association
+Expires: 19 April 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         15 October 2024
+                                                         16 October 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 April 2025.
+   This Internet-Draft will expire on 19 April 2025.
 
 Copyright Notice
 
@@ -3321,6 +3321,8 @@ direction
    The SIG frame payload may contain multiple IPv4 or IPv6 packets, or
    parts thereof.  No other types of packets can be encapsulated and the
    packets are placed directly after one another with no padding.
+   Handling of multicast is not covered by this specification and it is
+   left as future work.
 
    SIG uses the IPv4 or IPv6 'Payload Length Field to determine the size
    of the packet.  To make the processing easier, it is REQUIRED that
