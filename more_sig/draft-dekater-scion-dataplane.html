@@ -4393,13 +4393,13 @@ AS.<a href="#section-5.5.3-4" class="pilcrow">¶</a></p>
 <p id="section-8.1-5">To preserve performance, IP packets encapsulated in a single stream <span class="bcp14">SHOULD NOT</span> be re-ordered. To that end:<a href="#section-8.1-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8.1-6.1">
-            <p id="section-8.1-6.1.1">The ingress SIG <span class="bcp14">SHOULD</span> encapsulate IP packets that cannot be proven independent (for example with the same source, destination and traffic class) in the same stream.<a href="#section-8.1-6.1.1" class="pilcrow">¶</a></p>
+            <p id="section-8.1-6.1.1">The ingress SIG <span class="bcp14">SHOULD</span> encapsulate IP packets that cannot be proven independent (e.g., with the same  IP 6-tuple) in the same stream.<a href="#section-8.1-6.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.1-6.2">
             <p id="section-8.1-6.2.1">The ingress SIG <span class="bcp14">SHOULD</span> encapsulate IP packets to a given stream in the order in which they were received.<a href="#section-8.1-6.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.1-6.3">
-            <p id="section-8.1-6.3.1">The ingress SIG <span class="bcp14">SHOULD</span> send all frames of a given stream over a the same SCION path.<a href="#section-8.1-6.3.1" class="pilcrow">¶</a></p>
+            <p id="section-8.1-6.3.1">The ingress SIG <span class="bcp14">SHOULD</span> send all frames of a given stream over the same SCION path.<a href="#section-8.1-6.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.1-6.4">
             <p id="section-8.1-6.4.1">The egress SIG <span class="bcp14">SHOULD</span> reassemble and forward packets from each stream, ordered by frame sequence number and packet within each frame.<a href="#section-8.1-6.4.1" class="pilcrow">¶</a></p>

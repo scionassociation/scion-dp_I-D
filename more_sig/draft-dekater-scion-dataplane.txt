@@ -3237,14 +3237,14 @@ direction
    SHOULD NOT be re-ordered.  To that end:
 
    *  The ingress SIG SHOULD encapsulate IP packets that cannot be
-      proven independent (for example with the same source, destination
-      and traffic class) in the same stream.
+      proven independent (e.g., with the same IP 6-tuple) in the same
+      stream.
 
    *  The ingress SIG SHOULD encapsulate IP packets to a given stream in
       the order in which they were received.
 
-   *  The ingress SIG SHOULD send all frames of a given stream over a
-      the same SCION path.
+   *  The ingress SIG SHOULD send all frames of a given stream over the
+      same SCION path.
 
    *  The egress SIG SHOULD reassemble and forward packets from each
       stream, ordered by frame sequence number and packet within each
