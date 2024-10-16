@@ -195,8 +195,7 @@ This document describes the SCION Data Plane component. It should be read in con
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
-Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}.
-This document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
+Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}. This document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
 
 
 ## Terminology {#terms}
@@ -1847,95 +1846,9 @@ However, the path choice of the endpoint may possibly be exploited by an attacke
 
 # Interoperability: SCION IP Gateway {#sig}
 
-The SCION IP Gateway (SIG) enables IP packets to be tunneled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network.
+The SCION IP Gateway (SIG) enables IP packets to be tunneled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network. Tunneling IP traffic over SCION requires a pair of SIGs: at the ingress and egress points of the SCION network.
 
-Tunneling IP traffic over SCION requires a pair of SIGs and it involves the following steps:
-
-1. A sender sends an IP packet towards an IP destination.
-
-2. The IP packet reaches a SIG in the sender’s network via standard IP routing.
-
-3. Based on the destination IP address, the source (ingress) SIG determines the destination (egress) SIG's ISD-AS endpoint address. To achieve this, SIGs may be pre-configured with a static IP prefix to remote SIG SCION address mappings. Alternatively, multiple SIGs may be configured to speak a dynamic routing protocol between each other. The choice of protocol is left up to implementors and is outside of the scope of this document. Whether an egress SIG accepts or drops traffic from a given ingress SIG is up to the policies of the receiver's operator. The control mechanisms are implementation defined.
-
-4. The ingress SIG encapsulates the original IP packet within a SCION packet and sends it to the egress SIG. If necessary, the ingress SIG performs SCION path lookups and selects a SCION path to the egress SIG.
-
-5. The egress SIG receives the SCION packet and decapsulates the original IP packet. It then forwards the packet to the final IP destination using standard IP routing.
-
-## SIG Framing
-
-IP packets are encapsulated over SCION/UDP into SIG frames. Whilst in principle, a given pair of SIGs may use any tunneling protocol, existing deployments use the SIG framing as described here. This protocol is designed to:
-
-- provide independence from the underlying SCION path MTU which can increase and decrease over time.
-- provide fast detection of packet loss and subsequent recovery of decapsulation for packets that weren't lost.
-- support for multiple streams within a framing session such that independent packet sequences be tunneled in parallel.
-
-There may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.
-
-The ingress SIG initiates unidirectional packet flows with the egress SIG simply by sending the corresponding SIG frames. There is no handshake. The egress SIG, should it accept the traffic, instanciates the necessary resources on-demand to process each flow. Each such flow forms an independent sequence of packets (a stream) ordered by an incrementing sequence number. Between a given SIG ingress/egress pair, a (session ID, stream ID) pair uniquely identifies a stream.
-
-To preserve performance, IP packets encapsulated in a single stream SHOULD leave the egress SIG in the order in which they entered it. To that end:
-
-- The ingress SIG SHOULD encapsulate IP packets that cannot be proven independent (e.g., with the same  IP 6-tuple) in the same stream.
-- The ingress SIG SHOULD encapsulate IP packets to a given stream in the order in which they were received.
-- The ingress SIG SHOULD send all frames of a given stream over the same SCION path.
-- The egress SIG SHOULD reassemble and forward packets from each stream, ordered by frame sequence number and packet within each frame.
-
-The session ID part of the (session ID, stream ID) pair is used to indicate traffic priority grouping. The egress SIG MAY dedicate processing resources to each session rather than to each individual stream.
-
-~~~~
-
-+-----------------------+
-|         SCION         |
-+-----------------------+
-|          UDP          |
-+-----------------------+
-|    SIG frame header   |
-+-----------------------+
-|   SIG frame payload   |
-+-----------------------+
-
-~~~~
-{: #figure-28 title="SIG framing within a SCION packet"}
-
-## SIG Frame Header
-
-~~~~
-
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Version   |  Session ID   |            Index              |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|         Reserved        |             Stream ID               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                                                               |
-+                       Sequence Number                         +
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-~~~~
-{: #figure-29 title="SIG Frame Header format"}
-
-
-All fields within SIG Frame Header are in network byte order.
-
-- `Version` (8 bits) indicates the SIG framing version. It MUST be set to zero if following this specification.
-- `Session ID` (8 bits) identifies a tunneling session between a pair of SIGs.
-- `Index` (16 bits) is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only the middle or trailing part of an IP packet, the field MUST be set to 0xFFFF.
-- `Reserved` (12 bits): it MUST be set to zero.
-- `Stream ID` (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the egress SIG, put into the same reassembly queue. There may be multiple streams per session.
-- `Sequence Number` (64 bits) indicates the position of the frame within a stream. Consecutive frames of a given stream have consecutive sequence numbers. IP packets split among multiple frames are re-assembled by concatenating the payloads of consecutive frames.
-
-A SIG MAY drop frames. Buffering frames received out-of-order by the egress SIG is optional. The egress SIG SHOULD drop frames from a stream if unable to perform the sequence re-assembly.
-
-The Session ID and Stream ID are chosen by the sender but the tuple MUST be unique within a session.
-
-
-## SIG Frame Payload
-
-The SIG frame payload may contain multiple IPv4 or IPv6 packets, or parts thereof. No other types of packets can be encapsulated and the packets are placed directly after one another with no padding. Handling of multicast is not covered by this specification and it is left as future work.
-
-SIG uses the IPv4 or IPv6 'Payload Length Field to determine the size of the packet. To make the processing easier, it is REQUIRED that the fixed part of the IP header is in the frame where the IP packet begins. In other words, the initial fragment of an IPv4 packet must be at least 20 bytes long, whilst the initial fragment of an IPv6 packet must be at least 40 bytes long.
+IP tunneling over SCION is an application from the perspective of the Data Plane and is outwith the scope of this document.
 
 
 # IANA Considerations
