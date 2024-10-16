@@ -3583,8 +3583,6 @@ draft-dekater-scion-dataplane-03
 
    Major changes:
 
-   *  Added Section on Header Overview in introduction
-
    *  Added section with SCMP specification
 
    *  Added section on SCION IP Gateway
@@ -3598,6 +3596,8 @@ draft-dekater-scion-dataplane-03
    *  Security Considerations: add section on Payload Modifications
 
    Minor changes:
+
+   *  Added Figure on Header Overview in introduction
 
    *  Clarified the router alert flags and relationship to the
       ConsIngress/Egress fields.
