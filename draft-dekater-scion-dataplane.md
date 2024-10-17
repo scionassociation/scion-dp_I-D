@@ -195,7 +195,7 @@ This document describes the SCION Data Plane component. It should be read in con
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
-Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}. This document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.
+==Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}. This document provides an extensive description of how the SCION Data Plane is implemented in order to facilitate understanding, but could potentially be split into separate documents if considered suitable for submission to the Internet Standards Process.==
 
 
 ## Terminology {#terms}
@@ -1079,27 +1079,6 @@ This section explains what happens with the SCION packet header at each router, 
 
 When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also [](#reverse)).
 
-## MTU  {#mtu}
-
-SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{RFC2460}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.
-
-The MTU of a SCION path is defined as the minimum of the MTUs of the links traversed by that path. The control plane disseminates such values and makes them available to endpoints (see: {{I-D.dekater-scion-controlplane}}, Path MTU).
-
-The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the link's underlay encapsulation or native link-layer in either direction.
-
-SCION assumes that the MTUs of a path segment remains correct for the life time of that segment. This is generally a safe assumption because:
-
-* Intra-AS network MTUs are a result of the network configuration of each AS and therefore predictable.
-
-* Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.
-
-Should the inter-AS link MTU be unpredictable (e.g. because the inter-AS link is deployed as an overlay), then the link's MTU MUST be configured statically to a conservative value. For a UDP/IP underlay, 1232 is a safe value.
-
-## Packet Fragmentation {#fragmentation}
-
-The SCION network layer does not support packet fragmentation; not even at the source endpoint. Upper layer protocols and applications MUST comply with the MTU of the paths that they use.
-
-SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations SHOULD allow MTU discovery mechanisms such as {{RFC4821}} to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
 
 # Path Authorization {#path-auth}
 
@@ -1389,6 +1368,40 @@ This bias comes in addition to a structural delay: PCBs are propagated at a conf
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
 Each administrator of SCION control services and routers is responsible for maintaining sufficient clock accuracy. No particular method is assumed for this.
+
+
+# Deployment Considerations
+
+## MTU  {#mtu}
+
+SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{RFC2460}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.
+
+The MTU of a SCION path is defined as the minimum of the MTUs of the links traversed by that path. The control plane disseminates such values and makes them available to endpoints (see: {{I-D.dekater-scion-controlplane}}, Path MTU).
+
+The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the link's underlay encapsulation or native link-layer in either direction.
+
+SCION assumes that the MTUs of a path segment remains correct for the life time of that segment. This is generally a safe assumption because:
+
+* Intra-AS network MTUs are a result of the network configuration of each AS and therefore predictable.
+
+* Inter-AS links MTU are normally under the joint control of the administrators of the two ASes involved and therefore equally predictable.
+
+Should the inter-AS link MTU be unpredictable (e.g. because the inter-AS link is deployed as an overlay), then the link's MTU MUST be configured statically to a conservative value. For a UDP/IP underlay, 1232 is a safe value.
+
+
+## Packet Fragmentation {#fragmentation}
+
+The SCION network layer does not support packet fragmentation; not even at the source endpoint. Upper layer protocols and applications MUST comply with the MTU of the paths that they use.
+
+SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g. used for intra-AS communication). Implementations SHOULD allow MTU discovery mechanisms such as {{RFC4821}} to be enabled in the underlay and avoid fragmentation. For inter-AS links, using a different configuration is the joint decision of the administrators of the two ASes involved. For intra-AS interfaces using a different configuration is the choice of that AS' administrator alone.
+
+
+## SCION IP Gateway {#sig}
+
+The SCION IP Gateway (SIG) enables IP packets to be tunneled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network. Tunneling IP traffic over SCION requires a pair of SIGs: at the ingress and egress points of the SCION network.
+
+IP tunneling over SCION is an application from the perspective of the Data Plane and is outwith the scope of this document.
+
 
 # SCMP {#scmp}
 
@@ -1842,13 +1855,6 @@ SCION provides protection against certain reflection-based DoS attacks. Here, th
 However, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with a relatively low send rate. The attacker can exploit the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.
 
 **Note** SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering, e.g. by ISD, AS or path length.
-
-
-# Interoperability: SCION IP Gateway {#sig}
-
-The SCION IP Gateway (SIG) enables IP packets to be tunneled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network. Tunneling IP traffic over SCION requires a pair of SIGs: at the ingress and egress points of the SCION network.
-
-IP tunneling over SCION is an application from the perspective of the Data Plane and is outwith the scope of this document.
 
 
 # IANA Considerations
