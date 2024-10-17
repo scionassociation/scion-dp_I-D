@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-15T00:00:37.982872+00:00",
+  "timestamp": "2024-10-17T00:00:48.537255+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -645,7 +645,7 @@
       "labels": [],
       "body": "Following the first wave of ISE feedback, we did quite some work on the dataplane draft. \r\n\r\nCan you provide your feedback on: \r\n\r\n- #68 \r\n- 6.  Handling Link Failures\r\n- 5 SCMP (needed to describe handling link failures)\r\n- Added section on SCION IP Gateway \r\n-  7.  Security Considerations\r\n\r\n\r\n\r\n\r\n[Datatracker diff v03 (mar 2024) / latest](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane-03&url_2=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt). If needed, you can change the datatracker version in the diff URL.\r\n[Changelog in the draft](https://scionassociation.github.io/scion-dp_I-D/draft-dekater-scion-dataplane.html#name-change-log) manually updated, includes changes in the future version to be submitted to datatracker\r\n[Changelog github](https://github.com/scionassociation/scion-dp_I-D/releases) (covers up to the past submitted version)\r\n\r\n",
       "createdAt": "2024-07-23T04:59:27Z",
-      "updatedAt": "2024-10-08T09:26:35Z",
+      "updatedAt": "2024-10-15T08:42:01Z",
       "closedAt": null,
       "comments": [
         {
@@ -661,6 +661,13 @@
           "body": "Done, I updated the issue above. JFYI as requested by Eliot, we added a \"manual\" changelog to the draft itself in #67, linked above. Github release notes are a bit more detailed than that  ",
           "createdAt": "2024-10-08T07:41:37Z",
           "updatedAt": "2024-10-08T07:41:37Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Hi @oncilla @shitz do you have any further comments on the DP draft? We'll have to submit a new draft by this weekend. ",
+          "createdAt": "2024-10-15T08:42:00Z",
+          "updatedAt": "2024-10-15T08:42:00Z"
         }
       ]
     },
@@ -732,9 +739,9 @@
     {
       "number": 40,
       "id": "I_kwDOKYa7786RBS5r",
-      "title": "Specify SCION-IP Gateways - outline",
+      "title": "Specify SCION-IP Gateways",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/40",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -745,10 +752,10 @@
         "Prio 1",
         "needs-discussion"
       ],
-      "body": "> Harald Alvestrand (meeting notes 26.07.2024)\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d must have enough information to make a connection over scion\r\n\r\n- [x] Prepare a description of the SIG (try in terms of functionality rather than how they work)\r\n- [x] Send text to Eliot\r\n- [ ] Decide if this needs to be a separate draft (or if it can be a paragraph in one of the other drafts)\r\n\r\n#### Feedback received:\r\n> Harald Alvestrand \r\nThe payload of a packet can be anything (does not affect SCION operation), but the header contains an integer saying which content it is, with the defined values being \u201cUDP\u201d, \u201cTCP\u201d, and some numbers for internal use. The process for constructing an IP packet from the SCION packet (or vice versa) is not described, but presumably involves mangling checksums - -dataplane describes a \u201cvirtual header\u201d for constructing the checksum of things that require it, which implies that a gateway to non-SCION IP would mangle checksums inside the UDP or TCP packet.\r\n(There are references in -overview to docs describing gateways. However, I can\u2019t see them at the moment.)\r\n\r\n>   My response: \r\nYes, we don\u2019t yet have a draft describing gateways in detail. There was [a presentation ](https://datatracker.ietf.org/meeting/118/materials/slides-118-panrg-operational-aspects-of-scion-00)by my co-author Sam Hitz at PANRG at 119 about it. Essentially gateways run an encapsulation protocol and exchange IP routes among each other. They use a custom protocol for that, so we felt for now it was best to leave this part out and treat gateways as a normal SCION endpoint. \r\nThis checksums is used, for example, by UDP on top of SCION. Gateways encapsulate the whole IP packet, so they don\u2019t mangle UDP/TCP checksums in them. However, the gateway encapsulation protocol itself runs on top of UDP on top of SCION, therefore there is a ckechsum in the encapsulating UDP packet, and this uses the \u201cvirtual header\u201d.\r\n\r\n> Lunch discussion\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d. The  must have enough information to make a connection over scion\r\n\r\n#### Potential sources: \r\n- [Anapaya Docs](https://docs.anapaya.net/en/latest/edge/configuration/scion-tunneling/#edge-tunneling-sgrp) for SGRP, tunneling, also called \"Prefix discovery\" in open source\r\n- [SCIONproto](https://docs.scion.org/en/latest/sig.html) for SIG framing \r\n- Scion book section  13.3 The SCION\u2013IP Gateway (SIG) \r\n- [component analysis draft](https://www.ietf.org/archive/id/draft-rustignoli-panrg-scion-components-03.txt) section 3.1\r\n- https://github.com/scionproto/scion/issues/2948",
+      "body": "> Harald Alvestrand (meeting notes 26.07.2024)\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d must have enough information to make a connection over scion\r\n\r\n- [x] Prepare a description of the SIG (try in terms of functionality rather than how they work)\r\n- [x] Send text to Eliot\r\n- [x] Decide if this needs to be a separate draft (or if it can be a paragraph in one of the other drafts) --> No\r\n- [x] #78\r\n\r\n#### Feedback received:\r\n> Harald Alvestrand \r\nThe payload of a packet can be anything (does not affect SCION operation), but the header contains an integer saying which content it is, with the defined values being \u201cUDP\u201d, \u201cTCP\u201d, and some numbers for internal use. The process for constructing an IP packet from the SCION packet (or vice versa) is not described, but presumably involves mangling checksums - -dataplane describes a \u201cvirtual header\u201d for constructing the checksum of things that require it, which implies that a gateway to non-SCION IP would mangle checksums inside the UDP or TCP packet.\r\n(There are references in -overview to docs describing gateways. However, I can\u2019t see them at the moment.)\r\n\r\n>   My response: \r\nYes, we don\u2019t yet have a draft describing gateways in detail. There was [a presentation ](https://datatracker.ietf.org/meeting/118/materials/slides-118-panrg-operational-aspects-of-scion-00)by my co-author Sam Hitz at PANRG at 119 about it. Essentially gateways run an encapsulation protocol and exchange IP routes among each other. They use a custom protocol for that, so we felt for now it was best to leave this part out and treat gateways as a normal SCION endpoint. \r\nThis checksums is used, for example, by UDP on top of SCION. Gateways encapsulate the whole IP packet, so they don\u2019t mangle UDP/TCP checksums in them. However, the gateway encapsulation protocol itself runs on top of UDP on top of SCION, therefore there is a ckechsum in the encapsulating UDP packet, and this uses the \u201cvirtual header\u201d.\r\n\r\n> Lunch discussion\r\nDocument SCION-IP gateways: If the goal is to document existing deployment, the gateways must be specified. This could be an additional ISE draft. The overall SCION draft \u201cpackage\u201d. The  must have enough information to make a connection over scion\r\n\r\n#### Potential sources: \r\n- [Anapaya Docs](https://docs.anapaya.net/en/latest/edge/configuration/scion-tunneling/#edge-tunneling-sgrp) for SGRP, tunneling, also called \"Prefix discovery\" in open source\r\n- [SCIONproto](https://docs.scion.org/en/latest/sig.html) for SIG framing \r\n- Scion book section  13.3 The SCION\u2013IP Gateway (SIG) \r\n- [component analysis draft](https://www.ietf.org/archive/id/draft-rustignoli-panrg-scion-components-03.txt) section 3.1\r\n- https://github.com/scionproto/scion/issues/2948",
       "createdAt": "2024-07-26T22:05:22Z",
-      "updatedAt": "2024-10-04T08:20:15Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-16T15:54:40Z",
+      "closedAt": "2024-10-16T15:06:39Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -763,6 +770,13 @@
           "body": "Feedback Eliot Lear call 3.10.2024\r\n\r\nSIG Description must clarify:\r\n*  how are packets directed to the GW?\r\n* How does GW know where to tunnel? \r\n* What happens at egress?\r\n* (mention multicast left as future work). \r\n\r\nShow fully flashed out config of how to have SCION nodes, a device in the middle, they did this with M-BONE. And the 6 bone to play with IPv6. If you have someone who wants to build an implementation, how can they test that it works and that they can interoperate. \r\nWhat do you have to do if you want to want to add a GW. Show a reference to what you can do (guide how to participate) e.g. to SCIONLab, not docs.scion.org. Goal; meet interop requirement. No Anapaya docs (but could be). Beginning as vendor implementation, intent is to offer to community for further improvement and potential standardization later on.",
           "createdAt": "2024-10-03T14:51:15Z",
           "updatedAt": "2024-10-03T14:51:15Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "For the records, the latest and greatest description for the SIG is in this commit: https://github.com/scionassociation/scion-dp_I-D/commit/148adfb6229f252844a3aa567c82e1ed8da1cbf6 . The text is below. Following a discussion with Eliot, we decided to leave this outside of the scope of this draft.\r\n\r\n```\r\n# Interoperability: SCION IP Gateway {#sig}\r\n\r\nThe SCION IP Gateway (SIG) enables IP packets to be tunneled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network.\r\n\r\nTunneling IP traffic over SCION requires a pair of SIGs and it involves the following steps:\r\n\r\n1. A sender sends an IP packet towards an IP destination.\r\n\r\n2. The IP packet reaches a SIG in the sender\u2019s network via standard IP routing.\r\n\r\n3. Based on the destination IP address, the source (ingress) SIG determines the destination (egress) SIG's ISD-AS endpoint address. To achieve this, SIGs may be pre-configured with a static IP prefix to remote SIG SCION address mappings. Alternatively, multiple SIGs may be configured to speak a dynamic routing protocol between each other. The choice of protocol is left up to implementors and is outside of the scope of this document. Whether an egress SIG accepts or drops traffic from a given ingress SIG is up to the policies of the receiver's operator. The control mechanisms are implementation defined.\r\n\r\n4. The ingress SIG encapsulates the original IP packet within a SCION packet and sends it to the egress SIG. If necessary, the ingress SIG performs SCION path lookups and selects a SCION path to the egress SIG.\r\n\r\n5. The egress SIG receives the SCION packet and decapsulates the original IP packet. It then forwards the packet to the final IP destination using standard IP routing.\r\n\r\n## SIG Framing\r\n\r\nIP packets are encapsulated over SCION/UDP into SIG frames. Whilst in principle, a given pair of SIGs may use any tunneling protocol, existing deployments use the SIG framing as described here. This protocol is designed to:\r\n\r\n- provide independence from the underlying SCION path MTU which can increase and decrease over time.\r\n- provide fast detection of packet loss and subsequent recovery of decapsulation for packets that weren't lost.\r\n- support for multiple streams within a framing session such that independent packet sequences be tunneled in parallel.\r\n\r\nThere may be multiple IP packets in a single SIG frame, and a single IP packet may be split into multiple SIG frames.\r\n\r\nThe ingress SIG initiates unidirectional packet flows with the egress SIG simply by sending the corresponding SIG frames. There is no handshake. The egress SIG, should it accept the traffic, instanciates the necessary resources on-demand to process each flow. Each such flow forms an independent sequence of packets (a stream) ordered by an incrementing sequence number. Between a given SIG ingress/egress pair, a (session ID, stream ID) pair uniquely identifies a stream.\r\n\r\nTo preserve performance, IP packets encapsulated in a single stream SHOULD leave the egress SIG in the order in which they entered it. To that end:\r\n\r\n- The ingress SIG SHOULD encapsulate IP packets that cannot be proven independent (e.g., with the same  IP 6-tuple) in the same stream.\r\n- The ingress SIG SHOULD encapsulate IP packets to a given stream in the order in which they were received.\r\n- The ingress SIG SHOULD send all frames of a given stream over the same SCION path.\r\n- The egress SIG SHOULD reassemble and forward packets from each stream, ordered by frame sequence number and packet within each frame.\r\n\r\nThe session ID part of the (session ID, stream ID) pair is used to indicate traffic priority grouping. The egress SIG MAY dedicate processing resources to each session rather than to each individual stream.\r\n\r\n~~~~\r\n\r\n+-----------------------+\r\n|         SCION         |\r\n+-----------------------+\r\n|          UDP          |\r\n+-----------------------+\r\n|    SIG frame header   |\r\n+-----------------------+\r\n|   SIG frame payload   |\r\n+-----------------------+\r\n\r\n~~~~\r\n{: #figure-28 title=\"SIG framing within a SCION packet\"}\r\n\r\n## SIG Frame Header\r\n\r\n~~~~\r\n\r\n 0                   1                   2                   3\r\n 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1\r\n+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\r\n|     Version   |  Session ID   |            Index              |\r\n+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\r\n|         Reserved        |             Stream ID               |\r\n+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\r\n|                                                               |\r\n+                       Sequence Number                         +\r\n|                                                               |\r\n+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+\r\n\r\n~~~~\r\n{: #figure-29 title=\"SIG Frame Header format\"}\r\n\r\n\r\nAll fields within SIG Frame Header are in network byte order.\r\n\r\n- `Version` (8 bits) indicates the SIG framing version. It MUST be set to zero if following this specification.\r\n- `Session ID` (8 bits) identifies a tunneling session between a pair of SIGs.\r\n- `Index` (16 bits) is the byte offset of the first beginning of an IP packet within the payload. If no IP packet starts in the payload, e.g. if the frame contains only the middle or trailing part of an IP packet, the field MUST be set to 0xFFFF.\r\n- `Reserved` (12 bits): it MUST be set to zero.\r\n- `Stream ID` (20 bits), along with the session, it identifies a unique sequence of SIG frames. Frames from the same stream are, on the egress SIG, put into the same reassembly queue. There may be multiple streams per session.\r\n- `Sequence Number` (64 bits) indicates the position of the frame within a stream. Consecutive frames of a given stream have consecutive sequence numbers. IP packets split among multiple frames are re-assembled by concatenating the payloads of consecutive frames.\r\n\r\nA SIG MAY drop frames. Buffering frames received out-of-order by the egress SIG is optional. The egress SIG SHOULD drop frames from a stream if unable to perform the sequence re-assembly.\r\n\r\nThe Session ID and Stream ID are chosen by the sender but the tuple MUST be unique within a session.\r\n\r\n\r\n## SIG Frame Payload\r\n\r\nThe SIG frame payload may contain multiple IPv4 or IPv6 packets, or parts thereof. No other types of packets can be encapsulated and the packets are placed directly after one another with no padding. Handling of multicast is not covered by this specification and it is left as future work.\r\n\r\nSIG uses the IPv4 or IPv6 'Payload Length Field to determine the size of the packet. To make the processing easier, it is REQUIRED that the fixed part of the IP header is in the frame where the IP packet begins. In other words, the initial fragment of an IPv4 packet must be at least 20 bytes long, whilst the initial fragment of an IPv6 packet must be at least 40 bytes long.\r\n\r\n``` ",
+          "createdAt": "2024-10-16T15:47:33Z",
+          "updatedAt": "2024-10-16T15:47:33Z"
         }
       ]
     },
@@ -1222,7 +1236,7 @@
       "id": "I_kwDOKYa7786Zsd24",
       "title": "Remove mention of AS in multiple ISDs",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/73",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1231,9 +1245,48 @@
       "labels": [
         "Prio 1"
       ],
-      "body": "From Harald https://github.com/scionassociation/standards/issues/105 \r\n> A couple of things are described either very briefly or inconsistently - for instance, the claim is made that \u201cone AS can be in multiple ISDs\u201d - yet the addressing consists of a 16 bit ISD number and a 48 bit AS number - it would seem that one AS in multiple ISDs would have to operate as if it was two ASes.\r\n\r\n```\r\n      the up and down segments do not need to originate from the same\r\n      core AS and can even be in different ISDs (if the AS at the\r\n      intersection is part of multiple ISDs).\r\n```",
+      "body": "From Harald https://github.com/scionassociation/standards/issues/105 \r\n> A couple of things are described either very briefly or inconsistently - for instance, the claim is made that \u201cone AS can be in multiple ISDs\u201d - yet the addressing consists of a 16 bit ISD number and a 48 bit AS number - it would seem that one AS in multiple ISDs would have to operate as if it was two ASes.\r\n\r\n```\r\n      the up and down segments do not need to originate from the same\r\n      core AS and can even be in different ISDs (if the AS at the\r\n      intersection is part of multiple ISDs).\r\n```\r\n\r\nBackground on this: https://github.com/scionproto/scion/issues/4293 ",
       "createdAt": "2024-10-10T11:32:20Z",
-      "updatedAt": "2024-10-10T11:32:20Z",
+      "updatedAt": "2024-10-15T10:15:46Z",
+      "closedAt": "2024-10-15T10:15:45Z",
+      "comments": []
+    },
+    {
+      "number": 77,
+      "id": "I_kwDOKYa7786aeVBf",
+      "title": "Add header overview figure in intro ",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/77",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "nicorusti",
+        "knmeynell"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "Following meeting with Eliot/Brian, we should have an overview of where SCION sits in the stack, like this\r\n<img width=\"224\" alt=\"Screenshot 2024-10-16 at 13 51 12\" src=\"https://github.com/user-attachments/assets/3970a060-dcb2-4eb7-aa80-733371049deb\">\r\n",
+      "createdAt": "2024-10-16T11:51:22Z",
+      "updatedAt": "2024-10-16T12:14:19Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 78,
+      "id": "I_kwDOKYa7786ag4iD",
+      "title": "Remove SIG description from the draft",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/78",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [],
+      "body": "IP Tunneling over SCION is a SCION application from a DP perspective. It is out of scope of this draft",
+      "createdAt": "2024-10-16T15:52:05Z",
+      "updatedAt": "2024-10-16T15:54:32Z",
       "closedAt": null,
       "comments": []
     }
@@ -5267,25 +5320,42 @@
       "id": "PR_kwDOKYa77859mxFe",
       "title": "Expanded on SCION-IP Gateway",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/68",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Resolves #40 ",
       "createdAt": "2024-10-04T10:46:45Z",
-      "updatedAt": "2024-10-14T20:43:11Z",
+      "updatedAt": "2024-10-15T08:49:44Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "ab0bf8c9e5de1861244815e3011d5f7539d2688b",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "SCION-IP_Gateway",
-      "headRefOid": "17bf3d57602fdce6676c2e78363150feda3dfd8e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "40f62aa8d8854c6f21eca3afdaaae51700a6290d",
+      "closedAt": "2024-10-15T08:49:44Z",
+      "mergedAt": "2024-10-15T08:49:44Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "2789aa33581110a0eafebb1f0faf94b3d38d21ff"
+      },
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "For simplicity of the process, I accepted suggestions. I think this is good enough to merge (even if we leave it at that). We can do another pass after that.",
+          "createdAt": "2024-10-15T08:33:05Z",
+          "updatedAt": "2024-10-15T08:33:05Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Accepted. In the next pass I will mention that the egress SIG is free to buffer packets for re-ordering, or discard; as a unilateral decision. ",
+          "createdAt": "2024-10-15T08:48:51Z",
+          "updatedAt": "2024-10-15T08:48:51Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOKYa7786L_WuK",
@@ -5890,6 +5960,64 @@
               "updatedAt": "2024-10-11T13:18:48Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NLGGc",
+          "commit": {
+            "abbreviatedOid": "17bf3d5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-15T08:07:34Z",
+          "updatedAt": "2024-10-15T08:15:49Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\nIP packets are encapsulated over SCION/UDP into SIG frames. Whilst in principle, a pair of SIGs may use other tunneling protocols, existing deployments use SIG framing as described here. This is to provide independence from the underlying SCION path MTU which can increase and decrease over time, to provide fast detection of packet loss and subsequent recovery of decapsulation for packets that weren't lost, and support for multiple streams within a framing session such that the streams can be distributed to separate cores.\r\n```",
+              "createdAt": "2024-10-15T08:07:34Z",
+              "updatedAt": "2024-10-15T08:15:49Z"
+            },
+            {
+              "originalPosition": 35,
+              "body": "```suggestion\r\nA source SIG unidirectionally establishes a SIG tunneling session with a destination SIG. A session may be mapped to one or multiple SCION paths, depending on implementors.\r\n```",
+              "createdAt": "2024-10-15T08:13:17Z",
+              "updatedAt": "2024-10-15T08:15:49Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "```suggestion\r\nStreams can be used within a session to distinguish between different packet flows. A single stream has a single reassembly queue and SHOULD be processed by a single core. Packets in a stream SHOULD NOT be distributed over multiple SCION paths to avoid reordering and therefore lower performance.\r\n```",
+              "createdAt": "2024-10-15T08:14:56Z",
+              "updatedAt": "2024-10-15T08:15:49Z"
+            },
+            {
+              "originalPosition": 36,
+              "body": "THanks a lot, @knmeynell added a derivative of this text to the draft",
+              "createdAt": "2024-10-15T08:15:49Z",
+              "updatedAt": "2024-10-15T08:15:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NLVJy",
+          "commit": {
+            "abbreviatedOid": "17bf3d5"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "I left a couple of comments, I think after this this is good to merge  (sorry, one more suggestion for you @jiceatscion \ud83e\udd72 )\r\n",
+          "createdAt": "2024-10-15T08:33:02Z",
+          "updatedAt": "2024-10-15T08:37:18Z",
+          "comments": [
+            {
+              "originalPosition": 83,
+              "body": "```suggestion\r\n- `Sequence Number` (64 bits) indicates the position of the frame within a stream. Consecutive frames are used to reassemble IP packets split among multiple frames.\r\n\r\nSIGs MAY reorder received frames within a stream. Choice of frame reassembly window is left to implementations.\r\n```",
+              "createdAt": "2024-10-15T08:33:02Z",
+              "updatedAt": "2024-10-15T08:34:25Z"
+            }
+          ]
         }
       ]
     },
@@ -6153,6 +6281,477 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 74,
+      "id": "PR_kwDOKYa7785-o-Yk",
+      "title": "remove mention of multiple ISDs",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/74",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #73 ",
+      "createdAt": "2024-10-15T08:41:11Z",
+      "updatedAt": "2024-10-15T10:15:47Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "a5a2d7939b6fb929714c0ae490e3a4c673a2b13e",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "multiple_ISD",
+      "headRefOid": "dd620f4bc10370bf701d36e77c987100b6f08f45",
+      "closedAt": "2024-10-15T10:15:44Z",
+      "mergedAt": "2024-10-15T10:15:44Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "2002bac75a804032803ffbfe540452ee58feae51"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Coming from here: \r\n<img width=\"360\" alt=\"Screenshot 2024-10-15 at 11 42 25\" src=\"https://github.com/user-attachments/assets/d6466e92-939d-4574-bd96-17cac287edd0\">\r\n",
+          "createdAt": "2024-10-15T09:42:59Z",
+          "updatedAt": "2024-10-15T09:42:59Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786NLjNH",
+          "commit": {
+            "abbreviatedOid": "be9abac"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "...some readers who pay attention might ask how it happens that two segments in different ISDs intersect at one AS... If you accept leaving the response as an exercise to the reader, then all right.\r\n",
+          "createdAt": "2024-10-15T08:55:39Z",
+          "updatedAt": "2024-10-15T08:55:39Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKYa7786NMFrh",
+          "commit": {
+            "abbreviatedOid": "be9abac"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-15T09:45:34Z",
+          "updatedAt": "2024-10-15T09:45:38Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n- **AS shortcut** (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.\r\n```",
+              "createdAt": "2024-10-15T09:45:34Z",
+              "updatedAt": "2024-10-15T09:47:30Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 75,
+      "id": "PR_kwDOKYa7785-r87T",
+      "title": "sig: clarify what's required for compatibility and what is unspecified",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/75",
+      "state": "MERGED",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #40 ",
+      "createdAt": "2024-10-15T14:35:58Z",
+      "updatedAt": "2024-10-16T15:06:39Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "2002bac75a804032803ffbfe540452ee58feae51",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "more_sig",
+      "headRefOid": "f4c3f410a5edcd0fa1e2c609da4585c22f893061",
+      "closedAt": "2024-10-16T15:06:39Z",
+      "mergedAt": "2024-10-16T15:06:38Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "148adfb6229f252844a3aa567c82e1ed8da1cbf6"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786NWQmk",
+          "commit": {
+            "abbreviatedOid": "eae4486"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks a lot, I left a few suggestions. \r\nI don't understand what \"priority grouping\" means, maybe we can quickly discuss",
+          "createdAt": "2024-10-16T07:19:51Z",
+          "updatedAt": "2024-10-16T07:41:28Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "```suggestion\r\nThe ingress SIG initiates unidirectional packet streams with the egress SIG simply by sending the corresponding SIG frames. There is no handshake. The egress SIG, should it accept the traffic, instanciates the necessary resources on-demand to process each stream. Each such  stream consists of an independent sequence of packets ordered by an incrementing sequence number. Between a given SIG ingress/egress pair, a (session ID, stream ID) pair uniquely identifies a stream.\r\n```\r\nI think your version uses a lot the word \"flow\" to talk about a stream. How about we just talk about streams? \r\nAlso., I'd prefer handshake rather than p**R**eamble",
+              "createdAt": "2024-10-16T07:19:51Z",
+              "updatedAt": "2024-10-16T07:41:28Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": ">  IP packets encapsulated in a single stream SHOULD NOT be re-ordered. \r\n\r\nThis sentence is a bit ambiguous, it feels like the destination SIG should not do any reordering\r\n\r\n ```suggestion\r\nTo preserve performance,  SIGs SHOULD take the following measures to minimize chances of re-ordering:\r\n```",
+              "createdAt": "2024-10-16T07:23:57Z",
+              "updatedAt": "2024-10-16T07:41:28Z"
+            },
+            {
+              "originalPosition": 33,
+              "body": "```suggestion\r\n- The ingress SIG SHOULD encapsulate IP packets that cannot be proven independent (e.g., with the same  IP 6-tuple) in the same stream.\r\n- The ingress SIG SHOULD encapsulate IP packets to a given stream in the order in which they were received.\r\n- The ingress SIG SHOULD send all frames of a given stream over the same SCION path.\r\n- The egress SIG SHOULD reassemble and forward packets from each stream, ordered by frame sequence number and packet within each frame.\r\n```\r\nWe don't describe what traffic class we are referring to (the SCION header traffic class? The IP header one?). Id therefore remove the mention of traffic class",
+              "createdAt": "2024-10-16T07:26:24Z",
+              "updatedAt": "2024-10-16T07:41:28Z"
+            },
+            {
+              "originalPosition": 36,
+              "body": "> to indicate traffic priority grouping \r\n\r\nI find priority grouping a bit ambiguous. Also, couldn't two streams have different priorities? ",
+              "createdAt": "2024-10-16T07:31:50Z",
+              "updatedAt": "2024-10-16T07:41:28Z"
+            },
+            {
+              "originalPosition": 50,
+              "body": "```suggestion\r\nA SIG MAY drop frames. Reordering by the egress SIG is optional. The egress SIG SHOULD drop frames from a stream if unable to perform the sequence re-assembly.\r\n```",
+              "createdAt": "2024-10-16T07:40:16Z",
+              "updatedAt": "2024-10-16T07:41:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NWh4w",
+          "commit": {
+            "abbreviatedOid": "c4d413a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T07:47:12Z",
+          "updatedAt": "2024-10-16T07:47:12Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "@jiceatscion JFYI Eliot recommended to mention multicast tunneling is not in scope. I added this",
+              "createdAt": "2024-10-16T07:47:12Z",
+              "updatedAt": "2024-10-16T07:47:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NW-Af",
+          "commit": {
+            "abbreviatedOid": "c4d413a"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T08:27:40Z",
+          "updatedAt": "2024-10-16T08:27:40Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "lgtm",
+              "createdAt": "2024-10-16T08:27:40Z",
+              "updatedAt": "2024-10-16T08:27:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NXBoE",
+          "commit": {
+            "abbreviatedOid": "eae4486"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T08:33:11Z",
+          "updatedAt": "2024-10-16T08:33:11Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "My reason for this phrasing is to avoid ambiguity. Frames do have an order, defined by the sequence number. I want to be clear that the \"re-ordering\" we're talking about is to process them into *that* order and not changing it. Apparently that doesn't work. But I am not satisfied with just saying \"reordering\" I think it is not precise and relies on the audience guessing the meaning. May be the more specific \"buffering frames received out-of-order is optional\" would work?",
+              "createdAt": "2024-10-16T08:33:11Z",
+              "updatedAt": "2024-10-16T08:33:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NXJT0",
+          "commit": {
+            "abbreviatedOid": "eae4486"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T08:44:03Z",
+          "updatedAt": "2024-10-16T08:44:04Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "Actually the grouping does not guarantee any effective priority. The egress SIG has no idea what the various sessions are for. All it does is to give each session its own task, thereby preventing head-of-line blocking. The priorities arise from the relative loads placed by the sender on the sessions. In the OS impl, streams within a session have separate queues but they do not have separate tasks. That is the *only* effect of sessions that I could find in the impl, so I thought I'd use it as a way to explain why the protocol has an explicit ID pair to identify a stream: it enables this kind of hint from the ingress to the egress stream. Depending on implementation it may have an impact (e.g. in the OS impl) or not (e.g. if the egress SIG gives a core to every stream or has a single core running them all). This is basically the protocol enabling some subtle QoS behaviours without being too complicated. I am not sure how to explain that. If I don't people will ask what the two-level stream ID is for. I agree that \"priority grouping\" is crappy. Suggestions welcome for an alternate term.",
+              "createdAt": "2024-10-16T08:44:03Z",
+              "updatedAt": "2024-10-16T08:44:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NXM16",
+          "commit": {
+            "abbreviatedOid": "eae4486"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T08:49:24Z",
+          "updatedAt": "2024-10-16T08:49:25Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "I was quite deliberate in avoiding the term \"stream\" until I defined it. That is because the protocol identifies what we have to call a stream by \"session ID\" and \"stream ID\". So we have the so common and irritating case of a stream ID not being the ID of a stream. My phrasing was attempt at containing the issue.",
+              "createdAt": "2024-10-16T08:49:24Z",
+              "updatedAt": "2024-10-16T08:49:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NXR8q",
+          "commit": {
+            "abbreviatedOid": "eae4486"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T08:56:24Z",
+          "updatedAt": "2024-10-16T08:56:24Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "I disagree both with your assessment and your suggestion. I am pretty clear that it is IP packets that must not be re-ordered. I say nothing of the SIG frames in that sentence. Your phrasing removes that distinction which makes things even more ambiguous. How about: \"IP packets encapsulated in a single stream SHOULD leave the egress SIG in the order in which they entered the ingress SIG\"?",
+              "createdAt": "2024-10-16T08:56:24Z",
+              "updatedAt": "2024-10-16T08:56:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NZwnL",
+          "commit": {
+            "abbreviatedOid": "eae4486"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T12:37:46Z",
+          "updatedAt": "2024-10-16T12:37:46Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "I do agree with your suggestion of replacing \"preamble\" with \"handshake\".",
+              "createdAt": "2024-10-16T12:37:46Z",
+              "updatedAt": "2024-10-16T12:37:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NbSb-",
+          "commit": {
+            "abbreviatedOid": "eae4486"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T14:47:21Z",
+          "updatedAt": "2024-10-16T14:47:21Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Ok replaced with handshake",
+              "createdAt": "2024-10-16T14:47:21Z",
+              "updatedAt": "2024-10-16T14:47:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NbTnB",
+          "commit": {
+            "abbreviatedOid": "eae4486"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T14:49:04Z",
+          "updatedAt": "2024-10-16T14:49:04Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "Ok I like your wording, added it\r\n\r\n> To preserve performance, IP packets encapsulated in a single stream SHOULD leave the egress SIG in the order in which they entered it. To that end:\r\n ",
+              "createdAt": "2024-10-16T14:49:04Z",
+              "updatedAt": "2024-10-16T14:49:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786NbU2H",
+          "commit": {
+            "abbreviatedOid": "eae4486"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-10-16T14:50:53Z",
+          "updatedAt": "2024-10-16T14:50:54Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "Sounds good, went for \r\n>  Buffering frames received out-of-order by the egress SIG is optional. ",
+              "createdAt": "2024-10-16T14:50:54Z",
+              "updatedAt": "2024-10-16T14:50:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786Nbhai",
+          "commit": {
+            "abbreviatedOid": "f4c3f41"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-16T15:06:18Z",
+          "updatedAt": "2024-10-16T15:06:18Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 76,
+      "id": "PR_kwDOKYa7785-uTk3",
+      "title": "Suggested change to remove specific reference to CPU cores",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/76",
+      "state": "CLOSED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is less implementation specific.",
+      "createdAt": "2024-10-15T19:46:25Z",
+      "updatedAt": "2024-10-16T07:43:05Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "more_sig",
+      "baseRefOid": "eae4486647cccce8a652d22e1d486aa4ceb83aed",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "De-core-SIG",
+      "headRefOid": "5dfead29fa244f127fdf5c6087add6869b0ed97d",
+      "closedAt": "2024-10-16T07:43:01Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Conflicts with #75, let's review that one first and then see how we remove mentions of CPUs (I think JC already did it)",
+          "createdAt": "2024-10-16T07:33:22Z",
+          "updatedAt": "2024-10-16T07:33:22Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "Similar changes are already in https://github.com/scionassociation/scion-dp_I-D/pull/75 , closing",
+          "createdAt": "2024-10-16T07:43:01Z",
+          "updatedAt": "2024-10-16T07:43:01Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 79,
+      "id": "PR_kwDOKYa7785-3g5a",
+      "title": "Removed SIG protocol description",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/79",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Now contains brief SIG description and note that IP tunnelling is out-of-scope of the draft. ",
+      "createdAt": "2024-10-16T17:47:57Z",
+      "updatedAt": "2024-10-16T21:01:33Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "148adfb6229f252844a3aa567c82e1ed8da1cbf6",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "De-SIGisation",
+      "headRefOid": "f9d37b5b3dd1bfcca3f075f48dfb21edae8df9b9",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "JFYI I updated the definition of endpoint also in the CP draft to not mention SIG in https://github.com/scionassociation/scion-cp_I-D/pull/60 \r\n\r\n\r\n\r\n\r\n",
+          "createdAt": "2024-10-16T20:49:21Z",
+          "updatedAt": "2024-10-16T20:49:21Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786NevX8",
+          "commit": {
+            "abbreviatedOid": "02f25a6"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "The text sounds good, however, do you think it could fit as a subsection? I think it would fit nicely below MTU & fragmentation: \r\n```\r\n 3.  Life of a SCION Data Packet\r\n     3.1.  Description\r\n     3.2.  Creating an End-to-End SCION Forwarding Path\r\n     3.3.  Step-by-Step Explanation\r\n     3.4.  MTU\r\n     3.5.  Packet Fragmentation\r\n ```\r\n \r\n However, both the fragmentation and MTU sections are not really part of life of a packet. Maybe we can create a new section # Deployment considerations (including MTU, fragmentation, SIG)? \r\n\r\nP.S. I learned a new word, outwith ",
+          "createdAt": "2024-10-16T20:43:32Z",
+          "updatedAt": "2024-10-16T21:01:33Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 80,
+      "id": "PR_kwDOKYa7785-4pvm",
+      "title": "Add header overview figure in intro",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/80",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #77",
+      "createdAt": "2024-10-16T20:28:41Z",
+      "updatedAt": "2024-10-16T20:30:26Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "148adfb6229f252844a3aa567c82e1ed8da1cbf6",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "header-overview",
+      "headRefOid": "71b3bc4ee3439644f14367a0ea574e7fd7c6b668",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
