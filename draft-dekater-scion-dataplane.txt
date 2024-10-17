@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 19 April 2025                                 SCION Association
+Expires: 20 April 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         16 October 2024
+                                                         17 October 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2025.
+   This Internet-Draft will expire on 20 April 2025.
 
 Copyright Notice
 
@@ -413,7 +413,45 @@ Table of Contents
    domain forwarding; re-using the intra-domain network fabric to
    provide connectivity amongst all SCION infrastructure services,
    border routers, and endpoints.  As a consequence, minimal change to
-   the infrastructure is required for ISPs when deploying SCION.
+   the infrastructure is required for ISPs when deploying SCION.  In
+   practice, in most existing SCION deployments, SCION routers
+   communicate among themselves and with endpoints by enclosing the
+   SCION header inside an UDP/IPv6 or UDP/IPv4 packet.  The choice of
+   using an UDP/IP as an intra-domain protocol between routers was
+   driven by the need to maximize compatibility with existing networks.
+   This does not exclude that a SCION packet may be enclosed directly on
+   top of a L2 protocol, since the choice of intra-domain protocol is AS
+   specific.
+
+   Figure 1 shows the SCION header within the protocol stack, in an AS
+   where the SCION deployment uses UDP/IP as an intra-domain protocol.
+   A similar model may be used for inter-domain links, depending on the
+   individual choice of the two interconnected SCION router operators.
+   A full example of the life of a SCION packet is later presented in
+   Section 3.  A list of currently used upper layer protocols on top of
+   SCION is presented in Appendix "Assigned SCION Protocol Numbers".
+
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                             |
+   |                             |
+   |        Payload (L4)         |
+   |                             |
+   |                             |
+   |                             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                             |
+   |            SCION            |
+   |                             |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
+   |             UDP             |                |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  Intra-domain  |
+   |             IP              |                |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+    protocol    |
+   |         Link Layer          |                |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
+
+     Figure 1: The SCION header within the protocol stack in a typical
+                                deployment.
 
    A complete SCION address is composed of the <ISD, AS, endpoint
    address> 3-tuple.  The ISD-AS part is used for inter-domain routing.
@@ -426,8 +464,9 @@ Table of Contents
 
 1.3.2.  Intra-Domain Forwarding Process
 
-   The full forwarding process for a packet transiting an intermediate
-   AS consists of the following steps.
+   When transiting an intermediate SCION AS, a packet gets forwarded by
+   at most two SCION routers.  The forwarding process consists of the
+   following steps.
 
    1.  The AS's SCION ingress router receives a SCION packet from the
        neighboring AS.
@@ -437,11 +476,11 @@ Table of Contents
 
    3.  The SCION router maps the egress interface ID in the current Hop
        Field of the SCION header to the destination address of the
-       intra-domain protocol (e.g.  MPLS or IP) on the egress border
+       intra-domain protocol (e.g.  MPLS or IP) of the egress border
        router.
 
-   4.  The packet is forwarded within the AS by routers and switches
-       based on the header of the intra-domain protocol.
+   4.  The packet is forwarded within the AS by SCION-unaware routers
+       and switches based on the header of the intra-domain protocol.
 
    5.  Upon receiving the packet, the SCION egress router strips off the
        header of the intra-domain protocol, again validates and updates
@@ -536,7 +575,7 @@ Table of Contents
    the fact that such paths go "down" (following parent-child links)
    before going "up" (following child-parent links).
 
-   Figure 1 below shows valid segment combinations.
+   Figure 2 below shows valid segment combinations.
 
    *Note:* It is assumed that the source and destination endpoints are
    in different ASes (as endpoints from the same AS use an empty
@@ -602,14 +641,14 @@ Table of Contents
   +->( * )     ( * )<-+  +>( * )   ( * )<+    ( * )     ( * )  +-> ( * )
       `-'       `-'         `-'     `-'        `-'       `-'        `-'
 
- Figure 1: Illustration of valid path segment combinations.  Each node
+ Figure 2: Illustration of valid path segment combinations.  Each node
                  represents a SCION Autonomous System.
 
    Valid path segment combinations:
 
    *  *Communication through core ASes*:
 
-      -  *Core-segment combination* (Cases 1a, 1b, 1c, 1d in Figure 1):
+      -  *Core-segment combination* (Cases 1a, 1b, 1c, 1d in Figure 2):
          The up and down segments of source and destination do not have
          an AS in common.  In this case, a core segment is REQUIRED to
          connect the source's up segment and the destination's down
@@ -618,7 +657,7 @@ Table of Contents
          then no up or down segments are REQUIRED to connect the
          respective ASes to the core segment.
 
-      -  *Immediate combination* (Cases 2a, 2b in Figure 1): The last AS
+      -  *Immediate combination* (Cases 2a, 2b in Figure 2): The last AS
          on the up segment (which is necessarily a core AS) is the same
          as the first AS on the down segment.  In this case, a simple
          combination of up and down segments creates a valid forwarding
@@ -658,7 +697,7 @@ Table of Contents
 
    The SCION packet header is aligned to 4 bytes.  It is composed of a
    common header, an address header, a path header, and an OPTIONAL
-   extension header, see Figure 2 below.
+   extension header, see Figure 3 below.
 
    +--------------------------------------------------------+
    |                     Common header                      |
@@ -674,7 +713,7 @@ Table of Contents
    |                                                        |
    +--------------------------------------------------------+
 
-                Figure 2: High-level SCION header structure
+                Figure 3: High-level SCION header structure
 
    The _common header_ contains important meta information including
    version number and the lengths of the header and payload.  In
@@ -709,7 +748,7 @@ Table of Contents
    |    PathType   |DT |DL |ST |SL |              RSV              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-              Figure 3: The SCION common header packet format
+              Figure 4: The SCION common header packet format
 
    *  Version: The version of the SCION common header.  Currently, only
       version "0" is supported.
@@ -841,7 +880,7 @@ Table of Contents
    |                    SrcHostAddr (variable Len)                 |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-              Figure 4: The SCION address header packet format
+              Figure 5: The SCION address header packet format
 
    *  DstISD, SrcISD: The 16-bit ISD identifier of the destination/
       source.
@@ -862,7 +901,7 @@ Table of Contents
    |         Service Number        |              RSV              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 5: Service address format
+                      Figure 6: Service address format
 
    *  RSV: reserved for future use
 
@@ -930,7 +969,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 6: Layout of a standard SCION path
+                 Figure 7: Layout of a standard SCION path
 
    It consists of a path meta header, up to 3 Info Fields and up to 64
    Hop Fields.
@@ -954,7 +993,7 @@ Table of Contents
 
    The SCION header is created by extracting the required Info Fields
    and Hop Fields from the corresponding path segments.  The process of
-   extracting is illustrated in Figure 7 below.  Note that ASes at the
+   extracting is illustrated in Figure 8 below.  Note that ASes at the
    intersection of multiple segments are represented by two Hop Fields.
    Be aware that these Hop Fields are not equal!
 
@@ -1026,7 +1065,7 @@ Table of Contents
                          | +------+ |
                          +----------+
 
-                    Figure 7: Path construction example
+                    Figure 8: Path construction example
 
 2.3.2.1.  Path Meta Header Field
 
@@ -1040,7 +1079,7 @@ Table of Contents
    | C |  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-      Figure 8: SCION path type - Format of the Path Meta Header field
+      Figure 9: SCION path type - Format of the Path Meta Header field
 
    *  C (urrINF): Specifies a 2-bits index (0-based) pointing to the
       current Info Field for the packet on its way through the network.
@@ -1109,7 +1148,7 @@ Table of Contents
    |                           Timestamp                           |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            Figure 9: SCION path type - Format of the Info Field
+           Figure 10: SCION path type - Format of the Info Field
 
    *  RSV: Unused and reserved for future use.
 
@@ -1153,7 +1192,7 @@ Table of Contents
    |                              MAC                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            Figure 10: SCION path type - Format of the Hop Field
+            Figure 11: SCION path type - Format of the Hop Field
 
    *  RSV: Unused and reserved for future use.
 
@@ -1223,7 +1262,7 @@ Table of Contents
    value 0), ensuring the path cannot be used beyond the destination AS.
    Then it calculates and appends the appropriate MAC for the Hop Field.
 
-   Figure 11 below shows the layout of a SCION one-hop path type.  There
+   Figure 12 below shows the layout of a SCION one-hop path type.  There
    is only a single Info Field; the appropriate Hop Field can be
    processed by a border router based on the source and destination
    address.  In this context, the following rules apply:
@@ -1240,7 +1279,7 @@ Table of Contents
    |                           HopField                            |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-              Figure 11: Layout of the SCION one-hop path type
+              Figure 12: Layout of the SCION one-hop path type
 
 2.3.4.  Path Reversal
 
@@ -1299,7 +1338,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 12: Extension headers: Options header
+                Figure 13: Extension headers: Options header
 
    *  NextHdr: Unsigned 8-bit integer.  Identifies the type of header
       immediately following the Hop-by-Hop/End-to-End Options header.
@@ -1334,7 +1373,7 @@ Table of Contents
    |                              ...                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-               Figure 13: Options field: TLV-encoded options
+               Figure 14: Options field: TLV-encoded options
 
    *  OptType: 8-bit identifier of the type of option.  The following
       option types are assigned to the SCION HBH/E2E Options header:
@@ -1398,7 +1437,7 @@ Table of Contents
    |       0       |
    +-+-+-+-+-+-+-+-+
 
-                Figure 14: TLV-encoded options - Pad1 option
+                Figure 15: TLV-encoded options - Pad1 option
 
    *Note:* The format of the Pad1 option is a special case - it does not
    have length and value fields.
@@ -1419,7 +1458,7 @@ Table of Contents
    |                              ...                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 15: TLV-encoded options - PadN option
+                Figure 16: TLV-encoded options - PadN option
 
    The PadN option is used to insert two or more bytes of padding into
    the Options field of an extension header.  For N bytes of padding,
@@ -1453,7 +1492,7 @@ Table of Contents
 |                      zero                     |  Next Header  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
- Figure 16: Layout of the pseudo header for the upper-layer checksum
+ Figure 17: Layout of the pseudo header for the upper-layer checksum
 
    *  DstISD, SrcISD, DstAS, SrcAS, DstHostAddr, SrcHostAddr: These
       values are taken from the SCION address header.
@@ -1524,11 +1563,11 @@ Table of Contents
    |                    |                +--------------------+
    +--------------------+
 
-        Figure 17: Sample topology to illustrate the life cycle of a
+        Figure 18: Sample topology to illustrate the life cycle of a
       SCION packet.  AS1 is the core AS of ISD 1, and AS2 and AS3 are
                           non-core ASes of ISD 1.
 
-   Based on the network topology in Figure 17 above, this example shows
+   Based on the network topology in Figure 18 above, this example shows
    the path of a SCION packet sent from its source at Endpoint A to its
    destination at Endpoint B, and how it will be processed by each
    router on the path using simplified snapshots of the packet header
@@ -1575,7 +1614,7 @@ Table of Contents
 3.3.  Step-by-Step Explanation
 
    This section explains what happens with the SCION packet header at
-   each router, based on the network topology in described Figure 17
+   each router, based on the network topology in described Figure 18
    above.  Each step includes a table that represents a simplified
    snapshot of the packet header at the end of this specific step.
    Regarding the notation used in the figure/tables, each source and
@@ -1979,7 +2018,7 @@ Table of Contents
    padded to 16 bytes.  The _first_ 6 bytes of the AES-CMAC output are
    used as resulting Hop Field MAC.
 
-   Figure 18 below shows the layout of the input data to calculate the
+   Figure 19 below shows the layout of the input data to calculate the
    Hop Field MAC.
 
 0                   1                   2                   3
@@ -1994,7 +2033,7 @@ Table of Contents
 |          ConsEgress           |               0               |      |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
 
-     Figure 18: Input data to calculate the Hop Field MAC for the
+     Figure 19: Input data to calculate the Hop Field MAC for the
                    default hop-field MAC algorithm
 
 4.1.1.4.  Alternative Hop Field MAC Algorithms
@@ -2206,7 +2245,7 @@ direction
                                                             construction
                                                                direction
 
-     Figure 19: A simplified representation of the processing at
+     Figure 20: A simplified representation of the processing at
                      routers in both directions.
 
 4.2.2.1.  Steps at Ingress Border Router
@@ -2456,7 +2495,7 @@ direction
        |                         (variable length)                     |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 20: SCMP message format
+                       Figure 21: SCMP message format
 
    *  Type: it indicates the type of SCMP message.  Its value determines
       the format of the type-dependent block.
@@ -2595,7 +2634,7 @@ direction
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 21: Packet-too-big format
+                      Figure 22: Packet-too-big format
 
       +======+=====================================================+
       | Name | Value                                               |
@@ -2635,7 +2674,7 @@ direction
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 22: External-interface-down format
+                 Figure 23: External-interface-down format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -2687,7 +2726,7 @@ direction
        |                    exceeding 1232 bytes.                      |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 23: Internal-connectivity-down format
+                Figure 24: Internal-connectivity-down format
 
      +============+==================================================+
      | Name       | Value                                            |
@@ -2733,7 +2772,7 @@ direction
        |                     Data (variable Len)                       |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                       Figure 24: Echo-request format
+                       Figure 25: Echo-request format
 
              +============+=================================+
              | Name       | Value                           |
@@ -2769,7 +2808,7 @@ direction
        |                     Data (variable Len)                       |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                        Figure 25: Echo-reply format
+                        Figure 26: Echo-reply format
 
         +==============+=========================================+
         | Name         | Value                                   |
@@ -2811,7 +2850,7 @@ direction
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                    Figure 26: Traceroute-request format
+                    Figure 27: Traceroute-request format
 
    Given a SCION path constituted of hop fields, traceroute allows to
    identify the corresponding on-path ISD-ASes.
@@ -2865,7 +2904,7 @@ direction
        |                                                               |
        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 27: Traceroute-reply format
+                     Figure 28: Traceroute-reply format
 
     +==============+==================================================+
     | Name         | Value                                            |
@@ -3267,7 +3306,7 @@ direction
    |   SIG frame payload   |
    +-----------------------+
 
-                Figure 28: SIG framing within a SCION packet
+                Figure 29: SIG framing within a SCION packet
 
 8.2.  SIG Frame Header
 
@@ -3283,7 +3322,7 @@ direction
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                     Figure 29: SIG Frame Header format
+                     Figure 30: SIG Frame Header format
 
    All fields within SIG Frame Header are in network byte order.
 
@@ -3557,6 +3596,8 @@ draft-dekater-scion-dataplane-03
    *  Security Considerations: add section on Payload Modifications
 
    Minor changes:
+
+   *  Added Figure on Header Overview in introduction
 
    *  Clarified the router alert flags and relationship to the
       ConsIngress/Egress fields.
