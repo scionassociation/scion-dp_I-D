@@ -1926,7 +1926,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 Major changes:
 
 - Added section with SCMP specification
-- Added section on SCION IP Gateway
+- Added short section on SCION IP Gateway
 - Added section on Handling Link Failures and BFD
 - Added sections on MTU and fragmentation
 - Clarified router checks in Processing at Routers
