@@ -3434,9 +3434,10 @@ draft-dekater-scion-dataplane-03
 
    Major changes:
 
-   *  Added section with SCMP specification
+   *  Introduction: clarified document goal and added Figure showing
+      SCION Header within the stack
 
-   *  Added short section on SCION IP Gateway
+   *  Added section with SCMP specification
 
    *  Added section on Handling Link Failures and BFD
 
@@ -3448,7 +3449,7 @@ draft-dekater-scion-dataplane-03
 
    Minor changes:
 
-   *  Added Figure on Header Overview in introduction
+   *  Added short section mentioning SCION IP Gateway
 
    *  Clarified the router alert flags and relationship to the
       ConsIngress/Egress fields.
