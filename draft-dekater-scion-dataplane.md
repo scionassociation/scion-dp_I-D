@@ -88,6 +88,10 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
+  ISD-AS-assignments:
+    title: "SCION ISD and AS Assignments"
+    date: 2024
+    target: https://docs.anapaya.net/en/latest/resources/isd-as-assignments/
   RFC1122:
   RFC1918:
   RFC2711:
@@ -1885,7 +1889,7 @@ However, the path choice of the endpoint may possibly be exploited by an attacke
 
 This document has no IANA actions.
 
-The SCION AS and ISD number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see [Anapaya ISD AS assignments](https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)). This task is currently being transitioned from Anapaya to the SCION Association.
+The SCION AS and ISD number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}). This task is currently being transitioned from Anapaya to the SCION Association.
 
 
 --- back
@@ -1949,8 +1953,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 Major changes:
 
+- Introduction: clarified document goal and added Figure showing SCION Header within the stack
 - Added section with SCMP specification
-- Added short section on SCION IP Gateway
 - Added section on Handling Link Failures and BFD
 - Added sections on MTU and fragmentation
 - Clarified router checks in Processing at Routers
@@ -1958,7 +1962,7 @@ Major changes:
 
 Minor changes:
 
-- Added Figure on Header Overview in introduction
+- Added short section mentioning SCION IP Gateway
 - Clarified the router alert flags and relationship to the ConsIngress/Egress fields.
 - Clarifications in the SCION Header Specification section (router alert flags, service addresses, one-hop paths, text clarifications, validity of peering links)
 - Added mention of why proof of transit is not needed.
