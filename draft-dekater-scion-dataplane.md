@@ -1953,8 +1953,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 Major changes:
 
+- Introduction: clarified document goal and added Figure showing SCION Header within the stack
 - Added section with SCMP specification
-- Added short section on SCION IP Gateway
 - Added section on Handling Link Failures and BFD
 - Added sections on MTU and fragmentation
 - Clarified router checks in Processing at Routers
@@ -1962,7 +1962,7 @@ Major changes:
 
 Minor changes:
 
-- Added Figure on Header Overview in introduction
+- Added short section mentioning SCION IP Gateway
 - Clarified the router alert flags and relationship to the ConsIngress/Egress fields.
 - Clarifications in the SCION Header Specification section (router alert flags, service addresses, one-hop paths, text clarifications, validity of peering links)
 - Added mention of why proof of transit is not needed.
