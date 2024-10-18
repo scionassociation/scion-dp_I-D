@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 20 April 2025                                 SCION Association
+Expires: 21 April 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         17 October 2024
+                                                         18 October 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2025.
+   This Internet-Draft will expire on 21 April 2025.
 
 Copyright Notice
 
@@ -3225,9 +3225,8 @@ direction
 
    The SCION AS and ISD number are SCION-specific numbers.  They are
    currently allocated by Anapaya Systems, a provider of SCION-based
-   networking software and solutions (see Anapaya ISD AS assignments
-   (https://docs.anapaya.net/en/latest/resources/isd-as-assignments/)).
-   This task is currently being transitioned from Anapaya to the SCION
+   networking software and solutions (see [ISD-AS-assignments]).  This
+   task is currently being transitioned from Anapaya to the SCION
    Association.
 
 10.  References
@@ -3313,6 +3312,11 @@ direction
               dekater-panrg-scion-overview-06, 7 May 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
               panrg-scion-overview-06>.
+
+   [ISD-AS-assignments]
+              "SCION ISD and AS Assignments", 2024,
+              <https://docs.anapaya.net/en/latest/resources/isd-as-
+              assignments/>.
 
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
@@ -3430,9 +3434,10 @@ draft-dekater-scion-dataplane-03
 
    Major changes:
 
-   *  Added section with SCMP specification
+   *  Introduction: clarified document goal and added Figure showing
+      SCION Header within the stack
 
-   *  Added short section on SCION IP Gateway
+   *  Added section with SCMP specification
 
    *  Added section on Handling Link Failures and BFD
 
@@ -3444,7 +3449,7 @@ draft-dekater-scion-dataplane-03
 
    Minor changes:
 
-   *  Added Figure on Header Overview in introduction
+   *  Added short section mentioning SCION IP Gateway
 
    *  Clarified the router alert flags and relationship to the
       ConsIngress/Egress fields.
