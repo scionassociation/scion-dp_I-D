@@ -1983,7 +1983,7 @@ Major changes:
 - Introduced AES-CMAC as default MAC algorithm and elaborated on MAC chaining and path splicing.
 - Added section to describe Effects of Clock Inaccuracy / time synchronization requirements
 - Added section to describe required router Configuration
-- Added service field table
+- Added service field table.
 
 Minor changes:
 
