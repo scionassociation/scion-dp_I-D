@@ -3488,7 +3488,7 @@ draft-dekater-scion-dataplane-02
 
    *  Added section to describe required router Configuration
 
-   *  Added service field table
+   *  Added service field table.
 
    Minor changes:
 
