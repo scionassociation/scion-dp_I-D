@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 21 April 2025                                 SCION Association
+Expires: 22 April 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         18 October 2024
+                                                         19 October 2024
 
 
                             SCION Data Plane
@@ -20,13 +20,13 @@ Abstract
    domain network architecture SCION (Scalability, Control, and
    Isolation On Next-generation networks).  One of the basic
    characteristics of SCION is that it gives path control to endpoints.
-   The SCION control plane is responsible for discovering these paths
+   The SCION Control Plane is responsible for discovering these paths
    and making them available as path segments to the endpoints.  The
-   role of the SCION data plane is to combine the path segments into
+   role of the SCION Data Plane is to combine the path segments into
    end-to-end paths, and forward data between endpoints according to the
    specified path.
 
-   The SCION data plane fundamentally differs from today's IP-based data
+   The SCION Data Plane fundamentally differs from today's IP-based data
    plane in that it is _path-aware_: In SCION, interdomain forwarding
    directives are embedded in the packet header.  This document provides
    a detailed specification of the SCION data packet format as well as
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 April 2025.
+   This Internet-Draft will expire on 22 April 2025.
 
 Copyright Notice
 
@@ -197,7 +197,7 @@ Table of Contents
    collection of signed root certificates in X.509 v3 format [RFC5280].
    The ISD is governed by a set of _core ASes_ which typically manage
    the trust roots and provide connectivity to other ISDs.  This is the
-   basis of the public key infrastructure which the SCION control plane
+   basis of the public key infrastructure which the SCION Control Plane
    relies upon for the authentication of messages that is used for the
    SCION control plane.  See [I-D.dekater-scion-pki]
 
@@ -359,7 +359,7 @@ Table of Contents
 
 1.3.  Overview
 
-   The SCION data plane forwards inter-domain packets between SCION-
+   The SCION Data Plane forwards inter-domain packets between SCION-
    enabled ASes.  SCION routers are normally deployed at the edge of an
    AS, and peer with neighbor SCION routers.  Inter-domain forwarding is
    based on end-to-end path information contained in the packet header.
@@ -523,7 +523,7 @@ Table of Contents
 
 1.4.  Path Construction (Segment Combinations)
 
-   Paths are discovered by the SCION control plane which makes them
+   Paths are discovered by the SCION Control Plane which makes them
    available to SCION endpoints in the form of path segments.  As
    described in [I-D.dekater-scion-controlplane], there are three kinds
    of path segments: up, down, and core.  In the data plane, a SCION
@@ -644,7 +644,7 @@ Table of Contents
 
    *  *Communication through core ASes*:
 
-      -  *Core-segment combination* (Cases 1a, 1b, 1c, 1d in Figure 2):
+      -  *Core segment combination* (Cases 1a, 1b, 1c, 1d in Figure 2):
          The up and down segments of source and destination do not have
          an AS in common.  In this case, a core segment is REQUIRED to
          connect the source's up segment and the destination's down
@@ -680,7 +680,7 @@ Table of Contents
 
 1.5.  Path Authorization
 
-   The SCION data plane provides _path authorization_. This property
+   The SCION Data Plane provides _path authorization_. This property
    ensures that data packets always traverse the network using path
    segments that were explicitly authorized by the respective ASes and
    prevents endpoints from constructing unauthorized paths or paths
@@ -930,7 +930,9 @@ Table of Contents
 
    The Empty path type (PathType=0) is used to send traffic within an
    AS.  It has no additional fields, i.e. it consumes 0 bytes on the
-   wire.  One use case of the Empty path type lies in the context of
+   wire.
+
+   One use case of the Empty path type lies in the context of
    link-failure detection (Section 7.1).
 
 2.3.2.  SCION Path Type
@@ -1463,7 +1465,7 @@ Table of Contents
 
 2.5.  Pseudo Header for Upper-Layer Checksum
 
-   The SCION data plane does not provide payload integrity protection,
+   The SCION Data Plane does not provide payload integrity protection,
    as further clarified in Section 8.2.2.  Should any transport or other
    upper-layer protocols compute a checksum of the SCION header, then
    they SHOULD use the following pseudo header:
@@ -2216,11 +2218,11 @@ direction
    *  Peering-child or vice-versa
 
    Link types above are defined in [I-D.dekater-scion-controlplane]
-   section "Paths and Links".  This check prevents valley-use of
-   peering-links or hair-pin segments. 3.  Check if the current Hop
-   Field is expired or originated in the future, i.e. the current Info
-   Field MUST NOT have a timestamp in the future, as defined in
-   Section 2.3.2.3.  If either is true, the router MUST drop the packet.
+   section "Paths and Links".  This check prevents valley use of peering
+   links or hair-pin segments. 3.  Check if the current Hop Field is
+   expired or originated in the future, i.e. the current Info Field MUST
+   NOT have a timestamp in the future, as defined in Section 2.3.2.3.
+   If either is true, the router MUST drop the packet.
 
    The next steps depend on the direction of travel and whether this
    segment includes a peering Hop Field.  Both features are indicated by
@@ -2587,7 +2589,7 @@ direction
    The checksum is the 16-bit one's complement of the one's complement
    sum of the entire SCMP message, starting with the SCMP message type
    field, and prepended with a "pseudo-header" consisting of the SCION
-   address header and the layer-4 protocol type as defined in
+   address header and the Layer 4 protocol type as defined in
    Section 2.5.
 
 6.4.  Processing Rules
@@ -2767,8 +2769,8 @@ direction
    identifies the interface on which the packet is destined to leave the
    AS, but the connection is broken to.
 
-   Recipients can use this information to route around broken data-plane
-   inside an AS.
+   Recipients can use this information to route around a broken data
+   plane inside an AS.
 
 6.6.  Informational Messages
 
@@ -2984,14 +2986,14 @@ direction
    Sending an SCMP error notification is OPTIONAL.  Endpoints should
    therefore implement additional mechanisms to validate or detect link
    down signals.  To reduce exposure to denial-of-service attacks, SCION
-   routers SHOULD employ rate-limiting when sending recommended SCMP
+   routers SHOULD employ rate limiting when sending recommended SCMP
    notifications (especially identical ones).  Rate limit policies are
    up to each AS' administrator.
 
 8.  Security Considerations
 
    This section describes the possible security risks and attacks that
-   SCION's data plane may be prone to, and how these attacks may be
+   the SCION Data Plane may be prone to, and how these attacks may be
    mitigated.  It first discusses security risks that pertain to path
    authorization, followed by a section on other forwarding related
    security considerations.
@@ -3002,7 +3004,7 @@ direction
    authorization.  Path authorization guarantees that data packets
    always traverse the network along path segments authorized in the
    control plane by all on-path ASes.  This section discusses how an
-   adversary may attempt to violate the path-authorization property, as
+   adversary may attempt to violate the path authorization property, as
    well as SCION's prevention mechanisms; either an attacker can attempt
    to create unauthorized Hop Fields, or they can attempt to create
    illegitimate paths assembled from authentic individual Hop Fields.
@@ -3171,7 +3173,7 @@ direction
 8.2.2.  Payload Integrity
 
    An on-path attacker can modify the payload of a SCION packet.
-   Existing higher-layer protocols can easily defend against such an
+   Existing higher layer protocols can easily defend against such an
    attack without any cooperation by the SCION network.  For that
    reason, payload integrity is not in scope for this specification.
    However, there exists a proposal for an experimental extension to
@@ -3236,16 +3238,16 @@ direction
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-05, 21 July 2024,
+              scion-controlplane-06, 19 October 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-05>.
+              scion-controlplane-06>.
 
    [I-D.dekater-scion-pki]
-              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control-
+              de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-06, 8 July 2024,
+              dekater-scion-pki-07, 19 October 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-06>.
+              scion-pki-07>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
