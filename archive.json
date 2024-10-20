@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-17T00:00:48.537255+00:00",
+  "timestamp": "2024-10-20T00:00:51.666949+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1256,7 +1256,7 @@
       "id": "I_kwDOKYa7786aeVBf",
       "title": "Add header overview figure in intro ",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/77",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1268,8 +1268,8 @@
       ],
       "body": "Following meeting with Eliot/Brian, we should have an overview of where SCION sits in the stack, like this\r\n<img width=\"224\" alt=\"Screenshot 2024-10-16 at 13 51 12\" src=\"https://github.com/user-attachments/assets/3970a060-dcb2-4eb7-aa80-733371049deb\">\r\n",
       "createdAt": "2024-10-16T11:51:22Z",
-      "updatedAt": "2024-10-16T12:14:19Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-17T13:52:50Z",
+      "closedAt": "2024-10-17T13:52:50Z",
       "comments": []
     },
     {
@@ -1277,7 +1277,7 @@
       "id": "I_kwDOKYa7786ag4iD",
       "title": "Remove SIG description from the draft",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/78",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1286,8 +1286,8 @@
       "labels": [],
       "body": "IP Tunneling over SCION is a SCION application from a DP perspective. It is out of scope of this draft",
       "createdAt": "2024-10-16T15:52:05Z",
-      "updatedAt": "2024-10-16T15:54:32Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-18T13:18:12Z",
+      "closedAt": "2024-10-18T13:18:12Z",
       "comments": []
     }
   ],
@@ -5327,7 +5327,7 @@
       "labels": [],
       "body": "Resolves #40 ",
       "createdAt": "2024-10-04T10:46:45Z",
-      "updatedAt": "2024-10-15T08:49:44Z",
+      "updatedAt": "2024-10-18T14:26:53Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "ab0bf8c9e5de1861244815e3011d5f7539d2688b",
@@ -6684,24 +6684,26 @@
       "id": "PR_kwDOKYa7785-3g5a",
       "title": "Removed SIG protocol description",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/79",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Now contains brief SIG description and note that IP tunnelling is out-of-scope of the draft. ",
+      "body": "Now contains brief SIG description and note that IP tunnelling is out-of-scope of the draft. \r\nResolves #78 ",
       "createdAt": "2024-10-16T17:47:57Z",
-      "updatedAt": "2024-10-16T21:01:33Z",
+      "updatedAt": "2024-10-18T13:18:06Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "148adfb6229f252844a3aa567c82e1ed8da1cbf6",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "De-SIGisation",
-      "headRefOid": "f9d37b5b3dd1bfcca3f075f48dfb21edae8df9b9",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "a999a4aef36683711dd90f299500f28bb2d38b25",
+      "closedAt": "2024-10-17T17:26:57Z",
+      "mergedAt": "2024-10-17T17:26:57Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "69ca0001dde3b40e25d1e7c47830b83f6471315a"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -6724,6 +6726,19 @@
           "createdAt": "2024-10-16T20:43:32Z",
           "updatedAt": "2024-10-16T21:01:33Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKYa7786NlM9d",
+          "commit": {
+            "abbreviatedOid": "a999a4a"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-17T13:59:34Z",
+          "updatedAt": "2024-10-17T13:59:34Z",
+          "comments": []
         }
       ]
     },
@@ -6732,24 +6747,138 @@
       "id": "PR_kwDOKYa7785-4pvm",
       "title": "Add header overview figure in intro",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/80",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "Resolves #77",
       "createdAt": "2024-10-16T20:28:41Z",
-      "updatedAt": "2024-10-16T20:30:26Z",
+      "updatedAt": "2024-10-18T14:26:43Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "148adfb6229f252844a3aa567c82e1ed8da1cbf6",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "header-overview",
       "headRefOid": "71b3bc4ee3439644f14367a0ea574e7fd7c6b668",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-10-17T13:52:49Z",
+      "mergedAt": "2024-10-17T13:52:49Z",
+      "mergedBy": "knmeynell",
+      "mergeCommit": {
+        "oid": "8ffe19c5b6dc2720ca79570547b684c4cb4d71f4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786NlH6q",
+          "commit": {
+            "abbreviatedOid": "71b3bc4"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "All looks good to me.",
+          "createdAt": "2024-10-17T13:52:35Z",
+          "updatedAt": "2024-10-17T13:52:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 81,
+      "id": "PR_kwDOKYa7785_GqFa",
+      "title": "fix ref to ISD-AS assignments",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/81",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Last quick edits before submission",
+      "createdAt": "2024-10-18T13:25:08Z",
+      "updatedAt": "2024-10-18T14:26:23Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "69ca0001dde3b40e25d1e7c47830b83f6471315a",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "nic_refs",
+      "headRefOid": "10fcb3497e3f81ccd8b850dd0e1752219cb51dc1",
+      "closedAt": "2024-10-18T14:26:20Z",
+      "mergedAt": "2024-10-18T14:26:20Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "95ef2b2049630ac2f1063a0319835b5f6f83e403"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 82,
+      "id": "PR_kwDOKYa7785_LIzg",
+      "title": "Final tweaks",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/82",
+      "state": "MERGED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-19T12:31:48Z",
+      "updatedAt": "2024-10-19T13:21:21Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "95ef2b2049630ac2f1063a0319835b5f6f83e403",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "Final_tweaks",
+      "headRefOid": "26fa95ed218185f19a805eab1f9bfeaf279285bb",
+      "closedAt": "2024-10-19T13:21:15Z",
+      "mergedAt": "2024-10-19T13:21:15Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "ea5bc04282d74fbf8ad0869f7527964a05d0c46b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786N00HR",
+          "commit": {
+            "abbreviatedOid": "26fa95e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-19T13:21:08Z",
+          "updatedAt": "2024-10-19T13:21:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 83,
+      "id": "PR_kwDOKYa7785_LTma",
+      "title": "dummy change",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/83",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-19T13:42:54Z",
+      "updatedAt": "2024-10-19T13:43:10Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "ea5bc04282d74fbf8ad0869f7527964a05d0c46b",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "dummy-change",
+      "headRefOid": "ed25b9a092f675e16134a7041fc136fa2b5e949b",
+      "closedAt": "2024-10-19T13:43:08Z",
+      "mergedAt": "2024-10-19T13:43:08Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "1da0d36e757bae9d8e6fc2bb9528a414c01aecad"
+      },
       "comments": [],
       "reviews": []
     }
