@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-03T00:00:43.493293+00:00",
+  "timestamp": "2024-11-05T00:00:34.642104+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1049,7 +1049,7 @@
       "id": "I_kwDOKYa7786UISMk",
       "title": "Clarify wether routers perform checks on segment types (up/down/core)",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/52",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -1059,8 +1059,8 @@
       ],
       "body": "In section 1.4 we write: \r\n\r\n> The type of segment is known to the endpoint but is not visible\r\nis the path header of data packets. **Therefore, a SCION router needs\r\nto explicitly verify that these rules were followed correctly.**\r\n\r\nthis sentence actually comes from the book section \"5.5 Path Construction (Segment Combinations)\". \r\n\r\n\r\nWe then describe checks at routers in 4.2.2.   Processing at Routers and there is no mention that routers verify any of the rules in 1.4. \r\n\r\n@jiceatscion do you know if routers do any checks at all? If not, we should just remove the second sentence I guess.",
       "createdAt": "2024-08-25T11:42:57Z",
-      "updatedAt": "2024-10-08T12:16:19Z",
-      "closedAt": "2024-09-03T10:03:36Z",
+      "updatedAt": "2024-11-03T15:02:03Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "jiceatscion",
