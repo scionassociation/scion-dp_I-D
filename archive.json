@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-05T00:00:34.642104+00:00",
+  "timestamp": "2024-11-07T00:00:30.860746+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1288,6 +1288,26 @@
       "createdAt": "2024-10-16T15:52:05Z",
       "updatedAt": "2024-10-18T13:18:12Z",
       "closedAt": "2024-10-18T13:18:12Z",
+      "comments": []
+    },
+    {
+      "number": 84,
+      "id": "I_kwDOKYa7786dNYZS",
+      "title": "Move SCMP to CP draft",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/84",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP",
+      "createdAt": "2024-11-06T09:37:40Z",
+      "updatedAt": "2024-11-06T09:37:40Z",
+      "closedAt": null,
       "comments": []
     }
   ],
