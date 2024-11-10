@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-07T00:00:30.860746+00:00",
+  "timestamp": "2024-11-10T00:00:35.122498+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1307,6 +1307,22 @@
       "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP",
       "createdAt": "2024-11-06T09:37:40Z",
       "updatedAt": "2024-11-06T09:37:40Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 85,
+      "id": "I_kwDOKYa7786dnq3j",
+      "title": "Add external reference to SIG",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/85",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "- [ ] Complete https://github.com/scionproto/scion/pull/4641 \r\n- [ ] Add an informative reference in CP draft\r\n- [ ] Discuss with Eliot (at 121 he mentioned he would first talk to Harald about this)",
+      "createdAt": "2024-11-08T15:48:46Z",
+      "updatedAt": "2024-11-08T15:48:46Z",
       "closedAt": null,
       "comments": []
     }
