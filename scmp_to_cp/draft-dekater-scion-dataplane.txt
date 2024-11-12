@@ -335,8 +335,9 @@ Table of Contents
    are joined by a peering link.  Two peering ASes may be in different
    ISDs and may exist between any ASes, including core ASes.
 
-   *SCMP*: A signaling protocol, part of the SCION control plane
-   described in [I-D.dekater-scion-controlplane].
+   *SCMP*: A signaling protocol analogous to the Internet Control
+   Message Protocol (ICMP).  This is described in
+   [I-D.dekater-scion-controlplane].
 
 1.2.  Conventions and Definitions
 
