@@ -223,7 +223,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Peering Link**: A link between two SCION border routers of different ASes that can be used as a shortcut. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments. It is possible to construct a path out of only two partial segments which top-most hops are joined by a peering link. Two peering ASes may be in different ISDs and may exist between any ASes, including core ASes.
 
-**SCMP**: A signaling protocol, part of the SCION control plane described in {{I-D.dekater-scion-controlplane}}.
+**SCMP**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in {{I-D.dekater-scion-controlplane}}.
 
 ## Conventions and Definitions
 
