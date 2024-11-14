@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-12T00:00:39.097370+00:00",
+  "timestamp": "2024-11-14T00:00:40.506290+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -636,7 +636,7 @@
       "id": "I_kwDOKYa7786Qf0PK",
       "title": "Anapaya review",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/38",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -645,8 +645,8 @@
       "labels": [],
       "body": "Following the first wave of ISE feedback, we did quite some work on the dataplane draft. \r\n\r\nCan you provide your feedback on: \r\n\r\n- #68 \r\n- 6.  Handling Link Failures\r\n- 5 SCMP (needed to describe handling link failures)\r\n- Added section on SCION IP Gateway \r\n-  7.  Security Considerations\r\n\r\n\r\n\r\n\r\n[Datatracker diff v03 (mar 2024) / latest](https://author-tools.ietf.org/api/iddiff?doc_1=draft-dekater-scion-controlplane-03&url_2=https://scionassociation.github.io/scion-cp_I-D/draft-dekater-scion-controlplane.txt). If needed, you can change the datatracker version in the diff URL.\r\n[Changelog in the draft](https://scionassociation.github.io/scion-dp_I-D/draft-dekater-scion-dataplane.html#name-change-log) manually updated, includes changes in the future version to be submitted to datatracker\r\n[Changelog github](https://github.com/scionassociation/scion-dp_I-D/releases) (covers up to the past submitted version)\r\n\r\n",
       "createdAt": "2024-07-23T04:59:27Z",
-      "updatedAt": "2024-10-15T08:42:01Z",
-      "closedAt": null,
+      "updatedAt": "2024-11-12T10:20:21Z",
+      "closedAt": "2024-11-12T10:20:21Z",
       "comments": [
         {
           "author": "oncilla",
@@ -1299,16 +1299,40 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "knmeynell"
+        "knmeynell",
+        "jiceatscion"
       ],
       "labels": [
+        "Prio 1",
         "editorial"
       ],
-      "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP",
+      "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP\r\n\r\nIdeas: \r\n- [x] IS SCMP used anywhere by the control service? (@jiceatscion )\r\n- SCMP is an additional signaling mechanism between endpoints and SCION routers (?). It could be a new section before security considerations in the CP draft\r\n- [x] Add SCMP to the definitions in the CP draft\r\n- [x] Add cross references from DP (handling link failures) to the CP draft\r\n",
       "createdAt": "2024-11-06T09:37:40Z",
-      "updatedAt": "2024-11-06T09:37:40Z",
+      "updatedAt": "2024-11-12T13:42:38Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'll do the move, as I have a small fix to add to the DP anyway. Kevin or I can do a second pass to attend to the breadcrumbs",
+          "createdAt": "2024-11-12T11:01:59Z",
+          "updatedAt": "2024-11-12T11:01:59Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Is SCMP used by the CS?:\r\n* Yes!\r\n* https://github.com/scionproto/scion/blob/dd852aa7a8e6eb99cb677851a7c55eb33bf64cb2/control/cmd/control/main.go#L217\r\n* Link-down messages are used to revoke segments.\r\n* The public goes \"Ooooo\"\r\n \r\n\r\n",
+          "createdAt": "2024-11-12T13:41:43Z",
+          "updatedAt": "2024-11-12T13:41:43Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Move done per the PR The cross-referencing probably needs some more work.\r\n",
+          "createdAt": "2024-11-12T13:42:37Z",
+          "updatedAt": "2024-11-12T13:42:37Z"
+        }
+      ]
     },
     {
       "number": 85,
@@ -1318,11 +1342,33 @@
       "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "nicorusti"
+      ],
+      "labels": [
+        "Prio 1"
+      ],
       "body": "- [ ] Complete https://github.com/scionproto/scion/pull/4641 \r\n- [ ] Add an informative reference in CP draft\r\n- [ ] Discuss with Eliot (at 121 he mentioned he would first talk to Harald about this)",
       "createdAt": "2024-11-08T15:48:46Z",
-      "updatedAt": "2024-11-08T15:48:46Z",
+      "updatedAt": "2024-11-12T10:05:39Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 86,
+      "id": "I_kwDOKYa7786eEFEL",
+      "title": "hopfield expiration: the calculation is wrong",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/86",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "jiceatscion"
+      ],
+      "labels": [],
+      "body": "The formula for the absolute expiration time of a hop field is wrong. It implies that the duration unit is a 256th of an hour. In reality it is a 256th of a day. We also do not actually describe the unit; we just throw it in the formula.\r\n",
+      "createdAt": "2024-11-12T11:17:06Z",
+      "updatedAt": "2024-11-12T11:17:11Z",
       "closedAt": null,
       "comments": []
     }
@@ -6915,6 +6961,32 @@
       "mergeCommit": {
         "oid": "1da0d36e757bae9d8e6fc2bb9528a414c01aecad"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 87,
+      "id": "PR_kwDOKYa7786Boh8u",
+      "title": "scmp: export SCMP to controlplane draft",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/87",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Also, in passing:\r\n* fix the description of the hopfield expiration time field\r\n* delete left-over text fragment \"(see [])\".\r\n\r\nContributes to: #84 \r\nFixes #86 \r\n",
+      "createdAt": "2024-11-12T13:21:21Z",
+      "updatedAt": "2024-11-12T19:02:03Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "1da0d36e757bae9d8e6fc2bb9528a414c01aecad",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "scmp_to_cp",
+      "headRefOid": "e13c147b1fbec69bde3a50409eae99b6f3498dc0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
