@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 16 May 2025                                   SCION Association
+Expires: 5 June 2025                                   SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        12 November 2024
+                                                         2 December 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 May 2025.
+   This Internet-Draft will expire on 5 June 2025.
 
 Copyright Notice
 
@@ -1221,7 +1221,7 @@ Table of Contents
    treat the payload of the packet as a message to itself and parse it
    according to the value of the NextHdr field.  Such messages include
    Traceroute Requests (see [I-D.dekater-scion-controlplane] section
-   "SCMP/Traceroute Request")
+   "SCMP/Traceroute Request").
 
    Setting multiple router alert flags on a path SHOULD be avoided.
    This is because the router for which the corresponding Router Alert
@@ -2941,7 +2941,7 @@ Change Log
 
 draft-dekater-scion-dataplane-04
 
-   *  Moved SCMP scpecification to the control-plane draft
+   *  Moved SCMP specification to draft-dekater-scion-controlplane
 
 draft-dekater-scion-dataplane-03
 
