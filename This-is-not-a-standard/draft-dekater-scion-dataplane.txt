@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 30 May 2025                                   SCION Association
+Expires: 5 June 2025                                   SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        26 November 2024
+                                                         2 December 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 May 2025.
+   This Internet-Draft will expire on 5 June 2025.
 
 Copyright Notice
 
@@ -163,9 +163,6 @@ Table of Contents
    path properties.  SCION is an inter-domain network architecture and
    is therefore not concerned with intra-domain forwarding.
 
-   The data transmission order for SCION is the same as for IPv6 as
-   defined in Introduction of [RFC8200].
-
    SCION has been developed with the following goals:
 
    _Availability_ - to provide highly available communication that can
@@ -174,12 +171,15 @@ Table of Contents
    hop or anywhere along the path) and provide continuity in the
    presence of adversaries.
 
-   _Security_ - to provide higher levels of trust in routing information
-   in order to prevent traffic hijacking, reduce potential for denial-
-   of-service and other attacks.  Endpoints can decide the trust roots
-   they wish to rely on, routing information can be unambiguously
-   attributed to an AS, and packets are only forwarded along authorized
-   path segments.  A particular use case is to enable geofencing.
+   _Security_ - This work introduces a new approach to inter-domain path
+   security that leverages path-awareness in combination with an unique
+   trust model.  The goal is to provide higher levels of trust in
+   routing information to: - prevent traffic hijacking - enable users to
+   decide where their data travels based on routing information that can
+   be unambiguously attributed to an AS, so that packets are only
+   forwarded along authorized path segments.  A particular use case is
+   to enable geofencing. - reduce potential for denial-of-service and
+   other attacks
 
    _Scalability_ - to improve the scalability of the inter-domain
    control plane and data plane, avoiding existing limitations related
@@ -458,6 +458,9 @@ Table of Contents
    AS.  This means, for example, that an endpoint running a SCION stack
    using a [RFC1918] could directly communicate with another SCION
    endpoint using a [RFC1918] endpoint address in a different SCION AS.
+
+   The data transmission order for SCION is the same as for IPv6 as
+   defined in Introduction of [RFC8200].
 
 1.3.2.  Intra-Domain Forwarding Process
 
