@@ -13,11 +13,11 @@
        This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION Control Plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION Data Plane is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path. 
        The SCION Data Plane fundamentally differs from today's IP-based data plane in that it is  path-aware : In SCION, interdomain forwarding directives are embedded in the packet header. This document provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers, which are additionally described. The document continues with the life cycle of a SCION packet while traversing the SCION Internet, followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. 
     " name="description">
-<meta content="xml2rfc 3.24.0" name="generator">
+<meta content="xml2rfc 3.25.0" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-dekater-scion-dataplane-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.24.0
+  xml2rfc 3.25.0
     Python 3.12.7
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
@@ -1048,7 +1048,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 5 June 2025</td>
+<td class="center">Expires 6 June 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1061,12 +1061,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-12-02" class="published">2 December 2024</time>
+<time datetime="2024-12-03" class="published">3 December 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-06-05">5 June 2025</time></dd>
+<dd class="expires"><time datetime="2025-06-06">6 June 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1124,7 +1124,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 June 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 6 June 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1430,10 +1430,14 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1-1">SCION is a path-aware internetworking routing architecture as described in <span>[<a href="#RFC9217" class="cite xref">RFC9217</a>]</span>. It allows endpoints and applications to select paths across the network to use for traffic, based on trusted path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">SCION has been developed with the following goals:<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3"><em>Availability</em> - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4"><em>Security</em> - This work introduces a new approach to inter-domain path security that leverages path-awareness in combination with an unique trust model. The goal is to provide higher levels of trust in routing information to:
+<p id="section-1-4">&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream
+<em>Security</em> - This work introduces a new approach to inter-domain path security that leverages path-awareness in combination with an unique trust model. The goal is to provide higher levels of trust in routing information to:
 - prevent traffic hijacking
 - enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, so that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
-- reduce potential for denial-of-service and other attacks<a href="#section-1-4" class="pilcrow">¶</a></p>
+- reduce potential for denial-of-service and other attacks
+=======
+<em>Security</em> - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trust in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5"><em>Scalability</em> - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">SCION relies on three main components:<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7"><em>PKI</em> - To achieve scalability and trust, SCION organizes existing ASes into logical groups of independent routing planes called <em>Isolation Domains (ISDs)</em>. All ASes in an ISD agree on a set of trust roots called the <em>Trust Root Configuration (TRC)</em> which is a collection of signed root certificates in X.509 v3 format <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>. The ISD is governed by a set of <em>core ASes</em> which typically manage the trust roots and provide connectivity to other ISDs. This is the basis of the public key infrastructure which the SCION Control Plane relies upon for the authentication of messages that is used for the SCION control plane. See <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span><a href="#section-1-7" class="pilcrow">¶</a></p>
