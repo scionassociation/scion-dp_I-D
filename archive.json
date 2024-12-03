@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-01T00:00:46.207175+00:00",
+  "timestamp": "2024-12-03T00:00:56.508611+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1306,9 +1306,9 @@
         "Prio 1",
         "editorial"
       ],
-      "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP\r\n\r\nIdeas: \r\n- [x] IS SCMP used anywhere by the control service? (@jiceatscion )\r\n- SCMP is an additional signaling mechanism between endpoints and SCION routers (?). It could be a new section before security considerations in the CP draft\r\n- [x] Add SCMP to the definitions in the CP draft\r\n- [x] Add cross references from DP (handling link failures) to the CP draft\r\n",
+      "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP\r\n\r\nIdeas: \r\n- [x] IS SCMP used anywhere by the control service? (@jiceatscion )\r\n- SCMP is an additional signaling mechanism between endpoints and SCION routers (?). It could be a new section before security considerations in the CP draft\r\n- [x] Add SCMP to the definitions in the CP draft\r\n- [x] Add cross references from DP (handling link failures) to the CP draft\r\n- [ ] Clarify path revocation\r\n",
       "createdAt": "2024-11-06T09:37:40Z",
-      "updatedAt": "2024-11-12T13:42:38Z",
+      "updatedAt": "2024-12-02T17:32:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -1331,6 +1331,13 @@
           "body": "Move done per the PR The cross-referencing probably needs some more work.\r\n",
           "createdAt": "2024-11-12T13:42:37Z",
           "updatedAt": "2024-11-12T13:42:37Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "@jiceatscion  is  the CP really revoking paths based on SCMP? I thought this was not the case since the 2018 redesign.\r\n\r\nI feel (after merging a PR, sigh!) that  there are still some open points:\r\n- [ ]  Right now we have a section about Handling Link Failures in the DP but not in the CP. Shall we move it to the CP (but then we break the flow, as we talk about BFD in the DP)\r\n- [ ] This wording in the CP might have to be updated if we include revocation (I'd rather not): \r\n  > Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane. \r\n\r\n",
+          "createdAt": "2024-12-02T17:32:24Z",
+          "updatedAt": "2024-12-02T17:32:24Z"
         }
       ]
     },
@@ -6976,19 +6983,66 @@
       "labels": [],
       "body": "Also, in passing:\r\n* fix the description of the hopfield expiration time field\r\n* delete left-over text fragment \"(see [])\".\r\n\r\nResolves: #84 \r\nResolves: #86 \r\n",
       "createdAt": "2024-11-12T13:21:21Z",
-      "updatedAt": "2024-11-27T08:54:52Z",
+      "updatedAt": "2024-12-02T17:33:49Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1da0d36e757bae9d8e6fc2bb9528a414c01aecad",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "scmp_to_cp",
-      "headRefOid": "e13c147b1fbec69bde3a50409eae99b6f3498dc0",
+      "headRefOid": "562708105257cb8d2ee957a4fcbf5f892960cdb0",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786Ta9IQ",
+          "commit": {
+            "abbreviatedOid": "5627081"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "~LGTM (I fixed a couple of minor things)~",
+          "createdAt": "2024-12-02T16:56:25Z",
+          "updatedAt": "2024-12-02T17:33:10Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKYa7786TbYQ_",
+          "commit": {
+            "abbreviatedOid": "5627081"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Should this section go to the CP? \r\n",
+          "createdAt": "2024-12-02T17:32:52Z",
+          "updatedAt": "2024-12-02T17:32:52Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKYa7786TbYvR",
+          "commit": {
+            "abbreviatedOid": "5627081"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-02T17:33:45Z",
+          "updatedAt": "2024-12-02T17:33:49Z",
+          "comments": [
+            {
+              "originalPosition": 467,
+              "body": "Should this section go to the CP?",
+              "createdAt": "2024-12-02T17:33:46Z",
+              "updatedAt": "2024-12-02T17:33:49Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 88,
@@ -7000,21 +7054,42 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Contributes to #10",
       "createdAt": "2024-11-26T11:02:38Z",
-      "updatedAt": "2024-11-26T11:02:39Z",
+      "updatedAt": "2024-12-02T16:51:37Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1da0d36e757bae9d8e6fc2bb9528a414c01aecad",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "This-is-not-a-standard",
-      "headRefOid": "6972b045d38b5eec92fe2537d215124792d5de4c",
+      "headRefOid": "e85453667b74126e684f3d34538d40e19fed73ea",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786Ta53p",
+          "commit": {
+            "abbreviatedOid": "07aced6"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-02T16:51:32Z",
+          "updatedAt": "2024-12-02T16:51:37Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "@knmeynell I feel we can do a bit better on this point. IN one of the feedback received, I heard we could say something like: \r\n\r\n> We are doing this because:  existing IP had struggle with routing security. THis work intended to change the nature of how we secure data path. \r\n\r\nI tried to reword the security section, let me know your thoughts. It might need some more wordsmithing.\r\n\r\n",
+              "createdAt": "2024-12-02T16:51:32Z",
+              "updatedAt": "2024-12-02T16:51:37Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
