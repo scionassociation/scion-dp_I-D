@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-03T00:00:56.508611+00:00",
+  "timestamp": "2024-12-05T00:00:48.992348+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -7056,13 +7056,13 @@
       "labels": [],
       "body": "Contributes to #10",
       "createdAt": "2024-11-26T11:02:38Z",
-      "updatedAt": "2024-12-02T16:51:37Z",
+      "updatedAt": "2024-12-03T18:51:07Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1da0d36e757bae9d8e6fc2bb9528a414c01aecad",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "This-is-not-a-standard",
-      "headRefOid": "e85453667b74126e684f3d34538d40e19fed73ea",
+      "headRefOid": "46fce61bfdcf42e5d9f587d65898c3e0ececcce2",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -7086,6 +7086,26 @@
               "body": "@knmeynell I feel we can do a bit better on this point. IN one of the feedback received, I heard we could say something like: \r\n\r\n> We are doing this because:  existing IP had struggle with routing security. THis work intended to change the nature of how we secure data path. \r\n\r\nI tried to reword the security section, let me know your thoughts. It might need some more wordsmithing.\r\n\r\n",
               "createdAt": "2024-12-02T16:51:32Z",
               "updatedAt": "2024-12-02T16:51:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786TnP5U",
+          "commit": {
+            "abbreviatedOid": "07aced6"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-03T18:51:06Z",
+          "updatedAt": "2024-12-03T18:51:07Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Suggested a slight rewording. ",
+              "createdAt": "2024-12-03T18:51:07Z",
+              "updatedAt": "2024-12-03T18:51:18Z"
             }
           ]
         }
