@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-05T00:00:48.992348+00:00",
+  "timestamp": "2024-12-08T00:00:51.363874+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -7056,13 +7056,13 @@
       "labels": [],
       "body": "Contributes to #10",
       "createdAt": "2024-11-26T11:02:38Z",
-      "updatedAt": "2024-12-03T18:51:07Z",
+      "updatedAt": "2024-12-05T16:12:35Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1da0d36e757bae9d8e6fc2bb9528a414c01aecad",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "This-is-not-a-standard",
-      "headRefOid": "46fce61bfdcf42e5d9f587d65898c3e0ececcce2",
+      "headRefOid": "b8fafc6e6dfd7a9961364a2c0deb1641e43c3e51",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
