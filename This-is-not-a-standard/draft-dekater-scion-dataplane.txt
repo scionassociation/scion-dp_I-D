@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 8 June 2025                                   SCION Association
+Expires: 14 June 2025                                  SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         5 December 2024
+                                                        11 December 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 June 2025.
+   This Internet-Draft will expire on 14 June 2025.
 
 Copyright Notice
 
@@ -223,7 +223,8 @@ Table of Contents
    deployed, to encourage interoperability among implementations, and to
    introduce new concepts that can potentially be further improved to
    address particular problems with the current Internet architecture.
-   This is not intended for publication as an Internet Standard.
+   This document is not an Internet Standards Track specification; it is
+   published for informational purposes.
 
    ==Note (to be removed before publication): this document, together
    with the other components [I-D.dekater-scion-pki] and
