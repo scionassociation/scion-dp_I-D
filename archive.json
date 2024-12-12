@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-10T00:00:50.948525+00:00",
+  "timestamp": "2024-12-12T00:00:50.428362+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -228,7 +228,7 @@
       "id": "I_kwDOKYa7786IuWFf",
       "title": "Extend introduction and remove/edit notes",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/10",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [
@@ -241,8 +241,8 @@
       ],
       "body": "The following text needs to be reworked as you are not publishing some of these:\r\n\r\n > \\*Note:\\* This is the very first version of the SCION Data Plane\r\n   document.  We are aware that the draft is far from perfect, and hope\r\n   to improve the content in later versions of the document.  To reach\r\n   this goal, any feedback is welcome and much appreciated.  Thanks!\r\n\r\n>  \\*Note:\\* It is assumed that readers of this draft are familiar with\r\n   the basic concepts of the SCION next-generation inter-domain network\r\n   architecture.  If not, please find more detailed information in the\r\n   IETF Internet Drafts [I-D.scion-overview], [I-D.scion-components],\r\n   [I-D.scion-cppki], and [I-D.scion-cp], as well as in [CHUAT22],\r\n   especially Chapter 2.  A short description of the SCION basic terms\r\n   and elements can be found in Section 1.1 below.\r\n\r\n\r\n\r\nAlso, \r\n> From: Ron Bonica\r\n> The problem statement is weak. Before describing forwarding plane details, you need to tell the readers why they should deploy SCION. You say that the design advantages are:\r\n>  - It provides control and transparency over forwarding paths the endpoints.  \u2002\u2002\u2002\u2002\u2002\u2002\u2002\r\n>  -  It simplifies the packet-processing at routers: Instead of having to perform longest-prefix matching on IP addresses, which requires expensive hardware and substantial amounts of energy, a router can simply access the next hop from the packet header, after having verified the authenticity of the hop field's MAC.\r\n\r\n> \u2002\u2002\u2002\u2002\u2002\u2002Is there any benefit in switching, as opposed to routing, at the AS boundary? Yes, routing is expensive. But the router is already there. There is no incremental cost. By contrast, you would have to add a SCION device.\r\n> Is the real motivation to support new settlement models?\r\n\r\n\r\nSame issue in other drafts: \r\n- CPPKI  https://github.com/scionassociation/scion-cppki_I-D/issues/29\r\n- CP        https://github.com/scionassociation/scion-cp_I-D/issues/14",
       "createdAt": "2024-05-13T21:08:42Z",
-      "updatedAt": "2024-10-08T12:16:17Z",
-      "closedAt": "2024-10-08T09:24:17Z",
+      "updatedAt": "2024-12-11T09:28:01Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "nicorusti",
@@ -7049,24 +7049,26 @@
       "id": "PR_kwDOKYa7786DK6K-",
       "title": "Clarifies the aim of the document.",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/88",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Contributes to #10",
       "createdAt": "2024-11-26T11:02:38Z",
-      "updatedAt": "2024-12-05T16:12:35Z",
+      "updatedAt": "2024-12-11T09:27:54Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1da0d36e757bae9d8e6fc2bb9528a414c01aecad",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "This-is-not-a-standard",
-      "headRefOid": "b8fafc6e6dfd7a9961364a2c0deb1641e43c3e51",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "62ed97684933fc4ac7d331727a97f9e33191a9d6",
+      "closedAt": "2024-12-11T09:27:49Z",
+      "mergedAt": "2024-12-11T09:27:49Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "dd01fe293644db5a89e645f280422e4bd32d272b"
+      },
       "comments": [],
       "reviews": [
         {
@@ -7106,6 +7108,26 @@
               "body": "Suggested a slight rewording. ",
               "createdAt": "2024-12-03T18:51:07Z",
               "updatedAt": "2024-12-03T18:51:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786UtQ69",
+          "commit": {
+            "abbreviatedOid": "b8fafc6"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-11T09:25:42Z",
+          "updatedAt": "2024-12-11T09:25:46Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\r\nThe SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.  This document is not an Internet Standards Track specification; it is published for informational purposes.\r\n```",
+              "createdAt": "2024-12-11T09:25:42Z",
+              "updatedAt": "2024-12-11T09:25:46Z"
             }
           ]
         }
