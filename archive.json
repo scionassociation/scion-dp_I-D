@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-15T00:00:53.437494+00:00",
+  "timestamp": "2024-12-17T00:00:38.482944+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1295,7 +1295,7 @@
       "id": "I_kwDOKYa7786dNYZS",
       "title": "Move SCMP to CP draft",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/84",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1308,8 +1308,8 @@
       ],
       "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP\r\n\r\nIdeas: \r\n- [x] IS SCMP used anywhere by the control service? (@jiceatscion )\r\n- SCMP is an additional signaling mechanism between endpoints and SCION routers (?). It could be a new section before security considerations in the CP draft\r\n- [x] Add SCMP to the definitions in the CP draft\r\n- [x] Add cross references from DP (handling link failures) to the CP draft\r\n- [ ] Clarify path revocation\r\n",
       "createdAt": "2024-11-06T09:37:40Z",
-      "updatedAt": "2024-12-02T17:32:26Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-16T17:12:07Z",
+      "closedAt": "2024-12-16T17:12:07Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -1338,6 +1338,20 @@
           "body": "@jiceatscion  is  the CP really revoking paths based on SCMP? I thought this was not the case since the 2018 redesign.\r\n\r\nI feel (after merging a PR, sigh!) that  there are still some open points:\r\n- [ ]  Right now we have a section about Handling Link Failures in the DP but not in the CP. Shall we move it to the CP (but then we break the flow, as we talk about BFD in the DP)\r\n- [ ] This wording in the CP might have to be updated if we include revocation (I'd rather not): \r\n  > Note that link removal is not part of path discovery in SCION. For scheduled removal of links, operators let path segments expire. On link failures, endpoints route around the failed link by switching to different paths in the data plane. \r\n\r\n",
           "createdAt": "2024-12-02T17:32:24Z",
           "updatedAt": "2024-12-02T17:32:24Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "So, after some painful reverse engineering. It seems that these messages\r\nare occasionally used to create negative cache entries in some places:\r\nWithin the control service (when forwarding segment requests to another CS)\r\nand within the daemon for the same kind of reason. I guess the fact that\r\nthe API is called RevocationHandler and the method is called Revoke is all\r\na bit misleading but not entirely false... A negative cache is just a very\r\nprivate revocation.\r\n\r\n\r\nOn Mon, Dec 2, 2024 at 6:32\u202fPM Nicola Rustignoli ***@***.***>\r\nwrote:\r\n\r\n> @jiceatscion <https://github.com/jiceatscion> is the CP really revoking\r\n> paths based on SCMP? I thought this was not the case since the 2018\r\n> redesign.\r\n>\r\n> I feel (after merging a PR, sigh!) that there are still some open points:\r\n>\r\n>    - Right now we have a section about Handling Link Failures in the DP\r\n>    but not in the CP. Shall we move it to the CP (but then we break the flow,\r\n>    as we talk about BFD in the DP)\r\n>    - This wording in the CP might have to be updated if we include\r\n>    revocation (I'd rather not):\r\n>\r\n>    Note that link removal is not part of path discovery in SCION. For\r\n>    scheduled removal of links, operators let path segments expire. On link\r\n>    failures, endpoints route around the failed link by switching to different\r\n>    paths in the data plane.\r\n>\r\n>\r\n> \u2014\r\n> Reply to this email directly, view it on GitHub\r\n> <https://github.com/scionassociation/scion-dp_I-D/issues/84#issuecomment-2512240156>,\r\n> or unsubscribe\r\n> <https://github.com/notifications/unsubscribe-auth/BBLEYOAXZCOMTCULXRHOIND2DSKT7AVCNFSM6AAAAABRIMYWKSVHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZDKMJSGI2DAMJVGY>\r\n> .\r\n> You are receiving this because you were mentioned.Message ID:\r\n> ***@***.***>\r\n>\r\n\r\n\r\n-- \r\n\r\nJEAN-CHRISTOPHE HUGLY\r\n\r\nSoftware Engineer\r\n\r\n\r\n +41 79 455 68 69\r\n***@***.*** ***@***.***>\r\n scion.org <http://www.scion.org/>\r\n SCION Association <https://www.linkedin.com/company/scion-association/>\r\n\r\n\r\n<https://www.scion.org/>\r\n",
+          "createdAt": "2024-12-16T16:55:00Z",
+          "updatedAt": "2024-12-16T16:55:00Z"
+        },
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I would not remove anything from the \"handling link failures\" section in the DP. What it describes is the role that router plays and nothing more. Yes the router sends an SCMP message. We can't pretend it doesn't just because SCMP is described in the CP, can we?\r\n\r\nRegarding the the wording about link removal: We don't actually speak of revocation. We could (should?) speak about negative caching and that would still not mean link removal.\r\n\r\nLet me know if you think we still need to make changes. I think not.\r\n",
+          "createdAt": "2024-12-16T17:06:52Z",
+          "updatedAt": "2024-12-16T17:06:52Z"
         }
       ]
     },
@@ -1366,7 +1380,7 @@
       "id": "I_kwDOKYa7786eEFEL",
       "title": "hopfield expiration: the calculation is wrong",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/86",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -1375,8 +1389,8 @@
       "labels": [],
       "body": "The formula for the absolute expiration time of a hop field is wrong. It implies that the duration unit is a 256th of an hour. In reality it is a 256th of a day. We also do not actually describe the unit; we just throw it in the formula.\r\n",
       "createdAt": "2024-11-12T11:17:06Z",
-      "updatedAt": "2024-11-12T11:17:11Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-16T17:12:08Z",
+      "closedAt": "2024-12-16T17:12:08Z",
       "comments": []
     }
   ],
@@ -6976,24 +6990,26 @@
       "id": "PR_kwDOKYa7786Boh8u",
       "title": "scmp: export SCMP to controlplane draft",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/87",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Also, in passing:\r\n* fix the description of the hopfield expiration time field\r\n* delete left-over text fragment \"(see [])\".\r\n\r\nResolves: #84 \r\nResolves: #86 \r\n",
       "createdAt": "2024-11-12T13:21:21Z",
-      "updatedAt": "2024-12-02T17:33:49Z",
+      "updatedAt": "2024-12-16T17:13:00Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "1da0d36e757bae9d8e6fc2bb9528a414c01aecad",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "scmp_to_cp",
       "headRefOid": "562708105257cb8d2ee957a4fcbf5f892960cdb0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-12-16T17:12:06Z",
+      "mergedAt": "2024-12-16T17:12:06Z",
+      "mergedBy": "jiceatscion",
+      "mergeCommit": {
+        "oid": "30fc7d0bb168d215f62094cd13fb2ea53aac443a"
+      },
       "comments": [],
       "reviews": [
         {
@@ -7039,6 +7055,26 @@
               "body": "Should this section go to the CP?",
               "createdAt": "2024-12-02T17:33:46Z",
               "updatedAt": "2024-12-02T17:33:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786VatJJ",
+          "commit": {
+            "abbreviatedOid": "5627081"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-16T17:11:53Z",
+          "updatedAt": "2024-12-16T17:11:53Z",
+          "comments": [
+            {
+              "originalPosition": 467,
+              "body": "I don't think so. Just because the control plane provides the SCMP service (by some definition of provides, anyway), doesn't mean that everything that makes use of it becomes part of the control service, does it?\r\n\r\nAs you seem to let me make that choice, I'm merging.\r\n",
+              "createdAt": "2024-12-16T17:11:53Z",
+              "updatedAt": "2024-12-16T17:11:53Z"
             }
           ]
         }
