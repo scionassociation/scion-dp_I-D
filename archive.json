@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-17T00:00:38.482944+00:00",
+  "timestamp": "2024-12-19T00:00:50.304480+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -201,7 +201,7 @@
       "id": "I_kwDOKYa7786IuVaP",
       "title": "editorial: de-emphasisize text",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/9",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "elear",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -211,8 +211,8 @@
       ],
       "body": "No need for this in the abstract: \\*SCION data plane\\*",
       "createdAt": "2024-05-13T21:06:52Z",
-      "updatedAt": "2024-10-09T12:59:43Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-17T10:23:02Z",
+      "closedAt": "2024-12-17T10:23:02Z",
       "comments": [
         {
           "author": "nicorusti",
@@ -1295,7 +1295,7 @@
       "id": "I_kwDOKYa7786dNYZS",
       "title": "Move SCMP to CP draft",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/84",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1306,10 +1306,10 @@
         "Prio 1",
         "editorial"
       ],
-      "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP\r\n\r\nIdeas: \r\n- [x] IS SCMP used anywhere by the control service? (@jiceatscion )\r\n- SCMP is an additional signaling mechanism between endpoints and SCION routers (?). It could be a new section before security considerations in the CP draft\r\n- [x] Add SCMP to the definitions in the CP draft\r\n- [x] Add cross references from DP (handling link failures) to the CP draft\r\n- [ ] Clarify path revocation\r\n",
+      "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP\r\n\r\nIdeas: \r\n- [x] IS SCMP used anywhere by the control service? (@jiceatscion )\r\n- SCMP is an additional signaling mechanism between endpoints and SCION routers (?). It could be a new section before security considerations in the CP draft\r\n- [x] Add SCMP to the definitions in the CP draft\r\n- [x] Add cross references from DP (handling link failures) to the CP draft\r\n- [x] Clarify path revocation #89 \r\n",
       "createdAt": "2024-11-06T09:37:40Z",
-      "updatedAt": "2024-12-16T17:12:07Z",
-      "closedAt": "2024-12-16T17:12:07Z",
+      "updatedAt": "2024-12-18T20:47:27Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "jiceatscion",
@@ -1352,6 +1352,13 @@
           "body": "I would not remove anything from the \"handling link failures\" section in the DP. What it describes is the role that router plays and nothing more. Yes the router sends an SCMP message. We can't pretend it doesn't just because SCMP is described in the CP, can we?\r\n\r\nRegarding the the wording about link removal: We don't actually speak of revocation. We could (should?) speak about negative caching and that would still not mean link removal.\r\n\r\nLet me know if you think we still need to make changes. I think not.\r\n",
           "createdAt": "2024-12-16T17:06:52Z",
           "updatedAt": "2024-12-16T17:06:52Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": ">    In SCION, an intermediate router cannot change the path followed by a\r\n   packet, only the source endpoint can chose a different path.\r\n   Therefore, to enable fast recovery, a router SHOULD signal forwarding\r\n   failures to the source, via a SCMP notification (Section 6.5).  This\r\n   allows the source endpoint to quickly switch to a different path.\r\n   **It is RECOMMENDED that the source endpoint keeps a short-lived cache for the broken path to avoid a flood of retries. Current implementations use a time of 1s.** (TODO check)",
+          "createdAt": "2024-12-17T10:15:46Z",
+          "updatedAt": "2024-12-17T10:15:46Z"
         }
       ]
     },
@@ -1364,14 +1371,14 @@
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
-        "nicorusti"
+        "jiceatscion"
       ],
       "labels": [
         "Prio 1"
       ],
       "body": "- [ ] Complete https://github.com/scionproto/scion/pull/4641 \r\n- [ ] Add an informative reference in CP draft\r\n- [ ] Discuss with Eliot (at 121 he mentioned he would first talk to Harald about this)",
       "createdAt": "2024-11-08T15:48:46Z",
-      "updatedAt": "2024-11-12T10:05:39Z",
+      "updatedAt": "2024-12-17T10:22:07Z",
       "closedAt": null,
       "comments": []
     },
@@ -7164,6 +7171,53 @@
               "body": "```suggestion\r\nThe SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.  This document is not an Internet Standards Track specification; it is published for informational purposes.\r\n```",
               "createdAt": "2024-12-11T09:25:42Z",
               "updatedAt": "2024-12-11T09:25:46Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 89,
+      "id": "PR_kwDOKYa7786Fqs1h",
+      "title": "Clarify possible use of failed link scmp messages.",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/89",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #84 ",
+      "createdAt": "2024-12-18T15:44:04Z",
+      "updatedAt": "2024-12-18T20:50:07Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "30fc7d0bb168d215f62094cd13fb2ea53aac443a",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "netgative_cache",
+      "headRefOid": "42bd8884259f0e620a2b328fa22b03a80fde5653",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786VxtFh",
+          "commit": {
+            "abbreviatedOid": "42bd888"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Just some minor wording change, then feel free to merge",
+          "createdAt": "2024-12-18T20:49:48Z",
+          "updatedAt": "2024-12-18T20:50:07Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nIn SCION, an intermediate router cannot change the path followed by a packet, only the source endpoint can chose a different path. Therefore, to enable fast recovery, a router SHOULD signal forwarding failures to the source, via a SCMP notification (see {{I-D.dekater-scion-controlplane}} section \"SCMP/Error Messages\"). This allows the source endpoint to quickly switch to a different path. To that end, the source endpoint SHOULD disqualify the broken path. Current implementations use a negative cache with entries retained for 10s.\r\n```",
+              "createdAt": "2024-12-18T20:49:48Z",
+              "updatedAt": "2024-12-18T20:50:07Z"
             }
           ]
         }
