@@ -144,7 +144,7 @@ informative:
     title: SCIONLab website
     date: 2024
     target: https://www.scionlab.org/
-  SUG:
+  SIG:
     title: SCION IP Gateway Documentation
     date: 2024
     target: https://docs.scion.org/en/latest/sig.html
