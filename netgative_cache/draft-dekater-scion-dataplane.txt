@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 21 June 2025                                  SCION Association
+Expires: 23 June 2025                                  SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        18 December 2024
+                                                        20 December 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 June 2025.
+   This Internet-Draft will expire on 23 June 2025.
 
 Copyright Notice
 
@@ -2500,9 +2500,9 @@ direction
    failures to the source, via a SCMP notification (see
    [I-D.dekater-scion-controlplane] section "SCMP/Error Messages").
    This allows the source endpoint to quickly switch to a different
-   path.  To that end, the source end-point needs to temporarily
-   disqualify the broken path.  Current implementations use a negative
-   cache with entries retained for 10s.
+   path.  To that end, the source end-point SHOULD give lower preference
+   to the broken path.  Current implementations use a negative cache
+   with entries retained for 10s.
 
    Sending an SCMP error notification is OPTIONAL.  Endpoints should
    therefore implement additional mechanisms to validate or detect link
