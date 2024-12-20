@@ -144,6 +144,20 @@ informative:
     title: SCIONLab website
     date: 2024
     target: https://www.scionlab.org/
+  SIG:
+    title: SCION IP Gateway Documentation
+    date: 2024
+    target: https://docs.scion.org/en/latest/sig.html
+    author:
+      -
+        ins: Anapaya
+        org: Anapaya Systems
+      -
+        ins: ETH
+        org: ETH Zuerich
+      -
+        ins: SCION
+        org: SCION Association
 
 --- abstract
 
@@ -1412,6 +1426,8 @@ SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g.
 The SCION IP Gateway (SIG) enables IP packets to be tunneled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network. Tunneling IP traffic over SCION requires a pair of SIGs: at the ingress and egress points of the SCION network.
 
 IP tunneling over SCION is an application from the perspective of the Data Plane and is outwith the scope of this document.
+
+More information about the reference open source SCION IP Gateway implementation can be found at {{SIG}}.
 
 # Handling Link Failures
 
