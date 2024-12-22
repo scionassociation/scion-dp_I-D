@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-19T00:00:50.304480+00:00",
+  "timestamp": "2024-12-22T00:00:41.307046+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1378,9 +1378,17 @@
       ],
       "body": "- [ ] Complete https://github.com/scionproto/scion/pull/4641 \r\n- [ ] Add an informative reference in CP draft\r\n- [ ] Discuss with Eliot (at 121 he mentioned he would first talk to Harald about this)",
       "createdAt": "2024-11-08T15:48:46Z",
-      "updatedAt": "2024-12-17T10:22:07Z",
+      "updatedAt": "2024-12-19T17:41:41Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> * [ ]  Complete [doc: improve the SIG doc with the text from the ietf drafts scionproto/scion#4641](https://github.com/scionproto/scion/pull/4641)\r\n\r\nSam has explained. I have updated the text. I think that is ready to commit. After which I can take care of the second point.\r\n",
+          "createdAt": "2024-12-19T17:41:40Z",
+          "updatedAt": "2024-12-19T17:41:40Z"
+        }
+      ]
     },
     {
       "number": 86,
@@ -7188,13 +7196,13 @@
       "labels": [],
       "body": "Fixes #84 ",
       "createdAt": "2024-12-18T15:44:04Z",
-      "updatedAt": "2024-12-18T20:50:07Z",
+      "updatedAt": "2024-12-20T09:31:18Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "30fc7d0bb168d215f62094cd13fb2ea53aac443a",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "netgative_cache",
-      "headRefOid": "42bd8884259f0e620a2b328fa22b03a80fde5653",
+      "headRefOid": "23f708c63ca3cfb8efc599a15509ba2060fa9fc4",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -7220,8 +7228,94 @@
               "updatedAt": "2024-12-18T20:50:07Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786V2VUY",
+          "commit": {
+            "abbreviatedOid": "42bd888"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-19T10:45:34Z",
+          "updatedAt": "2024-12-19T10:45:34Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "No; I disagree. We say that SCMP errors are optional, which means that disqualifying broken paths is unavoidably optional. So, there is no SHOULD. It is true that *in order to* stop using the path, the endpoint *should*. But that's lower case. Since lower-case \"should\" or \"must\" are pretty-much forbidden in RFCs.... also, even disqualify is too strong a term (one could just lower its preference score; or whatever makes more sense per the implementation).\r\n\r\nHow about: \"To that end, the source endpoint needs to give lower preference to the broken path. Current implementations use...\"",
+              "createdAt": "2024-12-19T10:45:34Z",
+              "updatedAt": "2024-12-19T10:45:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786WBS2h",
+          "commit": {
+            "abbreviatedOid": "42bd888"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-20T07:20:13Z",
+          "updatedAt": "2024-12-20T07:20:13Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "How about using MAY? leaving \"needs to\" will cause confusion\r\n\r\nOr alternatively \"To that end, the source endpoint SHOULD to give lower preference to the broken path.\"",
+              "createdAt": "2024-12-20T07:20:13Z",
+              "updatedAt": "2024-12-20T07:21:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786WCGdx",
+          "commit": {
+            "abbreviatedOid": "42bd888"
+          },
+          "author": "jiceatscion",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-20T09:31:18Z",
+          "updatedAt": "2024-12-20T09:31:18Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Ok, SHOULD is back. Let's not mince hair forever.\r\n",
+              "createdAt": "2024-12-20T09:31:18Z",
+              "updatedAt": "2024-12-20T09:31:18Z"
+            }
+          ]
         }
       ]
+    },
+    {
+      "number": 90,
+      "id": "PR_kwDOKYa7786F7J-B",
+      "title": "Added reference to the SIG documentation.",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/90",
+      "state": "OPEN",
+      "author": "jiceatscion",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #85 \r\n\r\nIt would be best to merge this after https://github.com/scionproto/scion/pull/4641\r\n",
+      "createdAt": "2024-12-20T15:12:13Z",
+      "updatedAt": "2024-12-20T15:14:32Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "30fc7d0bb168d215f62094cd13fb2ea53aac443a",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "sig_ref",
+      "headRefOid": "74cd457e5702e7695c7870586c61b1cfbb2b21bd",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
