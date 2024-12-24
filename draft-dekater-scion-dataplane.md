@@ -1441,7 +1441,7 @@ A SCION router SHOULD accept BFD connections from its peers and SHOULD attempt t
 
 ## Link Failure Notification - SCMP {#link-down-notification}
 
-In SCION, an intermediate router cannot change the path followed by a packet, only the source endpoint can chose a different path. Therefore, to enable fast recovery, a router SHOULD signal forwarding failures to the source, via a SCMP notification (see {{I-D.dekater-scion-controlplane}} section "SCMP/Error Messages"). This allows the source endpoint to quickly switch to a different path.
+In SCION, an intermediate router cannot change the path followed by a packet, only the source endpoint can chose a different path. Therefore, to enable fast recovery, a router SHOULD signal forwarding failures to the source, via a SCMP notification (see {{I-D.dekater-scion-controlplane}} section "SCMP/Error Messages"). This allows the source endpoint to quickly switch to a different path. To that end, the source end-point SHOULD give lower preference to the broken path. Current implementations use a negative cache with entries retained for 10s.
 
 Sending an SCMP error notification is OPTIONAL. Endpoints should therefore implement additional mechanisms to validate or detect link down signals. To reduce exposure to denial-of-service attacks, SCION routers SHOULD employ rate limiting when sending recommended SCMP notifications (especially identical ones). Rate limit policies are up to each AS' administrator.
 
