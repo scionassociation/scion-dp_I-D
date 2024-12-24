@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 19 June 2025                                  SCION Association
+Expires: 27 June 2025                                  SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        16 December 2024
+                                                        24 December 2024
 
 
                             SCION Data Plane
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 June 2025.
+   This Internet-Draft will expire on 27 June 2025.
 
 Copyright Notice
 
@@ -2469,6 +2469,9 @@ direction
    IP tunneling over SCION is an application from the perspective of the
    Data Plane and is outwith the scope of this document.
 
+   More information about the reference open source SCION IP Gateway
+   implementation can be found at [SIG].
+
 6.  Handling Link Failures
 
 6.1.  Link Failure Detection - BFD
@@ -2867,6 +2870,9 @@ direction
 
    [SCIONLAB_WEBSITE]
               "SCIONLab website", 2024, <https://www.scionlab.org/>.
+
+   [SIG]      Anapaya, ETH, and SCION, "SCION IP Gateway Documentation",
+              2024, <https://docs.scion.org/en/latest/sig.html>.
 
 Acknowledgments
 
