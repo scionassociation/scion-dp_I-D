@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-24T00:00:53.625850+00:00",
+  "timestamp": "2024-12-26T00:00:40.402389+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1295,7 +1295,7 @@
       "id": "I_kwDOKYa7786dNYZS",
       "title": "Move SCMP to CP draft",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/84",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1308,8 +1308,8 @@
       ],
       "body": "We went through the DP draft with Eliot at IETF121. He was overall positive, but mentioned that SCMP is a CP topic and (for now) move it to the CP\r\n\r\nIdeas: \r\n- [x] IS SCMP used anywhere by the control service? (@jiceatscion )\r\n- SCMP is an additional signaling mechanism between endpoints and SCION routers (?). It could be a new section before security considerations in the CP draft\r\n- [x] Add SCMP to the definitions in the CP draft\r\n- [x] Add cross references from DP (handling link failures) to the CP draft\r\n- [x] Clarify path revocation #89 \r\n",
       "createdAt": "2024-11-06T09:37:40Z",
-      "updatedAt": "2024-12-18T20:47:27Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-24T11:56:42Z",
+      "closedAt": "2024-12-24T11:56:42Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -1367,7 +1367,7 @@
       "id": "I_kwDOKYa7786dnq3j",
       "title": "Add external reference to SIG",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/85",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1376,10 +1376,10 @@
       "labels": [
         "Prio 1"
       ],
-      "body": "- [ ] Complete https://github.com/scionproto/scion/pull/4641 \r\n- [ ] Add an informative reference in CP draft\r\n- [ ] Discuss with Eliot (at 121 he mentioned he would first talk to Harald about this)",
+      "body": "- [x] Complete https://github.com/scionproto/scion/pull/4641 \r\n- [x] Add an informative reference in CP draft\r\n- [ ] Discuss with Eliot (at 121 he mentioned he would first talk to Harald about this)",
       "createdAt": "2024-11-08T15:48:46Z",
-      "updatedAt": "2024-12-19T17:41:41Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-24T11:55:32Z",
+      "closedAt": "2024-12-24T11:55:32Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -7189,24 +7189,26 @@
       "id": "PR_kwDOKYa7786Fqs1h",
       "title": "Clarify possible use of failed link scmp messages.",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/89",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #84 ",
       "createdAt": "2024-12-18T15:44:04Z",
-      "updatedAt": "2024-12-20T09:31:18Z",
+      "updatedAt": "2024-12-24T11:56:41Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "30fc7d0bb168d215f62094cd13fb2ea53aac443a",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "netgative_cache",
       "headRefOid": "23f708c63ca3cfb8efc599a15509ba2060fa9fc4",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-12-24T11:56:41Z",
+      "mergedAt": "2024-12-24T11:56:41Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "aa20c8532a9919ce75e674acf782ec95a170da1a"
+      },
       "comments": [],
       "reviews": [
         {
@@ -7288,6 +7290,19 @@
               "updatedAt": "2024-12-20T09:31:18Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786WUNdu",
+          "commit": {
+            "abbreviatedOid": "23f708c"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-12-24T11:56:36Z",
+          "updatedAt": "2024-12-24T11:56:36Z",
+          "comments": []
         }
       ]
     },
@@ -7296,24 +7311,68 @@
       "id": "PR_kwDOKYa7786F7J-B",
       "title": "Added reference to the SIG documentation.",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/90",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jiceatscion",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Fixes #85 \r\n\r\nIt would be best to merge this after https://github.com/scionproto/scion/pull/4641\r\n",
       "createdAt": "2024-12-20T15:12:13Z",
-      "updatedAt": "2024-12-20T15:14:32Z",
+      "updatedAt": "2024-12-24T11:55:35Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "30fc7d0bb168d215f62094cd13fb2ea53aac443a",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "sig_ref",
       "headRefOid": "74cd457e5702e7695c7870586c61b1cfbb2b21bd",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-12-24T11:55:31Z",
+      "mergedAt": "2024-12-24T11:55:31Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "2c7712ac9bf5c8e10972d0ffb80fc284a3a25544"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786WUNNK",
+          "commit": {
+            "abbreviatedOid": "74cd457"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-12-24T11:55:26Z",
+          "updatedAt": "2024-12-24T11:55:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 91,
+      "id": "PR_kwDOKYa7786GKkai",
+      "title": "not a standard wording, remove note about splitting document",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/91",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Contributes to #48 ",
+      "createdAt": "2024-12-24T12:22:48Z",
+      "updatedAt": "2024-12-24T12:24:15Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "aa20c8532a9919ce75e674acf782ec95a170da1a",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "intro_nic",
+      "headRefOid": "310c5c8269f0233c25c33487ed703c071ad999f3",
+      "closedAt": "2024-12-24T12:23:55Z",
+      "mergedAt": "2024-12-24T12:23:55Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "4d827e98f42fd9db95e0cf7e05bfb68ddd07bd96"
+      },
       "comments": [],
       "reviews": []
     }
