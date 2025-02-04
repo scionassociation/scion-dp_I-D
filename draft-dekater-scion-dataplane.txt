@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 27 June 2025                                  SCION Association
+Expires: 8 August 2025                                 SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        24 December 2024
+                                                         4 February 2025
 
 
                             SCION Data Plane
@@ -63,11 +63,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 June 2025.
+   This Internet-Draft will expire on 8 August 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -361,7 +361,7 @@ Table of Contents
    This concept allows SCION routers to forward packets to a neighbor AS
    without inspecting the destination address and also without
    consulting an inter-domain forwarding table.  Intra-domain forwarding
-   and routing are based on existing mechanisms (e.g.  IP).  A SCION
+   and routing are based on existing mechanisms (e.g. IP).  A SCION
    border router reuses existing intra-domain infrastructure to
    communicate to other SCION routers or SCION endpoints within its AS.
    The last SCION router at the destination AS therefore uses the
@@ -463,7 +463,7 @@ Table of Contents
 
    3.  The SCION router maps the egress interface ID in the current Hop
        Field of the SCION header to the destination address of the
-       intra-domain protocol (e.g.  MPLS or IP) of the egress border
+       intra-domain protocol (e.g. MPLS or IP) of the egress border
        router.
 
    4.  The packet is forwarded within the AS by SCION-unaware routers
@@ -1489,8 +1489,8 @@ Table of Contents
 
    *  Upper-Layer Packet Length: The length of the upper-layer header
       and data.  Some upper-layer protocols define headers that carry
-      the length information explicitly (e.g.  UDP).  This information
-      is used as the upper-layer packet length in the pseudo header for
+      the length information explicitly (e.g. UDP).  This information is
+      used as the upper-layer packet length in the pseudo header for
       these protocols.  The remaining protocols, which do not carry the
       length information directly, use the value from the PayloadLen
       field in the SCION common header, minus the sum of the extension
@@ -2759,16 +2759,16 @@ direction
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-06, 19 October 2024,
+              scion-controlplane-07, 24 December 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-06>.
+              scion-controlplane-07>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-07, 19 October 2024,
+              dekater-scion-pki-08, 30 December 2024,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-07>.
+              scion-pki-08>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
