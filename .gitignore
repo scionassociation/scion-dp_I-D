@@ -15,6 +15,7 @@
 /lib
 /node_modules/
 /versioned/
+.DS_Store
 Gemfile.lock
 archive.json
 draft-dekater-scion-dataplane.xml
