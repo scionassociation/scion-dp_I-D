@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-30T00:00:39.364701+00:00",
+  "timestamp": "2025-02-06T00:00:42.373263+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -7399,6 +7399,34 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 93,
+      "id": "PR_kwDOKYa7786J9G-c",
+      "title": "Update actions",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/93",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-04T08:33:45Z",
+      "updatedAt": "2025-02-04T08:35:29Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "4d827e98f42fd9db95e0cf7e05bfb68ddd07bd96",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "update-actions",
+      "headRefOid": "4c54dfe2687bbd7a13b4808f39a4e7bb9a9459cd",
+      "closedAt": "2025-02-04T08:35:26Z",
+      "mergedAt": "2025-02-04T08:35:26Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "c486f1cab900022c45c75432e8cc868c7bad512f"
+      },
       "comments": [],
       "reviews": []
     }
