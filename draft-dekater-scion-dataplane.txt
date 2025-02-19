@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 8 August 2025                                 SCION Association
+Expires: 23 August 2025                                SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         4 February 2025
+                                                        19 February 2025
 
 
                             SCION Data Plane
@@ -35,6 +35,13 @@ Abstract
    with the life cycle of a SCION packet while traversing the SCION
    Internet, followed by a specification of the SCION path authorization
    mechanisms and the packet processing at routers.
+
+   This document contains new approaches to secure path aware
+   networking.  It is not an Internet Standard, has not received any
+   formal review of the IETF, nor was the work developed through the
+   rough consensus process.  The approaches offered in this work are
+   offered to the community for its consideration in the further
+   evolution of the Internet.
 
 About This Document
 
@@ -63,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 August 2025.
+   This Internet-Draft will expire on 23 August 2025.
 
 Copyright Notice
 
@@ -209,9 +216,6 @@ Table of Contents
    deployed, to encourage interoperability among implementations, and to
    introduce new concepts that can potentially be further improved to
    address particular problems with the current Internet architecture.
-   This document is not an Internet Standards Track specification; it
-   does not have IETF consensus and it is published for informational
-   purposes.
 
    ==Note (to be removed before publication): this document, together
    with the other components [I-D.dekater-scion-pki] and
