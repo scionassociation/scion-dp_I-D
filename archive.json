@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-18T00:00:39.137535+00:00",
+  "timestamp": "2025-02-20T00:00:52.401755+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -7379,28 +7379,44 @@
     {
       "number": 92,
       "id": "PR_kwDOKYa7786H2PBw",
-      "title": "Added disclaimer to Abstract",
+      "title": "This is not a standard  - Added disclaimer to Abstract",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/92",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-01-15T12:56:12Z",
-      "updatedAt": "2025-01-15T12:56:13Z",
+      "updatedAt": "2025-02-19T13:14:44Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "4d827e98f42fd9db95e0cf7e05bfb68ddd07bd96",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "Disclaimer",
       "headRefOid": "b4cbb899cad5d9355784b23416f413b148d9ded6",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-02-19T13:14:39Z",
+      "mergedAt": "2025-02-19T13:14:39Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "ea2ee8b60d58cad99632c22ac36e91f6b5f768c0"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786ckRbV",
+          "commit": {
+            "abbreviatedOid": "b4cbb89"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-19T13:14:05Z",
+          "updatedAt": "2025-02-19T13:14:05Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 93,
