@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-27T00:00:47.102434+00:00",
+  "timestamp": "2025-03-02T00:00:43.897755+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1049,7 +1049,7 @@
       "id": "I_kwDOKYa7786UISMk",
       "title": "Clarify wether routers perform checks on segment types (up/down/core)",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/52",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -1059,8 +1059,8 @@
       ],
       "body": "In section 1.4 we write: \r\n\r\n> The type of segment is known to the endpoint but is not visible\r\nis the path header of data packets. **Therefore, a SCION router needs\r\nto explicitly verify that these rules were followed correctly.**\r\n\r\nthis sentence actually comes from the book section \"5.5 Path Construction (Segment Combinations)\". \r\n\r\n\r\nWe then describe checks at routers in 4.2.2.   Processing at Routers and there is no mention that routers verify any of the rules in 1.4. \r\n\r\n@jiceatscion do you know if routers do any checks at all? If not, we should just remove the second sentence I guess.",
       "createdAt": "2024-08-25T11:42:57Z",
-      "updatedAt": "2024-11-03T15:02:03Z",
-      "closedAt": null,
+      "updatedAt": "2025-02-28T08:29:49Z",
+      "closedAt": "2025-02-28T08:29:48Z",
       "comments": [
         {
           "author": "jiceatscion",
@@ -1075,6 +1075,13 @@
           "body": "I proposed #61 based on your inputs, feel free to review and modify ",
           "createdAt": "2024-08-30T14:24:34Z",
           "updatedAt": "2024-08-30T14:24:34Z"
+        },
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I opened this by mistake in relations to the feedback received by Daniel Galan, which was about beaconing. Closing",
+          "createdAt": "2025-02-28T08:29:48Z",
+          "updatedAt": "2025-02-28T08:29:48Z"
         }
       ]
     },
