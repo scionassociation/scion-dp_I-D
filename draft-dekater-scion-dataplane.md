@@ -1589,6 +1589,11 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-dataplane-05
+{:numbered="false"}
+
+- Abstract: mention goal and that document is not an Internet Standard
+
 ## draft-dekater-scion-dataplane-04
 {:numbered="false"}
  - Moved SCMP specification to draft-dekater-scion-controlplane
