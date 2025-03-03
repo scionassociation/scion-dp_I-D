@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 23 August 2025                                SCION Association
+Expires: 4 September 2025                              SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        19 February 2025
+                                                            3 March 2025
 
 
                             SCION Data Plane
@@ -70,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 August 2025.
+   This Internet-Draft will expire on 4 September 2025.
 
 Copyright Notice
 
@@ -143,6 +143,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-05
      draft-dekater-scion-dataplane-04
      draft-dekater-scion-dataplane-03
      draft-dekater-scion-dataplane-02
@@ -2763,16 +2764,16 @@ direction
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-07, 24 December 2024,
+              scion-controlplane-08, 3 March 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-07>.
+              scion-controlplane-08>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-08, 30 December 2024,
+              dekater-scion-pki-09, 3 March 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-08>.
+              scion-pki-09>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2951,6 +2952,11 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-05
+
+   *  Abstract: mention goal and that document is not an Internet
+      Standard
 
 draft-dekater-scion-dataplane-04
 
