@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-01T00:00:45.068924+00:00",
+  "timestamp": "2025-04-06T00:00:37.333806+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1413,6 +1413,27 @@
       "createdAt": "2024-11-12T11:17:06Z",
       "updatedAt": "2024-12-16T17:12:08Z",
       "closedAt": "2024-12-16T17:12:08Z",
+      "comments": []
+    },
+    {
+      "number": 94,
+      "id": "I_kwDOKYa7786w7tj8",
+      "title": "Add SVG figures",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/94",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 2",
+        "final-polish"
+      ],
+      "body": "> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
+      "createdAt": "2025-04-03T06:09:48Z",
+      "updatedAt": "2025-04-03T06:11:12Z",
+      "closedAt": null,
       "comments": []
     }
   ],
