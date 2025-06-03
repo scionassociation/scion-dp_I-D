@@ -381,7 +381,7 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 
 
          Core                                      Core
-      ─────────-▶                               ─────────-▶  
+      ─────────-▶                               ─────────-▶
     .─.       .─.               .-.           .-.       .-.        .-.
 ┌──( C )- - -( C )──┐   ┌──────( C )──────┐  ( C )- - -( C )  ┌───( C )
 │   `┬'       `┬'   │   │       `┬'       │   `┬'       `┬'   │    `┬'
