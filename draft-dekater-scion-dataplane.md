@@ -1280,34 +1280,31 @@ The following sections describe the tasks to be performed by the ingress and egr
 The following figure provides a simplified representation of the processing at routers both in construction direction and against construction direction.
 
 ~~~~
-                              .--.
-                             ( RR )  = Router
-Processing in                 `--'
-construction
-direction
+                              .-.
+                             (RR )  = Router
+                              `-'
+Processing in construction direction
 
       1. Verify MAC of AS1          1. Verify MAC of AS2
       2. Update Acc for AS2         2. Update Acc for AS3
                  |                            |
->>>--------------o----------------------------o---------------------->>>
-
-+-------------+  |           +-------------+  |          +-------------+
-|             |              |             |             |             |
-|           .--. |          .--.         .--. |         .--.           |
-|   AS1    ( RR )o---------( RR )  AS2  ( RR )o--------( RR )  AS3     |
-|           `--' |          `--'         `--' |         `--'           |
-|             |              |             |             |             |
-+-------------+  |           +-------------+  |          +-------------+
-
+▶▶▶──────────────o────────────────────────────o──────────────────────▶▶▶
                  |                            |
-<<<--------------o----------------------------o----------------------<<<
+┌─────────────┐  |           ┌─────────────┐  |          ┌─────────────┐
+│             │  |           │             │  |          │             │
+│            .┴. |          .┴.           .┴. |         .┴.            │
+│     AS1   (RR )o---------(RR )   AS2   (RR )o--------(RR )   AS3     │
+│            `┬' |          `┬'           `┬' |         `┬'            │
+│             │  |           │             │  |          │             │
+└─────────────┘  |           └─────────────┘  |          └─────────────┘
                  |                            |
-      1. Update Acc for AS1         1. Update Acc for AS2
-      2. Verify MAC of AS1          2. Verify MAC of AS2
+                 |                            |
+◀◀◀──────────────o────────────────────────────o──────────────────────◀◀◀
+                 |                            |
+       1. Update Acc for AS1        1. Update Acc for AS2
+       2. Verify MAC of AS1         2. Verify MAC of AS2
 
-                                                      Processing against
-                                                            construction
-                                                               direction
+                               Processing against construction direction
 ~~~~
 {: #figure-19 title="A simplified representation of the processing at routers in both directions."}
 
