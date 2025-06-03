@@ -267,24 +267,24 @@ SCION emphasizes this separation as it is used exclusively for inter-domain forw
 {{figure-30}} shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is later presented in [](#life-of-a-packet). A list of currently used upper layer protocols on top of SCION is presented in [](#protnum).
 
 ~~~~
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                             |
-|                             |
-|        Payload (L4)         |
-|                             |
-|                             |
-|                             |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                             |
-|            SCION            |
-|                             |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
-|             UDP             |                |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  Intra-domain  |
-|             IP              |                |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+    protocol    |
-|         Link Layer          |                |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
+┌─────────────────────────────┐
+│                             │
+│                             │
+│        Payload (L4)         │
+│                             │
+│                             │
+│                             │
+├─────────────────────────────┤
+│                             │
+│            SCION            │
+│                             │
+├─────────────────────────────┤  ──────────────┐
+│             UDP             │                │
+├─────────────────────────────┤   Intra-domain │
+│             IP              │                │
+├─────────────────────────────┤     protocol   │
+│         Link Layer          │                │
+└─────────────────────────────┘  ──────────────┘
 ~~~~
 {: #figure-30 title="The SCION header within the protocol stack in a typical deployment."}
 
