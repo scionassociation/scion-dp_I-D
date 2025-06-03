@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 4 September 2025                              SCION Association
+Expires: 5 December 2025                               SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            3 March 2025
+                                                             3 June 2025
 
 
                             SCION Data Plane
@@ -70,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 September 2025.
+   This Internet-Draft will expire on 5 December 2025.
 
 Copyright Notice
 
@@ -420,24 +420,24 @@ Table of Contents
    Section 3.  A list of currently used upper layer protocols on top of
    SCION is presented in Appendix "Assigned SCION Protocol Numbers".
 
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                             |
-   |                             |
-   |        Payload (L4)         |
-   |                             |
-   |                             |
-   |                             |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                             |
-   |            SCION            |
-   |                             |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
-   |             UDP             |                |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  Intra-domain  |
-   |             IP              |                |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+    protocol    |
-   |         Link Layer          |                |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
+   ┌─────────────────────────────┐
+   │                             │
+   │                             │
+   │        Payload (L4)         │
+   │                             │
+   │                             │
+   │                             │
+   ├─────────────────────────────┤
+   │                             │
+   │            SCION            │
+   │                             │
+   ├─────────────────────────────┤  ──────────────┐
+   │             UDP             │                │
+   ├─────────────────────────────┤   Intra-domain │
+   │             IP              │                │
+   ├─────────────────────────────┤     protocol   │
+   │         Link Layer          │                │
+   └─────────────────────────────┘  ──────────────┘
 
      Figure 1: The SCION header within the protocol stack in a typical
                                 deployment.
