@@ -943,7 +943,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 ├───────────────────────────────┘                               ┤        │
 │                             DstAS                             │        │
 ├───────────────────────────────┬───────────────────────────────┤        │
-│            SrcISD             │                               │ SCION  │ 
+│            SrcISD             │                               │ SCION  │
 ├───────────────────────────────┘                               ┤ address│
 │                             SrcAS                             │ header │
 ├───────────────────────────────────────────────────────────────┤        │
