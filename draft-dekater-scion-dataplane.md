@@ -994,7 +994,7 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
 │            │    AS2     │             │            │    AS3     │
 │            │            │             │            │            │
 │          ┌─┴─┐          │             │          ┌─┴─┐          │
-│          │ A │          │             │          │ N │          │
+│          │ A │          │             │          │ B │          │
 │          └───┘          │             │          └───┘          │
 │     1-2,203.0.113.6     │             │      1-3,192.0.2.7      │
 │                         │             │                         │
@@ -1195,7 +1195,7 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
 │       0       │    ExpTime    │          ConsIngress          │   Hop  │
 ├───────────────┴───────────────┼───────────────────────────────┤  Field │
 │          ConsEgress           │               0               │        │
-└───────────────────────────────┴───────────────────────────────┤ ───────┤
+└───────────────────────────────┴───────────────────────────────┘ ───────┘
 ~~~~
 {: #figure-18 title="Input data to calculate the Hop Field MAC for the default hop-field MAC algorithm"}
 
