@@ -423,19 +423,19 @@ The SCION Data Plane provides *path authorization*. This property ensures that d
 The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an OPTIONAL extension header, see {{figure-2}} below.
 
 ~~~~
-+--------------------------------------------------------+
-|                     Common header                      |
-|                                                        |
-+--------------------------------------------------------+
-|                     Address header                     |
-|                                                        |
-+--------------------------------------------------------+
-|                      Path header                       |
-|                                                        |
-+--------------------------------------------------------+
-|               Extension header (OPTIONAL)              |
-|                                                        |
-+--------------------------------------------------------+
+┌────────────────────────────────────────────────────────┐
+│                     Common header                      │
+│                                                        │
+├────────────────────────────────────────────────────────┤
+│                     Address header                     │
+│                                                        │
+├────────────────────────────────────────────────────────┤
+│                      Path header                       │
+│                                                        │
+├────────────────────────────────────────────────────────┤
+│               Extension header (OPTIONAL)              │
+│                                                        │
+└────────────────────────────────────────────────────────┘
 ~~~~
 {: #figure-2 title="High-level SCION header structure"}
 
@@ -452,20 +452,20 @@ The OPTIONAL *extension* header contains a variable number of hop-by-hop and end
 The SCION common header has the following packet format:
 
 ~~~~
-0                   1                   2                   3
+ 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|Version|  TraffCl      |                Flow Label             |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    NextHdr    |    HdrLen     |          PayloadLen           |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|    PathType   |DT |DL |ST |SL |              RSV              |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+├─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┤
+│Version│   TrafficClass    │            Flow Label             │
+├───────┴───────┬───────────┴───┬───────────────────────────────┤
+│    NextHdr    │    HdrLen     │          PayloadLen           │
+├───────────────┼───┬───┬───┬───┼───────────────────────────────┤
+│    PathType   │DT │DL │ST │SL │              RSV              │
+└───────────────┴───┴───┴───┴───┴───────────────────────────────┘
 ~~~~
 {: #figure-3 title="The SCION common header packet format"}
 
 - `Version`: The version of the SCION common header. Currently, only version "0" is supported.
-- `TrafficClass` (`TraffCl` in the image above): The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet might differ from the value sent by the packet's source. The current use of the `TrafficClass` field for Differentiated Services and Explicit Congestion Notification is specified in {{RFC2474}} and {{RFC3168}}.
+- `TrafficClass`: The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet might differ from the value sent by the packet's source. The current use of the `TrafficClass` field for Differentiated Services and Explicit Congestion Notification is specified in {{RFC2474}} and {{RFC3168}}.
 - `Flow Label`: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources MUST set this field. This serves the same purpose as what {{RFC6437}} describes for IPv6 and is used in the same manner. Notably, a Flow Label of zero does not imply that packet reordering is acceptable.
 - `NextHdr`: Encodes the type of the first header after the SCION header. This can be either a SCION extension or a Layer 4 protocol such as TCP or UDP. Values of this field respect the Assigned SCION Protocol Numbers (see [](#protnum)).
 - `HdrLen`: Specifies the entire length of the SCION header in bytes, i.e. the sum of the lengths of the common header, the address header, and the path header. The SCION header is aligned to a multiple of 4 bytes. The SCION header length is computed as `HdrLen` * 4 bytes. The 8 bits of the `HdrLen` field limit the SCION header to a maximum of 255 * 4 = 1020 bytes.
@@ -510,19 +510,19 @@ The SCION address header has the following format:
 ~~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|            DstISD             |                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-|                             DstAS                             |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|            SrcISD             |                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-|                             SrcAS                             |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                    DstHostAddr (variable Len)                 |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                    SrcHostAddr (variable Len)                 |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+├─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┤
+│            DstISD             │                               │
+├───────────────────────────────┘                               ┤
+│                             DstAS                             │
+├───────────────────────────────┬───────────────────────────────┤
+│            SrcISD             │                               │
+├───────────────────────────────┘                               ┤
+│                             SrcAS                             │
+├───────────────────────────────────────────────────────────────┤
+│                 DstHostAddr (variable length)                 │
+├───────────────────────────────────────────────────────────────┤
+│                 SrcHostAddr (variable length)                 │
+└───────────────────────────────────────────────────────────────┘
 ~~~~
 {: #figure-4 title="The SCION address header packet format"}
 
@@ -535,9 +535,9 @@ If a service address is implied by the `DT/DL` or `ST/SL` field of the common he
 ~~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|         Service Number        |              RSV              |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+├─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┤
+│         Service Number        │              RSV              │
+└───────────────────────────────┴───────────────────────────────┘
 ~~~~
 {: #figure-20 title="Service address format"}
 
@@ -575,30 +575,30 @@ The `SCION` path type (`PathType=1`) is the standard path type. A SCION path has
 ~~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                          PathMetaHdr                          |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                           InfoField                           |
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                              ...                              |
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                           InfoField                           |
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                           HopField                            |
-|                                                               |
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                           HopField                            |
-|                                                               |
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                              ...                              |
-|                                                               |
-|                                                               |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+├─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┤
+│                          PathMetaHdr                          │
+├───────────────────────────────────────────────────────────────┤
+│                           InfoField                           │
+│                                                               │
+├───────────────────────────────────────────────────────────────┤
+│                              ...                              │
+│                                                               │
+├───────────────────────────────────────────────────────────────┤
+│                           InfoField                           │
+│                                                               │
+├───────────────────────────────────────────────────────────────┤
+│                           HopField                            │
+│                                                               │
+│                                                               │
+├───────────────────────────────────────────────────────────────┤
+│                           HopField                            │
+│                                                               │
+│                                                               │
+├───────────────────────────────────────────────────────────────┤
+│                              ...                              │
+│                                                               │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
 ~~~~
 {: #figure-5 title="Layout of a standard SCION path"}
 
