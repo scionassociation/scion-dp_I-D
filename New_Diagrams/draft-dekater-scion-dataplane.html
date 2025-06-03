@@ -3253,34 +3253,31 @@ The following <code>InfoField</code> settings are possible, based on the followi
 <figure id="figure-20">
             <div class="alignLeft art-text artwork" id="section-4.2.2-5.1">
 <pre>
-                              .--.
-                             ( RR )  = Router
-Processing in                 `--'
-construction
-direction
+                              .-.
+                             (RR )  = Router
+                              `-'
+Processing in construction direction
 
       1. Verify MAC of AS1          1. Verify MAC of AS2
       2. Update Acc for AS2         2. Update Acc for AS3
                  |                            |
-&gt;&gt;&gt;--------------o----------------------------o----------------------&gt;&gt;&gt;
-
-+-------------+  |           +-------------+  |          +-------------+
-|             |              |             |             |             |
-|           .--. |          .--.         .--. |         .--.           |
-|   AS1    ( RR )o---------( RR )  AS2  ( RR )o--------( RR )  AS3     |
-|           `--' |          `--'         `--' |         `--'           |
-|             |              |             |             |             |
-+-------------+  |           +-------------+  |          +-------------+
-
+▶▶▶──────────────o────────────────────────────o──────────────────────▶▶▶
                  |                            |
-&lt;&lt;&lt;--------------o----------------------------o----------------------&lt;&lt;&lt;
+┌─────────────┐  |           ┌─────────────┐  |          ┌─────────────┐
+│             │  |           │             │  |          │             │
+│            .┴. |          .┴.           .┴. |         .┴.            │
+│     AS1   (RR )o---------(RR )   AS2   (RR )o--------(RR )   AS3     │
+│            `┬' |          `┬'           `┬' |         `┬'            │
+│             │  |           │             │  |          │             │
+└─────────────┘  |           └─────────────┘  |          └─────────────┘
                  |                            |
-      1. Update Acc for AS1         1. Update Acc for AS2
-      2. Verify MAC of AS1          2. Verify MAC of AS2
+                 |                            |
+◀◀◀──────────────o────────────────────────────o──────────────────────◀◀◀
+                 |                            |
+       1. Update Acc for AS1        1. Update Acc for AS2
+       2. Verify MAC of AS1         2. Verify MAC of AS2
 
-                                                      Processing against
-                                                            construction
-                                                               direction
+                               Processing against construction direction
 </pre>
 </div>
 <figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
