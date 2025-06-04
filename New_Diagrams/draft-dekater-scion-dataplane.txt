@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 5 December 2025                               SCION Association
+Expires: 6 December 2025                               SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                             3 June 2025
+                                                             4 June 2025
 
 
                             SCION Data Plane
@@ -70,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2025.
+   This Internet-Draft will expire on 6 December 2025.
 
 Copyright Notice
 
@@ -737,6 +737,7 @@ Table of Contents
    ├───────────────┼───┬───┬───┬───┼───────────────────────────────┤
    │    PathType   │DT │DL │ST │SL │              RSV              │
    └───────────────┴───┴───┴───┴───┴───────────────────────────────┘
+   d
 
               Figure 4: The SCION common header packet format
 
