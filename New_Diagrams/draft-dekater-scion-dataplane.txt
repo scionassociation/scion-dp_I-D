@@ -997,12 +997,12 @@ Table of Contents
    and egress interface.  As such, they bring the two adjacent segments
    together.
 
-                      ┌────────────────┐
-                      │    ISD Core    │
-      ┌───┐   ┌───┐   │  ┌───┐  ┌───┐  │    ┌───┐  ┌───┐
+                      ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+                      ┆    ISD Core    ┆
+      ┌───┐   ┌───┐   ┆  ┌───┐  ┌───┐  ┆    ┌───┐  ┌───┐
       │AS3├───┤AS4├──────┤AS1├──┤AS2├───────┤AS5├──┤AS6│
-      └───┘   └───┘   │  └───┘  └───┘  │    └───┘  └───┘
-                      └────────────────┘
+      └───┘   └───┘   ┆  └───┘  └───┘  ┆    └───┘  └───┘
+                      └┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┘
 
     Up-Segment           Core-Segment        Down-Segment
    ┌─────────┐           ┌─────────┐         ┌─────────┐
