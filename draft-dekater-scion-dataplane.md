@@ -611,12 +611,12 @@ The SCION header is created by extracting the required Info Fields and Hop Field
 In the Hop Field that represents the last Hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
 
 ~~~~
-                   ┌────────────────┐
-                   │    ISD Core    │
-   ┌───┐   ┌───┐   │  ┌───┐  ┌───┐  │    ┌───┐  ┌───┐
+                   ┌┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┐
+                   ┆    ISD Core    ┆
+   ┌───┐   ┌───┐   ┆  ┌───┐  ┌───┐  ┆    ┌───┐  ┌───┐
    │AS3├───┤AS4├──────┤AS1├──┤AS2├───────┤AS5├──┤AS6│
-   └───┘   └───┘   │  └───┘  └───┘  │    └───┘  └───┘
-                   └────────────────┘
+   └───┘   └───┘   ┆  └───┘  └───┘  ┆    └───┘  └───┘
+                   └┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┘
 
  Up-Segment           Core-Segment        Down-Segment
 ┌─────────┐           ┌─────────┐         ┌─────────┐
