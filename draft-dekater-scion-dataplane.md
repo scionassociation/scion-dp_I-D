@@ -459,6 +459,7 @@ The SCION common header has the following packet format:
 ├───────────────┼───┬───┬───┬───┼───────────────────────────────┤
 │    PathType   │DT │DL │ST │SL │              RSV              │
 └───────────────┴───┴───┴───┴───┴───────────────────────────────┘
+d
 ~~~~
 {: #figure-3 title="The SCION common header packet format"}
 
