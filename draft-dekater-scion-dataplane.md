@@ -360,7 +360,7 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 │     │         │     │     │     │                   │             │
 │   ┌─┴─┐     ┌─┴─┐   │     │   ┌─┴─┐               ┌─┴─┐   1d    ┌─┴─┐
 └─-▶│ * │     │ * │◀──┘     └─-▶│ * │               │C/*│         │C/*│
-    └───┘     └───┘             └───┘               └───┘         └───┘ 
+    └───┘     └───┘             └───┘               └───┘         └───┘
 
 
          ┌───┐                   ┌───┐                 ┌───┐
