@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-04-06T00:00:37.333806+00:00",
+  "timestamp": "2025-06-05T00:00:49.954622+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -7472,6 +7472,47 @@
         "oid": "c486f1cab900022c45c75432e8cc868c7bad512f"
       },
       "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 95,
+      "id": "PR_kwDOKYa7786Y08rg",
+      "title": "Updated Figure 1",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/95",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-03T13:39:08Z",
+      "updatedAt": "2025-06-04T14:05:45Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "New_Diagrams",
+      "headRefOid": "e66c2d747dfa506f1ed5c6f02795d550b983bb46",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "I'm not sure why, but these new figures sometimes generate some weirdness in the HTML version.  This, however, should not be relevant once we get svg graphics in. \r\nExample: \r\n<img width=\"726\" alt=\"Screenshot 2025-06-04 at 13 29 01\" src=\"https://github.com/user-attachments/assets/b9de1127-ba61-4105-8ca6-59cf4f35b7ae\" />\r\n\r\n\r\n",
+          "createdAt": "2025-06-04T11:30:25Z",
+          "updatedAt": "2025-06-04T11:30:25Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I'm not sure why, but these new figures sometimes generate some weirdness in the HTML version. This, however, should not be relevant once we get svg graphics in.\n> Example:\n> Screenshot.2025-06-04.at.13.29.01.png (view on web) <https://github.com/user-attachments/assets/b9de1127-ba61-4105-8ca6-59cf4f35b7ae>There may be subtle differences in the line art, especially if this weirdness also appears in the equivalent ASCII diagram.\n\nKevin",
+          "createdAt": "2025-06-04T11:43:35Z",
+          "updatedAt": "2025-06-04T11:43:35Z"
+        }
+      ],
       "reviews": []
     }
   ]
