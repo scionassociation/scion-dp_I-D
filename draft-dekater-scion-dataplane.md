@@ -225,7 +225,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Leaf AS**: An AS at the "edge" of an ISD, with no other downstream ASes.
 
-**MAC**: Message Authentication Code. In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
+**Message Authentication Code (MAC)**: In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
 
 **Path Authorization**: A requirement for the data plane is that endpoints can only use paths that were constructed and authorized by ASes in the control plane. This property is called path authorization. The goal of path authorization is to prevent endpoints from crafting Hop Fields (HFs) themselves, modifying HFs in authorized path segments, or combining HFs of different path segments.
 
@@ -239,7 +239,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Peering Link**: A link between two SCION border routers of different ASes that can be used as a shortcut. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments. It is possible to construct a path out of only two partial segments which top-most hops are joined by a peering link. Two peering ASes may be in different ISDs and may exist between any ASes, including core ASes.
 
-**SCMP**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in {{I-D.dekater-scion-controlplane}}.
+**SCION Control Message Protocol (SCMP)**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in {{I-D.dekater-scion-controlplane}}.
 
 ## Conventions and Definitions
 
