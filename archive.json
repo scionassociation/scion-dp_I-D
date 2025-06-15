@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-05T00:00:49.954622+00:00",
+  "timestamp": "2025-06-15T00:00:50.180795+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -7513,6 +7513,32 @@
           "updatedAt": "2025-06-04T11:43:35Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 96,
+      "id": "PR_kwDOKYa7786aUX3l",
+      "title": "Terminology Updates",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/96",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-13T04:01:32Z",
+      "updatedAt": "2025-06-13T04:01:32Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "Terminology-Updates",
+      "headRefOid": "23ce1744b62abc38481ee239e75d42654c4c8e9c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
