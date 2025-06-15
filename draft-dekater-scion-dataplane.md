@@ -266,7 +266,11 @@ SCION emphasizes this separation as it is used exclusively for inter-domain forw
 
 {{figure-30}} shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is later presented in [](#life-of-a-packet). A list of currently used upper layer protocols on top of SCION is presented in [](#protnum).
 
-~~~~
+<figure anchor="_figure-30">
+<name>The SCION header within the protocol stack in a typical deployment</name>
+<artset>
+<artwork type="svg" src="images/scion-header.svg"/>
+<artwork type="ascii-art">
 ┌─────────────────────────────┐
 │                             │
 │                             │
@@ -285,8 +289,9 @@ SCION emphasizes this separation as it is used exclusively for inter-domain forw
 ├─────────────────────────────┤    protocol   │
 │         Link Layer          │               │
 └─────────────────────────────┘ ──────────────┘
-~~~~
-{: #figure-30 title="The SCION header within the protocol stack in a typical deployment."}
+</artwork>
+</artset>
+</figure>
 
 A complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple. The ISD-AS part is used for inter-domain routing. The endpoint address part is only used for intra-domain forwarding at the source and destination ASes. This implies that endpoint addresses are only required to be globally unique within each SCION AS. This means, for example, that an endpoint running a SCION stack using a {{RFC1918}} could directly communicate with another SCION endpoint using a {{RFC1918}} endpoint address in a different SCION AS.
 
