@@ -285,7 +285,7 @@ SCION emphasizes this separation as it is used exclusively for inter-domain forw
 |                             |
 +-----------------------------+ <-+
 |             UDP             |   |
-+─────────────────────────────+   | Intra-domain
++-----------------------------+   | Intra-domain
 |             IP              |   |  protocol
 +-----------------------------+   |
 |         Link Layer          |   |
@@ -345,7 +345,12 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 
 **Note:** It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).
 
-~~~~
+<figure anchor="_figure-1">
+<name>Illustration of valid path segment combinations. Each node represents a SCION Autonomous System.</name>
+<artset>
+<artwork type="svg" src="images/valid-path-segments.svg"/>
+<artwork type="ascii-art">
+	
  ┌───┐
  │ C │ = Core AS                  - - - - = unused links
  └───┘
@@ -405,8 +410,9 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 │  ┌─┴─┐     ┌─┴─┐  │   │  ┌─┴─┐   ┌─┴─┐  │  ┌─┴─┐     ┌─┴─┐  │   ┌─┴─┐
 └─▶│ * │     │ * │◀─┘   └-▶│ * │   │ * │◀─┘  │ * │     │ * │  └--▶│ * │
    └───┘     └───┘         └───┘   └───┘     └───┘     └───┘      └───┘
-~~~~
-{: #figure-1 title="Illustration of valid path segment combinations. Each node represents a SCION Autonomous System."}
+</artwork>
+</artset>
+</figure>
 
 
 Valid path segment combinations:
