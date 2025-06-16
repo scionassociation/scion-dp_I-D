@@ -471,18 +471,25 @@ The OPTIONAL *extension* header contains a variable number of hop-by-hop and end
 
 The SCION common header has the following packet format:
 
-~~~~
+<figure anchor="_figure-3">
+<name>The SCION common header packet format</name>
+<artset>
+<artwork type="svg" src="images/valid-path-segments.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│Version│   TrafficClass    │            Flow Label             │
-├───────┴───────┬───────────┴───┬───────────────────────────────┤
-│    NextHdr    │    HdrLen     │          PayloadLen           │
-├───────────────┼───┬───┬───┬───┼───────────────────────────────┤
-│    PathType   │DT │DL │ST │SL │              RSV              │
-└───────────────┴───┴───┴───┴───┴───────────────────────────────┘
-~~~~
-{: #figure-3 title="The SCION common header packet format"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|Version| TrafficClass  |                Flow Label             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    NextHdr    |    HdrLen     |          PayloadLen           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    PathType   |DT |DL |ST |SL |              RSV              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 - `Version`: The version of the SCION common header. Currently, only version "0" is supported.
 - `TrafficClass`: The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet might differ from the value sent by the packet's source. The current use of the `TrafficClass` field for Differentiated Services and Explicit Congestion Notification is specified in {{RFC2474}} and {{RFC3168}}.
