@@ -534,24 +534,31 @@ A service address designates a set of endpoint addresses rather than a singular 
 
 The SCION address header has the following format:
 
-~~~~
+<figure anchor="_figure-4">
+<name>The SCION address header packet format</name>
+<artset>
+<artwork type="svg" src="images/address-header.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│            DstISD             │                               │
-├───────────────────────────────┘                               ┤
-│                             DstAS                             │
-├───────────────────────────────┬───────────────────────────────┤
-│            SrcISD             │                               │
-├───────────────────────────────┘                               ┤
-│                             SrcAS                             │
-├───────────────────────────────────────────────────────────────┤
-│                 DstHostAddr (variable length)                 │
-├───────────────────────────────────────────────────────────────┤
-│                 SrcHostAddr (variable length)                 │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-4 title="The SCION address header packet format"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            DstISD             |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                             DstAS                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            SrcISD             |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                             SrcAS                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    DstHostAddr (variable Len)                 |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    SrcHostAddr (variable Len)                 |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 - `DstISD, SrcISD`: The 16-bit ISD identifier of the destination/source.
 - `DstAS, SrcAS`: The 48-bit AS identifier of the destination/source.
