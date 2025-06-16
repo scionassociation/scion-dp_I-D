@@ -435,22 +435,29 @@ The SCION Data Plane provides *path authorization*. This property ensures that d
 
 The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an OPTIONAL extension header, see {{figure-2}} below.
 
-~~~~
-┌────────────────────────────────────────────────────────┐
-│                     Common header                      │
-│                                                        │
-├────────────────────────────────────────────────────────┤
-│                     Address header                     │
-│                                                        │
-├────────────────────────────────────────────────────────┤
-│                      Path header                       │
-│                                                        │
-├────────────────────────────────────────────────────────┤
-│               Extension header (OPTIONAL)              │
-│                                                        │
-└────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-2 title="High-level SCION header structure, non-byte aligned"}
+<figure anchor="_figure-2">
+<name>High-level SCION header structure, non-byte aligned</name>
+<artset>
+<artwork type="svg" src="images/valid-path-segments.svg"/>
+<artwork type="ascii-art">
+
++--------------------------------------------------------+
+|                     Common header                      |
+|                                                        |
++--------------------------------------------------------+
+|                     Address header                     |
+|                                                        |
++--------------------------------------------------------+
+|                      Path header                       |
+|                                                        |
++--------------------------------------------------------+
+|               Extension header (OPTIONAL)              |
+|                                                        |
++--------------------------------------------------------+
+
+</artwork>
+</artset>
+</figure>
 
 The *common header* contains important meta information including version number and the lengths of the header and payload. In particular, it contains flags that control the format of subsequent headers such as the address and path headers. For more details, see [](#common-header).
 
