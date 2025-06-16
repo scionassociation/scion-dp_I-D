@@ -438,7 +438,7 @@ The SCION packet header is aligned to 4 bytes. It is composed of a common header
 <figure anchor="_figure-2">
 <name>High-level SCION header structure, non-byte aligned</name>
 <artset>
-<artwork type="svg" src="images/valid-path-segments.svg"/>
+<artwork type="svg" src="images/scion-header-specification.svg"/>
 <artwork type="ascii-art">
 
 +--------------------------------------------------------+
@@ -474,7 +474,7 @@ The SCION common header has the following packet format:
 <figure anchor="_figure-3">
 <name>The SCION common header packet format</name>
 <artset>
-<artwork type="svg" src="images/valid-path-segments.svg"/>
+<artwork type="svg" src="images/common-header.svg"/>
 <artwork type="ascii-art">
 
  0                   1                   2                   3
