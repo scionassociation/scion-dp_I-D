@@ -271,24 +271,25 @@ SCION emphasizes this separation as it is used exclusively for inter-domain forw
 <artset>
 <artwork type="svg" src="images/scion-header.svg"/>
 <artwork type="ascii-art">
-┌─────────────────────────────┐
-│                             │
-│                             │
-│        Payload (L4)         │
-│                             │
-│                             │
-│                             │
-├─────────────────────────────┤
-│                             │
-│            SCION            │
-│                             │
-├─────────────────────────────┤◀─┐
-│             UDP             │  │
-├─────────────────────────────┤  │ Intra-domain
-│             IP              │  │  protocol
-├─────────────────────────────┤  │
-│         Link Layer          │  │
-└─────────────────────────────┘◀─┘
+
++-----------------------------+
+|                             |
+|                             |
+|        Payload (L4)         |
+|                             |
+|                             |
+|                             |
++-----------------------------+
+|                             |
+|            SCION            |
+|                             |
++-----------------------------+ <-+
+|             UDP             |   |
++─────────────────────────────+   | Intra-domain
+|             IP              |   |  protocol
++-----------------------------+   |
+|         Link Layer          |   |
++-----------------------------+ <-+
 </artwork>
 </artset>
 </figure>
