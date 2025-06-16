@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 17 December 2025                              SCION Association
+Expires: 18 December 2025                              SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            15 June 2025
+                                                            16 June 2025
 
 
                             SCION Data Plane
@@ -70,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 December 2025.
+   This Internet-Draft will expire on 18 December 2025.
 
 Copyright Notice
 
@@ -431,13 +431,13 @@ Table of Contents
    │                             │
    │            SCION            │
    │                             │
-   ├─────────────────────────────┤ ──────────────┐
-   │             UDP             │               │
-   ├─────────────────────────────┤  Intra-domain │
-   │             IP              │               │
-   ├─────────────────────────────┤    protocol   │
-   │         Link Layer          │               │
-   └─────────────────────────────┘ ──────────────┘
+   ├─────────────────────────────┤◀─┐
+   │             UDP             │  │
+   ├─────────────────────────────┤  │ Intra-domain
+   │             IP              │  │  protocol
+   ├─────────────────────────────┤  │
+   │         Link Layer          │  │
+   └─────────────────────────────┘◀─┘
 
      Figure 1: The SCION header within the protocol stack in a typical
                                  deployment
@@ -573,9 +573,12 @@ Table of Contents
    in different ASes (as endpoints from the same AS use an empty
    forwarding path to communicate with each other).
 
-    C = Core AS                    - - - - = unused links
-    * = source/destination AS      ──────▶ = direction of beaconing
-
+  ┌───┐
+  │ C │ = Core AS                  - - - - = unused links
+  └───┘
+  ┌───┐
+  │ * │ = source/destination AS    ──────▶ = direction of beaconing
+  └───┘
 
           Core                        Core                  Core
        ──────────▶                 ──────────▶           ──────────▶
@@ -618,7 +621,7 @@ Table of Contents
  ┌──┤ C ├ - - ┤ C ├──┐   ┌──────┤ C ├──────┐  │ C ├ - - ┤ C │  ┌───┤ C │
  │  └─┬─┘     └─┬─┘  │   │      └─┬─┘      │  └─┬─┘     └─┬─┘  │   └─┬─┘
  │    |   3b    |    │   │        |   4a   │    |   4b    |    │  5  |
- │    |         |    │   │        |             |         |    │     |
+ │    |         |    │   │        |        │    |         |    │     |
  │    |         |    │   │        |        │    |         |    │     |
  │  ┌─┴─┐     ┌─┴─┐  │   │      ┌─┴─┐      │    └ -┌───┐- ┘    │   ┌─┴─┐
  │  │   #- - -#   │  │   │    ┌─┤   ├─┐    │    ┌──┤   ├──┐    │   │ * │
@@ -702,7 +705,7 @@ Table of Contents
    │                                                        │
    └────────────────────────────────────────────────────────┘
 
-                Figure 3: High-level SCION header structure
+       Figure 3: High-level SCION header structure, non-byte aligned
 
    The _common header_ contains important meta information including
    version number and the lengths of the header and payload.  In
@@ -1022,7 +1025,7 @@ Table of Contents
                 │ │ │ │  │ ┃Meta ┃ │  │ │ │               │ │ │ │
                 │ │ │ │  │ ┗━━━━━┛ │  │ │ │               │ │ │ │
                 │ │ │ │  │ ┌─────┐ │  │ │ │               │ │ │ │
-                │ │ │ └─▶│ │ NF  │ │  │ │ │               │ │ │ │
+                │ │ │ └─▶│ │ INF │ │  │ │ │               │ │ │ │
                 │ │ │    │ └─────┘ │  │ │ │               │ │ │ │
                 │ │ │    │ ┌─────┐ │  │ │ │               │ │ │ │
                 │ │ │    │ │ INF │ │◀─┘ │ │               │ │ │ │
@@ -1466,19 +1469,19 @@ Table of Contents
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤ ───────┐
-│            DstISD             │                               │        │
-├───────────────────────────────┘                               ┤        │
-│                             DstAS                             │        │
-├───────────────────────────────┬───────────────────────────────┤        │
-│            SrcISD             │                               │ SCION  │
-├───────────────────────────────┘                               ┤ address│
-│                             SrcAS                             │ header │
-├───────────────────────────────────────────────────────────────┤        │
-│                 DstHostAddr (variable length)                 │        │
-├───────────────────────────────────────────────────────────────┤        │
-│                 SrcHostAddr (variable length)                 │        │
-├───────────────────────────────────────────────────────────────┤ ───────┘
+├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤◀─┐
+│            DstISD             │                               │  │
+├───────────────────────────────┘                               ┤  │
+│                             DstAS                             │  │
+├───────────────────────────────┬───────────────────────────────┤  │
+│            SrcISD             │                               │  │ SCION
+├───────────────────────────────┘                               ┤  │ address
+│                             SrcAS                             │  │ header
+├───────────────────────────────────────────────────────────────┤  │
+│                 DstHostAddr (variable length)                 │  │
+├───────────────────────────────────────────────────────────────┤  │
+│                 SrcHostAddr (variable length)                 │  │
+├───────────────────────────────────────────────────────────────┤◀─┘
 │                   Upper-Layer Packet Length                   │
 ├───────────────────────────────────────────────┬───────────────┤
 │                      zero                     │  Next Header  │
@@ -1967,15 +1970,15 @@ Table of Contents
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤ ───────┐
-│               0               │              Acc              │   Info │
-├───────────────────────────────┴───────────────────────────────┤  Field │
-│                           Timestamp                           │        │
-├───────────────┬───────────────┬───────────────────────────────┤ ───────┤
-│       0       │    ExpTime    │          ConsIngress          │   Hop  │
-├───────────────┴───────────────┼───────────────────────────────┤  Field │
-│          ConsEgress           │               0               │        │
-└───────────────────────────────┴───────────────────────────────┘ ───────┘
+├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤◀─┐
+│               0               │              Acc              │  │ Info
+├───────────────────────────────┴───────────────────────────────┤  │ Field
+│                           Timestamp                           │  │
+├───────────────┬───────────────┬───────────────────────────────┤◀─┤
+│       0       │    ExpTime    │          ConsIngress          │  │ Hop
+├───────────────┴───────────────┼───────────────────────────────┤  │ Field
+│          ConsEgress           │               0               │  │
+└───────────────────────────────┴───────────────────────────────┘◀─┘
 
      Figure 19: Input data to calculate the Hop Field MAC for the
                    default hop-field MAC algorithm
@@ -2160,9 +2163,9 @@ Table of Contents
    processing at routers both in construction direction and against
    construction direction.
 
-                              .-.
-                             (RR )  = Router
-                              `-'
+                             ┌───┐
+                             │ R │  = Router
+                             └───┘
 Processing in construction direction
 
       1. Verify MAC of AS1          1. Verify MAC of AS2
