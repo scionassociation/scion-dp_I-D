@@ -282,13 +282,13 @@ SCION emphasizes this separation as it is used exclusively for inter-domain forw
 │                             │
 │            SCION            │
 │                             │
-├─────────────────────────────┤ ──────────────┐
-│             UDP             │               │
-├─────────────────────────────┤  Intra-domain │
-│             IP              │               │
-├─────────────────────────────┤    protocol   │
-│         Link Layer          │               │
-└─────────────────────────────┘ ──────────────┘
+├─────────────────────────────┤◀─┐
+│             UDP             │  │
+├─────────────────────────────┤  │ Intra-domain
+│             IP              │  │  protocol
+├─────────────────────────────┤  │
+│         Link Layer          │  │
+└─────────────────────────────┘◀─┘
 </artwork>
 </artset>
 </figure>
@@ -345,9 +345,12 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 **Note:** It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).
 
 ~~~~
-   C = Core AS                    - - - - = unused links
-   * = source/destination AS      ──────▶ = direction of beaconing
-
+ ┌───┐
+ │ C │ = Core AS                  - - - - = unused links
+ └───┘  
+ ┌───┐ 
+ │ * │ = source/destination AS    ──────▶ = direction of beaconing
+ └───┘
 
          Core                        Core                  Core
       ──────────▶                 ──────────▶           ──────────▶
@@ -390,7 +393,7 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 ┌──┤ C ├ - - ┤ C ├──┐   ┌──────┤ C ├──────┐  │ C ├ - - ┤ C │  ┌───┤ C │
 │  └─┬─┘     └─┬─┘  │   │      └─┬─┘      │  └─┬─┘     └─┬─┘  │   └─┬─┘
 │    |   3b    |    │   │        |   4a   │    |   4b    |    │  5  |
-│    |         |    │   │        |             |         |    │     |
+│    |         |    │   │        |        │    |         |    │     |
 │    |         |    │   │        |        │    |         |    │     |
 │  ┌─┴─┐     ┌─┴─┐  │   │      ┌─┴─┐      │    └ -┌───┐- ┘    │   ┌─┴─┐
 │  │   #- - -#   │  │   │    ┌─┤   ├─┐    │    ┌──┤   ├──┐    │   │ * │
@@ -439,7 +442,7 @@ The SCION packet header is aligned to 4 bytes. It is composed of a common header
 │                                                        │
 └────────────────────────────────────────────────────────┘
 ~~~~
-{: #figure-2 title="High-level SCION header structure"}
+{: #figure-2 title="High-level SCION header structure, non-byte aligned"}
 
 The *common header* contains important meta information including version number and the lengths of the header and payload. In particular, it contains flags that control the format of subsequent headers such as the address and path headers. For more details, see [](#common-header).
 
@@ -641,7 +644,7 @@ In the Hop Field that represents the last Hop in the first segment (seen in the 
              │ │ │ │  │ ┃Meta ┃ │  │ │ │               │ │ │ │
              │ │ │ │  │ ┗━━━━━┛ │  │ │ │               │ │ │ │
              │ │ │ │  │ ┌─────┐ │  │ │ │               │ │ │ │
-             │ │ │ └─▶│ │ NF  │ │  │ │ │               │ │ │ │
+             │ │ │ └─▶│ │ INF │ │  │ │ │               │ │ │ │
              │ │ │    │ └─────┘ │  │ │ │               │ │ │ │
              │ │ │    │ ┌─────┐ │  │ │ │               │ │ │ │
              │ │ │    │ │ INF │ │◀─┘ │ │               │ │ │ │
@@ -940,19 +943,19 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 ~~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤ ───────┐
-│            DstISD             │                               │        │
-├───────────────────────────────┘                               ┤        │
-│                             DstAS                             │        │
-├───────────────────────────────┬───────────────────────────────┤        │
-│            SrcISD             │                               │ SCION  │
-├───────────────────────────────┘                               ┤ address│
-│                             SrcAS                             │ header │
-├───────────────────────────────────────────────────────────────┤        │
-│                 DstHostAddr (variable length)                 │        │
-├───────────────────────────────────────────────────────────────┤        │
-│                 SrcHostAddr (variable length)                 │        │
-├───────────────────────────────────────────────────────────────┤ ───────┘
+├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤◀─┐
+│            DstISD             │                               │  │
+├───────────────────────────────┘                               ┤  │
+│                             DstAS                             │  │
+├───────────────────────────────┬───────────────────────────────┤  │
+│            SrcISD             │                               │  │ SCION
+├───────────────────────────────┘                               ┤  │ address
+│                             SrcAS                             │  │ header
+├───────────────────────────────────────────────────────────────┤  │
+│                 DstHostAddr (variable length)                 │  │
+├───────────────────────────────────────────────────────────────┤  │
+│                 SrcHostAddr (variable length)                 │  │
+├───────────────────────────────────────────────────────────────┤◀─┘
 │                   Upper-Layer Packet Length                   │
 ├───────────────────────────────────────────────┬───────────────┤
 │                      zero                     │  Next Header  │
@@ -1190,15 +1193,15 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
 ~~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤ ───────┐
-│               0               │              Acc              │   Info │
-├───────────────────────────────┴───────────────────────────────┤  Field │
-│                           Timestamp                           │        │
-├───────────────┬───────────────┬───────────────────────────────┤ ───────┤
-│       0       │    ExpTime    │          ConsIngress          │   Hop  │
-├───────────────┴───────────────┼───────────────────────────────┤  Field │
-│          ConsEgress           │               0               │        │
-└───────────────────────────────┴───────────────────────────────┘ ───────┘
+├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤◀─┐
+│               0               │              Acc              │  │ Info
+├───────────────────────────────┴───────────────────────────────┤  │ Field
+│                           Timestamp                           │  │
+├───────────────┬───────────────┬───────────────────────────────┤◀─┤
+│       0       │    ExpTime    │          ConsIngress          │  │ Hop
+├───────────────┴───────────────┼───────────────────────────────┤  │ Field
+│          ConsEgress           │               0               │  │
+└───────────────────────────────┴───────────────────────────────┘◀─┘
 ~~~~
 {: #figure-18 title="Input data to calculate the Hop Field MAC for the default hop-field MAC algorithm"}
 
@@ -1283,9 +1286,9 @@ The following sections describe the tasks to be performed by the ingress and egr
 The following figure provides a simplified representation of the processing at routers both in construction direction and against construction direction.
 
 ~~~~
-                              .-.
-                             (RR )  = Router
-                              `-'
+                             ┌───┐
+                             │ R │  = Router
+                             └───┘
 Processing in construction direction
 
       1. Verify MAC of AS1          1. Verify MAC of AS2
