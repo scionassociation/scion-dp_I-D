@@ -347,8 +347,8 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 ~~~~
  ┌───┐
  │ C │ = Core AS                  - - - - = unused links
- └───┘  
- ┌───┐ 
+ └───┘
+ ┌───┐
  │ * │ = source/destination AS    ──────▶ = direction of beaconing
  └───┘
 
