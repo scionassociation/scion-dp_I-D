@@ -10935,43 +10935,6 @@ The following <code>InfoField</code> settings are possible, based on the followi
 <p id="section-4.2.2-1">During forwarding, each SCION router verifies the path contained in the packet header. Each SCION router also <span class="bcp14">MUST</span> correctly verify or set the value of the Accumulator in the <code>Acc</code> field for the next AS to be able to verify its Hop Field. The exact operations differ based on the location of the AS on the path.<a href="#section-4.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2.2-2">The processing of SCION packets for ASes where a peering link is crossed between path segments is a special case. A path containing a peering link contains exactly two path segments, one against construction direction (up) and one in construction direction (down). On the path segment against construction direction (up), the peering Hop Field is the last hop of the segment. In construction direction (down), the peering Hop Field is the first hop of the segment.<a href="#section-4.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-4.2.2-3">The following sections describe the tasks to be performed by the ingress and egress border routers of each on-path AS. Each operation is described from the perspective of AS<sub>i</sub>, where i belongs to [0 ... n-1], and n == the number of ASes in the path segment (counted from the first AS in the beaconing direction).<a href="#section-4.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.2.2-4">The following figure provides a simplified representation of the processing at routers both in construction direction and against construction direction.<a href="#section-4.2.2-4" class="pilcrow">¶</a></p>
-<span id="name-a-simplified-representation"></span><div id="_figure-19">
-<figure id="figure-19">
-            <div class="alignLeft art-text artwork" id="section-4.2.2-5.1">
-<pre>
-                             ┌───┐
-                             │ R │  = Router
-                             └───┘
-Processing in construction direction
-
-      1. Verify MAC of AS1          1. Verify MAC of AS2
-      2. Update Acc for AS2         2. Update Acc for AS3
-                 │                            │
-                 ▼                            ▼
-▶▶▶──────────────────────────────────────────────────────────────────▶▶▶
-                 |                            |
-┌─────────────┐  |           ┌─────────────┐  |          ┌─────────────┐
-│             │  |           │             │  |          │             │
-│           ┌─┴─┐|         ┌─┴─┐         ┌─┴─┐|        ┌─┴─┐           │
-│     AS1   │ R ├──────────┤ R │   AS2   │ R ├─────────┤ R │   AS3     │
-│           └─┬─┘|         └─┬─┘         └─┬─┘|        └─┬─┘           │
-│             │  |           │             │  |          │             │
-└─────────────┘  |           └─────────────┘  |          └─────────────┘
-                 |                            |
-◀◀◀──────────────────────────────────────────────────────────────────◀◀◀
-                 ▲                            ▲
-                 │                            │
-       1. Update Acc for AS1        1. Update Acc for AS2
-       2. Verify MAC of AS1         2. Verify MAC of AS2
-
-                               Processing against construction direction
-</pre>
-</div>
-<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
-<a href="#name-a-simplified-representation" class="selfRef">A simplified representation of the processing at routers in both directions.</a>
-            </figcaption></figure>
-</div>
 <div id="process-router-ingress">
 <section id="section-4.2.2.1">
             <h5 id="name-steps-at-ingress-border-rou">
