@@ -1380,38 +1380,6 @@ The processing of SCION packets for ASes where a peering link is crossed between
 
 The following sections describe the tasks to be performed by the ingress and egress border routers of each on-path AS. Each operation is described from the perspective of AS<sub>i</sub>, where i belongs to \[0 ... n-1], and n == the number of ASes in the path segment (counted from the first AS in the beaconing direction).
 
-The following figure provides a simplified representation of the processing at routers both in construction direction and against construction direction.
-
-~~~~
-                             ┌───┐
-                             │ R │  = Router
-                             └───┘
-Processing in construction direction
-
-      1. Verify MAC of AS1          1. Verify MAC of AS2
-      2. Update Acc for AS2         2. Update Acc for AS3
-                 │                            │
-                 ▼                            ▼
-▶▶▶──────────────────────────────────────────────────────────────────▶▶▶
-                 |                            |
-┌─────────────┐  |           ┌─────────────┐  |          ┌─────────────┐
-│             │  |           │             │  |          │             │
-│           ┌─┴─┐|         ┌─┴─┐         ┌─┴─┐|        ┌─┴─┐           │
-│     AS1   │ R ├──────────┤ R │   AS2   │ R ├─────────┤ R │   AS3     │
-│           └─┬─┘|         └─┬─┘         └─┬─┘|        └─┬─┘           │
-│             │  |           │             │  |          │             │
-└─────────────┘  |           └─────────────┘  |          └─────────────┘
-                 |                            |
-◀◀◀──────────────────────────────────────────────────────────────────◀◀◀
-                 ▲                            ▲
-                 │                            │
-       1. Update Acc for AS1        1. Update Acc for AS2
-       2. Verify MAC of AS1         2. Verify MAC of AS2
-
-                               Processing against construction direction
-~~~~
-{: #figure-19 title="A simplified representation of the processing at routers in both directions."}
-
 #### Steps at Ingress Border Router {#process-router-ingress}
 
 A SCION ingress border router MUST perform the following steps when it receives a SCION packet:
