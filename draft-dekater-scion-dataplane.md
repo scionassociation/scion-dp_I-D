@@ -964,14 +964,21 @@ There are two padding options to align subsequent options and to pad out the con
 
 Alignment requirement: none.
 
-~~~~
+<figure anchor="_figure-13">
+<name>TLV-encoded options - Pad1 option</name>
+<artset>
+<artwork type="svg" src="images/pad1-option.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-┌───────────────┐
-│       0       │
-└───────────────┘
-~~~~
-{: #figure-13 title="TLV-encoded options - Pad1 option"}
++-+-+-+-+-+-+-+-+
+|       0       |
++-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 
 **Note:** The format of the Pad1 option is a special case - it does not have length and value fields.
@@ -983,17 +990,23 @@ The Pad1 option is used to insert 1 byte of padding into the `Options` field of 
 
 Alignment requirement: none.
 
-~~~~
+<figure anchor="_figure-14">
+<name>TLV-encoded options - PadN option</name>
+<artset>
+<artwork type="svg" src="images/pad1-option.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│       1       │  OptDataLen   │            OptData            │
-├───────────────┴───────────────┘                               ┤
-│                              ...                              │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-14 title="TLV-encoded options - PadN option"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|       1       |  OptDataLen   |            OptData            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                              ...                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+</artwork>
+</artset>
+</figure>
 
 The PadN option is used to insert two or more bytes of padding into the `Options` field of an extension header. For N bytes of padding, the `OptDataLen` field contains the value N-2, and the `OptData` consists of N-2 zero-valued bytes.
 
