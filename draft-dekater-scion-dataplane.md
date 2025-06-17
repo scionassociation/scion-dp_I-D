@@ -791,17 +791,23 @@ To check that the current Hop Field is in the segment of the current Info Field,
 
 The 8-byte Info Field (`InfoField`) has the following format:
 
-~~~~
+<figure anchor="_figure-8">
+<name>SCION path type - Format of the Info Field</name>
+<artset>
+<artwork type="svg" src="images/info-field.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┼─┼─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│    RSV    │P│C│      RSV      │             Acc               │
-├───────────┴─┴─┴───────────────┴───────────────────────────────┤
-│                           Timestamp                           │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-8 title="SCION path type - Format of the Info Field"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    RSV    |P|C|      RSV      |             Acc               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           Timestamp                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+</artwork>
+</artset>
+</figure>
 
 - `RSV`: Unused and reserved for future use.
 - `P`: Peering flag. If the flag has value "1", the segment represented by this Info Field contains a peering Hop Field, which requires special processing in the data plane. For more details, see [](#peerlink) and [](#packet-verif).
@@ -813,20 +819,25 @@ The 8-byte Info Field (`InfoField`) has the following format:
 
 The 12-byte Hop Field (``HopField``) has the following format:
 
-~~~~
+<figure anchor="_figure-9">
+<name>SCION path type - Format of the Hop Field</name>
+<artset>
+<artwork type="svg" src="images/hop-field.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┼─┼─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│    RSV    │I│E│    ExpTime    │          ConsIngress          │
-├───────────┴─┴─┴───────────────┼───────────────────────────────┤
-│          ConsEgress           │                               │
-├───────────────────────────────┘                               ┤
-│                              MAC                              │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-9 title="SCION path type - Format of the Hop Field"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    RSV    |I|E|    ExpTime    |           ConsIngress         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|        ConsEgress             |                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                              MAC                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-
+</artwork>
+</artset>
+</figure>
 
 - `RSV`: Unused and reserved for future use.
 - `I`: The Ingress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of `ConsIngress`, the router SHOULD process the L4 payload in the packet.
