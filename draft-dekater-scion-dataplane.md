@@ -1016,28 +1016,35 @@ The PadN option is used to insert two or more bytes of padding into the `Options
 The SCION Data Plane does not provide payload integrity protection, as further clarified in [](#payload-integrity).
 Should any transport or other upper-layer protocols compute a checksum of the SCION header, then they SHOULD use the following pseudo header:
 
-~~~~
+<figure anchor="_figure-15">
+<name>Layout of the pseudo header for the upper-layer checksum</name>
+<artset>
+<artwork type="svg" src="images/pseudo-header.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤◀─┐
-│            DstISD             │                               │  │
-├───────────────────────────────┘                               ┤  │
-│                             DstAS                             │  │
-├───────────────────────────────┬───────────────────────────────┤  │
-│            SrcISD             │                               │  │ SCION
-├───────────────────────────────┘                               ┤  │ address
-│                             SrcAS                             │  │ header
-├───────────────────────────────────────────────────────────────┤  │
-│                 DstHostAddr (variable length)                 │  │
-├───────────────────────────────────────────────────────────────┤  │
-│                 SrcHostAddr (variable length)                 │  │
-├───────────────────────────────────────────────────────────────┤◀─┘
-│                   Upper-Layer Packet Length                   │
-├───────────────────────────────────────────────┬───────────────┤
-│                      zero                     │  Next Header  │
-└───────────────────────────────────────────────┴───────────────┘
-~~~~
-{: #figure-15 title="Layout of the pseudo header for the upper-layer checksum"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
+|            DstISD             |                               |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   |
+|                             DstAS                             |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|            SrcISD             |                               |   | SCION
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   | address
+|                             SrcAS                             |   | header
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|                    DstHostAddr (variable Len)                 |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|                    SrcHostAddr (variable Len)                 |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
+|                    Upper-Layer Packet Length                  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                      zero                     |  Next Header  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 
 - `DstISD`, `SrcISD`, `DstAS`, `SrcAS`, `DstHostAddr`, `SrcHostAddr`: These values are taken from the SCION address header.
