@@ -665,7 +665,7 @@ In the Hop Field that represents the last Hop in the first segment (seen in the 
 <artset>
 <artwork type="svg" src="images/path-construction-example.svg"/>
 <artwork type="ascii-art">
-	
+
                    +----------------+
                    |     ISD Core   |
    +---+   +---+   |  +---+  +---+  |    +---+  +---+
@@ -734,15 +734,21 @@ In the Hop Field that represents the last Hop in the first segment (seen in the 
 
 The 4-byte Path Meta Header field (`PathMetaHdr`) defines meta information about the SCION path that is contained in the path header. It has the following format:
 
-~~~~
+<figure anchor="_figure-7">
+<name>SCION path type - Format of the Path Meta Header field</name>
+<artset>
+<artwork type="svg" src="images/path-meta-header-field.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┼─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┤
-│ C │  CurrHF   │    RSV    │  Seg0Len  │  Seg1Len  │  Seg2Len  │
-└───┴───────────┴───────────┴───────────┴───────────┴───────────┘
-~~~~
-{: #figure-7 title="SCION path type - Format of the Path Meta Header field"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+| C |  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+</artwork>
+</artset>
+</figure>
 
 - `C` (urrINF): Specifies a 2-bits index (0-based) pointing to the current Info Field for the packet on its way through the network. For details, see [](#offset-calc) below.
 - `CurrHF`: Specifies a 6-bits index (0-based) pointing to the current Hop Field for the packet on its way through the network. For details, see [](#offset-calc) below. Note that the `CurrHF` index MUST point to a Hop Field that is part of the current path segment, as indicated by the `CurrINF` index.
