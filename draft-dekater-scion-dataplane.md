@@ -1280,20 +1280,27 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
 
 {{figure-18}} below shows the layout of the input data to calculate the Hop Field MAC.
 
-~~~~
+<figure anchor="_figure-18">
+<name>Input data to calculate the Hop Field MAC for the default hop-field MAC algorithm</name>
+<artset>
+<artwork type="svg" src="images/default-hop-field-mac-algorithm.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤◀─┐
-│               0               │              Acc              │  │ Info
-├───────────────────────────────┴───────────────────────────────┤  │ Field
-│                           Timestamp                           │  │
-├───────────────┬───────────────┬───────────────────────────────┤◀─┤
-│       0       │    ExpTime    │          ConsIngress          │  │ Hop
-├───────────────┴───────────────┼───────────────────────────────┤  │ Field
-│          ConsEgress           │               0               │  │
-└───────────────────────────────┴───────────────────────────────┘◀─┘
-~~~~
-{: #figure-18 title="Input data to calculate the Hop Field MAC for the default hop-field MAC algorithm"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
+|               0               |           Acc                 |   | Info
+|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|   | Field
+|                           Timestamp                           |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| <-+
+|       0       |    ExpTime    |          ConsIngress          |   | Hop
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   | Field
+|          ConsEgress           |               0               |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
+
+</artwork>
+</artset>
+</figure>
 
 
 #### Alternative Hop Field MAC Algorithms {#mac-requirements}
