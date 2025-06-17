@@ -566,14 +566,21 @@ The SCION address header has the following format:
 
 If a service address is implied by the `DT/DL` or `ST/SL` field of the common header, the corresponding address field has the following format:
 
-~~~~
+<figure anchor="_figure-20">
+<name>Service address format</name>
+<artset>
+<artwork type="svg" src="images/service-address-format.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│         Service Number        │              RSV              │
-└───────────────────────────────┴───────────────────────────────┘
-~~~~
-{: #figure-20 title="Service address format"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Service Number        |              RSV              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 - `RSV`: reserved for future use
 
@@ -606,7 +613,12 @@ One use case of the `Empty` path type lies in the context of [link-failure detec
 
 The `SCION` path type (`PathType=1`) is the standard path type. A SCION path has the following layout:
 
-~~~~
+<figure anchor="_figure-5">
+<name>Layout of a standard SCION path</name>
+<artset>
+<artwork type="svg" src="images/scion-path-type.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 ├─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
@@ -633,9 +645,10 @@ The `SCION` path type (`PathType=1`) is the standard path type. A SCION path has
 │                                                               │
 │                                                               │
 └───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-5 title="Layout of a standard SCION path"}
 
+</artwork>
+</artset>
+</figure>
 
 It consists of a path meta header, up to 3 Info Fields and up to 64 Hop Fields.
 
