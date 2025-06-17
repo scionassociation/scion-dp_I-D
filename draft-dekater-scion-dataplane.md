@@ -1062,35 +1062,42 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
 
 ## Description
 
-~~~~
-                  ┌─────────────────────────┐
-                  │                         │
-                  │           AS1           │
-                  │                         │ (1-1,
-                  │                         │ 198.51.100.17)
-                  │           198.51.100.4┌─┴─┐i1b
-                  │            ┌──────────┤R3 ├──┐
-             i1a┌─┴─┐          │          └─┬─┘  │
-             ┌──┤R2 ├──────────┘            │    │
-             │  └─┬─┘198.51.100.1           │    │
-             │    │                         │    │
-             │    └─────────────────────────┘    │ (1-3,
-             │                                   │ 198.51.100.18)
-        i2a┌─┴─┐                               ┌─┴─┐i3a
-┌──────────┤R1 ├──────────┐         ┌──────────┤R4 ├──────────┐
-│          └─┬─┘          │         │          └─┬─┘          │
-│            │203.0.113.17│         │            │192.0.2.34  │
-│            │            │         │            │            │
-│            │    AS2     │         │            │    AS3     │
-│            │            │         │            │            │
-│     ┌──────┴─────┐      │         │      ┌─────┴──────┐     │
-│     │ Endpoint A │      │         │      │ Endpoint B │     │
-│     └────────────┘      │         │      └────────────┘     │
-│     1-2,203.0.113.6     │         │      1-3,192.0.2.7      │
-│                         │         │                         │
-└─────────────────────────┘         └─────────────────────────┘
-~~~~
-{: #figure-16 title="Sample topology to illustrate the life cycle of a SCION packet. AS1 is the core AS of ISD 1, and AS2 and AS3 are non-core ASes of ISD 1."}
+<figure anchor="_figure-16">
+<name>Sample topology to illustrate the life cycle of a SCION packet. AS1 is the core AS of ISD 1, and AS2 and AS3 are non-core ASes of ISD 1.</name>
+<artset>
+<artwork type="svg" src="images/sample-topology-packet-lifecycle.svg"/>
+<artwork type="ascii-art">
+	
+                  +-------------------------+
+                  |                         |
+                  |           AS1           |
+                  |                         | (1-1,
+                  |                         | 198.51.100.17)
+                  |          198.51.100.4 +-+- +i1b
+                  |            +----------+R3 +--+
+            i1a +-+-+          |          +-+-+  |
+             +--+R2 +----------+            |    |
+             |  +-+-+ 198.51.100.1          |    |
+             |    |                         |    |
+             |    +-------------------------+    | (1-3,
+             |                                   | 198.51.100.18)
+       i2a +-+-+                               +-+-+ i3a
++----------+R1 +----------+         +----------+R4 +----------+
+|          +-+-+          |         |          +-+-+          |
+|            |203.0.113.17|         |            |192.0.2.34  |
+|            |            |         |            |            |
+|            |    AS2     |         |            |    AS3     |
+|            |            |         |            |            |
+|     +------+-----+      |         |      +-----+------+     |
+|     | Endpoint A |      |         |      | Endpoint B |     |
+|     +------------+      |         |      +------------+     |
+|     1-2,203.0.113.6     |         |      1-3,192.0.2.7      |
+|                         |         |                         |
++-------------------------+         +-------------------------+
+
+</artwork>
+</artset>
+</figure>
 
 Based on the network topology in {{figure-16}} above, this example shows the path of a SCION packet sent from its source at Endpoint A to its destination at Endpoint B, and how it will be processed by each router on the path using simplified snapshots of the packet header after each processing step. These snapshots, which are depicted in tables, show the most relevant information of the header, i.e. the SCION path and IP encapsulation for local communication.
 
