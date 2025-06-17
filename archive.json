@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-15T00:00:50.180795+00:00",
+  "timestamp": "2025-06-17T00:00:50.445014+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -7477,22 +7477,22 @@
     {
       "number": 95,
       "id": "PR_kwDOKYa7786Y08rg",
-      "title": "Updated Figure 1",
+      "title": "Updated Figures and added monodraw-generated SVGs",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/95",
       "state": "OPEN",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Resolves #94 ",
       "createdAt": "2025-06-03T13:39:08Z",
-      "updatedAt": "2025-06-04T14:05:45Z",
+      "updatedAt": "2025-06-16T23:53:28Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "New_Diagrams",
-      "headRefOid": "e66c2d747dfa506f1ed5c6f02795d550b983bb46",
+      "headRefOid": "6bf5adf07511455559e49bfc9b582019333c50a5",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -7513,7 +7513,100 @@
           "updatedAt": "2025-06-04T11:43:35Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786uqZUp",
+          "commit": {
+            "abbreviatedOid": "980c35e"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Figure 1 (and others): how about making the line highlighted dashed? \r\n<img width=\"560\" alt=\"Screenshot 2025-06-16 at 00 05 29\" src=\"https://github.com/user-attachments/assets/9491e935-365f-4d21-859a-8b36c51822e4\" />\r\n\r\n\r\nFigure 2: \r\nMaybe you could use the same box for ASes on top too (like here). Also, for vertical dashed patterns, aren't the dashes a bit close? Is this what comes out of monodraw, or is tehere a way to have a more distanced dashed pattern?\r\n<img width=\"573\" alt=\"Screenshot 2025-06-16 at 00 06 24\" src=\"https://github.com/user-attachments/assets/31b362be-9d9c-408b-841c-948914e7a440\" />\r\n\r\n Also, the arrow in 4a seems interrupted.\r\n<img width=\"176\" alt=\"Screenshot 2025-06-16 at 00 11 49\" src=\"https://github.com/user-attachments/assets/be74c62a-c895-4d18-883a-64e579d66f7f\" />\r\n\r\nFig 17:  on the right I would also use a dashed line\r\n<img width=\"573\" alt=\"Screenshot 2025-06-16 at 00 30 06\" src=\"https://github.com/user-attachments/assets/693c95c6-cd58-49d5-b86a-13a4b7b49fd0\" />\r\n\r\n<img width=\"581\" alt=\"Screenshot 2025-06-16 at 00 32 31\" src=\"https://github.com/user-attachments/assets/9bea8104-7bff-4358-9b94-0b4b7532bfc4\" />\r\n\r\nFig 20: Do we need it? And also, this router should also be a square.\r\n<img width=\"561\" alt=\"Screenshot 2025-06-16 at 00 33 26\" src=\"https://github.com/user-attachments/assets/faa49b5a-3ab8-4e9c-8d84-21e5dbf508d8\" />\r\n\r\n",
+          "createdAt": "2025-06-15T22:15:24Z",
+          "updatedAt": "2025-06-15T22:34:38Z",
+          "comments": [
+            {
+              "originalPosition": 206,
+              "body": "```suggestion\r\n{: #figure-2 title=\"High-level SCION header structure, non bite-aligned\"}\r\n```",
+              "createdAt": "2025-06-15T22:15:24Z",
+              "updatedAt": "2025-06-15T22:34:38Z"
+            },
+            {
+              "originalPosition": 424,
+              "body": "```suggestion\r\n             \u2502 \u2502 \u2502 \u2514\u2500\u25b6\u2502 \u2502 INF \u2502 \u2502  \u2502 \u2502 \u2502               \u2502 \u2502 \u2502 \u2502\r\n```",
+              "createdAt": "2025-06-15T22:18:48Z",
+              "updatedAt": "2025-06-15T22:34:38Z"
+            },
+            {
+              "originalPosition": 530,
+              "body": "Do we really need this figure?",
+              "createdAt": "2025-06-15T22:20:21Z",
+              "updatedAt": "2025-06-15T22:34:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786ux5b2",
+          "commit": {
+            "abbreviatedOid": "980c35e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-16T14:14:03Z",
+          "updatedAt": "2025-06-16T14:14:03Z",
+          "comments": [
+            {
+              "originalPosition": 206,
+              "body": "Fixed, although I assume this should be 'non-byte aligned' rather than 'non-bit aligned'.",
+              "createdAt": "2025-06-16T14:14:03Z",
+              "updatedAt": "2025-06-16T14:14:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786ux54u",
+          "commit": {
+            "abbreviatedOid": "980c35e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-16T14:14:35Z",
+          "updatedAt": "2025-06-16T14:14:35Z",
+          "comments": [
+            {
+              "originalPosition": 424,
+              "body": "Fixed",
+              "createdAt": "2025-06-16T14:14:35Z",
+              "updatedAt": "2025-06-16T14:14:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786ux6Xo",
+          "commit": {
+            "abbreviatedOid": "980c35e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-16T14:15:08Z",
+          "updatedAt": "2025-06-16T14:15:08Z",
+          "comments": [
+            {
+              "originalPosition": 206,
+              "body": "Fixed, but will look at removing superfluous diagrams.",
+              "createdAt": "2025-06-16T14:15:08Z",
+              "updatedAt": "2025-06-16T14:15:08Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 96,
