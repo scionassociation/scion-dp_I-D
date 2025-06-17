@@ -889,16 +889,23 @@ If both headers are present, the Hop-by-Hop Options header MUST come before the 
 
 The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 bytes and have the following format:
 
-~~~~
+<figure anchor="_figure-11">
+<name>Extension headers: Options header</name>
+<artset>
+<artwork type="svg" src="images/options-header.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│    NextHdr    │     ExtLen    │            Options            │
-├───────────────┴───────────────┘                               ┤
-│                                                               │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-11 title="Extension headers: Options header"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    NextHdr    |     ExtLen    |            Options            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+</artwork>
+</artset>
+</figure>
 
 
 - `NextHdr`: Unsigned 8-bit integer. Identifies the type of header immediately following the Hop-by-Hop/End-to-End Options header. Values of this field respect the Assigned SCION Protocol Numbers (see also [](#protnum)).
@@ -910,17 +917,23 @@ The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 byt
 
 The `Options` field of the Hop-by-Hop Options and the End-to-End Options headers carries a variable number of options that are type-length-value (TLV) encoded. Each TLV-encoded option has the following format:
 
-~~~~
+<figure anchor="_figure-12">
+<name>Options field: TLV-encoded options</name>
+<artset>
+<artwork type="svg" src="images/options-field.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-├─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┼─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┤
-│    OptType    │  OptDataLen   │            OptData            │
-├───────────────┴───────────────┘                               ┤
-│                              ...                              │
-└───────────────────────────────────────────────────────────────┘
-~~~~
-{: #figure-12 title="Options field: TLV-encoded options"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|    OptType    |  OptDataLen   |            OptData            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
+|                              ...                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+</artwork>
+</artset>
+</figure>
 
 - `OptType`: 8-bit identifier of the type of option. The following option types are assigned to the SCION HBH/E2E Options header:
 
