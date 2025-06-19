@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-17T00:00:50.445014+00:00",
+  "timestamp": "2025-06-19T00:00:56.114981+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1420,7 +1420,7 @@
       "id": "I_kwDOKYa7786w7tj8",
       "title": "Add SVG figures",
       "url": "https://github.com/scionassociation/scion-dp_I-D/issues/94",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "nicorusti",
       "authorAssociation": "MEMBER",
       "assignees": [
@@ -1432,9 +1432,17 @@
       ],
       "body": "> One immediate piece of feedback \u2014 it sure would be nice if the figures were rendered more nicely, if it doesn\u2019t represent too much work for the authors.[*] It\u2019s amazing how much the modest effort returns in terms of document readability. I have the zeal of a convert, having adopted aasvg for the most recent iteration of [https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/](https://urldefense.com/v3/__https://datatracker.ietf.org/doc/draft-ietf-idr-entropy-label/__;!!NEt6yMaO-gk!G9jt_GrlROPQcce-a5BfIgC_anQAMdJx3JN2ZsDAx4hOBvKhPemxMCY9phG6sqjMkzktzQTzYHMlVrjUGw$). I\u2019d say the conversion took less than an afternoon\u2019s work. I fed a couple of the figures from the SCION doc into aasvg and while they don\u2019t compile out of the box, it\u2019s evident it wouldn\u2019t be that hard to make the necessary changes. This isn\u2019t a demand, just a suggestion.",
       "createdAt": "2025-04-03T06:09:48Z",
-      "updatedAt": "2025-04-03T06:11:12Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-06-17T02:24:38Z",
+      "closedAt": "2025-06-17T02:24:38Z",
+      "comments": [
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've generated nicer SVGs from the Monodraw diagrams which appear in the HTML version. I've reverted to the original ASCII art (with my improvements) for the text version. \nI've put all the Monodraw source and SVG files into the 'images' directory. ",
+          "createdAt": "2025-06-17T02:24:35Z",
+          "updatedAt": "2025-06-17T02:24:35Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -7486,13 +7494,13 @@
       "labels": [],
       "body": "Resolves #94 ",
       "createdAt": "2025-06-03T13:39:08Z",
-      "updatedAt": "2025-06-16T23:53:28Z",
+      "updatedAt": "2025-06-17T09:53:03Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "New_Diagrams",
-      "headRefOid": "6bf5adf07511455559e49bfc9b582019333c50a5",
+      "headRefOid": "1693bae3554881a95c8e3b081dcf84108d9e26be",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -7603,6 +7611,46 @@
               "body": "Fixed, but will look at removing superfluous diagrams.",
               "createdAt": "2025-06-16T14:15:08Z",
               "updatedAt": "2025-06-16T14:15:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786u4Iar",
+          "commit": {
+            "abbreviatedOid": "980c35e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-17T02:19:58Z",
+          "updatedAt": "2025-06-17T02:19:58Z",
+          "comments": [
+            {
+              "originalPosition": 530,
+              "body": "It doesn't add much, so I've removed it. ",
+              "createdAt": "2025-06-17T02:19:58Z",
+              "updatedAt": "2025-06-17T02:19:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786u4Iqf",
+          "commit": {
+            "abbreviatedOid": "980c35e"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-17T02:20:56Z",
+          "updatedAt": "2025-06-17T02:20:56Z",
+          "comments": [
+            {
+              "originalPosition": 206,
+              "body": "I removed Figure 20 as it doesn't add much. The Monodraw source and SVG are in the images folder though.",
+              "createdAt": "2025-06-17T02:20:56Z",
+              "updatedAt": "2025-06-17T02:20:56Z"
             }
           ]
         }
