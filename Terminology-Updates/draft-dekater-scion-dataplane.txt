@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 15 December 2025                              SCION Association
+Expires: 26 December 2025                              SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            13 June 2025
+                                                            24 June 2025
 
 
                             SCION Data Plane
@@ -70,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 December 2025.
+   This Internet-Draft will expire on 26 December 2025.
 
 Copyright Notice
 
@@ -192,13 +192,12 @@ Table of Contents
    the trust roots and provide connectivity to other ISDs.  This is the
    basis of the public key infrastructure which the SCION Control Plane
    relies upon for the authentication of messages that is used for the
-   SCION control plane.  See [I-D.dekater-scion-pki]
+   SCION control plane.
 
    _Control Plane_ - performs inter-domain routing by discovering and
    securely disseminating path information between ASes.  The core ASes
    use Path-segment Construction Beacons (PCBs) to explore intra-ISD
-   paths, or to explore paths across different ISDs.  See
-   [I-D.dekater-scion-controlplane]
+   paths, or to explore paths across different ISDs.
 
    _Data Plane_ - carries out secure packet forwarding between SCION-
    enabled ASes over paths selected by endpoints.  A SCION border router
@@ -265,7 +264,7 @@ Table of Contents
    construction beacons (PCBs) accumulate cryptographically protected
    AS-level path information in the form of Hop Fields.  In the data
    plane, Hop Fields are used for packet forwarding: they contain the
-   incoming and outgoing interface IDs of the ASes on the forwarding
+   incoming and outgoing Interface IDs of the ASes on the forwarding
    path.
 
    *Info Field (INF)*: Each path segment construction beacon (PCB)
@@ -276,7 +275,7 @@ Table of Contents
    *Interface Identifier (Interface ID)*: A 16-bit identifier that
    designates a SCION interface at the end of a link connecting two
    SCION ASes, with each interface belonging to one border router.  Hop
-   fields describe the traversal of an AS by a pair of interface IDs
+   fields describe the traversal of an AS by a pair of Interface IDs
    called ConsIngress and ConsEgress, as they refer to the ingress and
    egress interfaces in the direction of path construction (beaconing).
    The Interface ID MUST be unique within each AS.  Interface ID 0 is
@@ -358,7 +357,7 @@ Table of Contents
    based on end-to-end path information contained in the packet header.
    This path information consists of a sequence of Hop Fields (HFs).
    Each Hop Field corresponds to an AS on the path, and it includes an
-   ingress interface ID as well as an egress interface ID, which
+   ingress Interface ID as well as an egress Interface ID, which
    unequivocally identifies the ingress and egress interfaces within the
    AS.  The information is authenticated with a Message Authentication
    Code (MAC) to prevent forgery.
@@ -466,7 +465,7 @@ Table of Contents
    2.  The SCION router parses, validates, and authenticates the SCION
        header.
 
-   3.  The SCION router maps the egress interface ID in the current Hop
+   3.  The SCION router maps the egress Interface ID in the current Hop
        Field of the SCION header to the destination address of the
        intra-domain protocol (e.g. MPLS or IP) of the egress border
        router.
@@ -485,7 +484,7 @@ Table of Contents
 
 1.3.3.  Configuration
 
-   Border routers require mappings from SCION interface IDs to underlay
+   Border routers require mappings from SCION Interface IDs to underlay
    addresses and such information MUST be supplied to each router in an
    out of band fashion (e.g in a configuration file).  For each link to
    a neighbor, these values MUST be configured.  A typical
@@ -1208,7 +1207,7 @@ Table of Contents
 
       -  Timestamp + (1 + ExpTime) * (86400/256)
 
-   *  ConsIngress, ConsEgress: The 16-bits ingress/egress interface IDs
+   *  ConsIngress, ConsEgress: The 16-bits ingress/egress Interface IDs
       in construction direction, that is, the direction of beaconing.
 
    *  MAC: The 6-byte Message Authentication Code to authenticate the
@@ -1252,7 +1251,7 @@ Table of Contents
 
    Upon receiving a packet containing a one-hop path, the ingress border
    router of the destination AS fills in the ConsIngress field in the
-   second Hop Field of the one-hop path with the ingress interface ID.
+   second Hop Field of the one-hop path with the ingress Interface ID.
    It sets the ConsEgress field to an invalid value (e.g. unspecified
    value 0), ensuring the path cannot be used beyond the destination AS.
    Then it calculates and appends the appropriate MAC for the Hop Field.
@@ -1700,7 +1699,7 @@ Table of Contents
       the last Hop Field of the current path segment, and hence moves
       the pointer from the current Info Field to the next Info Field
       _IF2_. The corresponding current Hop Field is (0,i1b), which
-      contains egress interface i1b.  Router maps the i1b interface ID
+      contains egress interface i1b.  Router maps the i1b Interface ID
       to egress Router 3, it therefore encapsulates the SCION packet
       inside an intra-AS underlay IP packet with the address of Router 3
       as the underlay destination.
@@ -2307,7 +2306,7 @@ direction
             Proceed with step 4.
 
    1.  Forward the packet to the egress border router (based on the
-       egress interface ID in the current Hop Field) or to the
+       egress Interface ID in the current Hop Field) or to the
        destination endpoint, if this is the destination AS.
 
 4.2.2.2.  Steps at Egress Border Router
