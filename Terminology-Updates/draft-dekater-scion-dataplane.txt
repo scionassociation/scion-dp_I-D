@@ -190,9 +190,8 @@ Table of Contents
    collection of signed root certificates in X.509 v3 format [RFC5280].
    The ISD is governed by a set of _core ASes_ which typically manage
    the trust roots and provide connectivity to other ISDs.  This is the
-   basis of the public key infrastructure which the SCION Control Plane
-   relies upon for the authentication of messages that is used for the
-   SCION control plane.
+   basis of the public key infrastructure used for the authentication of
+   messages used by the SCION Control Plane.
 
    _Control Plane_ - performs inter-domain routing by discovering and
    securely disseminating path information between ASes.  The core ASes
@@ -911,8 +910,8 @@ Table of Contents
 
                       Table 4: Known Service Numbers
 
-   *Note:* For more information on addressing, see the SCION Control
-   Plane specification ([I-D.dekater-scion-controlplane]).
+   *Note:* For more information on addressing, see the
+   ([I-D.dekater-scion-controlplane]).
 
 2.3.  Path Header
 
