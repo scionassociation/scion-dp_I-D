@@ -338,7 +338,7 @@ Table of Contents
    ISDs and may exist between any ASes, including core ASes.
 
    *SCION Control Message Protocol (SCMP)*: A signaling protocol
-   analogous to the Internet Control Message Protocol (ICMP).  This is
+   analogous to the Internet Control Message Protocol (ICMP), as
    described in [I-D.dekater-scion-controlplane].
 
 1.2.  Conventions and Definitions
@@ -518,16 +518,17 @@ Table of Contents
 
 1.4.  Path Construction (Segment Combinations)
 
-   Paths are discovered by the SCION Control Plane which makes them
-   available to SCION endpoints in the form of path segments.  As
-   described in [I-D.dekater-scion-controlplane], there are three kinds
-   of path segments: up, down, and core.  In the data plane, a SCION
-   endpoint creates end-to-end paths from the path segments by combining
-   multiple path segments.  Depending on the network topology, a SCION
-   forwarding path can consist of one, two, or three segments.  Each
-   path segment contains several Hop Fields representing the ASes on the
-   segment as well as one Info Field with basic information about the
-   segment, such as a timestamp.
+   Paths are discovered by the Control Plane which makes them available
+   to SCION endpoints in the form of path segments.  As described in
+   [I-D.dekater-scion-controlplane], there are three kinds of path
+   segments: up, down, and core.
+
+   In the data plane, a SCION endpoint creates end-to-end paths from the
+   path segments by combining multiple path segments.  Depending on the
+   network topology, a SCION forwarding path consists of at least one
+   and up to three segments.  Each path segment contains several Hop
+   Fields representing the ASes on the segment as well as one Info Field
+   with basic information about the segment, such as a timestamp.
 
    Segments cannot be combined arbitrarily.  To construct a valid
    forwarding path, the source endpoint MUST obey the following rules:
@@ -910,8 +911,8 @@ Table of Contents
 
                       Table 4: Known Service Numbers
 
-   *Note:* For more information on addressing in SCION, see the SCION
-   Control Plane Specification ([I-D.dekater-scion-controlplane]).
+   *Note:* For more information on addressing, see the SCION Control
+   Plane specification ([I-D.dekater-scion-controlplane]).
 
 2.3.  Path Header
 
@@ -1225,8 +1226,8 @@ Table of Contents
    Processing the L4 payload in the packet means that the router will
    treat the payload of the packet as a message to itself and parse it
    according to the value of the NextHdr field.  Such messages include
-   Traceroute Requests (see [I-D.dekater-scion-controlplane] section
-   "SCMP/Traceroute Request").
+   Traceroute Requests (see 'SCMP/Traceroute request' in
+   [I-D.dekater-scion-controlplane]).
 
    Setting multiple router alert flags on a path SHOULD be avoided.
    This is because the router for which the corresponding Router Alert
@@ -1581,9 +1582,8 @@ Table of Contents
    control service will return down segments from the ISD core down to
    AS3.
 
-   *Note:* For more details on the lookup of path segments, see the
-   section "Path Lookup" in the Control Plane specification
-   ([I-D.dekater-scion-controlplane]).
+   *Note:* For more details on the lookup of path segments, see 'Path
+   Lookup' in [I-D.dekater-scion-controlplane].
 
    Based on its own selection criteria, Endpoint A selects the up
    segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the
@@ -2213,12 +2213,12 @@ direction
 
    *  Peering-child or vice-versa
 
-   Link types above are defined in [I-D.dekater-scion-controlplane]
-   section "Paths and Links".  This check prevents valley use of peering
-   links or hair-pin segments. 3.  Check if the current Hop Field is
-   expired or originated in the future, i.e. the current Info Field MUST
-   NOT have a timestamp in the future, as defined in Section 2.3.2.3.
-   If either is true, the router MUST drop the packet.
+   Link types above are defined in 'Path and Links' in
+   [I-D.dekater-scion-controlplane].  This check prevents valley use of
+   peering links or hair-pin segments. 3.  Check if the current Hop
+   Field is expired or originated in the future, i.e. the current Info
+   Field MUST NOT have a timestamp in the future, as defined in
+   Section 2.3.2.3.  If either is true, the router MUST drop the packet.
 
    The next steps depend on the direction of travel and whether this
    segment includes a peering Hop Field.  Both features are indicated by
@@ -2418,8 +2418,8 @@ direction
 
    The MTU of a SCION path is defined as the minimum of the MTUs of the
    links traversed by that path.  The control plane disseminates such
-   values and makes them available to endpoints (see:
-   [I-D.dekater-scion-controlplane], Path MTU).
+   values and makes them available to endpoints (see 'Path MTU in
+   [I-D.dekater-scion-controlplane]).
 
    The MTU of each link may be discovered or administratively configured
    (current practice is for it to be configured).  It must be less than
@@ -2501,12 +2501,12 @@ direction
    In SCION, an intermediate router cannot change the path followed by a
    packet, only the source endpoint can chose a different path.
    Therefore, to enable fast recovery, a router SHOULD signal forwarding
-   failures to the source, via a SCMP notification (see
-   [I-D.dekater-scion-controlplane] section "SCMP/Error Messages").
-   This allows the source endpoint to quickly switch to a different
-   path.  To that end, the source end-point SHOULD give lower preference
-   to the broken path.  Current implementations use a negative cache
-   with entries retained for 10s.
+   failures to the source, via a SCMP notification (see 'SCMP/Error
+   messages' in [I-D.dekater-scion-controlplane]).  This allows the
+   source endpoint to quickly switch to a different path.  To that end,
+   the source end-point SHOULD give lower preference to the broken path.
+   Current implementations use a negative cache with entries retained
+   for 10s.
 
    Sending an SCMP error notification is OPTIONAL.  Endpoints should
    therefore implement additional mechanisms to validate or detect link
