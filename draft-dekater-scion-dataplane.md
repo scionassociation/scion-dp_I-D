@@ -193,7 +193,6 @@ SCION relies on three main components:
 
 This document describes the SCION Data Plane component. It should be read in conjunction with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}.
 
-
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
 ==Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}.==
@@ -239,7 +238,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Peering Link**: A link between two SCION border routers of different ASes that can be used as a shortcut. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments. It is possible to construct a path out of only two partial segments which top-most hops are joined by a peering link. Two peering ASes may be in different ISDs and may exist between any ASes, including core ASes.
 
-**SCION Control Message Protocol (SCMP)**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP). This is described in {{I-D.dekater-scion-controlplane}}.
+**SCION Control Message Protocol (SCMP)**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP), as described in {{I-D.dekater-scion-controlplane}}.
 
 ## Conventions and Definitions
 
@@ -320,7 +319,9 @@ In order to forward traffic to a service endpoint address (`DT/DS` == 0b01 in th
 
 ## Path Construction (Segment Combinations) {#construction}
 
-Paths are discovered by the SCION Control Plane which makes them available to SCION endpoints in the form of path segments. As described in {{I-D.dekater-scion-controlplane}}, there are three kinds of path segments: up, down, and core. In the data plane, a SCION endpoint creates end-to-end paths from the path segments by combining multiple path segments. Depending on the network topology, a SCION forwarding path can consist of one, two, or three segments. Each path segment contains several Hop Fields representing the ASes on the segment as well as one Info Field with basic information about the segment, such as a timestamp.
+Paths are discovered by the Control Plane which makes them available to SCION endpoints in the form of path segments. As described in {{I-D.dekater-scion-controlplane}}, there are three kinds of path segments: up, down, and core.
+
+In the data plane, a SCION endpoint creates end-to-end paths from the path segments by combining multiple path segments. Depending on the network topology, a SCION forwarding path consists of at least one and up to three segments. Each path segment contains several Hop Fields representing the ASes on the segment as well as one Info Field with basic information about the segment, such as a timestamp.
 
 Segments cannot be combined arbitrarily. To construct a valid forwarding path, the source endpoint MUST obey the following rules:
 
@@ -553,7 +554,7 @@ The currently known service numbers are:
 {: #table-4 title="Known Service Numbers"}
 
 
-**Note:** For more information on addressing in SCION, see the SCION Control Plane Specification ({{I-D.dekater-scion-controlplane}}).
+**Note:** For more information on addressing, see the SCION Control Plane specification ({{I-D.dekater-scion-controlplane}}).
 
 
 ## Path Header {#path-header}
@@ -780,7 +781,7 @@ The 12-byte Hop Field (``HopField``) has the following format:
 
 The Ingress Router (respectively Egress Router) is the router owning the Ingress interface (respectively, Egress interface) when the packet is traveling in the *construction direction* of the path segment (i.e. the direction of beaconing). When the packet is traveling in the opposite direction, the meanings are reversed.
 
-Router alert flags work similarly to {{RFC2711}} and allow a sender to address a specific router on the path without knowing its address. Processing the L4 payload in the packet means that the router will treat the payload of the packet as a message to itself and parse it according to the value of the `NextHdr` field. Such messages include Traceroute Requests (see {{I-D.dekater-scion-controlplane}} section "SCMP/Traceroute Request").
+Router alert flags work similarly to {{RFC2711}} and allow a sender to address a specific router on the path without knowing its address. Processing the L4 payload in the packet means that the router will treat the payload of the packet as a message to itself and parse it according to the value of the `NextHdr` field. Such messages include Traceroute Requests (see 'SCMP/Traceroute request' in {{I-D.dekater-scion-controlplane}}).
 
 Setting multiple router alert flags on a path SHOULD be avoided. This is because the router for which the corresponding Router Alert flag is set to "1" may process the request without further forwarding it along the path. Use cases that require multiple routers/hops on the path to process a packet SHOULD rely on a hop-by-hop extension (see [](#ext-header)).
 
@@ -1012,7 +1013,7 @@ Based on the network topology in {{figure-16}} above, this example shows the pat
 
 In this example, Endpoint A in AS2 wants to send a data packet to Endpoint B in AS3. Both AS2 and AS3 are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first requests its own AS2 control service for up segments to the core AS in its ISD. The AS2 control service will return up segments from AS2 to the ISD core. Endpoint A will also query its AS2 control service for a down segment from its ISD core AS to AS3, in which Endpoint B is located. The AS2 control service will return down segments from the ISD core down to AS3.
 
-**Note:** For more details on the lookup of path segments, see the section "Path Lookup" in the Control Plane specification ({{I-D.dekater-scion-controlplane}}).
+**Note:** For more details on the lookup of path segments, see 'Path Lookup' in {{I-D.dekater-scion-controlplane}}.
 
 Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS2 control service. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g., i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
 
@@ -1324,7 +1325,7 @@ A SCION ingress border router MUST perform the following steps when it receives 
   - Parent-child or vice-versa
   - Peering-child or vice-versa
 
-Link types above are defined in {{I-D.dekater-scion-controlplane}} section "Paths and Links". This check prevents valley use of peering links or hair-pin segments.
+Link types above are defined in 'Path and Links' in {{I-D.dekater-scion-controlplane}}. This check prevents valley use of peering links or hair-pin segments.
 3. Check if the current Hop Field is expired or originated in the future, i.e. the current Info Field MUST NOT have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 
 The next steps depend on the direction of travel and whether this segment includes a peering Hop Field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current Info Field, so the settings of both flags MUST be checked. The following combinations are possible:
@@ -1403,7 +1404,7 @@ Each administrator of SCION control services and routers is responsible for main
 
 SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{RFC2460}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.
 
-The MTU of a SCION path is defined as the minimum of the MTUs of the links traversed by that path. The control plane disseminates such values and makes them available to endpoints (see: {{I-D.dekater-scion-controlplane}}, Path MTU).
+The MTU of a SCION path is defined as the minimum of the MTUs of the links traversed by that path. The control plane disseminates such values and makes them available to endpoints (see 'Path MTU in {{I-D.dekater-scion-controlplane}}).
 
 The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the link's underlay encapsulation or native link-layer in either direction.
 
@@ -1443,7 +1444,7 @@ A SCION router SHOULD accept BFD connections from its peers and SHOULD attempt t
 
 ## Link Failure Notification - SCMP {#link-down-notification}
 
-In SCION, an intermediate router cannot change the path followed by a packet, only the source endpoint can chose a different path. Therefore, to enable fast recovery, a router SHOULD signal forwarding failures to the source, via a SCMP notification (see {{I-D.dekater-scion-controlplane}} section "SCMP/Error Messages"). This allows the source endpoint to quickly switch to a different path. To that end, the source end-point SHOULD give lower preference to the broken path. Current implementations use a negative cache with entries retained for 10s.
+In SCION, an intermediate router cannot change the path followed by a packet, only the source endpoint can chose a different path. Therefore, to enable fast recovery, a router SHOULD signal forwarding failures to the source, via a SCMP notification (see 'SCMP/Error messages' in {{I-D.dekater-scion-controlplane}}). This allows the source endpoint to quickly switch to a different path. To that end, the source end-point SHOULD give lower preference to the broken path. Current implementations use a negative cache with entries retained for 10s.
 
 Sending an SCMP error notification is OPTIONAL. Endpoints should therefore implement additional mechanisms to validate or detect link down signals. To reduce exposure to denial-of-service attacks, SCION routers SHOULD employ rate limiting when sending recommended SCMP notifications (especially identical ones). Rate limit policies are up to each AS' administrator.
 
