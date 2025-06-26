@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-19T00:00:56.114981+00:00",
+  "timestamp": "2025-06-26T00:00:49.711618+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -7668,13 +7668,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-06-13T04:01:32Z",
-      "updatedAt": "2025-06-13T04:01:32Z",
+      "updatedAt": "2025-06-24T16:30:44Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "Terminology-Updates",
-      "headRefOid": "23ce1744b62abc38481ee239e75d42654c4c8e9c",
+      "headRefOid": "3a457557c562365fa7cae775887a7609b8ed980b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
