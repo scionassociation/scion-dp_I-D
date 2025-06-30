@@ -218,7 +218,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Info Field (INF)**: Each path segment construction beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
 
-**Interface Identifier (Interface ID)**: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of Interface IDs called `ConsIngress` and `ConsEgress`, as they refer to the ingress and egress interfaces in the direction of path construction (beaconing). The Interface ID MUST be unique within each AS. Interface ID 0 is not a valid identifier as implementations MAY use it as the "unspecified" value.
+**Interface Identifier (Interface ID)**: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of Interface IDs called `ConsIngress` and `ConsEgress`, as they refer to the ingress and egress interfaces in the direction of path construction (beaconing). The Interface ID MUST be unique within each AS, and 0 is not a valid as an Interface ID.
 
 **Isolation Domain (ISD)**: In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
 
