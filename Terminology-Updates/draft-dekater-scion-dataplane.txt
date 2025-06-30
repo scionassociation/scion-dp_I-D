@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 26 December 2025                              SCION Association
+Expires: 1 January 2026                                SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            24 June 2025
+                                                            30 June 2025
 
 
                             SCION Data Plane
@@ -70,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 December 2025.
+   This Internet-Draft will expire on 1 January 2026.
 
 Copyright Notice
 
@@ -277,9 +277,8 @@ Table of Contents
    fields describe the traversal of an AS by a pair of Interface IDs
    called ConsIngress and ConsEgress, as they refer to the ingress and
    egress interfaces in the direction of path construction (beaconing).
-   The Interface ID MUST be unique within each AS.  Interface ID 0 is
-   not a valid identifier as implementations MAY use it as the
-   "unspecified" value.
+   The Interface ID MUST be unique within each AS, and 0 is not a valid
+   as an Interface ID.
 
    *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
    organized into logical groups called Isolation Domains or ISDs.  Each
