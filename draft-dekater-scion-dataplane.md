@@ -1073,7 +1073,7 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
                   |           AS1           |
                   |                         | (1-1,
                   |                         | 198.51.100.17)
-                  |          198.51.100.4 +-+- +i1b
+                  |          198.51.100.4 +-+-+ i1b
                   |            +----------+R3 +--+
             i1a +-+-+          |          +-+-+  |
              +--+R2 +----------+            |    |
