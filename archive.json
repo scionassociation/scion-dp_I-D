@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-26T00:00:49.711618+00:00",
+  "timestamp": "2025-07-01T00:00:41.622373+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -7492,15 +7492,15 @@
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "Resolves #94 ",
+      "body": "Resolves #94 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-dp_I-D/draft-dekater-scion-dataplane.txt&url_2=https://scionassociation.github.io/scion-dp_I-D/New_Diagrams/draft-dekater-scion-dataplane.txt)",
       "createdAt": "2025-06-03T13:39:08Z",
-      "updatedAt": "2025-06-17T09:53:03Z",
+      "updatedAt": "2025-06-30T18:57:50Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "New_Diagrams",
-      "headRefOid": "1693bae3554881a95c8e3b081dcf84108d9e26be",
+      "headRefOid": "90b637cdad5cd23bda897b34ee79d2675ed1b48e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -7653,6 +7653,98 @@
               "updatedAt": "2025-06-17T02:20:56Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786xDPaS",
+          "commit": {
+            "abbreviatedOid": "3926db9"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "Just some very minor things in comments",
+          "createdAt": "2025-06-30T08:48:15Z",
+          "updatedAt": "2025-06-30T09:08:59Z",
+          "comments": [
+            {
+              "originalPosition": 167,
+              "body": "Could you use the same ASCIIS characters as in the CP draft for links?",
+              "createdAt": "2025-06-30T08:48:15Z",
+              "updatedAt": "2025-06-30T09:08:59Z"
+            },
+            {
+              "originalPosition": 556,
+              "body": "Perhaps we could still save some of the text from the caption?\r\n```\r\n- At the source endpoint AS, *CurrHF := 0*.\r\n- At the destination endpoint AS, *CurrHF := 1*.\r\n```",
+              "createdAt": "2025-06-30T08:52:41Z",
+              "updatedAt": "2025-06-30T09:08:59Z"
+            },
+            {
+              "originalPosition": 784,
+              "body": "Could you use the same links as in the CP draft? (parent-child links)",
+              "createdAt": "2025-06-30T08:55:46Z",
+              "updatedAt": "2025-06-30T09:08:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786xKb_A",
+          "commit": {
+            "abbreviatedOid": "1693bae"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-30T18:52:09Z",
+          "updatedAt": "2025-06-30T18:52:09Z",
+          "comments": [
+            {
+              "originalPosition": 784,
+              "body": "Hopefully these links are now updated",
+              "createdAt": "2025-06-30T18:52:09Z",
+              "updatedAt": "2025-06-30T18:52:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786xKcR7",
+          "commit": {
+            "abbreviatedOid": "1693bae"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-30T18:52:42Z",
+          "updatedAt": "2025-06-30T18:52:42Z",
+          "comments": [
+            {
+              "originalPosition": 167,
+              "body": "I've updated these representations, but please double-check.",
+              "createdAt": "2025-06-30T18:52:42Z",
+              "updatedAt": "2025-06-30T18:52:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786xKf6i",
+          "commit": {
+            "abbreviatedOid": "1693bae"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-06-30T18:57:50Z",
+          "updatedAt": "2025-06-30T18:57:50Z",
+          "comments": [
+            {
+              "originalPosition": 556,
+              "body": "I've preserved the text whilst removing the figure. ",
+              "createdAt": "2025-06-30T18:57:50Z",
+              "updatedAt": "2025-06-30T18:57:50Z"
+            }
+          ]
         }
       ]
     },
@@ -7668,13 +7760,39 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-06-13T04:01:32Z",
-      "updatedAt": "2025-06-24T16:30:44Z",
+      "updatedAt": "2025-06-30T18:25:09Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "Terminology-Updates",
-      "headRefOid": "3a457557c562365fa7cae775887a7609b8ed980b",
+      "headRefOid": "e7426288bb45056717063040c91b94f3bad9d2c1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 97,
+      "id": "PR_kwDOKYa7786cwGS3",
+      "title": "One-Hop Path Type update",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/97",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-30T18:57:02Z",
+      "updatedAt": "2025-06-30T18:57:02Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "One-Hop-Path-Type",
+      "headRefOid": "acc88ccb955501907364e2d2c2fc44117276fdb1",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
