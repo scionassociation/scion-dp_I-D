@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 1 January 2026                                SCION Association
+Expires: 4 January 2026                                SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            30 June 2025
+                                                             3 July 2025
 
 
                             SCION Data Plane
@@ -70,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 January 2026.
+   This Internet-Draft will expire on 4 January 2026.
 
 Copyright Notice
 
@@ -1256,6 +1256,25 @@ Table of Contents
    value 0), ensuring the path cannot be used beyond the destination AS.
    Then it calculates and appends the appropriate MAC for the Hop Field.
 
+   Figure 12 below shows the layout of a SCION one-hop path type.  There
+   is only a single Info Field; the appropriate Hop Field can be
+   processed by a border router based on the source and destination
+   address.  In this context, the following rules apply:
+
+   *  At the source endpoint AS, _CurrHF := 0_.
+
+   *  At the destination endpoint AS, _CurrHF := 1_.
+
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                           InfoField                           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                           HopField                            |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                           HopField                            |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+              Figure 12: Layout of the SCION one-hop path type
+
 2.3.4.  Path Reversal
 
    When a destination endpoint receives a SCION packet, it MAY use the
@@ -1313,7 +1332,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 12: Extension headers: Options header
+                Figure 13: Extension headers: Options header
 
    *  NextHdr: Unsigned 8-bit integer.  Identifies the type of header
       immediately following the Hop-by-Hop/End-to-End Options header.
@@ -1348,7 +1367,7 @@ Table of Contents
    |                              ...                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-               Figure 13: Options field: TLV-encoded options
+               Figure 14: Options field: TLV-encoded options
 
    *  OptType: 8-bit identifier of the type of option.  The following
       option types are assigned to the SCION HBH/E2E Options header:
@@ -1412,7 +1431,7 @@ Table of Contents
    |       0       |
    +-+-+-+-+-+-+-+-+
 
-                Figure 14: TLV-encoded options - Pad1 option
+                Figure 15: TLV-encoded options - Pad1 option
 
    *Note:* The format of the Pad1 option is a special case - it does not
    have length and value fields.
@@ -1433,7 +1452,7 @@ Table of Contents
    |                              ...                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 15: TLV-encoded options - PadN option
+                Figure 16: TLV-encoded options - PadN option
 
    The PadN option is used to insert two or more bytes of padding into
    the Options field of an extension header.  For N bytes of padding,
@@ -1467,7 +1486,7 @@ Table of Contents
 |                      zero                     |  Next Header  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
- Figure 16: Layout of the pseudo header for the upper-layer checksum
+ Figure 17: Layout of the pseudo header for the upper-layer checksum
 
    *  DstISD, SrcISD, DstAS, SrcAS, DstHostAddr, SrcHostAddr: These
       values are taken from the SCION address header.
@@ -1537,11 +1556,11 @@ Table of Contents
    |                         |         |                         |
    +-------------------------+         +-------------------------+
 
-        Figure 17: Sample topology to illustrate the life cycle of a
+        Figure 18: Sample topology to illustrate the life cycle of a
       SCION packet.  AS1 is the core AS of ISD 1, and AS2 and AS3 are
                           non-core ASes of ISD 1.
 
-   Based on the network topology in Figure 17 above, this example shows
+   Based on the network topology in Figure 18 above, this example shows
    the path of a SCION packet sent from its source at Endpoint A to its
    destination at Endpoint B, and how it will be processed by each
    router on the path using simplified snapshots of the packet header
@@ -1588,7 +1607,7 @@ Table of Contents
 3.3.  Step-by-Step Explanation
 
    This section explains what happens with the SCION packet header at
-   each router, based on the network topology in described Figure 17
+   each router, based on the network topology in described Figure 18
    above.  Each step includes a table that represents a simplified
    snapshot of the packet header at the end of this specific step.
    Regarding the notation used in the figure/tables, each source and
@@ -1945,7 +1964,7 @@ Table of Contents
    padded to 16 bytes.  The _first_ 6 bytes of the AES-CMAC output are
    used as resulting Hop Field MAC.
 
-   Figure 18 below shows the layout of the input data to calculate the
+   Figure 19 below shows the layout of the input data to calculate the
    Hop Field MAC.
 
  0                   1                   2                   3
@@ -1960,7 +1979,7 @@ Table of Contents
 |          ConsEgress           |               0               |   |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 
-     Figure 18: Input data to calculate the Hop Field MAC for the
+     Figure 19: Input data to calculate the Hop Field MAC for the
                    default hop-field MAC algorithm
 
 4.1.1.4.  Alternative Hop Field MAC Algorithms
