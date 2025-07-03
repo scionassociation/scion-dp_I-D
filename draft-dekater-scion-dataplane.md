@@ -1009,7 +1009,7 @@ Alignment requirement: none.
 <figure anchor="_figure-14">
 <name>TLV-encoded options - PadN option</name>
 <artset>
-<artwork type="svg" src="images/pad1-option.svg"/>
+<artwork type="svg" src="images/padn-option.svg"/>
 <artwork type="ascii-art">
 	
  0                   1                   2                   3
