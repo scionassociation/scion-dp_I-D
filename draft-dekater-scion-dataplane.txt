@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 4 September 2025                              SCION Association
+Expires: 4 January 2026                                SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            3 March 2025
+                                                             3 July 2025
 
 
                             SCION Data Plane
@@ -70,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 September 2025.
+   This Internet-Draft will expire on 4 January 2026.
 
 Copyright Notice
 
@@ -143,6 +143,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-06
      draft-dekater-scion-dataplane-05
      draft-dekater-scion-dataplane-04
      draft-dekater-scion-dataplane-03
@@ -420,27 +421,27 @@ Table of Contents
    Section 3.  A list of currently used upper layer protocols on top of
    SCION is presented in Appendix "Assigned SCION Protocol Numbers".
 
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   +-----------------------------+
    |                             |
    |                             |
    |        Payload (L4)         |
    |                             |
    |                             |
    |                             |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   +-----------------------------+
    |                             |
    |            SCION            |
    |                             |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
-   |             UDP             |                |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  Intra-domain  |
-   |             IP              |                |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+    protocol    |
-   |         Link Layer          |                |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
+   +-----------------------------+ <-+
+   |             UDP             |   |
+   +-----------------------------+   | Intra-domain
+   |             IP              |   |  protocol
+   +-----------------------------+   |
+   |         Link Layer          |   |
+   +-----------------------------+ <-+
 
      Figure 1: The SCION header within the protocol stack in a typical
-                                deployment.
+                                 deployment
 
    A complete SCION address is composed of the <ISD, AS, endpoint
    address> 3-tuple.  The ISD-AS part is used for inter-domain routing.
@@ -573,65 +574,65 @@ Table of Contents
    in different ASes (as endpoints from the same AS use an empty
    forwarding path to communicate with each other).
 
-                                   ------- = end-to-end path
-    C = Core AS                    - - - - = unused links
-    * = source/destination AS      ------> = direction of beaconing
+  +---+
+  | C | = Core AS                  - - - - = unused links
+  +---+
+  +---+
+  | * | = source/destination AS    ------> = direction of beaconing
+  +---+
 
-
-           Core                        Core                  Core
+          Core                        Core                  Core
        ---------->                 ---------->           ---------->
-      .-.       .-.               .-.       .-.         .-.       .-.
- +-- ( C )-----( C ) --+     +-- ( C )-----(C/*)       (C/*)-----(C/*)
- |    `+'       `+'    |     |    `+'       `-'         `-'       `-'
- |     |    1a   |     |     |     |     1b                   1c
+     +---+     +---+             +---+     +---+       +---+     +---+
+ +---+ C +-----+ C +---+     +---+ C +-----+C/*|       |C/*+ - - +C/*|
+ |   +-+-+     +-+-+   |     |   +-+-+     +---+       +---+     +---+
+ |     |   1a    |     |     |     |   1b                    1c
  |     |         |     |     |     |
  |     |         |     |     |     |
- |    .+.       .+.    |     |    .+.                       Core
- |   (   )     (   )   |     |   (   )                 -------------->
- |    `+'       `+'    |     |    `+'                        .-.
- |     |         |     |     |     |                   +----( C )----+
- |     |         |     |     |     |                   |     `-'     |
+ |   +-+-+     +-+-+   |     |   +-+-+                      Core
+ |   |   |     |   |   |     |   |   |                 -------------->
+ |   +-+-+     +-+-+   |     |   +-+-+                      +---+
+ |     |         |     |     |     |                   +----+ C +----+
+ |     |         |     |     |     |                   |    +---+    |
  |     |         |     |     |     |                   |             |
- |    .+.       .+.    |     |    .+.                 .+.     1d    .+.
- +-> ( * )     ( * ) <-+     +-> ( * )               (C/*)         (C/*)
-      `-'       `-'               `-'                 `-'           `-'
+ |   +-+-+     +-+-+   |     |   +-+-+               +-+-+   1d    +-+-+
+ +-->| * |     | * |<--+     +-->| * |               |C/*|         |C/*|
+     +---+     +---+             +---+               +---+         +---+
 
 
+          +---+                   +---+                 +---+
+ +--   +--+ C +--+   --+     +----+C/*|        +--   ┌─ ┤ C ├ ─┐   --+
+ |     |  +---+  |     |     |    +-+-+        |     |  +---+  |     |
+ |     |         |     |     |      |          |     |         |     |
+ |     |   2a    |     |     |  2b  |          |     |    3a   |     |
+ |     |         |     |     |      |          |     |         |     |
+ |   +-+-+     +-+-+   |     |    +-+-+        |   +-+-+     +-+-+   |
+ |   |   |     |   |   |     |    |   |        |   |   +p---p+   |   |
+ |   +-+-+     +-+-+   |     |    +-+-+        |   +-+-+     +-+-+   |
+ |     |         |     |     |      |          |     │         │     |
+ |     |         |     |     |      |          |     │         │     |
+ |     |         |     |     |      |          |     │         │     |
+ |   +-+-+     +-+-+   |     |    +-+-+        |   +-+-+     +-+-+   |
+ +-->| * |     | * |<--+     +--->| * |        +-->| * |     | * |<--+
+     +---+     +---+              +---+            +---+     +---+
 
-           .-.                      .-.                   .-.
- +--   +--( C )--+   --+      +--  (C/*)        +--    - ( C ) -    --+
- |     |   `-'   |     |      |     `+'         |     |   `-'   |     |
- |     |         |     |      |      |          |                     |
- |     |    2a   |     |      |  2b  |          |     |    3a   |     |
- |     |         |     |      |      |          |                     |
- |    .+.       .+.    |      |     .+.         |    .+.       .+.    |
- |   (   )     (   )   |      |    (   )        |   (   #-----#   )   |
- |    `+'       `+'    |      |     `+'         |    `+'  Peer `+'    |
- |     |         |     |      |      |          |     |         |     |
- |     |         |     |      |      |          |     |         |     |
- |     |         |     |      |      |          |     |         |     |
- |    .+.       .+.    |      |     .+.         |    .+.       .+.    |
- +-> ( * )     ( * ) <-+      +->  ( * )        +-> ( * )     ( * ) <-+
-      `-'       `-'                 `-'              `-'       `-'
-
-
-           Core                                    Core
-       ---------->                              ---------->
-      .-.       .-.             .-.            .-.       .-.        .-.
-  +--( C )- - -( C )--+  +---- ( C ) ----+    ( C )- - -( C )  +-- ( C )
-  |   `+'       `+'   |  |      `+'      |     `+'       `+'   |    `+'
-  |         3b        |  |           4a  |          4b         |  5
-  |    |         |    |  |       |       |      |         |    |     |
-  |                   |  |               |                     |
-  |   .+.       .+.   |  |      .+.      |      + - --. - +    |    .+.
-  |  (   #-----#   )  |  |   +-(   )-+   |      +--(   )--+    |   ( * )
-  |   `+'  Peer `+'   |  |   |  `-'  |   |      |   `-'   |    |    `+'
-  |    |         |    |  |   |       |   |      |         |    |     |
-  |    |         |    |  |   |       |   |      |         |    |     |
-  |    |         |    |  |   |       |   |      |         |    |     |
-  |   .+.       .+.   |  |  .+.     .+.  |     .+.       .+.   |    .+.
-  +->( * )     ( * )<-+  +>( * )   ( * )<+    ( * )     ( * )  +-> ( * )
-      `-'       `-'         `-'     `-'        `-'       `-'        `-'
+          Core                                      Core
+      ---------->                               ---------->
+    +---+     +---+             +---+         +---+     +---+      +---+
+ +--+ C + - - + C +--+   +------+ C +------+  | C ├ - - ┤ C │  +---+ C |
+ |  +-+-+     +-+-+  |   |      +-+-+      |  +-+-+     +-+-+  |   +-+-+
+ |    |    3b   |    |   |        |   4a   |    |   4b    |    |  5  |
+ |                   |   |        |        |                   |
+ |    |         |    |   |        |        |    |         |    |     |
+ |  +-+-+     +-+-+  |   |      +-+-+      |    +- +---+ -+    |   +-+-+
+ |  |   +p---p+   │  |   |    +-+   +-+    |       |   |       |   | * |
+ |  +-+-+     +─+─+  |   |    | +---+ |    |    +- +---+ -+    |   +-+-+
+ |    |         |    |   |    |       |    |    |         |    |     │
+ |    |         |    |   |    |       |    |                   |     │
+ |    |         |    |   |    |       |    |    |         |    |     │
+ |  +-+-+     +-+-+  |   |  +-+-+   +-+-+  |  +-+-+     +-+-+  |   +-+-+
+ +->| * |     | * |<-+   +->| * |   │ * |<-+  | * |     | * |  +-->| * |
+    +---+     +---+         +---+   +---+     +---+     +---+      +---+
 
  Figure 2: Illustration of valid path segment combinations.  Each node
                  represents a SCION Autonomous System.
@@ -705,7 +706,7 @@ Table of Contents
    |                                                        |
    +--------------------------------------------------------+
 
-                Figure 3: High-level SCION header structure
+       Figure 3: High-level SCION header structure, non-byte aligned
 
    The _common header_ contains important meta information including
    version number and the lengths of the header and payload.  In
@@ -730,10 +731,10 @@ Table of Contents
 
    The SCION common header has the following packet format:
 
-   0                   1                   2                   3
+    0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |Version|  TraffCl      |                Flow Label             |
+   |Version| TrafficClass  |                Flow Label             |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |    NextHdr    |    HdrLen     |          PayloadLen           |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -745,12 +746,12 @@ Table of Contents
    *  Version: The version of the SCION common header.  Currently, only
       version "0" is supported.
 
-   *  TrafficClass (TraffCl in the image above): The 8-bit long
-      identifier of the packet's class or priority.  The value of the
-      traffic class bits in a received packet might differ from the
-      value sent by the packet's source.  The current use of the
-      TrafficClass field for Differentiated Services and Explicit
-      Congestion Notification is specified in [RFC2474] and [RFC3168].
+   *  TrafficClass: The 8-bit long identifier of the packet's class or
+      priority.  The value of the traffic class bits in a received
+      packet might differ from the value sent by the packet's source.
+      The current use of the TrafficClass field for Differentiated
+      Services and Explicit Congestion Notification is specified in
+      [RFC2474] and [RFC3168].
 
    *  Flow Label: This 20-bit field labels sequences of packets to be
       treated in the network as a single flow.  Sources MUST set this
@@ -1000,64 +1001,64 @@ Table of Contents
    and egress interface.  As such, they bring the two adjacent segments
    together.
 
-                      +-----------------+
-                      |    ISD Core     |
-     .--.    .--.     |  .--.     .--.  |     .--.    .--.
-    (AS 3)--(AS 4)----|-(AS 1)---(AS 2)-|----(AS 5)--(AS 6)
-     `--'    `--'     |  `--'     `--'  |     `--'    `--'
-                      +-----------------+
+                      +----------------+
+                      |     ISD Core   |
+      +---+   +---+   |  +---+  +---+  |    +---+  +---+
+      |AS3+---+AS4+------+AS1+--+AS2+-------+AS5+--+AS6|
+      +---+   +---+   |  +---+  +---+  |    +---+  +---+
+                      +----------------+
 
     Up-Segment           Core-Segment        Down-Segment
    +---------+           +---------+         +---------+
    | +-----+ |           | +-----+ |         | +-----+ |
-   | + INF + |--------+  | + INF + |---+     | + INF + |--+
-   | +-----+ |        |  | +-----+ |   |     | +-----+ |  |
-   | +-----+ |        |  | +-----+ |   |     | +-----+ |  |
-   | | HF  | |------+ |  | | HF  | |---+-+   | | HF  | |--+-+
-   | +-----+ |      | |  | +-----+ |   | |   | +-----+ |  | |
-   | +-----+ |      | |  | +-----+ |   | |   | +-----+ |  | |
-   | | HF  | |----+ | |  | | HF  | |---+-+-+ | | HF  | |--+-+-+
-   | +-----+ |    | | |  | +-----+ |   | | | | +-----+ |  | | |
-   | +-----+ |    | | |  +---------+   | | | | +-----+ |  | | |
-   | | HF  | |--+ | | |                | | | | | HF  | |--+-+-+-+
-   | +-----+ |  | | | |  +----------+  | | | | +-----+ |  | | | |
-   +---------+  | | | |  | ++++++++ |  | | | +---------+  | | | |
-                | | | |  | | Meta | |  | | |              | | | |
-                | | | |  | ++++++++ |  | | |              | | | |
-                | | | |  | +------+ |  | | |              | | | |
-                | | | +->| + INF  + |  | | |              | | | |
-                | | |    | +------+ |  | | |              | | | |
-                | | |    | +------+ |  | | |              | | | |
-                | | |    | + INF  + |<-+ | |              | | | |
-                | | |    | +------+ |    | |              | | | |
-                | | |    | +------+ |    | |              | | | |
-                | | |    | + INF  + |<---+-+--------------+ | | |
-                | | |    | +------+ |    | |                | | |
-                | | |    | +------+ |    | |                | | |
-                | | +--->| |  HF  | |    | |                | | |
-                | |      | +------+ |    | |                | | |
-                | |      | +------+ |    | |                | | |
-                | +----->| |  HF  | |    | |                | | |
-                |        | +------+ |    | |                | | |
-                |        | +------+ |    | |                | | |
-                +------->| |  HF  | |    | |                | | |
-                         | +------+ |    | |                | | |
-                         | +------+ |    | |                | | |
-                         | |  HF  | |<---+ |                | | |
-                         | +------+ |      |                | | |
-                         | +------+ |      |                | | |
-        Forwarding Path  | |  HF  | |<-----+                | | |
-                         | +------+ |                       | | |
-                         | +------+ |                       | | |
-                         | |  HF  | |<----------------------+ | |
-                         | +------+ |                         | |
-                         | +------+ |                         | |
-                         | |  HF  | |<------------------------+ |
-                         | +------+ |                           |
-                         | +------+ |                           |
-                         | |  HF  | |<--------------------------+
-                         | +------+ |
-                         +----------+
+   | | INF | +--------+  | | INF | +--+      | | INF | +--+
+   | +-----+ |        |  | +-----+ |  |      | +-----+ |  |
+   | +-----+ |        |  | +-----+ |  |      | +-----+ |  |
+   | | HF  | +------+ |  | | HF  | +----+    | | HF  | +----+
+   | +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
+   | +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
+   | | HF  | +----+ | |  | | HF  | +------+  | | HF  | +------+
+   | +-----+ |    | | |  | +-----+ |  | | |  | +-----+ |  | | |
+   | +-----+ |    | | |  +---------+  | | |  | +-----+ |  | | |
+   | | HF  | +--+ | | |               | | |  | | HF  | +--------+
+   | +-----+ |  | | | |  +---------+  | | |  | +-----+ |  | | | |
+   +---------+  | | | |  | +++++++ |  | | |  +---------+  | | | |
+                | | | |  | |Meta | |  | | |               | | | |
+                | | | |  | +++++++ |  | | |               | | | |
+                | | | |  | +-----+ |  | | |               | | | |
+                | | | +->| | INF | |  | | |               | | | |
+                | | |    | +-----+ |  | | |               | | | |
+                | | |    | +-----+ |  | | |               | | | |
+                | | |    | | INF | |<-+ | |               | | | |
+                | | |    | +-----+ |    | |               | | | |
+                | | |    | +-----+ |    | |               | | | |
+                | | |    | | INF | |<---------------------+ | | |
+                | | |    | +-----+ |    | |                 | | |
+                | | |    | +-----+ |    | |                 | | |
+                | | +--->| | HF  | |    | |                 | | |
+                | |      | +-----+ |    | |                 | | |
+                | |      | +-----+ |    | |                 | | |
+                | +----->| | HF  | |    | |                 | | |
+                |        | +-----+ |    | |                 | | |
+                |        | +-----+ |    | |                 | | |
+                +------->| | HF  | |    | |                 | | |
+                         | +-----+ |    | |                 | | |
+                         | +-----+ |    | |                 | | |
+                         | | HF  | |<---+ |                 | | |
+                         | +-----+ |      |                 | | |
+                         | +-----+ |      |                 | | |
+        Forwarding Path  | | HF  | |<-----+                 | | |
+                         | +-----+ |                        | | |
+                         | +-----+ |                        | | |
+                         | | HF  | |<-----------------------+ | |
+                         | +-----+ |                          | |
+                         | +-----+ |                          | |
+                         | | HF  | |<-------------------------+ |
+                         | +-----+ |                            |
+                         | +-----+ |                            |
+                         | | HF  | |<---------------------------+
+                         | +-----+ |
+                         +---------+
 
                     Figure 8: Path construction example
 
@@ -1243,12 +1244,11 @@ Table of Contents
    ASes do not have a forwarding path before beaconing is started.
 
    A one-hop path has exactly one Info Field and two Hop Fields with the
-   specialty that the second Hop Field is not known a priori, but is
-   instead created by the ingress SCION border router of the neighboring
-   AS while processing the one-hop path.  Any entity with access to the
-   forwarding key of the source endpoint AS can create a valid info and
-   Hop Field as described in Section 2.3.2.3 and Section 2.3.2.4,
-   respectively.
+   specialty that the second Hop Field is created by the ingress SCION
+   border router of the neighboring AS while processing the one-hop
+   path.  Any entity with access to the forwarding key of the source
+   endpoint AS can create a valid info and Hop Field as described in
+   Section 2.3.2.3 and Section 2.3.2.4, respectively.
 
    Upon receiving a packet containing a one-hop path, the ingress border
    router of the destination AS fills in the ConsIngress field in the
@@ -1469,19 +1469,19 @@ Table of Contents
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-|            DstISD             |                               |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               + SCION|
-|                             DstAS                             |   ad-|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ dress|
-|            SrcISD             |                               |  hea-|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   der|
-|                             SrcAS                             |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+      |
-|                    DstHostAddr (variable Len)                 |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+      |
-|                    SrcHostAddr (variable Len)                 |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
+|            DstISD             |                               |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   |
+|                             DstAS                             |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|            SrcISD             |                               |   | SCION
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   | address
+|                             SrcAS                             |   | header
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|                    DstHostAddr (variable Len)                 |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|                    SrcHostAddr (variable Len)                 |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 |                    Upper-Layer Packet Length                  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      zero                     |  Next Header  |
@@ -1530,33 +1530,32 @@ Table of Contents
 
 3.1.  Description
 
-                       +--------------------+
-                       |                    |
-                       |        AS1         |
-                       |                    |
-                       |                    |
-                       |     198.51.100.4 .-+. i1b (1-1,198.51.100.17)
-                       |          +------( R3 )---+
-                      .+-.        |       `-+'    |
-             +-------( R2 )-------+         |     |
-             |    i1a `+-' 198.51.100.1     |     |
-             |         |                    |     |
-             |         +--------------------+     | (1-3,198.51.100.18)
-             |                                    | i3a
-             |                                   .+-.
-       i2a .-+.                          +------( R4 )--------+
-   +------( R1 )--------+                |       `-+'         |
-   |       `-+'         |                |         |192.0.2.34|
-   |         |203.0.113.17               |         |          |
-   |         |          |                |         |    AS3   |
-   |         |    AS2   |                |         |          |
-   |         |          |                |       +---+        |
-   |       +---+        |                |       | B |        |
-   |       | A |        |                |       +---+        |
-   |       +---+        |                |   1-3,192.0.2.7    |
-   |  1-2,203.0.113.6   |                |                    |
-   |                    |                +--------------------+
-   +--------------------+
+                     +-------------------------+
+                     |                         |
+                     |           AS1           |
+                     |                         | (1-1,
+                     |                         | 198.51.100.17)
+                     |          198.51.100.4 +-+-+ i1b
+                     |            +----------+R3 +#-+
+               i1a +-+-+          |          +-+-+  |
+                +-#+R2 +----------+            |    |
+                |  +-+-+ 198.51.100.1          |    |
+                |    |                         |    |
+                |    +-------------------------+    | (1-3,
+                *                                   * 198.51.100.18)
+          i2a +-+-+                               +-+-+ i3a
+   +----------+R1 +----------+         +----------+R4 +----------+
+   |          +-+-+          |         |          +-+-+          |
+   |            |203.0.113.17|         |            |192.0.2.34  |
+   |            |            |         |            |            |
+   |            |    AS2     |         |            |    AS3     |
+   |            |            |         |            |            |
+   |     +------+-----+      |         |      +-----+------+     |
+   |     | Endpoint A |      |         |      | Endpoint B |     |
+   |     +------------+      |         |      +------------+     |
+   |     1-2,203.0.113.6     |         |      1-3,192.0.2.7      |
+   |                         |         |                         |
+   +-------------------------+         +-------------------------+
 
         Figure 18: Sample topology to illustrate the life cycle of a
       SCION packet.  AS1 is the core AS of ISD 1, and AS2 and AS3 are
@@ -1969,17 +1968,17 @@ Table of Contents
    Figure 19 below shows the layout of the input data to calculate the
    Hop Field MAC.
 
-0                   1                   2                   3
+ 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-|               0               |           Acc                 |  Info|
-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| Field|
-|                           Timestamp                           |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| -----+
-|       0       |    ExpTime    |          ConsIngress          |   Hop|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Field|
-|          ConsEgress           |               0               |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
+|               0               |           Acc                 |   | Info
+|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|   | Field
+|                           Timestamp                           |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| <-+
+|       0       |    ExpTime    |          ConsIngress          |   | Hop
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   | Field
+|          ConsEgress           |               0               |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 
      Figure 19: Input data to calculate the Hop Field MAC for the
                    default hop-field MAC algorithm
@@ -2159,42 +2158,6 @@ Table of Contents
    is described from the perspective of AS_i, where i belongs to [0 ...
    n-1], and n == the number of ASes in the path segment (counted from
    the first AS in the beaconing direction).
-
-   The following figure provides a simplified representation of the
-   processing at routers both in construction direction and against
-   construction direction.
-
-                              .--.
-                             ( RR )  = Router
-Processing in                 `--'
-construction
-direction
-
-      1. Verify MAC of AS1          1. Verify MAC of AS2
-      2. Update Acc for AS2         2. Update Acc for AS3
-                 |                            |
->>>--------------o----------------------------o---------------------->>>
-
-+-------------+  |           +-------------+  |          +-------------+
-|             |              |             |             |             |
-|           .--. |          .--.         .--. |         .--.           |
-|   AS1    ( RR )o---------( RR )  AS2  ( RR )o--------( RR )  AS3     |
-|           `--' |          `--'         `--' |         `--'           |
-|             |              |             |             |             |
-+-------------+  |           +-------------+  |          +-------------+
-
-                 |                            |
-<<<--------------o----------------------------o----------------------<<<
-                 |                            |
-      1. Update Acc for AS1         1. Update Acc for AS2
-      2. Verify MAC of AS1          2. Verify MAC of AS2
-
-                                                      Processing against
-                                                            construction
-                                                               direction
-
-     Figure 20: A simplified representation of the processing at
-                     routers in both directions.
 
 4.2.2.1.  Steps at Ingress Border Router
 
@@ -2952,6 +2915,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-06
+
+   *  Figures: redraw and add SVG version
 
 draft-dekater-scion-dataplane-05
 
