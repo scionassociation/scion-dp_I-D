@@ -666,12 +666,13 @@ In the Hop Field that represents the last Hop in the first segment (seen in the 
 <artwork type="svg" src="images/path-construction-example.svg"/>
 <artwork type="ascii-art">
 
-                   +----------------+
-                   |     ISD Core   |
-   +---+   +---+   |  +---+  +---+  |    +---+  +---+
-   |AS3+---+AS4+------+AS1+--+AS2+-------+AS5+--+AS6|
-   +---+   +---+   |  +---+  +---+  |    +---+  +---+
-                   +----------------+
+                      +-----------------------+
+                      |      ISD Core         |
++--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
+|   AS   +-+   AS   +---+   AS   +-+   AS   +---+   AS   +-+   AS   |
+|ff00:0:3| |ff00:0:4| | |ff00:0:1| +ff00:0:2| | |ff00:0:5| |ff00:0:6|
++--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
+                      +-----------------------+
 
  Up-Segment           Core-Segment        Down-Segment
 +---------+           +---------+         +---------+
@@ -1079,14 +1080,14 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
 ## Description
 
 <figure anchor="_figure-16">
-<name>Sample topology to illustrate the life cycle of a SCION packet. AS1 is the core AS of ISD 1, and AS2 and AS3 are non-core ASes of ISD 1.</name>
+<name>Sample topology to illustrate the life cycle of a SCION packet. AS ff00:0:1 is the core AS of ISD 1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.</name>
 <artset>
 <artwork type="svg" src="images/sample-topology-packet-lifecycle.svg"/>
 <artwork type="ascii-art">
 	
                   +-------------------------+
                   |                         |
-                  |           AS1           |
+                  |       AS ff00:0:1       |
                   |                         | (1-1,
                   |                         | 198.51.100.17)
                   |          198.51.100.4 +-+-+ i1b
@@ -1102,12 +1103,12 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
 |          +-+-+          |         |          +-+-+          |
 |            |203.0.113.17|         |            |192.0.2.34  |
 |            |            |         |            |            |
-|            |    AS2     |         |            |    AS3     |
-|            |            |         |            |            |
 |     +------+-----+      |         |      +-----+------+     |
 |     | Endpoint A |      |         |      | Endpoint B |     |
 |     +------------+      |         |      +------------+     |
 |     1-2,203.0.113.6     |         |      1-3,192.0.2.7      |
+|                         |         |                         |
+|       AS ff00:0:2       |         |       AS ff00:0:3       |
 |                         |         |                         |
 +-------------------------+         +-------------------------+
 
@@ -1120,11 +1121,11 @@ Based on the network topology in {{figure-16}} above, this example shows the pat
 
 ## Creating an End-to-End SCION Forwarding Path
 
-In this example, Endpoint A in AS2 wants to send a data packet to Endpoint B in AS3. Both AS2 and AS3 are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first requests its own AS2 control service for up segments to the core AS in its ISD. The AS2 control service will return up segments from AS2 to the ISD core. Endpoint A will also query its AS2 control service for a down segment from its ISD core AS to AS3, in which Endpoint B is located. The AS2 control service will return down segments from the ISD core down to AS3.
+In this example, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3. Both AS ff00:0:2 and AS ff00:0:3 are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first requests its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service will return up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A will also query its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:3 control service will return down segments from the ISD core down to AS ff00:0:3.
 
 **Note:** For more details on the lookup of path segments, see the section "Path Lookup" in the Control Plane specification ({{I-D.dekater-scion-controlplane}}).
 
-Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS2 control service. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g., i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
+Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS ff00:0:2 control service. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g., i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
 
 To obtain an end-to-end forwarding path from the source AS to the destination AS, Endpoint A combines the two path segments into the resulting SCION forwarding path, which contains the two Info Fields *IF1* and *IF2* and the Hop Fields (0,i2a), (i1a,0), (0,i1b), and (i3a,0).
 
@@ -1137,7 +1138,7 @@ Endpoint A now adds this end-to-end forwarding path to the header of the packet 
 
 This section explains what happens with the SCION packet header at each router, based on the network topology in described {{figure-16}} above. Each step includes a table that represents a simplified snapshot of the packet header at the end of this specific step. Regarding the notation used in the figure/tables, each source and destination entry should be read as router (or endpoint) followed by its address. The current Info Field (with metadata on the current path segment) in the SCION header is depicted as italic/cursive in the tables. The current Hop Field, representing the current AS, is shown bold. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel of SCION data packets.
 
-- *Step 1* <br> **A->R1**: The SCION-enabled Endpoint A in AS2 creates a new SCION packet destined for destination endpoint B in AS3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case Router 1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to Router 1, utilizing AS2's internal routing protocol. The current Info Field is *IF1*. Upon receiving the packet, Router 1 will forward the packet on the egress interface that endpoint A has included into the first Hop Field of the SCION header.
+- *Step 1* <br> **A->R1**: The SCION-enabled Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case Router 1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to Router 1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is *IF1*. Upon receiving the packet, Router 1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.
 
 |  A -> R1                                                     |
 |------------+-------------------------------------------------|
@@ -1168,7 +1169,7 @@ This section explains what happens with the SCION packet header at each router, 
 {: title="Snapshot header - step 2"}
 
 
-- *Step 3* <br> **R2->R3**: When receiving the packet, Router 2 of Core AS1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field. Otherwise, the packet is dropped by Router 2. The router notices that it has consumed the last Hop Field of the current path segment, and hence moves the pointer from the current Info Field to the next Info Field *IF2*. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. Router maps the i1b interface ID to egress Router 3, it therefore encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of Router 3 as the underlay destination.
+- *Step 3* <br> **R2->R3**: When receiving the packet, Router 2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field. Otherwise, the packet is dropped by Router 2. The router notices that it has consumed the last Hop Field of the current path segment, and hence moves the pointer from the current Info Field to the next Info Field *IF2*. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. Router maps the i1b interface ID to egress Router 3, it therefore encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of Router 3 as the underlay destination.
 
 |  R2 -> R3                                                   |
 |------------+------------------------------------------------|
@@ -1184,7 +1185,7 @@ This section explains what happens with the SCION packet header at each router, 
 {: title="Snapshot header - step 3"}
 
 
-- *Step 4* <br> **R3->R4**: Router 3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION-enabled Router 4 of AS3, and moves the current hop-field pointer forward. It adds an IP header to reach Router 4.
+- *Step 4* <br> **R3->R4**: Router 3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION-enabled Router 4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach Router 4.
 
 
 |  R3 -> R4                                                   |
