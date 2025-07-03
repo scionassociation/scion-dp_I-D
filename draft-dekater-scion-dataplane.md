@@ -266,27 +266,33 @@ SCION emphasizes this separation as it is used exclusively for inter-domain forw
 
 {{figure-30}} shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is later presented in [](#life-of-a-packet). A list of currently used upper layer protocols on top of SCION is presented in [](#protnum).
 
-~~~~
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+<figure anchor="_figure-30">
+<name>The SCION header within the protocol stack in a typical deployment</name>
+<artset>
+<artwork type="svg" src="images/scion-header.svg"/>
+<artwork type="ascii-art">
+
++-----------------------------+
 |                             |
 |                             |
 |        Payload (L4)         |
 |                             |
 |                             |
 |                             |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
++-----------------------------+
 |                             |
 |            SCION            |
 |                             |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
-|             UDP             |                |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  Intra-domain  |
-|             IP              |                |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+    protocol    |
-|         Link Layer          |                |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+  --------------+
-~~~~
-{: #figure-30 title="The SCION header within the protocol stack in a typical deployment."}
++-----------------------------+ <-+
+|             UDP             |   |
++-----------------------------+   | Intra-domain
+|             IP              |   |  protocol
++-----------------------------+   |
+|         Link Layer          |   |
++-----------------------------+ <-+
+</artwork>
+</artset>
+</figure>
 
 A complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple. The ISD-AS part is used for inter-domain routing. The endpoint address part is only used for intra-domain forwarding at the source and destination ASes. This implies that endpoint addresses are only required to be globally unique within each SCION AS. This means, for example, that an endpoint running a SCION stack using a {{RFC1918}} could directly communicate with another SCION endpoint using a {{RFC1918}} endpoint address in a different SCION AS.
 
@@ -339,68 +345,75 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 
 **Note:** It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).
 
-~~~~
-                                  ------- = end-to-end path
-   C = Core AS                    - - - - = unused links
-   * = source/destination AS      ------> = direction of beaconing
+<figure anchor="_figure-1">
+<name>Illustration of valid path segment combinations. Each node represents a SCION Autonomous System.</name>
+<artset>
+<artwork type="svg" src="images/valid-path-segments.svg"/>
+<artwork type="ascii-art">
+	
+ +---+
+ | C | = Core AS                  - - - - = unused links
+ +---+
+ +---+
+ | * | = source/destination AS    ------> = direction of beaconing
+ +---+
 
-
-          Core                        Core                  Core
+         Core                        Core                  Core
       ---------->                 ---------->           ---------->
-     .-.       .-.               .-.       .-.         .-.       .-.
-+-- ( C )-----( C ) --+     +-- ( C )-----(C/*)       (C/*)-----(C/*)
-|    `+'       `+'    |     |    `+'       `-'         `-'       `-'
-|     |    1a   |     |     |     |     1b                   1c
+    +---+     +---+             +---+     +---+       +---+     +---+
++---+ C +-----+ C +---+     +---+ C +-----+C/*|       |C/*+ - - +C/*|
+|   +-+-+     +-+-+   |     |   +-+-+     +---+       +---+     +---+
+|     |   1a    |     |     |     |   1b                    1c
 |     |         |     |     |     |
 |     |         |     |     |     |
-|    .+.       .+.    |     |    .+.                       Core
-|   (   )     (   )   |     |   (   )                 -------------->
-|    `+'       `+'    |     |    `+'                        .-.
-|     |         |     |     |     |                   +----( C )----+
-|     |         |     |     |     |                   |     `-'     |
+|   +-+-+     +-+-+   |     |   +-+-+                      Core
+|   |   |     |   |   |     |   |   |                 -------------->
+|   +-+-+     +-+-+   |     |   +-+-+                      +---+
+|     |         |     |     |     |                   +----+ C +----+
+|     |         |     |     |     |                   |    +---+    |
 |     |         |     |     |     |                   |             |
-|    .+.       .+.    |     |    .+.                 .+.     1d    .+.
-+-> ( * )     ( * ) <-+     +-> ( * )               (C/*)         (C/*)
-     `-'       `-'               `-'                 `-'           `-'
+|   +-+-+     +-+-+   |     |   +-+-+               +-+-+   1d    +-+-+
++-->| * |     | * |<--+     +-->| * |               |C/*|         |C/*|
+    +---+     +---+             +---+               +---+         +---+
 
 
+         +---+                   +---+                 +---+
++--   +--+ C +--+   --+     +----+C/*|        +--   ┌─ ┤ C ├ ─┐   --+
+|     |  +---+  |     |     |    +-+-+        |     |  +---+  |     |
+|     |         |     |     |      |          |     |         |     |
+|     |   2a    |     |     |  2b  |          |     |    3a   |     |
+|     |         |     |     |      |          |     |         |     |
+|   +-+-+     +-+-+   |     |    +-+-+        |   +-+-+     +-+-+   |
+|   |   |     |   |   |     |    |   |        |   |   +p---p+   |   |
+|   +-+-+     +-+-+   |     |    +-+-+        |   +-+-+     +-+-+   |
+|     |         |     |     |      |          |     │         │     |
+|     |         |     |     |      |          |     │         │     |
+|     |         |     |     |      |          |     │         │     |
+|   +-+-+     +-+-+   |     |    +-+-+        |   +-+-+     +-+-+   |
++-->| * |     | * |<--+     +--->| * |        +-->| * |     | * |<--+
+    +---+     +---+              +---+            +---+     +---+
 
-          .-.                      .-.                   .-.
-+--   +--( C )--+   --+      +--  (C/*)        +--    - ( C ) -    --+
-|     |   `-'   |     |      |     `+'         |     |   `-'   |     |
-|     |         |     |      |      |          |                     |
-|     |    2a   |     |      |  2b  |          |     |    3a   |     |
-|     |         |     |      |      |          |                     |
-|    .+.       .+.    |      |     .+.         |    .+.       .+.    |
-|   (   )     (   )   |      |    (   )        |   (   #-----#   )   |
-|    `+'       `+'    |      |     `+'         |    `+'  Peer `+'    |
-|     |         |     |      |      |          |     |         |     |
-|     |         |     |      |      |          |     |         |     |
-|     |         |     |      |      |          |     |         |     |
-|    .+.       .+.    |      |     .+.         |    .+.       .+.    |
-+-> ( * )     ( * ) <-+      +->  ( * )        +-> ( * )     ( * ) <-+
-     `-'       `-'                 `-'              `-'       `-'
+         Core                                      Core
+     ---------->                               ---------->
+   +---+     +---+             +---+         +---+     +---+      +---+
++--+ C + - - + C +--+   +------+ C +------+  | C ├ - - ┤ C │  +---+ C |
+|  +-+-+     +-+-+  |   |      +-+-+      |  +-+-+     +-+-+  |   +-+-+
+|    |    3b   |    |   |        |   4a   |    |   4b    |    |  5  |
+|                   |   |        |        |                   |
+|    |         |    |   |        |        |    |         |    |     |
+|  +-+-+     +-+-+  |   |      +-+-+      |    +- +---+ -+    |   +-+-+
+|  |   +p---p+   │  |   |    +-+   +-+    |       |   |       |   | * |
+|  +-+-+     +─+─+  |   |    | +---+ |    |    +- +---+ -+    |   +-+-+
+|    |         |    |   |    |       |    |    |         |    |     │
+|    |         |    |   |    |       |    |                   |     │
+|    |         |    |   |    |       |    |    |         |    |     │
+|  +-+-+     +-+-+  |   |  +-+-+   +-+-+  |  +-+-+     +-+-+  |   +-+-+
++->| * |     | * |<-+   +->| * |   │ * |<-+  | * |     | * |  +-->| * |
+   +---+     +---+         +---+   +---+     +---+     +---+      +---+
 
-
-          Core                                    Core
-      ---------->                              ---------->
-     .-.       .-.             .-.            .-.       .-.        .-.
- +--( C )- - -( C )--+  +---- ( C ) ----+    ( C )- - -( C )  +-- ( C )
- |   `+'       `+'   |  |      `+'      |     `+'       `+'   |    `+'
- |         3b        |  |           4a  |          4b         |  5
- |    |         |    |  |       |       |      |         |    |     |
- |                   |  |               |                     |
- |   .+.       .+.   |  |      .+.      |      + - --. - +    |    .+.
- |  (   #-----#   )  |  |   +-(   )-+   |      +--(   )--+    |   ( * )
- |   `+'  Peer `+'   |  |   |  `-'  |   |      |   `-'   |    |    `+'
- |    |         |    |  |   |       |   |      |         |    |     |
- |    |         |    |  |   |       |   |      |         |    |     |
- |    |         |    |  |   |       |   |      |         |    |     |
- |   .+.       .+.   |  |  .+.     .+.  |     .+.       .+.   |    .+.
- +->( * )     ( * )<-+  +>( * )   ( * )<+    ( * )     ( * )  +-> ( * )
-     `-'       `-'         `-'     `-'        `-'       `-'        `-'
-~~~~
-{: #figure-1 title="Illustration of valid path segment combinations. Each node represents a SCION Autonomous System."}
+</artwork>
+</artset>
+</figure>
 
 
 Valid path segment combinations:
@@ -422,7 +435,12 @@ The SCION Data Plane provides *path authorization*. This property ensures that d
 
 The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an OPTIONAL extension header, see {{figure-2}} below.
 
-~~~~
+<figure anchor="_figure-2">
+<name>High-level SCION header structure, non-byte aligned</name>
+<artset>
+<artwork type="svg" src="images/scion-header-specification.svg"/>
+<artwork type="ascii-art">
+
 +--------------------------------------------------------+
 |                     Common header                      |
 |                                                        |
@@ -436,8 +454,10 @@ The SCION packet header is aligned to 4 bytes. It is composed of a common header
 |               Extension header (OPTIONAL)              |
 |                                                        |
 +--------------------------------------------------------+
-~~~~
-{: #figure-2 title="High-level SCION header structure"}
+
+</artwork>
+</artset>
+</figure>
 
 The *common header* contains important meta information including version number and the lengths of the header and payload. In particular, it contains flags that control the format of subsequent headers such as the address and path headers. For more details, see [](#common-header).
 
@@ -451,21 +471,28 @@ The OPTIONAL *extension* header contains a variable number of hop-by-hop and end
 
 The SCION common header has the following packet format:
 
-~~~~
-0                   1                   2                   3
+<figure anchor="_figure-3">
+<name>The SCION common header packet format</name>
+<artset>
+<artwork type="svg" src="images/common-header.svg"/>
+<artwork type="ascii-art">
+
+ 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|Version|  TraffCl      |                Flow Label             |
+|Version| TrafficClass  |                Flow Label             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    NextHdr    |    HdrLen     |          PayloadLen           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    PathType   |DT |DL |ST |SL |              RSV              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-3 title="The SCION common header packet format"}
+
+</artwork>
+</artset>
+</figure>
 
 - `Version`: The version of the SCION common header. Currently, only version "0" is supported.
-- `TrafficClass` (`TraffCl` in the image above): The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet might differ from the value sent by the packet's source. The current use of the `TrafficClass` field for Differentiated Services and Explicit Congestion Notification is specified in {{RFC2474}} and {{RFC3168}}.
+- `TrafficClass`: The 8-bit long identifier of the packet's class or priority. The value of the traffic class bits in a received packet might differ from the value sent by the packet's source. The current use of the `TrafficClass` field for Differentiated Services and Explicit Congestion Notification is specified in {{RFC2474}} and {{RFC3168}}.
 - `Flow Label`: This 20-bit field labels sequences of packets to be treated in the network as a single flow. Sources MUST set this field. This serves the same purpose as what {{RFC6437}} describes for IPv6 and is used in the same manner. Notably, a Flow Label of zero does not imply that packet reordering is acceptable.
 - `NextHdr`: Encodes the type of the first header after the SCION header. This can be either a SCION extension or a Layer 4 protocol such as TCP or UDP. Values of this field respect the Assigned SCION Protocol Numbers (see [](#protnum)).
 - `HdrLen`: Specifies the entire length of the SCION header in bytes, i.e. the sum of the lengths of the common header, the address header, and the path header. The SCION header is aligned to a multiple of 4 bytes. The SCION header length is computed as `HdrLen` * 4 bytes. The 8 bits of the `HdrLen` field limit the SCION header to a maximum of 255 * 4 = 1020 bytes.
@@ -507,7 +534,12 @@ A service address designates a set of endpoint addresses rather than a singular 
 
 The SCION address header has the following format:
 
-~~~~
+<figure anchor="_figure-4">
+<name>The SCION address header packet format</name>
+<artset>
+<artwork type="svg" src="images/address-header.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -523,8 +555,10 @@ The SCION address header has the following format:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                    SrcHostAddr (variable Len)                 |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-4 title="The SCION address header packet format"}
+
+</artwork>
+</artset>
+</figure>
 
 - `DstISD, SrcISD`: The 16-bit ISD identifier of the destination/source.
 - `DstAS, SrcAS`: The 48-bit AS identifier of the destination/source.
@@ -532,14 +566,21 @@ The SCION address header has the following format:
 
 If a service address is implied by the `DT/DL` or `ST/SL` field of the common header, the corresponding address field has the following format:
 
-~~~~
+<figure anchor="_figure-20">
+<name>Service address format</name>
+<artset>
+<artwork type="svg" src="images/service-address-format.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |         Service Number        |              RSV              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-20 title="Service address format"}
+
+</artwork>
+</artset>
+</figure>
 
 - `RSV`: reserved for future use
 
@@ -572,7 +613,12 @@ One use case of the `Empty` path type lies in the context of [link-failure detec
 
 The `SCION` path type (`PathType=1`) is the standard path type. A SCION path has the following layout:
 
-~~~~
+<figure anchor="_figure-5">
+<name>Layout of a standard SCION path</name>
+<artset>
+<artwork type="svg" src="images/scion-path-type.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -599,9 +645,10 @@ The `SCION` path type (`PathType=1`) is the standard path type. A SCION path has
 |                                                               |
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-5 title="Layout of a standard SCION path"}
 
+</artwork>
+</artset>
+</figure>
 
 It consists of a path meta header, up to 3 Info Fields and up to 64 Hop Fields.
 
@@ -613,82 +660,95 @@ The SCION header is created by extracting the required Info Fields and Hop Field
 
 In the Hop Field that represents the last Hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
 
-~~~~
-                   +-----------------+
-                   |    ISD Core     |
-  .--.    .--.     |  .--.     .--.  |     .--.    .--.
- (AS 3)--(AS 4)----|-(AS 1)---(AS 2)-|----(AS 5)--(AS 6)
-  `--'    `--'     |  `--'     `--'  |     `--'    `--'
-                   +-----------------+
+<figure anchor="_figure-6">
+<name>Path construction example</name>
+<artset>
+<artwork type="svg" src="images/path-construction-example.svg"/>
+<artwork type="ascii-art">
+
+                   +----------------+
+                   |     ISD Core   |
+   +---+   +---+   |  +---+  +---+  |    +---+  +---+
+   |AS3+---+AS4+------+AS1+--+AS2+-------+AS5+--+AS6|
+   +---+   +---+   |  +---+  +---+  |    +---+  +---+
+                   +----------------+
 
  Up-Segment           Core-Segment        Down-Segment
 +---------+           +---------+         +---------+
 | +-----+ |           | +-----+ |         | +-----+ |
-| + INF + |--------+  | + INF + |---+     | + INF + |--+
-| +-----+ |        |  | +-----+ |   |     | +-----+ |  |
-| +-----+ |        |  | +-----+ |   |     | +-----+ |  |
-| | HF  | |------+ |  | | HF  | |---+-+   | | HF  | |--+-+
-| +-----+ |      | |  | +-----+ |   | |   | +-----+ |  | |
-| +-----+ |      | |  | +-----+ |   | |   | +-----+ |  | |
-| | HF  | |----+ | |  | | HF  | |---+-+-+ | | HF  | |--+-+-+
-| +-----+ |    | | |  | +-----+ |   | | | | +-----+ |  | | |
-| +-----+ |    | | |  +---------+   | | | | +-----+ |  | | |
-| | HF  | |--+ | | |                | | | | | HF  | |--+-+-+-+
-| +-----+ |  | | | |  +----------+  | | | | +-----+ |  | | | |
-+---------+  | | | |  | ++++++++ |  | | | +---------+  | | | |
-             | | | |  | | Meta | |  | | |              | | | |
-             | | | |  | ++++++++ |  | | |              | | | |
-             | | | |  | +------+ |  | | |              | | | |
-             | | | +->| + INF  + |  | | |              | | | |
-             | | |    | +------+ |  | | |              | | | |
-             | | |    | +------+ |  | | |              | | | |
-             | | |    | + INF  + |<-+ | |              | | | |
-             | | |    | +------+ |    | |              | | | |
-             | | |    | +------+ |    | |              | | | |
-             | | |    | + INF  + |<---+-+--------------+ | | |
-             | | |    | +------+ |    | |                | | |
-             | | |    | +------+ |    | |                | | |
-             | | +--->| |  HF  | |    | |                | | |
-             | |      | +------+ |    | |                | | |
-             | |      | +------+ |    | |                | | |
-             | +----->| |  HF  | |    | |                | | |
-             |        | +------+ |    | |                | | |
-             |        | +------+ |    | |                | | |
-             +------->| |  HF  | |    | |                | | |
-                      | +------+ |    | |                | | |
-                      | +------+ |    | |                | | |
-                      | |  HF  | |<---+ |                | | |
-                      | +------+ |      |                | | |
-                      | +------+ |      |                | | |
-     Forwarding Path  | |  HF  | |<-----+                | | |
-                      | +------+ |                       | | |
-                      | +------+ |                       | | |
-                      | |  HF  | |<----------------------+ | |
-                      | +------+ |                         | |
-                      | +------+ |                         | |
-                      | |  HF  | |<------------------------+ |
-                      | +------+ |                           |
-                      | +------+ |                           |
-                      | |  HF  | |<--------------------------+
-                      | +------+ |
-                      +----------+
-~~~~
-{: #figure-6 title="Path construction example"}
+| | INF | +--------+  | | INF | +--+      | | INF | +--+
+| +-----+ |        |  | +-----+ |  |      | +-----+ |  |
+| +-----+ |        |  | +-----+ |  |      | +-----+ |  |
+| | HF  | +------+ |  | | HF  | +----+    | | HF  | +----+
+| +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
+| +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
+| | HF  | +----+ | |  | | HF  | +------+  | | HF  | +------+
+| +-----+ |    | | |  | +-----+ |  | | |  | +-----+ |  | | |
+| +-----+ |    | | |  +---------+  | | |  | +-----+ |  | | |
+| | HF  | +--+ | | |               | | |  | | HF  | +--------+
+| +-----+ |  | | | |  +---------+  | | |  | +-----+ |  | | | |
++---------+  | | | |  | +++++++ |  | | |  +---------+  | | | |
+             | | | |  | |Meta | |  | | |               | | | |
+             | | | |  | +++++++ |  | | |               | | | |
+             | | | |  | +-----+ |  | | |               | | | |
+             | | | +->| | INF | |  | | |               | | | |
+             | | |    | +-----+ |  | | |               | | | |
+             | | |    | +-----+ |  | | |               | | | |
+             | | |    | | INF | |<-+ | |               | | | |
+             | | |    | +-----+ |    | |               | | | |
+             | | |    | +-----+ |    | |               | | | |
+             | | |    | | INF | |<---------------------+ | | |
+             | | |    | +-----+ |    | |                 | | |
+             | | |    | +-----+ |    | |                 | | |
+             | | +--->| | HF  | |    | |                 | | |
+             | |      | +-----+ |    | |                 | | |
+             | |      | +-----+ |    | |                 | | |
+             | +----->| | HF  | |    | |                 | | |
+             |        | +-----+ |    | |                 | | |
+             |        | +-----+ |    | |                 | | |
+             +------->| | HF  | |    | |                 | | |
+                      | +-----+ |    | |                 | | |
+                      | +-----+ |    | |                 | | |
+                      | | HF  | |<---+ |                 | | |
+                      | +-----+ |      |                 | | |
+                      | +-----+ |      |                 | | |
+     Forwarding Path  | | HF  | |<-----+                 | | |
+                      | +-----+ |                        | | |
+                      | +-----+ |                        | | |
+                      | | HF  | |<-----------------------+ | |
+                      | +-----+ |                          | |
+                      | +-----+ |                          | |
+                      | | HF  | |<-------------------------+ |
+                      | +-----+ |                            |
+                      | +-----+ |                            |
+                      | | HF  | |<---------------------------+
+                      | +-----+ |
+                      +---------+
+
+</artwork>
+</artset>
+</figure>
 
 
 #### Path Meta Header Field {#PathMetaHdr}
 
 The 4-byte Path Meta Header field (`PathMetaHdr`) defines meta information about the SCION path that is contained in the path header. It has the following format:
 
-~~~~
+<figure anchor="_figure-7">
+<name>SCION path type - Format of the Path Meta Header field</name>
+<artset>
+<artwork type="svg" src="images/path-meta-header-field.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 | C |  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-7 title="SCION path type - Format of the Path Meta Header field"}
 
+</artwork>
+</artset>
+</figure>
 
 - `C` (urrINF): Specifies a 2-bits index (0-based) pointing to the current Info Field for the packet on its way through the network. For details, see [](#offset-calc) below.
 - `CurrHF`: Specifies a 6-bits index (0-based) pointing to the current Hop Field for the packet on its way through the network. For details, see [](#offset-calc) below. Note that the `CurrHF` index MUST point to a Hop Field that is part of the current path segment, as indicated by the `CurrINF` index.
@@ -731,7 +791,12 @@ To check that the current Hop Field is in the segment of the current Info Field,
 
 The 8-byte Info Field (`InfoField`) has the following format:
 
-~~~~
+<figure anchor="_figure-8">
+<name>SCION path type - Format of the Info Field</name>
+<artset>
+<artwork type="svg" src="images/info-field.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -739,9 +804,10 @@ The 8-byte Info Field (`InfoField`) has the following format:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                           Timestamp                           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-8 title="SCION path type - Format of the Info Field"}
 
+</artwork>
+</artset>
+</figure>
 
 - `RSV`: Unused and reserved for future use.
 - `P`: Peering flag. If the flag has value "1", the segment represented by this Info Field contains a peering Hop Field, which requires special processing in the data plane. For more details, see [](#peerlink) and [](#packet-verif).
@@ -753,7 +819,12 @@ The 8-byte Info Field (`InfoField`) has the following format:
 
 The 12-byte Hop Field (``HopField``) has the following format:
 
-~~~~
+<figure anchor="_figure-9">
+<name>SCION path type - Format of the Hop Field</name>
+<artset>
+<artwork type="svg" src="images/hop-field.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -763,10 +834,10 @@ The 12-byte Hop Field (``HopField``) has the following format:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
 |                              MAC                              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-9 title="SCION path type - Format of the Hop Field"}
 
-
+</artwork>
+</artset>
+</figure>
 
 - `RSV`: Unused and reserved for future use.
 - `I`: The Ingress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of `ConsIngress`, the router SHOULD process the L4 payload in the packet.
@@ -788,7 +859,7 @@ Setting multiple router alert flags on a path SHOULD be avoided. This is because
 
 The `OneHopPath` path type (`PathType=2`) is currently used to bootstrap beaconing between neighboring ASes. This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.
 
-A one-hop path has exactly one Info Field and two Hop Fields with the specialty that the second Hop Field is not known a priori, but is instead created by the ingress SCION border router of the neighboring AS while processing the one-hop path. Any entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively.
+A one-hop path has exactly one Info Field and two Hop Fields with the specialty that the second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. Any entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively.
 
 Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.
 
@@ -834,7 +905,12 @@ If both headers are present, the Hop-by-Hop Options header MUST come before the 
 
 The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 bytes and have the following format:
 
-~~~~
+<figure anchor="_figure-11">
+<name>Extension headers: Options header</name>
+<artset>
+<artwork type="svg" src="images/options-header.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -842,8 +918,10 @@ The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 byt
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-11 title="Extension headers: Options header"}
+
+</artwork>
+</artset>
+</figure>
 
 
 - `NextHdr`: Unsigned 8-bit integer. Identifies the type of header immediately following the Hop-by-Hop/End-to-End Options header. Values of this field respect the Assigned SCION Protocol Numbers (see also [](#protnum)).
@@ -855,7 +933,12 @@ The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 byt
 
 The `Options` field of the Hop-by-Hop Options and the End-to-End Options headers carries a variable number of options that are type-length-value (TLV) encoded. Each TLV-encoded option has the following format:
 
-~~~~
+<figure anchor="_figure-12">
+<name>Options field: TLV-encoded options</name>
+<artset>
+<artwork type="svg" src="images/options-field.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -863,9 +946,10 @@ The `Options` field of the Hop-by-Hop Options and the End-to-End Options headers
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
 |                              ...                              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-12 title="Options field: TLV-encoded options"}
 
+</artwork>
+</artset>
+</figure>
 
 - `OptType`: 8-bit identifier of the type of option. The following option types are assigned to the SCION HBH/E2E Options header:
 
@@ -896,14 +980,21 @@ There are two padding options to align subsequent options and to pad out the con
 
 Alignment requirement: none.
 
-~~~~
+<figure anchor="_figure-13">
+<name>TLV-encoded options - Pad1 option</name>
+<artset>
+<artwork type="svg" src="images/pad1-option.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+
 |       0       |
 +-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-13 title="TLV-encoded options - Pad1 option"}
+
+</artwork>
+</artset>
+</figure>
 
 
 **Note:** The format of the Pad1 option is a special case - it does not have length and value fields.
@@ -915,7 +1006,12 @@ The Pad1 option is used to insert 1 byte of padding into the `Options` field of 
 
 Alignment requirement: none.
 
-~~~~
+<figure anchor="_figure-14">
+<name>TLV-encoded options - PadN option</name>
+<artset>
+<artwork type="svg" src="images/padn-option.svg"/>
+<artwork type="ascii-art">
+	
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -923,9 +1019,10 @@ Alignment requirement: none.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
 |                              ...                              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-14 title="TLV-encoded options - PadN option"}
 
+</artwork>
+</artset>
+</figure>
 
 The PadN option is used to insert two or more bytes of padding into the `Options` field of an extension header. For N bytes of padding, the `OptDataLen` field contains the value N-2, and the `OptData` consists of N-2 zero-valued bytes.
 
@@ -935,28 +1032,35 @@ The PadN option is used to insert two or more bytes of padding into the `Options
 The SCION Data Plane does not provide payload integrity protection, as further clarified in [](#payload-integrity).
 Should any transport or other upper-layer protocols compute a checksum of the SCION header, then they SHOULD use the following pseudo header:
 
-~~~~
+<figure anchor="_figure-15">
+<name>Layout of the pseudo header for the upper-layer checksum</name>
+<artset>
+<artwork type="svg" src="images/pseudo-header.svg"/>
+<artwork type="ascii-art">
+
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-|            DstISD             |                               |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               + SCION|
-|                             DstAS                             |   ad-|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ dress|
-|            SrcISD             |                               |  hea-|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   der|
-|                             SrcAS                             |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+      |
-|                    DstHostAddr (variable Len)                 |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+      |
-|                    SrcHostAddr (variable Len)                 |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
+|            DstISD             |                               |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   |
+|                             DstAS                             |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|            SrcISD             |                               |   | SCION
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   | address
+|                             SrcAS                             |   | header
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|                    DstHostAddr (variable Len)                 |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
+|                    SrcHostAddr (variable Len)                 |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 |                    Upper-Layer Packet Length                  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      zero                     |  Next Header  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-~~~~
-{: #figure-15 title="Layout of the pseudo header for the upper-layer checksum"}
+
+</artwork>
+</artset>
+</figure>
 
 
 - `DstISD`, `SrcISD`, `DstAS`, `SrcAS`, `DstHostAddr`, `SrcHostAddr`: These values are taken from the SCION address header.
@@ -974,36 +1078,42 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
 
 ## Description
 
-~~~~
-                    +--------------------+
-                    |                    |
-                    |        AS1         |
-                    |                    |
-                    |                    |
-                    |     198.51.100.4 .-+. i1b (1-1,198.51.100.17)
-                    |          +------( R3 )---+
-                   .+-.        |       `-+'    |
-          +-------( R2 )-------+         |     |
-          |    i1a `+-' 198.51.100.1     |     |
-          |         |                    |     |
-          |         +--------------------+     | (1-3,198.51.100.18)
-          |                                    | i3a
-          |                                   .+-.
-    i2a .-+.                          +------( R4 )--------+
-+------( R1 )--------+                |       `-+'         |
-|       `-+'         |                |         |192.0.2.34|
-|         |203.0.113.17               |         |          |
-|         |          |                |         |    AS3   |
-|         |    AS2   |                |         |          |
-|         |          |                |       +---+        |
-|       +---+        |                |       | B |        |
-|       | A |        |                |       +---+        |
-|       +---+        |                |   1-3,192.0.2.7    |
-|  1-2,203.0.113.6   |                |                    |
-|                    |                +--------------------+
-+--------------------+
-~~~~
-{: #figure-16 title="Sample topology to illustrate the life cycle of a SCION packet. AS1 is the core AS of ISD 1, and AS2 and AS3 are non-core ASes of ISD 1."}
+<figure anchor="_figure-16">
+<name>Sample topology to illustrate the life cycle of a SCION packet. AS1 is the core AS of ISD 1, and AS2 and AS3 are non-core ASes of ISD 1.</name>
+<artset>
+<artwork type="svg" src="images/sample-topology-packet-lifecycle.svg"/>
+<artwork type="ascii-art">
+	
+                  +-------------------------+
+                  |                         |
+                  |           AS1           |
+                  |                         | (1-1,
+                  |                         | 198.51.100.17)
+                  |          198.51.100.4 +-+-+ i1b
+                  |            +----------+R3 +#-+
+            i1a +-+-+          |          +-+-+  |
+             +-#+R2 +----------+            |    |
+             |  +-+-+ 198.51.100.1          |    |
+             |    |                         |    |
+             |    +-------------------------+    | (1-3,
+             *                                   * 198.51.100.18)
+       i2a +-+-+                               +-+-+ i3a
++----------+R1 +----------+         +----------+R4 +----------+
+|          +-+-+          |         |          +-+-+          |
+|            |203.0.113.17|         |            |192.0.2.34  |
+|            |            |         |            |            |
+|            |    AS2     |         |            |    AS3     |
+|            |            |         |            |            |
+|     +------+-----+      |         |      +-----+------+     |
+|     | Endpoint A |      |         |      | Endpoint B |     |
+|     +------------+      |         |      +------------+     |
+|     1-2,203.0.113.6     |         |      1-3,192.0.2.7      |
+|                         |         |                         |
++-------------------------+         +-------------------------+
+
+</artwork>
+</artset>
+</figure>
 
 Based on the network topology in {{figure-16}} above, this example shows the path of a SCION packet sent from its source at Endpoint A to its destination at Endpoint B, and how it will be processed by each router on the path using simplified snapshots of the packet header after each processing step. These snapshots, which are depicted in tables, show the most relevant information of the header, i.e. the SCION path and IP encapsulation for local communication.
 
@@ -1186,20 +1296,27 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
 
 {{figure-18}} below shows the layout of the input data to calculate the Hop Field MAC.
 
-~~~~
-0                   1                   2                   3
+<figure anchor="_figure-18">
+<name>Input data to calculate the Hop Field MAC for the default hop-field MAC algorithm</name>
+<artset>
+<artwork type="svg" src="images/default-hop-field-mac-algorithm.svg"/>
+<artwork type="ascii-art">
+
+ 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-|               0               |           Acc                 |  Info|
-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| Field|
-|                           Timestamp                           |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| -----+
-|       0       |    ExpTime    |          ConsIngress          |   Hop|
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ Field|
-|          ConsEgress           |               0               |      |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ -----+
-~~~~
-{: #figure-18 title="Input data to calculate the Hop Field MAC for the default hop-field MAC algorithm"}
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
+|               0               |           Acc                 |   | Info
+|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|   | Field
+|                           Timestamp                           |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| <-+
+|       0       |    ExpTime    |          ConsIngress          |   | Hop
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   | Field
+|          ConsEgress           |               0               |   |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
+
+</artwork>
+</artset>
+</figure>
 
 
 #### Alternative Hop Field MAC Algorithms {#mac-requirements}
@@ -1278,40 +1395,6 @@ During forwarding, each SCION router verifies the path contained in the packet h
 The processing of SCION packets for ASes where a peering link is crossed between path segments is a special case. A path containing a peering link contains exactly two path segments, one against construction direction (up) and one in construction direction (down). On the path segment against construction direction (up), the peering Hop Field is the last hop of the segment. In construction direction (down), the peering Hop Field is the first hop of the segment.
 
 The following sections describe the tasks to be performed by the ingress and egress border routers of each on-path AS. Each operation is described from the perspective of AS<sub>i</sub>, where i belongs to \[0 ... n-1], and n == the number of ASes in the path segment (counted from the first AS in the beaconing direction).
-
-The following figure provides a simplified representation of the processing at routers both in construction direction and against construction direction.
-
-~~~~
-                              .--.
-                             ( RR )  = Router
-Processing in                 `--'
-construction
-direction
-
-      1. Verify MAC of AS1          1. Verify MAC of AS2
-      2. Update Acc for AS2         2. Update Acc for AS3
-                 |                            |
->>>--------------o----------------------------o---------------------->>>
-
-+-------------+  |           +-------------+  |          +-------------+
-|             |              |             |             |             |
-|           .--. |          .--.         .--. |         .--.           |
-|   AS1    ( RR )o---------( RR )  AS2  ( RR )o--------( RR )  AS3     |
-|           `--' |          `--'         `--' |         `--'           |
-|             |              |             |             |             |
-+-------------+  |           +-------------+  |          +-------------+
-
-                 |                            |
-<<<--------------o----------------------------o----------------------<<<
-                 |                            |
-      1. Update Acc for AS1         1. Update Acc for AS2
-      2. Verify MAC of AS1          2. Verify MAC of AS2
-
-                                                      Processing against
-                                                            construction
-                                                               direction
-~~~~
-{: #figure-19 title="A simplified representation of the processing at routers in both directions."}
 
 #### Steps at Ingress Border Router {#process-router-ingress}
 
@@ -1589,6 +1672,11 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-dataplane-06
+{:numbered="false"}
+
+- Figures: redraw and add SVG version
+
 ## draft-dekater-scion-dataplane-05
 {:numbered="false"}
 
@@ -1640,4 +1728,3 @@ Minor changes:
 - Added and capitalized RFC2119 compliant terminology.
 - Clarified implications of AS forwarding key compromise and path splicing in security considerations
 - Clarified the computation of ExtLen.
-
