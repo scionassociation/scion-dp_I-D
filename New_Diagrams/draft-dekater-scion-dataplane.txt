@@ -143,6 +143,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-06
      draft-dekater-scion-dataplane-05
      draft-dekater-scion-dataplane-04
      draft-dekater-scion-dataplane-03
@@ -2914,6 +2915,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-06
+
+   *  Figures: redraw and add SVG version
 
 draft-dekater-scion-dataplane-05
 
