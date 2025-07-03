@@ -1672,6 +1672,11 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-dataplane-06
+{:numbered="false"}
+
+- Figures: redraw and add SVG version
+
 ## draft-dekater-scion-dataplane-05
 {:numbered="false"}
 
