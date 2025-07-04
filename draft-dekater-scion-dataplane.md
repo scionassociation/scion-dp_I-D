@@ -1106,7 +1106,7 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
 |     +------+-----+      |         |      +-----+------+     |
 |     | Endpoint A |      |         |      | Endpoint B |     |
 |     +------------+      |         |      +------------+     |
-| 1-ff00:0:2,203.0.113.6  |         | 1-ff00:0:3,192.0.2.7    |
+| 1-ff00:0:2,203.0.113.6  |         |  1-ff00:0:3,192.0.2.7   |
 |                         |         |                         |
 |       AS ff00:0:2       |         |       AS ff00:0:3       |
 |                         |         |                         |
