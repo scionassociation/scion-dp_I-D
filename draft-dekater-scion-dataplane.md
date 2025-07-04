@@ -859,14 +859,15 @@ Setting multiple router alert flags on a path SHOULD be avoided. This is because
 
 The `OneHopPath` path type (`PathType=2`) is currently used to bootstrap beaconing between neighboring ASes. This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.
 
-A one-hop path has exactly one Info Field and two Hop Fields with the specialty that the second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. Any entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively.
-
-Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.
-
-The One-Hop Path Type only has a single Info Field; the appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
+A one-hop path has exactly one Info Field and two Hop Fields. The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
 
 - At the source endpoint AS, *CurrHF := 0*.
 - At the destination endpoint AS, *CurrHF := 1*.
+
+
+Any entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively.
+
+Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.
 
 
 ### Path Reversal {#reverse}
