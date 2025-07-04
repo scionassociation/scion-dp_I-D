@@ -1243,11 +1243,18 @@ Table of Contents
    beaconing between neighboring ASes.  This is necessary as neighbor
    ASes do not have a forwarding path before beaconing is started.
 
-   A one-hop path has exactly one Info Field and two Hop Fields with the
-   specialty that the second Hop Field is created by the ingress SCION
-   border router of the neighboring AS while processing the one-hop
-   path.  Any entity with access to the forwarding key of the source
-   endpoint AS can create a valid info and Hop Field as described in
+   A one-hop path has exactly one Info Field and two Hop Fields.  The
+   second Hop Field is created by the ingress SCION border router of the
+   neighboring AS while processing the one-hop path.  The appropriate
+   Hop Field can be processed by a border router based on the source and
+   destination address.  In this context, the following rules apply:
+
+   *  At the source endpoint AS, _CurrHF := 0_.
+
+   *  At the destination endpoint AS, _CurrHF := 1_.
+
+   Any entity with access to the forwarding key of the source endpoint
+   AS can create a valid info and Hop Field as described in
    Section 2.3.2.3 and Section 2.3.2.4, respectively.
 
    Upon receiving a packet containing a one-hop path, the ingress border
@@ -1256,14 +1263,6 @@ Table of Contents
    It sets the ConsEgress field to an invalid value (e.g. unspecified
    value 0), ensuring the path cannot be used beyond the destination AS.
    Then it calculates and appends the appropriate MAC for the Hop Field.
-
-   The One-Hop Path Type only has a single Info Field; the appropriate
-   Hop Field can be processed by a border router based on the source and
-   destination address.  In this context, the following rules apply:
-
-   *  At the source endpoint AS, _CurrHF := 0_.
-
-   *  At the destination endpoint AS, _CurrHF := 1_.
 
 2.3.4.  Path Reversal
 

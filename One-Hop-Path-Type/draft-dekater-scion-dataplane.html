@@ -7788,17 +7788,17 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-one-hop-path-type" class="section-name selfRef">One-Hop Path Type</a>
           </h4>
 <p id="section-2.3.3-1">The <code>OneHopPath</code> path type (<code>PathType=2</code>) is currently used to bootstrap beaconing between neighboring ASes. This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.3-2">A one-hop path has exactly one Info Field and two Hop Fields with the specialty that the second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. Any entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in <a href="#inffield" class="auto internal xref">Section 2.3.2.3</a> and <a href="#hopfld" class="auto internal xref">Section 2.3.2.4</a>, respectively.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.3-3">Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the <code>ConsIngress</code> field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the <code>ConsEgress</code> field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.<a href="#section-2.3.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.3.3-4">The One-Hop Path Type only has a single Info Field; the appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:<a href="#section-2.3.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-2">A one-hop path has exactly one Info Field and two Hop Fields. The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-2.3.3-5.1">
-              <p id="section-2.3.3-5.1.1">At the source endpoint AS, <em>CurrHF := 0</em>.<a href="#section-2.3.3-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-2.3.3-3.1">
+              <p id="section-2.3.3-3.1.1">At the source endpoint AS, <em>CurrHF := 0</em>.<a href="#section-2.3.3-3.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.3.3-5.2">
-              <p id="section-2.3.3-5.2.1">At the destination endpoint AS, <em>CurrHF := 1</em>.<a href="#section-2.3.3-5.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-2.3.3-3.2">
+              <p id="section-2.3.3-3.2.1">At the destination endpoint AS, <em>CurrHF := 1</em>.<a href="#section-2.3.3-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
+<p id="section-2.3.3-4">Any entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in <a href="#inffield" class="auto internal xref">Section 2.3.2.3</a> and <a href="#hopfld" class="auto internal xref">Section 2.3.2.4</a>, respectively.<a href="#section-2.3.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-5">Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the <code>ConsIngress</code> field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the <code>ConsEgress</code> field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.<a href="#section-2.3.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="reverse">
