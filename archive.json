@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-01T00:00:41.622373+00:00",
+  "timestamp": "2025-07-06T00:00:47.931241+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1443,6 +1443,63 @@
           "updatedAt": "2025-06-17T02:24:35Z"
         }
       ]
+    },
+    {
+      "number": 98,
+      "id": "I_kwDOKYa7786-sOUi",
+      "title": "Clarify how MAC algorithm is configured",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/98",
+      "state": "OPEN",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 3",
+        "editorial"
+      ],
+      "body": "- [ ] In section `1.3.3.  Configuration` clarify that the same MAC algorithm must be configured in the CP and on the routers within an AS \n- [ ] Add new section  before `4.1.1.3.  Default Hop Field MAC Algorithm` titled something like `Hop Field MAC Algorithm`, then introduce two subsections with the default MAC algorithm and alternative ones.  Also this text is IMHO not so clear: ` the control service and routers of the AS do need to agree on the algorithm used` because there is not really an agreement, rather routers and CP must be configured out of band to use the same algorithm.\n\n\nThis is to address the feedback received by Alvaro on the CP draft : \n> [] Only one MAC algorithm is specified, but an AS can select its own. This may be a question for the dataplane draft... How does a SCION endpoint know which MAC algorithm to use for a non-connected AS (maybe even in a different ISD) when constructing the SCION Header?",
+      "createdAt": "2025-07-03T12:43:54Z",
+      "updatedAt": "2025-07-03T13:34:01Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "oncilla",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Also this text is IMHO not so clear:  the control service and routers of the AS do need to agree on the algorithm used because there is not really an agreement, rather routers and CP must be configured out of band to use the same algorithm.\n\nI think the problem is that there are different interpretations of what \"agree\" means.\n\nIn the end, it is important that the control service and the router use the same algorithm and key. Whether it is configuration, an agreement protocol, or something else is irrelevant. So, I would rephrase it to just say \"need to use same\" instead of \"need to agree\"\n\n",
+          "createdAt": "2025-07-03T13:30:07Z",
+          "updatedAt": "2025-07-03T13:30:07Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've re-written along what @oncilla suggests",
+          "createdAt": "2025-07-03T13:34:01Z",
+          "updatedAt": "2025-07-03T13:34:01Z"
+        }
+      ]
+    },
+    {
+      "number": 99,
+      "id": "I_kwDOKYa7786-urKh",
+      "title": "Use example ranges in examples",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/issues/99",
+      "state": "CLOSED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [
+        "knmeynell"
+      ],
+      "labels": [
+        "Prio 3",
+        "editorial"
+      ],
+      "body": "Use ISDs in the example range (1 - 15) and ASes in the example ranges () everywere.\nExamples: \n\n- [x]  figure 8\n```\n                      +-----------------+\n                      |    ISD Core     |\n     .--.    .--.     |  .--.     .--.  |     .--.    .--.\n    (AS 3)--(AS 4)----|-(AS 1)---(AS 2)-|----(AS 5)--(AS 6)\n     `--'    `--'     |  `--'     `--'  |     `--'    `--'\n                      +-----------------+\n```\n\n- [x] Life of a packet example, figure, tables 6-10: \n```\n        |                    |\n                       |                    |\n                       |     198.51.100.4 .-+. i1b (1-1,198.51.100.17)\n                       |          +------( R3 )---+\n                      .+-.        |       `-+'    |\n```\n\nPKI issue: https://github.com/scionassociation/scion-cppki_I-D/issues/69 ",
+      "createdAt": "2025-07-03T16:10:37Z",
+      "updatedAt": "2025-07-04T14:22:26Z",
+      "closedAt": "2025-07-04T14:22:26Z",
+      "comments": []
     }
   ],
   "pulls": [
@@ -7487,24 +7544,26 @@
       "id": "PR_kwDOKYa7786Y08rg",
       "title": "Updated Figures and added monodraw-generated SVGs",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/95",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Resolves #94 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-dp_I-D/draft-dekater-scion-dataplane.txt&url_2=https://scionassociation.github.io/scion-dp_I-D/New_Diagrams/draft-dekater-scion-dataplane.txt)",
       "createdAt": "2025-06-03T13:39:08Z",
-      "updatedAt": "2025-06-30T18:57:50Z",
+      "updatedAt": "2025-07-03T14:50:48Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
       "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "New_Diagrams",
-      "headRefOid": "90b637cdad5cd23bda897b34ee79d2675ed1b48e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "8688191eb040d53d6fad5ba7c981c7d20a48e5c9",
+      "closedAt": "2025-07-03T14:50:32Z",
+      "mergedAt": "2025-07-03T14:50:32Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "03c6d10fc808c473f4a2d85571b2ce0572995a9d"
+      },
       "comments": [
         {
           "author": "nicorusti",
@@ -7745,28 +7804,101 @@
               "updatedAt": "2025-06-30T18:57:50Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786x0vdF",
+          "commit": {
+            "abbreviatedOid": "1693bae"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-03T14:21:29Z",
+          "updatedAt": "2025-07-03T14:21:29Z",
+          "comments": [
+            {
+              "originalPosition": 556,
+              "body": "Where is it? I don't see the text",
+              "createdAt": "2025-07-03T14:21:29Z",
+              "updatedAt": "2025-07-03T14:21:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786x092N",
+          "commit": {
+            "abbreviatedOid": "1693bae"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-03T14:37:18Z",
+          "updatedAt": "2025-07-03T14:37:18Z",
+          "comments": [
+            {
+              "originalPosition": 556,
+              "body": "Found it in #97 \r\nI answered there",
+              "createdAt": "2025-07-03T14:37:18Z",
+              "updatedAt": "2025-07-03T14:37:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786x099Z",
+          "commit": {
+            "abbreviatedOid": "1693bae"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-03T14:37:24Z",
+          "updatedAt": "2025-07-03T14:37:24Z",
+          "comments": [
+            {
+              "originalPosition": 556,
+              "body": "Different PR. The figure was initially removed in this PR and then we decided to keep the text.",
+              "createdAt": "2025-07-03T14:37:24Z",
+              "updatedAt": "2025-07-03T14:37:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786x1JTU",
+          "commit": {
+            "abbreviatedOid": "8688191"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-03T14:50:19Z",
+          "updatedAt": "2025-07-03T14:50:19Z",
+          "comments": []
         }
       ]
     },
     {
       "number": 96,
       "id": "PR_kwDOKYa7786aUX3l",
-      "title": "Terminology Updates",
+      "title": "Reword \"unspecified\" interface ID and intro Terminology Updates",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/96",
       "state": "OPEN",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Changes in interface IDs address:\r\n-  https://github.com/scionassociation/scion-cp_I-D/issues/118 \r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-dp_I-D/draft-dekater-scion-dataplane.txt&url_2=https://scionassociation.github.io/scion-dp_I-D/Terminology-Updates/draft-dekater-scion-dataplane.txt)",
       "createdAt": "2025-06-13T04:01:32Z",
-      "updatedAt": "2025-06-30T18:25:09Z",
+      "updatedAt": "2025-07-04T13:18:36Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
+      "baseRefOid": "03c6d10fc808c473f4a2d85571b2ce0572995a9d",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "Terminology-Updates",
-      "headRefOid": "e7426288bb45056717063040c91b94f3bad9d2c1",
+      "headRefOid": "77497c22c249e6529a2c1610e981441300b2c52c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -7777,28 +7909,169 @@
     {
       "number": 97,
       "id": "PR_kwDOKYa7786cwGS3",
-      "title": "One-Hop Path Type update",
+      "title": "One-Hop Path Type: remove figure 12",
       "url": "https://github.com/scionassociation/scion-dp_I-D/pull/97",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "knmeynell",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "",
+      "body": "Follow up to PR #95 to add one-hop path type text\r\n",
       "createdAt": "2025-06-30T18:57:02Z",
-      "updatedAt": "2025-06-30T18:57:02Z",
+      "updatedAt": "2025-07-04T13:56:16Z",
       "baseRepository": "scionassociation/scion-dp_I-D",
       "baseRefName": "main",
-      "baseRefOid": "21819c9197fd8fb6ca21c03dab6a64b46811bece",
+      "baseRefOid": "03c6d10fc808c473f4a2d85571b2ce0572995a9d",
       "headRepository": "scionassociation/scion-dp_I-D",
       "headRefName": "One-Hop-Path-Type",
-      "headRefOid": "acc88ccb955501907364e2d2c2fc44117276fdb1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "324e6b08b35c2a3cf274e0a7b869a45f6d0efd81",
+      "closedAt": "2025-07-04T13:56:11Z",
+      "mergedAt": "2025-07-04T13:56:11Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "b2eb5d42903474e03279b6a371bfabd7dd114531"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": "ZDo you remember why we are changing this? Just to remove the figure, right? \r\n\r\nHow about this wording for the whole paragraph? \r\n```\r\nThe `OneHopPath` path type (`PathType=2`) is currently used to bootstrap beaconing between neighboring ASes. This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.\r\n\r\nA one-hop path has exactly one Info Field and two Hop Fields. The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:\r\n\r\n- At the source endpoint AS, *CurrHF := 0*.\r\n- At the destination endpoint AS, *CurrHF := 1*.\r\n\r\n\r\nAny entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively.\r\n\r\nUpon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.\r\n```",
+          "createdAt": "2025-07-03T14:33:35Z",
+          "updatedAt": "2025-07-03T14:33:50Z"
+        },
+        {
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> ZDo you remember why we are changing this? Just to remove the figure, right?\r\n> \r\n> How about this wording for the whole paragraph?\r\n> \r\n> ```\r\n> The `OneHopPath` path type (`PathType=2`) is currently used to bootstrap beaconing between neighboring ASes. This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.\r\n> \r\n> A one-hop path has exactly one Info Field and two Hop Fields. The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:\r\n> \r\n> - At the source endpoint AS, *CurrHF := 0*.\r\n> - At the destination endpoint AS, *CurrHF := 1*.\r\n> \r\n> \r\n> Any entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively.\r\n> \r\n> Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to an invalid value (e.g. unspecified value 0), ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.\r\n> ```\r\n\r\nWe wanted to remove the figure but keep the text from the figure. Revised text looks fine.",
+          "createdAt": "2025-07-03T14:35:56Z",
+          "updatedAt": "2025-07-03T14:35:56Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786yD2mx",
+          "commit": {
+            "abbreviatedOid": "324e6b0"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-04T13:56:03Z",
+          "updatedAt": "2025-07-04T13:56:03Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 100,
+      "id": "PR_kwDOKYa7786dVfcj",
+      "title": "Updated figures with example AS ranges",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/100",
+      "state": "MERGED",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #99\r\n\r\n[Diff with main](https://author-tools.ietf.org/api/iddiff?url_1=https://scionassociation.github.io/scion-dp_I-D/draft-dekater-scion-dataplane.txt&url_2=https://scionassociation.github.io/scion-dp_I-D/Update-Example-Figures/draft-dekater-scion-dataplane.txt) ",
+      "createdAt": "2025-07-03T21:02:05Z",
+      "updatedAt": "2025-07-04T14:22:31Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "03c6d10fc808c473f4a2d85571b2ce0572995a9d",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "Update-Example-Figures",
+      "headRefOid": "f015da724f31f0ca17c1bc04441a98ecdde6a990",
+      "closedAt": "2025-07-04T14:22:25Z",
+      "mergedAt": "2025-07-04T14:22:25Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "62657ceae26fd85743d1c1b017c98b3f66ad6f6c"
+      },
+      "comments": [
+        {
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "body": " had to add a few more substitutions in tables, Can you now edit the svgs?\r\n@knmeynell ",
+          "createdAt": "2025-07-04T13:08:19Z",
+          "updatedAt": "2025-07-04T13:08:19Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKYa7786yDNZu",
+          "commit": {
+            "abbreviatedOid": "87dabf2"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-04T13:09:06Z",
+          "updatedAt": "2025-07-04T13:09:06Z",
+          "comments": [
+            {
+              "originalPosition": 174,
+              "body": "I'm not sure why here we had ISD-AS at the IP layer, I think this was a mistake",
+              "createdAt": "2025-07-04T13:09:06Z",
+              "updatedAt": "2025-07-04T13:09:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786yD_t1",
+          "commit": {
+            "abbreviatedOid": "87dabf2"
+          },
+          "author": "knmeynell",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-04T14:08:11Z",
+          "updatedAt": "2025-07-04T14:08:11Z",
+          "comments": [
+            {
+              "originalPosition": 174,
+              "body": "Do we delete the SCION ISD-AS address from SRC and DST?",
+              "createdAt": "2025-07-04T14:08:11Z",
+              "updatedAt": "2025-07-04T14:08:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786yEG5N",
+          "commit": {
+            "abbreviatedOid": "87dabf2"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-04T14:16:20Z",
+          "updatedAt": "2025-07-04T14:16:21Z",
+          "comments": [
+            {
+              "originalPosition": 174,
+              "body": "I think this was introduced with the initial version of the life of a packet section  a long time ago in https://github.com/scionassociation/scion-dp_I-D/commit/85445bcaa19569dfd800467604d8c63d1f125497",
+              "createdAt": "2025-07-04T14:16:20Z",
+              "updatedAt": "2025-07-04T14:17:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKYa7786yEKbo",
+          "commit": {
+            "abbreviatedOid": "f015da7"
+          },
+          "author": "nicorusti",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-04T14:22:05Z",
+          "updatedAt": "2025-07-04T14:22:05Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
