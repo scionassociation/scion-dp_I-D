@@ -2716,9 +2716,9 @@ Table of Contents
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-08, 3 March 2025,
+              scion-controlplane-09, 7 July 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-08>.
+              scion-controlplane-09>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
@@ -2912,6 +2912,8 @@ draft-dekater-scion-dataplane-06
    *  Clarify 0 as "unspecified" Interface ID
 
    *  Use ASes within the documentation range in examples
+
+   *  Remove one-hop path type figure
 
 draft-dekater-scion-dataplane-05
 
