@@ -279,8 +279,8 @@ Table of Contents
    called ConsIngress and ConsEgress, as they refer to the ingress and
    egress interfaces in the direction of path construction (beaconing).
    Each Interface ID MUST be unique within each AS. 0 is a reserved
-   value that indicates the lack of an Interface ID.  It may be used as
-   the unspecified Interface ID (see Section 2.3.3).
+   value that indicates the lack of an Interface ID.  It is used as the
+   unspecified Interface ID (e.g., in Section 2.3.3).
 
    *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
    organized into logical groups called Isolation Domains or ISDs.  Each
@@ -2908,6 +2908,8 @@ Change Log
 draft-dekater-scion-dataplane-06
 
    *  Figures: redraw and add SVG version
+
+   *  Clarify 0 as "unspecified" Interface ID
 
    *  Use ASes within the documentation range in examples
 
