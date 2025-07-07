@@ -265,7 +265,7 @@ SCION emphasizes this separation as it is used exclusively for inter-domain forw
 
 {{figure-30}} shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is later presented in [](#life-of-a-packet). A list of currently used upper layer protocols on top of SCION is presented in [](#protnum).
 
-~~~
+~~~ aasvg
 
 +-----------------------------+
 |                             |
@@ -528,9 +528,9 @@ The SCION address header has the following format:
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
 |                             SrcAS                             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                    DstHostAddr (variable Len)                 |
+|                    DstHostAddr ( variable Len. )              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                    SrcHostAddr (variable Len)                 |
+|                    SrcHostAddr ( variable Len. )              |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~
@@ -873,7 +873,7 @@ The `Options` field of the Hop-by-Hop Options and the End-to-End Options headers
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |    OptType    |  OptDataLen   |            OptData            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-|                              ...                              |
+|                              . . .                            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~
@@ -937,7 +937,7 @@ Alignment requirement: none.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |       1       |  OptDataLen   |            OptData            |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-|                              ...                              |
+|                              . . .                             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~
@@ -964,9 +964,9 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   | address
 |                             SrcAS                             |   | header
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
-|                    DstHostAddr (variable Len)                 |   |
+|                    DstHostAddr ( variable Len. )              |   |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
-|                    SrcHostAddr (variable Len)                 |   |
+|                    SrcHostAddr ( variable Len. )              |   |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 |                    Upper-Layer Packet Length                  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -1211,9 +1211,9 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 |               0               |           Acc                 |   | Info
-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|   | Field
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   | Field
 |                           Timestamp                           |   |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| <-+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 |       0       |    ExpTime    |          ConsIngress          |   | Hop
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   | Field
 |          ConsEgress           |               0               |   |
