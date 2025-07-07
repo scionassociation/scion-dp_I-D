@@ -1671,6 +1671,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Figures: redraw and add SVG version
 - Clarify 0 as "unspecified" Interface ID
 - Use ASes within the documentation range in examples
+- Remove one-hop path type figure
 
 ## draft-dekater-scion-dataplane-05
 {:numbered="false"}
