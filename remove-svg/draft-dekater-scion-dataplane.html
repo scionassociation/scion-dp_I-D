@@ -1467,27 +1467,35 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
 <p id="section-1.3.1-3"><a href="#_figure-30" class="auto internal xref">Figure 1</a> shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is later presented in <a href="#life-of-a-packet" class="auto internal xref">Section 3</a>. A list of currently used upper layer protocols on top of SCION is presented in <a href="#protnum" class="auto internal xref">Appendix "Assigned SCION Protocol Numbers"</a>.<a href="#section-1.3.1-3" class="pilcrow">Â¶</a></p>
 <span id="name-the-scion-header-within-the"></span><div id="_figure-30">
 <figure id="figure-1">
-            <div class="alignLeft art-text artwork" id="section-1.3.1-4.1">
-<pre>
-+-----------------------------+
-|                             |
-|                             |
-|        Payload (L4)         |
-|                             |
-|                             |
-|                             |
-+-----------------------------+
-|                             |
-|            SCION            |
-|                             |
-+-----------------------------+ &lt;-+
-|             UDP             |   |
-+-----------------------------+   | Intra-domain
-|             IP              |   |  protocol
-+-----------------------------+   |
-|         Link Layer          |   |
-+-----------------------------+ &lt;-+
-</pre>
+            <div id="section-1.3.1-4.1">
+              <div class="alignLeft art-svg artwork" id="section-1.3.1-4.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="320" width="392" viewBox="0 0 392 320" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,32 L 8,304" fill="none" stroke="black"></path>
+                  <path d="M 248,32 L 248,304" fill="none" stroke="black"></path>
+                  <path d="M 280,208 L 280,304" fill="none" stroke="black"></path>
+                  <path d="M 8,32 L 248,32" fill="none" stroke="black"></path>
+                  <path d="M 8,144 L 248,144" fill="none" stroke="black"></path>
+                  <path d="M 8,208 L 248,208" fill="none" stroke="black"></path>
+                  <path d="M 264,208 L 280,208" fill="none" stroke="black"></path>
+                  <path d="M 8,240 L 248,240" fill="none" stroke="black"></path>
+                  <path d="M 8,272 L 248,272" fill="none" stroke="black"></path>
+                  <path d="M 8,304 L 248,304" fill="none" stroke="black"></path>
+                  <path d="M 264,304 L 280,304" fill="none" stroke="black"></path>
+                  <polygon class="arrowhead" points="272,304 260,298.4 260,309.6" fill="black" transform="rotate(180,264,304)"></polygon>
+                  <polygon class="arrowhead" points="272,208 260,202.4 260,213.6" fill="black" transform="rotate(180,264,208)"></polygon>
+                  <g class="text">
+                    <text x="104" y="84">Payload</text>
+                    <text x="156" y="84">(L4)</text>
+                    <text x="128" y="180">SCION</text>
+                    <text x="128" y="228">UDP</text>
+                    <text x="340" y="244">Intra-domain</text>
+                    <text x="124" y="260">IP</text>
+                    <text x="332" y="260">protocol</text>
+                    <text x="100" y="292">Link</text>
+                    <text x="144" y="292">Layer</text>
+                  </g>
+                </svg><a href="#section-1.3.1-4.1.1" class="pilcrow">Â¶</a>
+</div>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
 <a href="#name-the-scion-header-within-the" class="selfRef">The SCION header within the protocol stack in a typical deployment</a>
@@ -1973,9 +1981,6 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
                 <path d="M 8,64 L 8,256" fill="none" stroke="black"></path>
                 <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
                 <path d="M 264,128 L 264,160" fill="none" stroke="black"></path>
-                <path d="M 376,192 L 376,200" fill="none" stroke="black"></path>
-                <path d="M 376,216 L 376,232" fill="none" stroke="black"></path>
-                <path d="M 376,248 L 376,256" fill="none" stroke="black"></path>
                 <path d="M 520,64 L 520,256" fill="none" stroke="black"></path>
                 <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
                 <path d="M 8,96 L 264,96" fill="none" stroke="black"></path>
@@ -1984,8 +1989,6 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
                 <path d="M 8,192 L 520,192" fill="none" stroke="black"></path>
                 <path d="M 8,224 L 520,224" fill="none" stroke="black"></path>
                 <path d="M 8,256 L 520,256" fill="none" stroke="black"></path>
-                <path class="jump" d="M 376,248 C 382,248 382,232 376,232" fill="none" stroke="black"></path>
-                <path class="jump" d="M 376,216 C 382,216 382,200 376,200" fill="none" stroke="black"></path>
                 <g class="text">
                   <text x="16" y="36">0</text>
                   <text x="176" y="36">1</text>
@@ -2028,11 +2031,15 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
                   <text x="132" y="148">SrcISD</text>
                   <text x="264" y="180">SrcAS</text>
                   <text x="216" y="212">DstHostAddr</text>
-                  <text x="304" y="212">(variable</text>
-                  <text x="360" y="212">Len</text>
+                  <text x="272" y="212">(</text>
+                  <text x="316" y="212">variable</text>
+                  <text x="372" y="212">Len.</text>
+                  <text x="400" y="212">)</text>
                   <text x="216" y="244">SrcHostAddr</text>
-                  <text x="304" y="244">(variable</text>
-                  <text x="360" y="244">Len</text>
+                  <text x="272" y="244">(</text>
+                  <text x="316" y="244">variable</text>
+                  <text x="372" y="244">Len.</text>
+                  <text x="400" y="244">)</text>
                 </g>
               </svg><a href="#section-2.2-2.1.1" class="pilcrow">Â¶</a>
 </div>
@@ -2796,7 +2803,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="160" width="528" viewBox="0 0 528 160" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                   <path d="M 8,64 L 8,128" fill="none" stroke="black"></path>
                   <path d="M 136,64 L 136,96" fill="none" stroke="black"></path>
-                  <path d="M 264,64 L 264,128" fill="none" stroke="black"></path>
+                  <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
                   <path d="M 520,64 L 520,128" fill="none" stroke="black"></path>
                   <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
                   <path d="M 8,96 L 264,96" fill="none" stroke="black"></path>
@@ -2843,6 +2850,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
                     <text x="392" y="84">OptData</text>
                     <text x="256" y="116">.</text>
                     <text x="272" y="116">.</text>
+                    <text x="288" y="116">.</text>
                   </g>
                 </svg><a href="#section-2.4.1-2.1.1" class="pilcrow">Â¶</a>
 </div>
@@ -2990,14 +2998,15 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
 <figure id="figure-15">
               <div id="section-2.4.1.2-2.1">
                 <div class="alignLeft art-svg artwork" id="section-2.4.1.2-2.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="528" viewBox="0 0 528 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="536" viewBox="0 0 536 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                     <path d="M 8,80 L 8,144" fill="none" stroke="black"></path>
                     <path d="M 136,80 L 136,112" fill="none" stroke="black"></path>
-                    <path d="M 264,80 L 264,144" fill="none" stroke="black"></path>
-                    <path d="M 520,80 L 520,144" fill="none" stroke="black"></path>
+                    <path d="M 264,80 L 264,112" fill="none" stroke="black"></path>
+                    <path d="M 520,80 L 520,112" fill="none" stroke="black"></path>
                     <path d="M 8,80 L 520,80" fill="none" stroke="black"></path>
                     <path d="M 8,112 L 264,112" fill="none" stroke="black"></path>
-                    <path d="M 8,144 L 520,144" fill="none" stroke="black"></path>
+                    <path d="M 8,144 L 512,144" fill="none" stroke="black"></path>
+                    <path d="M 512,144 C 520.83064,144 528,136.83064 528,128" fill="none" stroke="black"></path>
                     <g class="text">
                       <text x="16" y="52">0</text>
                       <text x="176" y="52">1</text>
@@ -3040,6 +3049,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">Â
                       <text x="392" y="100">OptData</text>
                       <text x="256" y="132">.</text>
                       <text x="272" y="132">.</text>
+                      <text x="288" y="132">.</text>
                     </g>
                   </svg><a href="#section-2.4.1.2-2.1.1" class="pilcrow">Â¶</a>
 </div>
@@ -3070,9 +3080,6 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
                 <path d="M 8,64 L 8,320" fill="none" stroke="black"></path>
                 <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
                 <path d="M 264,128 L 264,160" fill="none" stroke="black"></path>
-                <path d="M 376,192 L 376,200" fill="none" stroke="black"></path>
-                <path d="M 376,216 L 376,232" fill="none" stroke="black"></path>
-                <path d="M 376,248 L 376,256" fill="none" stroke="black"></path>
                 <path d="M 392,288 L 392,320" fill="none" stroke="black"></path>
                 <path d="M 520,64 L 520,320" fill="none" stroke="black"></path>
                 <path d="M 552,64 L 552,256" fill="none" stroke="black"></path>
@@ -3089,8 +3096,6 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
                 <path d="M 8,320 L 520,320" fill="none" stroke="black"></path>
                 <polygon class="arrowhead" points="544,256 532,250.4 532,261.6" fill="black" transform="rotate(180,536,256)"></polygon>
                 <polygon class="arrowhead" points="544,64 532,58.4 532,69.6" fill="black" transform="rotate(180,536,64)"></polygon>
-                <path class="jump" d="M 376,248 C 382,248 382,232 376,232" fill="none" stroke="black"></path>
-                <path class="jump" d="M 376,216 C 382,216 382,200 376,200" fill="none" stroke="black"></path>
                 <g class="text">
                   <text x="16" y="36">0</text>
                   <text x="176" y="36">1</text>
@@ -3136,11 +3141,15 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
                   <text x="264" y="180">SrcAS</text>
                   <text x="588" y="180">header</text>
                   <text x="216" y="212">DstHostAddr</text>
-                  <text x="304" y="212">(variable</text>
-                  <text x="360" y="212">Len</text>
+                  <text x="272" y="212">(</text>
+                  <text x="316" y="212">variable</text>
+                  <text x="372" y="212">Len.</text>
+                  <text x="400" y="212">)</text>
                   <text x="216" y="244">SrcHostAddr</text>
-                  <text x="304" y="244">(variable</text>
-                  <text x="360" y="244">Len</text>
+                  <text x="272" y="244">(</text>
+                  <text x="316" y="244">variable</text>
+                  <text x="372" y="244">Len.</text>
+                  <text x="400" y="244">)</text>
                   <text x="216" y="276">Upper-Layer</text>
                   <text x="292" y="276">Packet</text>
                   <text x="348" y="276">Length</text>
@@ -3665,9 +3674,8 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
                     <path d="M 552,64 L 552,192" fill="none" stroke="black"></path>
                     <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
                     <path d="M 536,64 L 552,64" fill="none" stroke="black"></path>
-                    <path d="M 16,96 L 256,96" fill="none" stroke="black"></path>
-                    <path d="M 272,96 L 512,96" fill="none" stroke="black"></path>
-                    <path d="M 8,128 L 512,128" fill="none" stroke="black"></path>
+                    <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
+                    <path d="M 8,128 L 520,128" fill="none" stroke="black"></path>
                     <path d="M 536,128 L 552,128" fill="none" stroke="black"></path>
                     <path d="M 8,160 L 520,160" fill="none" stroke="black"></path>
                     <path d="M 8,192 L 520,192" fill="none" stroke="black"></path>
