@@ -3,12 +3,14 @@
 
 
 Network Working Group                                        C. de Kater
-Internet-Draft                                             N. Rustignoli
-Intended status: Informational                               J. C. Hugly
-Expires: 8 January 2026                                SCION Association
+Internet-Draft                                               Independent
+Intended status: Informational                             N. Rustignoli
+Expires: 17 January 2026                               SCION Association
+                                                             J. C. Hugly
+                                                             Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                             7 July 2025
+                                                            16 July 2025
 
 
                             SCION Data Plane
@@ -70,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2026.
+   This Internet-Draft will expire on 17 January 2026.
 
 Copyright Notice
 
@@ -2999,7 +3001,7 @@ draft-dekater-scion-dataplane-02
 Authors' Addresses
 
    Corine de Kater
-   SCION Association
+   Independent
    Email: c_de_kater@gmx.ch
 
 
@@ -3009,8 +3011,8 @@ Authors' Addresses
 
 
    Jean-Christophe Hugly
-   SCION Association
-   Email: jch@scion.org
+   Independent
+   Email: jice@vwaty.com
 
 
    Samuel Hitz
