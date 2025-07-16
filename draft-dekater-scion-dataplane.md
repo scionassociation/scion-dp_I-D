@@ -20,7 +20,7 @@ venue:
 author:
  -   ins: C. de Kater
      name: Corine de Kater
-     org: SCION Association
+     org: Independent
      email: c_de_kater@gmx.ch
 
  -   ins: N. Rustignoli
@@ -30,8 +30,8 @@ author:
 
  -   ins: J. C. Hugly
      name: Jean-Christophe Hugly
-     org: SCION Association
-     email: jch@scion.org
+     org: Independent
+     email: jice@vwaty.com
 
  -   ins: S. Hitz
      name: Samuel Hitz
