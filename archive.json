@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-08T00:00:45.939892+00:00",
+  "timestamp": "2025-07-17T00:00:41.111436+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -8186,6 +8186,34 @@
           "updatedAt": "2025-07-07T18:41:23Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 103,
+      "id": "PR_kwDOKYa7786fJQ55",
+      "title": "update JC as independent",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/103",
+      "state": "MERGED",
+      "author": "nicorusti",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-16T09:29:39Z",
+      "updatedAt": "2025-07-16T09:30:32Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "ab05eab02b448a2b207d7461f428170a1beebf2b",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "authors",
+      "headRefOid": "c8c6fd3de12764a5b63711151f27c3472f47edc4",
+      "closedAt": "2025-07-16T09:30:28Z",
+      "mergedAt": "2025-07-16T09:30:28Z",
+      "mergedBy": "nicorusti",
+      "mergeCommit": {
+        "oid": "6b8cf76dcea67460267631e2fe51d65a9f95d265"
+      },
+      "comments": [],
       "reviews": []
     }
   ]
