@@ -317,7 +317,8 @@ Border routers require mappings from SCION interface IDs to underlay addresses a
 - Link type (core, parent, child, peer). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number.
 - For the router that manages the interface: the neighbor interface underlay address.
-- For the routers that do not manage the interface:  the address of the intra-domain protocol on the router that does.
+- For the routers that do not manage the interface:  the address of the intra-domain protocol on the router that does
+- The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) which must be the same as that used by the Control Services within the AS.
 
 In order to forward traffic to a service endpoint address (`DT/DS` == 0b01 in the [common header](#common-header)), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
@@ -1289,9 +1290,11 @@ Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2]
 - MAC<sub>i</sub> \[:2] = The Hop Field MAC for the current AS<sub>i</sub>, truncated to 2 bytes
 
 
-#### Default Hop Field MAC Algorithm
+#### Hop Field MAC Algorithm
 
-The algorithm used to compute the Hop Field MAC is an AS-specific choice. The operator of an AS can freely choose any MAC algorithm and the control service and routers of the AS do need to agree on the algorithm used, but all implementations MUST support the Default Hop Field MAC algorithm described below.
+The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST use the same algorithm. Implementations MUST also support the Default Hop Field MAC algorithm as described below.
+
+##### Default Hop Field MAC Algorithm
 
 The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, computed over the Info Field and the first 6 bytes of the Hop Field with flags and reserved fields zeroed out. The input is padded to 16 bytes. The _first_ 6 bytes of the AES-CMAC output are used as resulting Hop Field MAC.
 
@@ -1319,8 +1322,7 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
 </artset>
 </figure>
 
-
-#### Alternative Hop Field MAC Algorithms {#mac-requirements}
+##### Alternative Hop Field MAC Algorithms {#mac-requirements}
 
 For alternative algorithms, the following requirements MUST all be met:
 
@@ -1331,6 +1333,7 @@ For alternative algorithms, the following requirements MUST all be met:
     - is roughly uniformly distributed when considering all possible input values.
 
  This additional requirement is naturally satisfied for MAC algorithms based on typical block ciphers or hash algorithms. It ensures that the MAC chaining via the `Acc` field is not degenerate.
+
 
 ### Peering Link MAC Computation {#peerlink}
 
