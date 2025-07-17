@@ -18,6 +18,7 @@ venue:
   latest: "https://scionassociation.github.io/scion-dp_I-D/draft-dekater-scion-dataplane.html"
 
 author:
+
  -   ins: C. de Kater
      name: Corine de Kater
      org: Independent
