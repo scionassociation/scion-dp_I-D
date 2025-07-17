@@ -313,7 +313,7 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - Neighbor ISD-AS number.
 - For the router that manages the interface: the neighbor interface underlay address.
 - For the routers that do not manage the interface:  the address of the intra-domain protocol on the router that does
-- The algorithm used to compute the Hop Field MAC which must be the same as that used by the Control Services within the AS.
+- The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) which must be the same as that used by the Control Services within the AS.
 
 In order to forward traffic to a service endpoint address (`DT/DS` == 0b01 in the [common header](#common-header)), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
