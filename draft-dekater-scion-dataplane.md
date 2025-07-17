@@ -312,7 +312,7 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - Neighbor ISD-AS number.
 - For the router that manages the interface: the neighbor interface underlay address.
 - For the routers that do not manage the interface:  the address of the intra-domain protocol on the router that does
-- The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) which must be the same as that used by the Control Services within the AS.
+- The algorithm used to compute the Hop Field MAC (#hf-mac-overview) which must be the same as that used by the Control Services within the AS.
 
 In order to forward traffic to a service endpoint address (`DT/DS` == 0b01 in the [common header](#common-header)), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
@@ -1228,7 +1228,7 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
 
 ##### Alternative Hop Field MAC Algorithms {#mac-requirements}
 
-For alternative algorithms, the following requirements MUST all be met:
+For alternative MAC algorithms, the following requirements MUST all be met:
 
 - The Hop Field MAC field is computed as a function of the secret forwarding key, the `Acc` and `Timestamp` fields of the Info Field, and the `ExpTime`, `ConsIngress` and `ConsEgress` fields of the Hop Field. Function is used in the mathematical sense that for for any values of these inputs there is exactly one result.
 - The algorithm returns an unforgable 48-bit value. Unforgable specifically means "existentially unforgable under a chosen message attack" ({{CRYPTOBOOK}}). Informally, this means an attacker without access to the secret key has no computationally efficient means to create a valid MAC for some attacker chosen input values, even if it has access to an "oracle" providing a valid MAC for any other input values.
