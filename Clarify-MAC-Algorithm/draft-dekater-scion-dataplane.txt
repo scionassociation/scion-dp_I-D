@@ -3,12 +3,14 @@
 
 
 Network Working Group                                        C. de Kater
-Internet-Draft                                             N. Rustignoli
-Intended status: Informational                               J. C. Hugly
-Expires: 18 January 2026                               SCION Association
+Internet-Draft                                               Independent
+Intended status: Informational                             N. Rustignoli
+Expires: 19 January 2026                               SCION Association
+                                                             J. C. Hugly
+                                                             Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            17 July 2025
+                                                            18 July 2025
 
 
                             SCION Data Plane
@@ -70,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 January 2026.
+   This Internet-Draft will expire on 19 January 2026.
 
 Copyright Notice
 
@@ -191,15 +193,13 @@ Table of Contents
    collection of signed root certificates in X.509 v3 format [RFC5280].
    The ISD is governed by a set of _core ASes_ which typically manage
    the trust roots and provide connectivity to other ISDs.  This is the
-   basis of the public key infrastructure which the SCION Control Plane
-   relies upon for the authentication of messages that is used for the
-   SCION control plane.  See [I-D.dekater-scion-pki]
+   basis of the public key infrastructure used for the authentication of
+   messages used by the SCION Control Plane.
 
    _Control Plane_ - performs inter-domain routing by discovering and
    securely disseminating path information between ASes.  The core ASes
    use Path-segment Construction Beacons (PCBs) to explore intra-ISD
-   paths, or to explore paths across different ISDs.  See
-   [I-D.dekater-scion-controlplane]
+   paths, or to explore paths across different ISDs.
 
    _Data Plane_ - carries out secure packet forwarding between SCION-
    enabled ASes over paths selected by endpoints.  A SCION border router
@@ -266,7 +266,7 @@ Table of Contents
    construction beacons (PCBs) accumulate cryptographically protected
    AS-level path information in the form of Hop Fields.  In the data
    plane, Hop Fields are used for packet forwarding: they contain the
-   incoming and outgoing interface IDs of the ASes on the forwarding
+   incoming and outgoing Interface IDs of the ASes on the forwarding
    path.
 
    *Info Field (INF)*: Each path segment construction beacon (PCB)
@@ -277,12 +277,12 @@ Table of Contents
    *Interface Identifier (Interface ID)*: A 16-bit identifier that
    designates a SCION interface at the end of a link connecting two
    SCION ASes, with each interface belonging to one border router.  Hop
-   fields describe the traversal of an AS by a pair of interface IDs
+   fields describe the traversal of an AS by a pair of Interface IDs
    called ConsIngress and ConsEgress, as they refer to the ingress and
    egress interfaces in the direction of path construction (beaconing).
-   The Interface ID MUST be unique within each AS.  Interface ID 0 is
-   not a valid identifier as implementations MAY use it as the
-   "unspecified" value.
+   Each Interface ID MUST be unique within each AS. 0 is a reserved
+   value that indicates the lack of an Interface ID.  It is used as the
+   unspecified Interface ID (e.g., in Section 2.3.3).
 
    *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
    organized into logical groups called Isolation Domains or ISDs.  Each
@@ -294,7 +294,7 @@ Table of Contents
    *Leaf AS*: An AS at the "edge" of an ISD, with no other downstream
    ASes.
 
-   *MAC*: Message Authentication Code.  In the rest of this document,
+   *Message Authentication Code (MAC)*: In the rest of this document,
    "MAC" always refers to "Message Authentication Code" and never to
    "Medium Access Control".  When "Medium Access Control address" is
    implied, the phrase "Link Layer Address" is used.
@@ -339,9 +339,9 @@ Table of Contents
    are joined by a peering link.  Two peering ASes may be in different
    ISDs and may exist between any ASes, including core ASes.
 
-   *SCMP*: A signaling protocol analogous to the Internet Control
-   Message Protocol (ICMP).  This is described in
-   [I-D.dekater-scion-controlplane].
+   *SCION Control Message Protocol (SCMP)*: A signaling protocol
+   analogous to the Internet Control Message Protocol (ICMP), as
+   described in [I-D.dekater-scion-controlplane].
 
 1.2.  Conventions and Definitions
 
@@ -359,7 +359,7 @@ Table of Contents
    based on end-to-end path information contained in the packet header.
    This path information consists of a sequence of Hop Fields (HFs).
    Each Hop Field corresponds to an AS on the path, and it includes an
-   ingress interface ID as well as an egress interface ID, which
+   ingress Interface ID as well as an egress Interface ID, which
    unequivocally identifies the ingress and egress interfaces within the
    AS.  The information is authenticated with a Message Authentication
    Code (MAC) to prevent forgery.
@@ -467,7 +467,7 @@ Table of Contents
    2.  The SCION router parses, validates, and authenticates the SCION
        header.
 
-   3.  The SCION router maps the egress interface ID in the current Hop
+   3.  The SCION router maps the egress Interface ID in the current Hop
        Field of the SCION header to the destination address of the
        intra-domain protocol (e.g. MPLS or IP) of the egress border
        router.
@@ -486,7 +486,7 @@ Table of Contents
 
 1.3.3.  Configuration
 
-   Border routers require mappings from SCION interface IDs to underlay
+   Border routers require mappings from SCION Interface IDs to underlay
    addresses and such information MUST be supplied to each router in an
    out of band fashion (e.g in a configuration file).  For each link to
    a neighbor, these values MUST be configured.  A typical
@@ -504,7 +504,7 @@ Table of Contents
       underlay address.
 
    *  For the routers that do not manage the interface: the address of
-      the intra-domain protocol on the router that does
+      the intra-domain protocol on the router that does.
 
    *  The algorithm used to compute the Hop Field MAC (Section 4.1.1)
       which must be the same as that used by the Control Services within
@@ -524,16 +524,17 @@ Table of Contents
 
 1.4.  Path Construction (Segment Combinations)
 
-   Paths are discovered by the SCION Control Plane which makes them
-   available to SCION endpoints in the form of path segments.  As
-   described in [I-D.dekater-scion-controlplane], there are three kinds
-   of path segments: up, down, and core.  In the data plane, a SCION
-   endpoint creates end-to-end paths from the path segments by combining
-   multiple path segments.  Depending on the network topology, a SCION
-   forwarding path can consist of one, two, or three segments.  Each
-   path segment contains several Hop Fields representing the ASes on the
-   segment as well as one Info Field with basic information about the
-   segment, such as a timestamp.
+   Paths are discovered by the Control Plane which makes them available
+   to SCION endpoints in the form of path segments.  As described in
+   [I-D.dekater-scion-controlplane], there are three kinds of path
+   segments: up, down, and core.
+
+   In the data plane, a SCION endpoint creates end-to-end paths from the
+   path segments by combining multiple path segments.  Depending on the
+   network topology, a SCION forwarding path consists of at least one
+   and up to three segments.  Each path segment contains several Hop
+   Fields representing the ASes on the segment as well as one Info Field
+   with basic information about the segment, such as a timestamp.
 
    Segments cannot be combined arbitrarily.  To construct a valid
    forwarding path, the source endpoint MUST obey the following rules:
@@ -872,9 +873,9 @@ Table of Contents
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
    |                             SrcAS                             |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                    DstHostAddr (variable Len)                 |
+   |                    DstHostAddr ( variable Len. )              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                    SrcHostAddr (variable Len)                 |
+   |                    SrcHostAddr ( variable Len. )              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
               Figure 5: The SCION address header packet format
@@ -916,8 +917,8 @@ Table of Contents
 
                       Table 4: Known Service Numbers
 
-   *Note:* For more information on addressing in SCION, see the SCION
-   Control Plane Specification ([I-D.dekater-scion-controlplane]).
+   *Note:* For more information on addressing, see the
+   ([I-D.dekater-scion-controlplane]).
 
 2.3.  Path Header
 
@@ -1013,57 +1014,57 @@ Table of Contents
    +--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
                          +-----------------------+
 
-    Up-Segment           Core-Segment        Down-Segment
-   +---------+           +---------+         +---------+
-   | +-----+ |           | +-----+ |         | +-----+ |
-   | | INF | +--------+  | | INF | +--+      | | INF | +--+
-   | +-----+ |        |  | +-----+ |  |      | +-----+ |  |
-   | +-----+ |        |  | +-----+ |  |      | +-----+ |  |
-   | | HF  | +------+ |  | | HF  | +----+    | | HF  | +----+
-   | +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
-   | +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
-   | | HF  | +----+ | |  | | HF  | +------+  | | HF  | +------+
-   | +-----+ |    | | |  | +-----+ |  | | |  | +-----+ |  | | |
-   | +-----+ |    | | |  +---------+  | | |  | +-----+ |  | | |
-   | | HF  | +--+ | | |               | | |  | | HF  | +--------+
-   | +-----+ |  | | | |  +---------+  | | |  | +-----+ |  | | | |
-   +---------+  | | | |  | +++++++ |  | | |  +---------+  | | | |
-                | | | |  | |Meta | |  | | |               | | | |
-                | | | |  | +++++++ |  | | |               | | | |
-                | | | |  | +-----+ |  | | |               | | | |
-                | | | +->| | INF | |  | | |               | | | |
-                | | |    | +-----+ |  | | |               | | | |
-                | | |    | +-----+ |  | | |               | | | |
-                | | |    | | INF | |<-+ | |               | | | |
-                | | |    | +-----+ |    | |               | | | |
-                | | |    | +-----+ |    | |               | | | |
-                | | |    | | INF | |<---------------------+ | | |
-                | | |    | +-----+ |    | |                 | | |
-                | | |    | +-----+ |    | |                 | | |
-                | | +--->| | HF  | |    | |                 | | |
-                | |      | +-----+ |    | |                 | | |
-                | |      | +-----+ |    | |                 | | |
-                | +----->| | HF  | |    | |                 | | |
-                |        | +-----+ |    | |                 | | |
-                |        | +-----+ |    | |                 | | |
-                +------->| | HF  | |    | |                 | | |
-                         | +-----+ |    | |                 | | |
-                         | +-----+ |    | |                 | | |
-                         | | HF  | |<---+ |                 | | |
-                         | +-----+ |      |                 | | |
-                         | +-----+ |      |                 | | |
-        Forwarding Path  | | HF  | |<-----+                 | | |
-                         | +-----+ |                        | | |
-                         | +-----+ |                        | | |
-                         | | HF  | |<-----------------------+ | |
-                         | +-----+ |                          | |
-                         | +-----+ |                          | |
-                         | | HF  | |<-------------------------+ |
-                         | +-----+ |                            |
-                         | +-----+ |                            |
-                         | | HF  | |<---------------------------+
-                         | +-----+ |
-                         +---------+
+       Up-Segment           Core-Segment        Down-Segment
+      +---------+           +---------+         +---------+
+      | +-----+ |           | +-----+ |         | +-----+ |
+      | | INF | +--------+  | | INF | +--+      | | INF | +--+
+      | +-----+ |        |  | +-----+ |  |      | +-----+ |  |
+      | +-----+ |        |  | +-----+ |  |      | +-----+ |  |
+      | | HF  | +------+ |  | | HF  | +----+    | | HF  | +----+
+      | +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
+      | +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
+      | | HF  | +----+ | |  | | HF  | +------+  | | HF  | +------+
+      | +-----+ |    | | |  | +-----+ |  | | |  | +-----+ |  | | |
+      | +-----+ |    | | |  +---------+  | | |  | +-----+ |  | | |
+      | | HF  | +--+ | | |               | | |  | | HF  | +--------+
+      | +-----+ |  | | | |  +---------+  | | |  | +-----+ |  | | | |
+      +---------+  | | | |  | +++++++ |  | | |  +---------+  | | | |
+                   | | | |  | |Meta | |  | | |               | | | |
+                   | | | |  | +++++++ |  | | |               | | | |
+                   | | | |  | +-----+ |  | | |               | | | |
+                   | | | +->| | INF | |  | | |               | | | |
+                   | | |    | +-----+ |  | | |               | | | |
+                   | | |    | +-----+ |  | | |               | | | |
+                   | | |    | | INF | |<-+ | |               | | | |
+                   | | |    | +-----+ |    | |               | | | |
+                   | | |    | +-----+ |    | |               | | | |
+                   | | |    | | INF | |<---------------------+ | | |
+                   | | |    | +-----+ |    | |                 | | |
+                   | | |    | +-----+ |    | |                 | | |
+                   | | +--->| | HF  | |    | |                 | | |
+                   | |      | +-----+ |    | |                 | | |
+                   | |      | +-----+ |    | |                 | | |
+                   | +----->| | HF  | |    | |                 | | |
+                   |        | +-----+ |    | |                 | | |
+                   |        | +-----+ |    | |                 | | |
+                   +------->| | HF  | |    | |                 | | |
+                            | +-----+ |    | |                 | | |
+                            | +-----+ |    | |                 | | |
+                            | | HF  | |<---+ |                 | | |
+                            | +-----+ |      |                 | | |
+                            | +-----+ |      |                 | | |
+           Forwarding Path  | | HF  | |<-----+                 | | |
+                            | +-----+ |                        | | |
+                            | +-----+ |                        | | |
+                            | | HF  | |<-----------------------+ | |
+                            | +-----+ |                          | |
+                            | +-----+ |                          | |
+                            | | HF  | |<-------------------------+ |
+                            | +-----+ |                            |
+                            | +-----+ |                            |
+                            | | HF  | |<---------------------------+
+                            | +-----+ |
+                            +---------+
 
                     Figure 8: Path construction example
 
@@ -1214,7 +1215,7 @@ Table of Contents
 
       -  Timestamp + (1 + ExpTime) * (86400/256)
 
-   *  ConsIngress, ConsEgress: The 16-bits ingress/egress interface IDs
+   *  ConsIngress, ConsEgress: The 16-bits ingress/egress Interface IDs
       in construction direction, that is, the direction of beaconing.
 
    *  MAC: The 6-byte Message Authentication Code to authenticate the
@@ -1232,8 +1233,8 @@ Table of Contents
    Processing the L4 payload in the packet means that the router will
    treat the payload of the packet as a message to itself and parse it
    according to the value of the NextHdr field.  Such messages include
-   Traceroute Requests (see [I-D.dekater-scion-controlplane] section
-   "SCMP/Traceroute Request").
+   Traceroute Requests (see 'SCMP/Traceroute request' in
+   [I-D.dekater-scion-controlplane]).
 
    Setting multiple router alert flags on a path SHOULD be avoided.
    This is because the router for which the corresponding Router Alert
@@ -1248,38 +1249,26 @@ Table of Contents
    beaconing between neighboring ASes.  This is necessary as neighbor
    ASes do not have a forwarding path before beaconing is started.
 
-   A one-hop path has exactly one Info Field and two Hop Fields with the
-   specialty that the second Hop Field is created by the ingress SCION
-   border router of the neighboring AS while processing the one-hop
-   path.  Any entity with access to the forwarding key of the source
-   endpoint AS can create a valid info and Hop Field as described in
-   Section 2.3.2.3 and Section 2.3.2.4, respectively.
-
-   Upon receiving a packet containing a one-hop path, the ingress border
-   router of the destination AS fills in the ConsIngress field in the
-   second Hop Field of the one-hop path with the ingress interface ID.
-   It sets the ConsEgress field to an invalid value (e.g. unspecified
-   value 0), ensuring the path cannot be used beyond the destination AS.
-   Then it calculates and appends the appropriate MAC for the Hop Field.
-
-   Figure 12 below shows the layout of a SCION one-hop path type.  There
-   is only a single Info Field; the appropriate Hop Field can be
-   processed by a border router based on the source and destination
-   address.  In this context, the following rules apply:
+   A one-hop path has exactly one Info Field and two Hop Fields.  The
+   second Hop Field is created by the ingress SCION border router of the
+   neighboring AS while processing the one-hop path.  The appropriate
+   Hop Field can be processed by a border router based on the source and
+   destination address.  In this context, the following rules apply:
 
    *  At the source endpoint AS, _CurrHF := 0_.
 
    *  At the destination endpoint AS, _CurrHF := 1_.
 
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                           InfoField                           |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                           HopField                            |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                           HopField                            |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   Any entity with access to the forwarding key of the source endpoint
+   AS can create a valid info and Hop Field as described in
+   Section 2.3.2.3 and Section 2.3.2.4, respectively.
 
-              Figure 12: Layout of the SCION one-hop path type
+   Upon receiving a packet containing a one-hop path, the ingress border
+   router of the destination AS fills in the ConsIngress field in the
+   second Hop Field of the one-hop path with the ingress interface ID.
+   It sets the ConsEgress field to the unspecified value 0, ensuring the
+   path cannot be used beyond the destination AS.  Then it calculates
+   and appends the appropriate MAC for the Hop Field.
 
 2.3.4.  Path Reversal
 
@@ -1338,7 +1327,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 13: Extension headers: Options header
+                Figure 12: Extension headers: Options header
 
    *  NextHdr: Unsigned 8-bit integer.  Identifies the type of header
       immediately following the Hop-by-Hop/End-to-End Options header.
@@ -1369,11 +1358,11 @@ Table of Contents
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |    OptType    |  OptDataLen   |            OptData            |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-   |                              ...                              |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               |
+   |                              . . .                            |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-               Figure 14: Options field: TLV-encoded options
+               Figure 13: Options field: TLV-encoded options
 
    *  OptType: 8-bit identifier of the type of option.  The following
       option types are assigned to the SCION HBH/E2E Options header:
@@ -1437,7 +1426,7 @@ Table of Contents
    |       0       |
    +-+-+-+-+-+-+-+-+
 
-                Figure 15: TLV-encoded options - Pad1 option
+                Figure 14: TLV-encoded options - Pad1 option
 
    *Note:* The format of the Pad1 option is a special case - it does not
    have length and value fields.
@@ -1455,10 +1444,10 @@ Table of Contents
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |       1       |  OptDataLen   |            OptData            |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +
-   |                              ...                              |
+   |                              . . .                            |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 16: TLV-encoded options - PadN option
+                Figure 15: TLV-encoded options - PadN option
 
    The PadN option is used to insert two or more bytes of padding into
    the Options field of an extension header.  For N bytes of padding,
@@ -1483,16 +1472,16 @@ Table of Contents
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               +   | address
 |                             SrcAS                             |   | header
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
-|                    DstHostAddr (variable Len)                 |   |
+|                    DstHostAddr ( variable Len. )              |   |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   |
-|                    SrcHostAddr (variable Len)                 |   |
+|                    SrcHostAddr ( variable Len. )              |   |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 |                    Upper-Layer Packet Length                  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                      zero                     |  Next Header  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
- Figure 17: Layout of the pseudo header for the upper-layer checksum
+ Figure 16: Layout of the pseudo header for the upper-layer checksum
 
    *  DstISD, SrcISD, DstAS, SrcAS, DstHostAddr, SrcHostAddr: These
       values are taken from the SCION address header.
@@ -1538,7 +1527,7 @@ Table of Contents
                      +-------------------------+
                      |                         |
                      |       AS ff00:0:1       |
-                     |                         | (1-1,
+                     |                         | (1-ff00:0:1,
                      |                         | 198.51.100.17)
                      |          198.51.100.4 +-+-+ i1b
                      |            +----------+R3 +#-+
@@ -1546,7 +1535,7 @@ Table of Contents
                 +-#+R2 +----------+            |    |
                 |  +-+-+ 198.51.100.1          |    |
                 |    |                         |    |
-                |    +-------------------------+    | (1-3,
+                |    +-------------------------+    | (1-ff00:0:3,
                 *                                   * 198.51.100.18)
           i2a +-+-+                               +-+-+ i3a
    +----------+R1 +----------+         +----------+R4 +----------+
@@ -1556,17 +1545,17 @@ Table of Contents
    |     +------+-----+      |         |      +-----+------+     |
    |     | Endpoint A |      |         |      | Endpoint B |     |
    |     +------------+      |         |      +------------+     |
-   |     1-2,203.0.113.6     |         |      1-3,192.0.2.7      |
+   | 1-ff00:0:2,203.0.113.6  |         |  1-ff00:0:3,192.0.2.7   |
    |                         |         |                         |
    |       AS ff00:0:2       |         |       AS ff00:0:3       |
    |                         |         |                         |
    +-------------------------+         +-------------------------+
 
-        Figure 18: Sample topology to illustrate the life cycle of a
+        Figure 17: Sample topology to illustrate the life cycle of a
          SCION packet.  AS ff00:0:1 is the core AS of ISD 1, and AS
             ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.
 
-   Based on the network topology in Figure 18 above, this example shows
+   Based on the network topology in Figure 17 above, this example shows
    the path of a SCION packet sent from its source at Endpoint A to its
    destination at Endpoint B, and how it will be processed by each
    router on the path using simplified snapshots of the packet header
@@ -1587,9 +1576,8 @@ Table of Contents
    which Endpoint B is located.  The AS ff00:0:3 control service will
    return down segments from the ISD core down to AS ff00:0:3.
 
-   *Note:* For more details on the lookup of path segments, see the
-   section "Path Lookup" in the Control Plane specification
-   ([I-D.dekater-scion-controlplane]).
+   *Note:* For more details on the lookup of path segments, see 'Path
+   Lookup' in [I-D.dekater-scion-controlplane].
 
    Based on its own selection criteria, Endpoint A selects the up
    segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the
@@ -1614,7 +1602,7 @@ Table of Contents
 3.3.  Step-by-Step Explanation
 
    This section explains what happens with the SCION packet header at
-   each router, based on the network topology in described Figure 18
+   each router, based on the network topology in described Figure 17
    above.  Each step includes a table that represents a simplified
    snapshot of the packet header at the end of this specific step.
    Regarding the notation used in the figure/tables, each source and
@@ -1639,29 +1627,29 @@ Table of Contents
       interface that Endpoint A has included into the first Hop Field of
       the SCION header.
 
-        +============+===========================================+
-        | A -> R1    |                                           |
-        +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
-        +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
-        +------------+-------------------------------------------+
-        |            | PATH =                                    |
-        +------------+-------------------------------------------+
-        |            | - _IF1_ *(0,i2a)* (i1a,0)                 |
-        +------------+-------------------------------------------+
-        |            | - IF2 (0,i1b) (i3a,0)                     |
-        +------------+-------------------------------------------+
-        | UDP        | P_S = 30041, P_D = 30041                  |
-        +------------+-------------------------------------------+
-        | IP         | SRC = 203.0.113.6 (Endpoint A)            |
-        +------------+-------------------------------------------+
-        |            | DST = 203.0.113.17 (Router 1)             |
-        +------------+-------------------------------------------+
-        | Link layer | SRC=A, DST=R1                             |
-        +------------+-------------------------------------------+
+     +============+==================================================+
+     | A -> R1    |                                                  |
+     +============+==================================================+
+     | SCION      | SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) |
+     +------------+--------------------------------------------------+
+     |            | DST = 1-ff00:0:3,192.0.2.7 (dest.  Endpoint B)   |
+     +------------+--------------------------------------------------+
+     |            | PATH =                                           |
+     +------------+--------------------------------------------------+
+     |            | - _IF1_ *(0,i2a)* (i1a,0)                        |
+     +------------+--------------------------------------------------+
+     |            | - IF2 (0,i1b) (i3a,0)                            |
+     +------------+--------------------------------------------------+
+     | UDP        | P_S = 30041, P_D = 30041                         |
+     +------------+--------------------------------------------------+
+     | IP         | SRC = 203.0.113.6 (Endpoint A)                   |
+     +------------+--------------------------------------------------+
+     |            | DST = 203.0.113.17 (Router 1)                    |
+     +------------+--------------------------------------------------+
+     | Link layer | SRC=A, DST=R1                                    |
+     +------------+--------------------------------------------------+
 
-                    Table 6: Snapshot header - step 1
+                     Table 6: Snapshot header - step 1
 
    *  _Step 2_
       *R1->R2*: Router 1 inspects the SCION header and considers the
@@ -1680,23 +1668,23 @@ Table of Contents
       each end, the available infrastructure, and the joint preference
       of the two ASes administrators.
 
-        +============+===========================================+
-        | R1 -> R2   |                                           |
-        +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
-        +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
-        +------------+-------------------------------------------+
-        |            | PATH =                                    |
-        +------------+-------------------------------------------+
-        |            | - _IF1_ (0,i2a) *(i1a,0)*                 |
-        +------------+-------------------------------------------+
-        |            | - IF2 (0,i1b) (i3a,0)                     |
-        +------------+-------------------------------------------+
-        | Link layer | SRC=R1, DST=R2                            |
-        +------------+-------------------------------------------+
+     +============+==================================================+
+     | R1 -> R2   |                                                  |
+     +============+==================================================+
+     | SCION      | SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) |
+     +------------+--------------------------------------------------+
+     |            | DST = 1-ff00:0:3,192.0.2.7 (dest.  Endpoint B)   |
+     +------------+--------------------------------------------------+
+     |            | PATH =                                           |
+     +------------+--------------------------------------------------+
+     |            | - _IF1_ (0,i2a) *(i1a,0)*                        |
+     +------------+--------------------------------------------------+
+     |            | - IF2 (0,i1b) (i3a,0)                            |
+     +------------+--------------------------------------------------+
+     | Link layer | SRC=R1, DST=R2                                   |
+     +------------+--------------------------------------------------+
 
-                    Table 7: Snapshot header - step 2
+                     Table 7: Snapshot header - step 2
 
    *  _Step 3_
       *R2->R3*: When receiving the packet, Router 2 of Core AS ff00:0:1
@@ -1711,29 +1699,29 @@ Table of Contents
       inside an intra-AS underlay IP packet with the address of Router 3
       as the underlay destination.
 
-        +============+===========================================+
-        | R2 -> R3   |                                           |
-        +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
-        +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
-        +------------+-------------------------------------------+
-        |            | PATH =                                    |
-        +------------+-------------------------------------------+
-        |            | - IF1 (0,i2a) (i1a,0)                     |
-        +------------+-------------------------------------------+
-        |            | - _IF2_ *(0,i1b)* (i3a,0)                 |
-        +------------+-------------------------------------------+
-        | UDP        | P_S = 30041, P_D = 30041                  |
-        +------------+-------------------------------------------+
-        | IP         | SRC = 198.51.100.1 (Router 2)             |
-        +------------+-------------------------------------------+
-        |            | DST = 198.51.100.4 (Router 3)             |
-        +------------+-------------------------------------------+
-        | Link layer | SRC=R2, DST=R3                            |
-        +------------+-------------------------------------------+
+     +============+==================================================+
+     | R2 -> R3   |                                                  |
+     +============+==================================================+
+     | SCION      | SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) |
+     +------------+--------------------------------------------------+
+     |            | DST = 1-ff00:0:3,192.0.2.7 (dest.  Endpoint B)   |
+     +------------+--------------------------------------------------+
+     |            | PATH =                                           |
+     +------------+--------------------------------------------------+
+     |            | - IF1 (0,i2a) (i1a,0)                            |
+     +------------+--------------------------------------------------+
+     |            | - _IF2_ *(0,i1b)* (i3a,0)                        |
+     +------------+--------------------------------------------------+
+     | UDP        | P_S = 30041, P_D = 30041                         |
+     +------------+--------------------------------------------------+
+     | IP         | SRC = 198.51.100.1 (Router 2)                    |
+     +------------+--------------------------------------------------+
+     |            | DST = 198.51.100.4 (Router 3)                    |
+     +------------+--------------------------------------------------+
+     | Link layer | SRC=R2, DST=R3                                   |
+     +------------+--------------------------------------------------+
 
-                    Table 8: Snapshot header - step 3
+                     Table 8: Snapshot header - step 3
 
    *  _Step 4_
       *R3->R4*: Router 3 inspects the current Hop Field in the SCION
@@ -1741,29 +1729,29 @@ Table of Contents
       SCION-enabled Router 4 of AS ff00:0:3, and moves the current hop-
       field pointer forward.  It adds an IP header to reach Router 4.
 
-        +============+===========================================+
-        | R3 -> R4   |                                           |
-        +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
-        +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
-        +------------+-------------------------------------------+
-        |            | PATH =                                    |
-        +------------+-------------------------------------------+
-        |            | - IF1 (0,i2a) (i1a,0)                     |
-        +------------+-------------------------------------------+
-        |            | - _IF2_ (0,i1b) *(i3a,0)*                 |
-        +------------+-------------------------------------------+
-        | UDP        | P_S = 30041, P_D = 30041                  |
-        +------------+-------------------------------------------+
-        | IP         | SRC = 1-1,198.51.100.17 (Router 3)        |
-        +------------+-------------------------------------------+
-        |            | DST = 1-3,198.51.100.18 (Router 4)        |
-        +------------+-------------------------------------------+
-        | Link layer | SRC=R3, DST=R4                            |
-        +------------+-------------------------------------------+
+     +============+==================================================+
+     | R3 -> R4   |                                                  |
+     +============+==================================================+
+     | SCION      | SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) |
+     +------------+--------------------------------------------------+
+     |            | DST = 1-ff00:0:3,192.0.2.7 (dest.  Endpoint B)   |
+     +------------+--------------------------------------------------+
+     |            | PATH =                                           |
+     +------------+--------------------------------------------------+
+     |            | - IF1 (0,i2a) (i1a,0)                            |
+     +------------+--------------------------------------------------+
+     |            | - _IF2_ (0,i1b) *(i3a,0)*                        |
+     +------------+--------------------------------------------------+
+     | UDP        | P_S = 30041, P_D = 30041                         |
+     +------------+--------------------------------------------------+
+     | IP         | SRC = 198.51.100.17 (Router 3)                   |
+     +------------+--------------------------------------------------+
+     |            | DST = 198.51.100.18 (Router 4)                   |
+     +------------+--------------------------------------------------+
+     | Link layer | SRC=R3, DST=R4                                   |
+     +------------+--------------------------------------------------+
 
-                    Table 9: Snapshot header - step 4
+                     Table 9: Snapshot header - step 4
 
    *  _Step 5_
       *R4->B*: SCION-enabled Router 4 first checks whether the packet
@@ -1778,29 +1766,29 @@ Table of Contents
       itself as source.  The intra-domain forwarding can now deliver the
       packet to its destination at Endpoint B.
 
-        +============+===========================================+
-        | R4 -> B    |                                           |
-        +============+===========================================+
-        | SCION      | SRC = 1-2,203.0.113.6 (source Endpoint A) |
-        +------------+-------------------------------------------+
-        |            | DST = 1-3,192.0.2.7 (dest.  Endpoint B)   |
-        +------------+-------------------------------------------+
-        |            | PATH =                                    |
-        +------------+-------------------------------------------+
-        |            | - IF1 (0,i2a) (i1a,0)                     |
-        +------------+-------------------------------------------+
-        |            | - _IF2_ (0,i1b) *(i3a,0)*                 |
-        +------------+-------------------------------------------+
-        | UDP        | P_S = 30041, P_D = 30041                  |
-        +------------+-------------------------------------------+
-        | IP         | SRC = 192.0.2.34 (Router 4)               |
-        +------------+-------------------------------------------+
-        |            | DST = 192.0.2.7 (Endpoint B)              |
-        +------------+-------------------------------------------+
-        | Link layer | SRC=R4, DST=B                             |
-        +------------+-------------------------------------------+
+     +============+==================================================+
+     | R4 -> B    |                                                  |
+     +============+==================================================+
+     | SCION      | SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) |
+     +------------+--------------------------------------------------+
+     |            | DST = 1-ff00:0:3,192.0.2.7 (dest.  Endpoint B)   |
+     +------------+--------------------------------------------------+
+     |            | PATH =                                           |
+     +------------+--------------------------------------------------+
+     |            | - IF1 (0,i2a) (i1a,0)                            |
+     +------------+--------------------------------------------------+
+     |            | - _IF2_ (0,i1b) *(i3a,0)*                        |
+     +------------+--------------------------------------------------+
+     | UDP        | P_S = 30041, P_D = 30041                         |
+     +------------+--------------------------------------------------+
+     | IP         | SRC = 192.0.2.34 (Router 4)                      |
+     +------------+--------------------------------------------------+
+     |            | DST = 192.0.2.7 (Endpoint B)                     |
+     +------------+--------------------------------------------------+
+     | Link layer | SRC=R4, DST=B                                    |
+     +------------+--------------------------------------------------+
 
-                    Table 10: Snapshot header - step 5
+                     Table 10: Snapshot header - step 5
 
    When destination Endpoint B wants to respond to source Endpoint A, it
    can just swap the source and destination addresses in the SCION
@@ -1973,28 +1961,28 @@ Table of Contents
    padded to 16 bytes.  The _first_ 6 bytes of the AES-CMAC output are
    used as resulting Hop Field MAC.
 
-   Figure 19 below shows the layout of the input data to calculate the
+   Figure 18 below shows the layout of the input data to calculate the
    Hop Field MAC.
 
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 |               0               |           Acc                 |   | Info
-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|   | Field
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   | Field
 |                           Timestamp                           |   |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-| <-+
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 |       0       |    ExpTime    |          ConsIngress          |   | Hop
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+   | Field
 |          ConsEgress           |               0               |   |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 
-     Figure 19: Input data to calculate the Hop Field MAC for the
+     Figure 18: Input data to calculate the Hop Field MAC for the
                    default hop-field MAC algorithm
 
 4.1.1.3.2.  Alternative Hop Field MAC Algorithms
 
-   For alternative algorithms, the following requirements MUST all be
-   met:
+   For alternative MAC algorithms, the following requirements MUST all
+   be met:
 
    *  The Hop Field MAC field is computed as a function of the secret
       forwarding key, the Acc and Timestamp fields of the Info Field,
@@ -2185,12 +2173,12 @@ Table of Contents
 
    *  Peering-child or vice-versa
 
-   Link types above are defined in [I-D.dekater-scion-controlplane]
-   section "Paths and Links".  This check prevents valley use of peering
-   links or hair-pin segments. 3.  Check if the current Hop Field is
-   expired or originated in the future, i.e. the current Info Field MUST
-   NOT have a timestamp in the future, as defined in Section 2.3.2.3.
-   If either is true, the router MUST drop the packet.
+   Link types above are defined in 'Path and Links' in
+   [I-D.dekater-scion-controlplane].  This check prevents valley use of
+   peering links or hair-pin segments. 3.  Check if the current Hop
+   Field is expired or originated in the future, i.e. the current Info
+   Field MUST NOT have a timestamp in the future, as defined in
+   Section 2.3.2.3.  If either is true, the router MUST drop the packet.
 
    The next steps depend on the direction of travel and whether this
    segment includes a peering Hop Field.  Both features are indicated by
@@ -2278,7 +2266,7 @@ Table of Contents
             Proceed with step 4.
 
    1.  Forward the packet to the egress border router (based on the
-       egress interface ID in the current Hop Field) or to the
+       egress Interface ID in the current Hop Field) or to the
        destination endpoint, if this is the destination AS.
 
 4.2.2.2.  Steps at Egress Border Router
@@ -2390,8 +2378,8 @@ Table of Contents
 
    The MTU of a SCION path is defined as the minimum of the MTUs of the
    links traversed by that path.  The control plane disseminates such
-   values and makes them available to endpoints (see:
-   [I-D.dekater-scion-controlplane], Path MTU).
+   values and makes them available to endpoints (see 'Path MTU in
+   [I-D.dekater-scion-controlplane]).
 
    The MTU of each link may be discovered or administratively configured
    (current practice is for it to be configured).  It must be less than
@@ -2473,12 +2461,12 @@ Table of Contents
    In SCION, an intermediate router cannot change the path followed by a
    packet, only the source endpoint can chose a different path.
    Therefore, to enable fast recovery, a router SHOULD signal forwarding
-   failures to the source, via a SCMP notification (see
-   [I-D.dekater-scion-controlplane] section "SCMP/Error Messages").
-   This allows the source endpoint to quickly switch to a different
-   path.  To that end, the source end-point SHOULD give lower preference
-   to the broken path.  Current implementations use a negative cache
-   with entries retained for 10s.
+   failures to the source, via a SCMP notification (see 'SCMP/Error
+   messages' in [I-D.dekater-scion-controlplane]).  This allows the
+   source endpoint to quickly switch to a different path.  To that end,
+   the source end-point SHOULD give lower preference to the broken path.
+   Current implementations use a negative cache with entries retained
+   for 10s.
 
    Sending an SCMP error notification is OPTIONAL.  Endpoints should
    therefore implement additional mechanisms to validate or detect link
@@ -2926,7 +2914,13 @@ Change Log
 
 draft-dekater-scion-dataplane-06
 
-   *  Figures: redraw and add SVG version
+   *  Figures: redraw and add aasvg version when possible
+
+   *  Clarify 0 as "unspecified" Interface ID
+
+   *  Use ASes within the documentation range in examples
+
+   *  Remove one-hop path type figure
 
 draft-dekater-scion-dataplane-05
 
@@ -3012,7 +3006,7 @@ draft-dekater-scion-dataplane-02
 Authors' Addresses
 
    Corine de Kater
-   SCION Association
+   Independent
    Email: c_de_kater@gmx.ch
 
 
@@ -3022,8 +3016,8 @@ Authors' Addresses
 
 
    Jean-Christophe Hugly
-   SCION Association
-   Email: jch@scion.org
+   Independent
+   Email: jice@vwaty.com
 
 
    Samuel Hitz
