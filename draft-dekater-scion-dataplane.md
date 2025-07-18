@@ -1021,7 +1021,6 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
 |       AS ff00:0:2       |         |       AS ff00:0:3       |
 |                         |         |                         |
 +-------------------------+         +-------------------------+
-
 ~~~
 {: #figure-16 title="Sample topology to illustrate the life cycle of a SCION packet. AS ff00:0:1 is the core AS of ISD 1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1."}
 
@@ -1060,7 +1059,6 @@ This section explains what happens with the SCION packet header at each router, 
 | IP         | SRC = 203.0.113.6 (Endpoint A) <br>                    |
 |            | DST = 203.0.113.17 (Router 1) <br>                     |
 | Link layer | SRC=A, DST=R1                                          |
-
 {: title="Snapshot header - step 1"}
 
 
