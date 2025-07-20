@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-17T00:00:41.111436+00:00",
+  "timestamp": "2025-07-20T00:00:48.440315+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1466,9 +1466,9 @@
         "Prio 3",
         "editorial"
       ],
-      "body": "- [ ] In section `1.3.3.  Configuration` clarify that the same MAC algorithm must be configured in the CP and on the routers within an AS \n- [ ] Add new section  before `4.1.1.3.  Default Hop Field MAC Algorithm` titled something like `Hop Field MAC Algorithm`, then introduce two subsections with the default MAC algorithm and alternative ones.  Also this text is IMHO not so clear: ` the control service and routers of the AS do need to agree on the algorithm used` because there is not really an agreement, rather routers and CP must be configured out of band to use the same algorithm.\n\n\nThis is to address the feedback received by Alvaro on the CP draft : \n> [] Only one MAC algorithm is specified, but an AS can select its own. This may be a question for the dataplane draft... How does a SCION endpoint know which MAC algorithm to use for a non-connected AS (maybe even in a different ISD) when constructing the SCION Header?",
+      "body": "- [x] In section `1.3.3.  Configuration` clarify that the same MAC algorithm must be configured in the CP and on the routers within an AS \n- [x] Add new section  before `4.1.1.3.  Default Hop Field MAC Algorithm` titled something like `Hop Field MAC Algorithm`, then introduce two subsections with the default MAC algorithm and alternative ones.  Also this text is IMHO not so clear: ` the control service and routers of the AS do need to agree on the algorithm used` because there is not really an agreement, rather routers and CP must be configured out of band to use the same algorithm.\n\n\nThis is to address the feedback received by Alvaro on the CP draft : \n> [] Only one MAC algorithm is specified, but an AS can select its own. This may be a question for the dataplane draft... How does a SCION endpoint know which MAC algorithm to use for a non-connected AS (maybe even in a different ISD) when constructing the SCION Header?",
       "createdAt": "2025-07-03T12:43:54Z",
-      "updatedAt": "2025-07-03T13:34:01Z",
+      "updatedAt": "2025-07-17T21:26:34Z",
       "closedAt": null,
       "comments": [
         {
@@ -8213,6 +8213,32 @@
       "mergeCommit": {
         "oid": "6b8cf76dcea67460267631e2fe51d65a9f95d265"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 104,
+      "id": "PR_kwDOKYa7786fcwgs",
+      "title": "Clarify MAC algorithm configuration",
+      "url": "https://github.com/scionassociation/scion-dp_I-D/pull/104",
+      "state": "OPEN",
+      "author": "knmeynell",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-17T20:50:13Z",
+      "updatedAt": "2025-07-18T02:50:01Z",
+      "baseRepository": "scionassociation/scion-dp_I-D",
+      "baseRefName": "main",
+      "baseRefOid": "6b8cf76dcea67460267631e2fe51d65a9f95d265",
+      "headRepository": "scionassociation/scion-dp_I-D",
+      "headRefName": "Clarify-MAC-Algorithm",
+      "headRefOid": "f3bf30e62154d2718e2776c84198cc239d19e6c6",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
