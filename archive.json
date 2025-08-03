@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-20T00:00:48.440315+00:00",
+  "timestamp": "2025-08-03T00:00:40.629940+00:00",
   "repo": "scionassociation/scion-dp_I-D",
   "labels": [
     {
@@ -1155,9 +1155,9 @@
         "question",
         "Prio 2"
       ],
-      "body": "In 3. Life of a SCION Data Packet we have a L2 link between R1, R2. Is this something that comes from the book or is this actually possible today? Can any of the implementations actually support this?\r\n\r\n\r\nI feel there are some missing pieces: \r\n* We'd need an [Assigned Protocol Number](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml) that can be used by L2\r\n* Is there any need for a L2 discovery mechanism?\r\n\r\n@jiceatscion \r\n\r\nphrasing to be adjusted: \r\n\r\n```\r\n*Note:* Although technically there is no need for a UDP/IP\r\n      underlay if two routers are directly connected, the SCION\r\n      implementation always uses a UDP/IP underlay in practice.  This is\r\n      to enable a common interface for all routers.\r\n  ```\r\n",
+      "body": "In 3. Life of a SCION Data Packet we have a L2 link between R1, R2. Is this something that comes from the book or is this actually possible today? Can any of the implementations actually support this?\n\n\nI feel there are some missing pieces: \n* We'd need an [Ethertype](https://www.iana.org/assignments/ieee-802-numbers/ieee-802-numbers.xhtml#ieee-802-numbers-1) that can be used by L2\n* Is there any need for a L2 discovery mechanism?\n\n@jiceatscion \n\nphrasing to be adjusted: \n\n```\n*Note:* Although technically there is no need for a UDP/IP\n      underlay if two routers are directly connected, the SCION\n      implementation always uses a UDP/IP underlay in practice.  This is\n      to enable a common interface for all routers.\n  ```\n",
       "createdAt": "2024-08-25T14:15:37Z",
-      "updatedAt": "2024-10-08T12:16:20Z",
+      "updatedAt": "2025-08-02T17:23:22Z",
       "closedAt": "2024-09-14T14:40:28Z",
       "comments": [
         {
