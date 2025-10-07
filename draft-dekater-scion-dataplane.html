@@ -14,23 +14,23 @@
        The SCION Data Plane fundamentally differs from today's IP-based data plane in that it is  path-aware : In SCION, interdomain forwarding directives are embedded in the packet header. This document provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers, which are additionally described. The document continues with the life cycle of a SCION packet while traversing the SCION Internet, followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. 
        This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet. 
     " name="description">
-<meta content="xml2rfc 3.29.0" name="generator">
+<meta content="xml2rfc 3.30.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-dekater-scion-dataplane-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.29.0
+  xml2rfc 3.30.2
     Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.1
-    platformdirs 4.3.8
+    platformdirs 4.4.0
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.4
+    requests 2.32.5
     setuptools 80.9.0
-    wcwidth 0.2.13
+    wcwidth 0.2.14
 -->
 <link href="draft-dekater-scion-dataplane.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1049,11 +1049,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCION DP</td>
-<td class="right">July 2025</td>
+<td class="right">October 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 17 January 2026</td>
+<td class="center">Expires 10 April 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1066,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-07-16" class="published">16 July 2025</time>
+<time datetime="2025-10-07" class="published">7 October 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-01-17">17 January 2026</time></dd>
+<dd class="expires"><time datetime="2026-04-10">10 April 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1130,7 +1130,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 10 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1553,7 +1553,10 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               <p id="section-1.3.3-2.4.1">For the router that manages the interface: the neighbor interface underlay address.<a href="#section-1.3.3-2.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-1.3.3-2.5">
-              <p id="section-1.3.3-2.5.1">For the routers that do not manage the interface:  the address of the intra-domain protocol on the router that does.<a href="#section-1.3.3-2.5.1" class="pilcrow">¶</a></p>
+              <p id="section-1.3.3-2.5.1">For the routers that do not manage the interface: the address of the intra-domain protocol on the router that does.<a href="#section-1.3.3-2.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-1.3.3-2.6">
+              <p id="section-1.3.3-2.6.1">The algorithm used to compute the <span><a href="#hf-mac-overview" class="internal xref">Hop Field MAC</a> (<a href="#hf-mac-overview" class="auto internal xref">Section 4.1.1</a>)</span> which must be the same as that used by the Control Services within the AS.<a href="#section-1.3.3-2.6.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-1.3.3-3">In order to forward traffic to a service endpoint address (<code>DT/DS</code> == 0b01 in the <span><a href="#common-header" class="internal xref">common header</a> (<a href="#common-header" class="auto internal xref">Section 2.1</a>)</span>), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.<a href="#section-1.3.3-3" class="pilcrow">¶</a></p>
@@ -2998,57 +3001,57 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <figure id="figure-15">
               <div id="section-2.4.1.2-2.1">
                 <div class="alignLeft art-svg artwork" id="section-2.4.1.2-2.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="528" viewBox="0 0 528 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                    <path d="M 8,80 L 8,144" fill="none" stroke="black"></path>
-                    <path d="M 136,80 L 136,112" fill="none" stroke="black"></path>
-                    <path d="M 264,80 L 264,112" fill="none" stroke="black"></path>
-                    <path d="M 520,80 L 520,144" fill="none" stroke="black"></path>
-                    <path d="M 8,80 L 520,80" fill="none" stroke="black"></path>
-                    <path d="M 8,112 L 264,112" fill="none" stroke="black"></path>
-                    <path d="M 8,144 L 520,144" fill="none" stroke="black"></path>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="160" width="528" viewBox="0 0 528 160" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                    <path d="M 8,64 L 8,128" fill="none" stroke="black"></path>
+                    <path d="M 136,64 L 136,96" fill="none" stroke="black"></path>
+                    <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
+                    <path d="M 520,64 L 520,128" fill="none" stroke="black"></path>
+                    <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
+                    <path d="M 8,96 L 264,96" fill="none" stroke="black"></path>
+                    <path d="M 8,128 L 520,128" fill="none" stroke="black"></path>
                     <g class="text">
+                      <text x="16" y="36">0</text>
+                      <text x="176" y="36">1</text>
+                      <text x="336" y="36">2</text>
+                      <text x="496" y="36">3</text>
                       <text x="16" y="52">0</text>
-                      <text x="176" y="52">1</text>
-                      <text x="336" y="52">2</text>
-                      <text x="496" y="52">3</text>
-                      <text x="16" y="68">0</text>
-                      <text x="32" y="68">1</text>
-                      <text x="48" y="68">2</text>
-                      <text x="64" y="68">3</text>
-                      <text x="80" y="68">4</text>
-                      <text x="96" y="68">5</text>
-                      <text x="112" y="68">6</text>
-                      <text x="128" y="68">7</text>
-                      <text x="144" y="68">8</text>
-                      <text x="160" y="68">9</text>
-                      <text x="176" y="68">0</text>
-                      <text x="192" y="68">1</text>
-                      <text x="208" y="68">2</text>
-                      <text x="224" y="68">3</text>
-                      <text x="240" y="68">4</text>
-                      <text x="256" y="68">5</text>
-                      <text x="272" y="68">6</text>
-                      <text x="288" y="68">7</text>
-                      <text x="304" y="68">8</text>
-                      <text x="320" y="68">9</text>
-                      <text x="336" y="68">0</text>
-                      <text x="352" y="68">1</text>
-                      <text x="368" y="68">2</text>
-                      <text x="384" y="68">3</text>
-                      <text x="400" y="68">4</text>
-                      <text x="416" y="68">5</text>
-                      <text x="432" y="68">6</text>
-                      <text x="448" y="68">7</text>
-                      <text x="464" y="68">8</text>
-                      <text x="480" y="68">9</text>
-                      <text x="496" y="68">0</text>
-                      <text x="512" y="68">1</text>
-                      <text x="72" y="100">1</text>
-                      <text x="196" y="100">OptDataLen</text>
-                      <text x="392" y="100">OptData</text>
-                      <text x="256" y="132">.</text>
-                      <text x="272" y="132">.</text>
-                      <text x="288" y="132">.</text>
+                      <text x="32" y="52">1</text>
+                      <text x="48" y="52">2</text>
+                      <text x="64" y="52">3</text>
+                      <text x="80" y="52">4</text>
+                      <text x="96" y="52">5</text>
+                      <text x="112" y="52">6</text>
+                      <text x="128" y="52">7</text>
+                      <text x="144" y="52">8</text>
+                      <text x="160" y="52">9</text>
+                      <text x="176" y="52">0</text>
+                      <text x="192" y="52">1</text>
+                      <text x="208" y="52">2</text>
+                      <text x="224" y="52">3</text>
+                      <text x="240" y="52">4</text>
+                      <text x="256" y="52">5</text>
+                      <text x="272" y="52">6</text>
+                      <text x="288" y="52">7</text>
+                      <text x="304" y="52">8</text>
+                      <text x="320" y="52">9</text>
+                      <text x="336" y="52">0</text>
+                      <text x="352" y="52">1</text>
+                      <text x="368" y="52">2</text>
+                      <text x="384" y="52">3</text>
+                      <text x="400" y="52">4</text>
+                      <text x="416" y="52">5</text>
+                      <text x="432" y="52">6</text>
+                      <text x="448" y="52">7</text>
+                      <text x="464" y="52">8</text>
+                      <text x="480" y="52">9</text>
+                      <text x="496" y="52">0</text>
+                      <text x="512" y="52">1</text>
+                      <text x="72" y="84">1</text>
+                      <text x="196" y="84">OptDataLen</text>
+                      <text x="392" y="84">OptData</text>
+                      <text x="256" y="116">.</text>
+                      <text x="272" y="116">.</text>
+                      <text x="288" y="116">.</text>
                     </g>
                   </svg><a href="#section-2.4.1.2-2.1.1" class="pilcrow">¶</a>
 </div>
@@ -3221,7 +3224,6 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 |       AS ff00:0:2       |         |       AS ff00:0:3       |
 |                         |         |                         |
 +-------------------------+         +-------------------------+
-
 </pre>
 </div>
 <figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
@@ -3628,7 +3630,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
                 <p id="section-4.1.1.1-5.7.1">ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub> = The content of the Hop Field HF<sub>i</sub><a href="#section-4.1.1.1-5.7.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-4.1.1.1-6">Thus, the current MAC is based on the XOR-sum of the truncated MACs of all preceding Hop Fields in the path segment as well as the path segment's <code>SegID</code>. In other words, the current MAC is <em>chained</em> to all preceding MACs. In order to effectively prevent path-splicing, the cryptographic checksum function used <span class="bcp14">MUST</span> ensure that the truncation of the MACs is non-degenerate and roughly uniformly distributed (see <a href="#mac-requirements" class="auto internal xref">Section 4.1.1.4</a>).<a href="#section-4.1.1.1-6" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.1-6">Thus, the current MAC is based on the XOR-sum of the truncated MACs of all preceding Hop Fields in the path segment as well as the path segment's <code>SegID</code>. In other words, the current MAC is <em>chained</em> to all preceding MACs. In order to effectively prevent path-splicing, the cryptographic checksum function used <span class="bcp14">MUST</span> ensure that the truncation of the MACs is non-degenerate and roughly uniformly distributed (see <a href="#mac-requirements" class="auto internal xref">Section 4.1.1.3.2</a>).<a href="#section-4.1.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="def-acc">
@@ -3652,121 +3654,128 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
             </ul>
 </section>
 </div>
-<div id="default-hop-field-mac-algorithm">
+<div id="hop-field-mac-algorithm">
 <section id="section-4.1.1.3">
-            <h5 id="name-default-hop-field-mac-algor">
-<a href="#section-4.1.1.3" class="section-number selfRef">4.1.1.3. </a><a href="#name-default-hop-field-mac-algor" class="section-name selfRef">Default Hop Field MAC Algorithm</a>
+            <h5 id="name-hop-field-mac-algorithm">
+<a href="#section-4.1.1.3" class="section-number selfRef">4.1.1.3. </a><a href="#name-hop-field-mac-algorithm" class="section-name selfRef">Hop Field MAC Algorithm</a>
             </h5>
-<p id="section-4.1.1.3-1">The algorithm used to compute the Hop Field MAC is an AS-specific choice. The operator of an AS can freely choose any MAC algorithm and the control service and routers of the AS do need to agree on the algorithm used, but all implementations <span class="bcp14">MUST</span> support the Default Hop Field MAC algorithm described below.<a href="#section-4.1.1.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3-2">The default MAC algorithm is AES-CMAC (<span>[<a href="#RFC4493" class="cite xref">RFC4493</a>]</span>) truncated to 48-bits, computed over the Info Field and the first 6 bytes of the Hop Field with flags and reserved fields zeroed out. The input is padded to 16 bytes. The <em>first</em> 6 bytes of the AES-CMAC output are used as resulting Hop Field MAC.<a href="#section-4.1.1.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3-3"><a href="#_figure-18" class="auto internal xref">Figure 18</a> below shows the layout of the input data to calculate the Hop Field MAC.<a href="#section-4.1.1.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.3-1">The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS <span class="bcp14">MUST</span> use the same algorithm. Implementations <span class="bcp14">MUST</span> also support the Default Hop Field MAC algorithm as described below.<a href="#section-4.1.1.3-1" class="pilcrow">¶</a></p>
+<div id="default-hop-field-mac-algorithm">
+<section id="section-4.1.1.3.1">
+              <h6 id="name-default-hop-field-mac-algor">
+<a href="#section-4.1.1.3.1" class="section-number selfRef">4.1.1.3.1. </a><a href="#name-default-hop-field-mac-algor" class="section-name selfRef">Default Hop Field MAC Algorithm</a>
+              </h6>
+<p id="section-4.1.1.3.1-1">The default MAC algorithm is AES-CMAC (<span>[<a href="#RFC4493" class="cite xref">RFC4493</a>]</span>) truncated to 48-bits, computed over the Info Field and the first 6 bytes of the Hop Field with flags and reserved fields zeroed out. The input is padded to 16 bytes. The <em>first</em> 6 bytes of the AES-CMAC output are used as resulting Hop Field MAC.<a href="#section-4.1.1.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.3.1-2"><a href="#_figure-18" class="auto internal xref">Figure 18</a> below shows the layout of the input data to calculate the Hop Field MAC.<a href="#section-4.1.1.3.1-2" class="pilcrow">¶</a></p>
 <span id="name-input-data-to-calculate-the"></span><div id="_figure-18">
 <figure id="figure-18">
-              <div id="section-4.1.1.3-4.1">
-                <div class="alignLeft art-svg artwork" id="section-4.1.1.3-4.1.1">
+                <div id="section-4.1.1.3.1-3.1">
+                  <div class="alignLeft art-svg artwork" id="section-4.1.1.3.1-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="224" width="608" viewBox="0 0 608 224" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                    <path d="M 8,64 L 8,192" fill="none" stroke="black"></path>
-                    <path d="M 136,128 L 136,160" fill="none" stroke="black"></path>
-                    <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
-                    <path d="M 264,128 L 264,192" fill="none" stroke="black"></path>
-                    <path d="M 520,64 L 520,192" fill="none" stroke="black"></path>
-                    <path d="M 552,64 L 552,192" fill="none" stroke="black"></path>
-                    <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
-                    <path d="M 536,64 L 552,64" fill="none" stroke="black"></path>
-                    <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
-                    <path d="M 8,128 L 520,128" fill="none" stroke="black"></path>
-                    <path d="M 536,128 L 552,128" fill="none" stroke="black"></path>
-                    <path d="M 8,160 L 520,160" fill="none" stroke="black"></path>
-                    <path d="M 8,192 L 520,192" fill="none" stroke="black"></path>
-                    <path d="M 536,192 L 552,192" fill="none" stroke="black"></path>
-                    <polygon class="arrowhead" points="544,192 532,186.4 532,197.6" fill="black" transform="rotate(180,536,192)"></polygon>
-                    <polygon class="arrowhead" points="544,128 532,122.4 532,133.6" fill="black" transform="rotate(180,536,128)"></polygon>
-                    <polygon class="arrowhead" points="544,64 532,58.4 532,69.6" fill="black" transform="rotate(180,536,64)"></polygon>
-                    <g class="text">
-                      <text x="16" y="36">0</text>
-                      <text x="176" y="36">1</text>
-                      <text x="336" y="36">2</text>
-                      <text x="496" y="36">3</text>
-                      <text x="16" y="52">0</text>
-                      <text x="32" y="52">1</text>
-                      <text x="48" y="52">2</text>
-                      <text x="64" y="52">3</text>
-                      <text x="80" y="52">4</text>
-                      <text x="96" y="52">5</text>
-                      <text x="112" y="52">6</text>
-                      <text x="128" y="52">7</text>
-                      <text x="144" y="52">8</text>
-                      <text x="160" y="52">9</text>
-                      <text x="176" y="52">0</text>
-                      <text x="192" y="52">1</text>
-                      <text x="208" y="52">2</text>
-                      <text x="224" y="52">3</text>
-                      <text x="240" y="52">4</text>
-                      <text x="256" y="52">5</text>
-                      <text x="272" y="52">6</text>
-                      <text x="288" y="52">7</text>
-                      <text x="304" y="52">8</text>
-                      <text x="320" y="52">9</text>
-                      <text x="336" y="52">0</text>
-                      <text x="352" y="52">1</text>
-                      <text x="368" y="52">2</text>
-                      <text x="384" y="52">3</text>
-                      <text x="400" y="52">4</text>
-                      <text x="416" y="52">5</text>
-                      <text x="432" y="52">6</text>
-                      <text x="448" y="52">7</text>
-                      <text x="464" y="52">8</text>
-                      <text x="480" y="52">9</text>
-                      <text x="496" y="52">0</text>
-                      <text x="512" y="52">1</text>
-                      <text x="136" y="84">0</text>
-                      <text x="368" y="84">Acc</text>
-                      <text x="580" y="84">Info</text>
-                      <text x="584" y="100">Field</text>
-                      <text x="264" y="116">Timestamp</text>
-                      <text x="72" y="148">0</text>
-                      <text x="200" y="148">ExpTime</text>
-                      <text x="392" y="148">ConsIngress</text>
-                      <text x="576" y="148">Hop</text>
-                      <text x="584" y="164">Field</text>
-                      <text x="132" y="180">ConsEgress</text>
-                      <text x="392" y="180">0</text>
-                    </g>
-                  </svg><a href="#section-4.1.1.3-4.1.1" class="pilcrow">¶</a>
+                      <path d="M 8,64 L 8,192" fill="none" stroke="black"></path>
+                      <path d="M 136,128 L 136,160" fill="none" stroke="black"></path>
+                      <path d="M 264,64 L 264,96" fill="none" stroke="black"></path>
+                      <path d="M 264,128 L 264,192" fill="none" stroke="black"></path>
+                      <path d="M 520,64 L 520,192" fill="none" stroke="black"></path>
+                      <path d="M 552,64 L 552,192" fill="none" stroke="black"></path>
+                      <path d="M 8,64 L 520,64" fill="none" stroke="black"></path>
+                      <path d="M 536,64 L 552,64" fill="none" stroke="black"></path>
+                      <path d="M 8,96 L 520,96" fill="none" stroke="black"></path>
+                      <path d="M 8,128 L 520,128" fill="none" stroke="black"></path>
+                      <path d="M 536,128 L 552,128" fill="none" stroke="black"></path>
+                      <path d="M 8,160 L 520,160" fill="none" stroke="black"></path>
+                      <path d="M 8,192 L 520,192" fill="none" stroke="black"></path>
+                      <path d="M 536,192 L 552,192" fill="none" stroke="black"></path>
+                      <polygon class="arrowhead" points="544,192 532,186.4 532,197.6" fill="black" transform="rotate(180,536,192)"></polygon>
+                      <polygon class="arrowhead" points="544,128 532,122.4 532,133.6" fill="black" transform="rotate(180,536,128)"></polygon>
+                      <polygon class="arrowhead" points="544,64 532,58.4 532,69.6" fill="black" transform="rotate(180,536,64)"></polygon>
+                      <g class="text">
+                        <text x="16" y="36">0</text>
+                        <text x="176" y="36">1</text>
+                        <text x="336" y="36">2</text>
+                        <text x="496" y="36">3</text>
+                        <text x="16" y="52">0</text>
+                        <text x="32" y="52">1</text>
+                        <text x="48" y="52">2</text>
+                        <text x="64" y="52">3</text>
+                        <text x="80" y="52">4</text>
+                        <text x="96" y="52">5</text>
+                        <text x="112" y="52">6</text>
+                        <text x="128" y="52">7</text>
+                        <text x="144" y="52">8</text>
+                        <text x="160" y="52">9</text>
+                        <text x="176" y="52">0</text>
+                        <text x="192" y="52">1</text>
+                        <text x="208" y="52">2</text>
+                        <text x="224" y="52">3</text>
+                        <text x="240" y="52">4</text>
+                        <text x="256" y="52">5</text>
+                        <text x="272" y="52">6</text>
+                        <text x="288" y="52">7</text>
+                        <text x="304" y="52">8</text>
+                        <text x="320" y="52">9</text>
+                        <text x="336" y="52">0</text>
+                        <text x="352" y="52">1</text>
+                        <text x="368" y="52">2</text>
+                        <text x="384" y="52">3</text>
+                        <text x="400" y="52">4</text>
+                        <text x="416" y="52">5</text>
+                        <text x="432" y="52">6</text>
+                        <text x="448" y="52">7</text>
+                        <text x="464" y="52">8</text>
+                        <text x="480" y="52">9</text>
+                        <text x="496" y="52">0</text>
+                        <text x="512" y="52">1</text>
+                        <text x="136" y="84">0</text>
+                        <text x="368" y="84">Acc</text>
+                        <text x="580" y="84">Info</text>
+                        <text x="584" y="100">Field</text>
+                        <text x="264" y="116">Timestamp</text>
+                        <text x="72" y="148">0</text>
+                        <text x="200" y="148">ExpTime</text>
+                        <text x="392" y="148">ConsIngress</text>
+                        <text x="576" y="148">Hop</text>
+                        <text x="584" y="164">Field</text>
+                        <text x="132" y="180">ConsEgress</text>
+                        <text x="392" y="180">0</text>
+                      </g>
+                    </svg><a href="#section-4.1.1.3.1-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-input-data-to-calculate-the" class="selfRef">Input data to calculate the Hop Field MAC for the default hop-field MAC algorithm</a>
-              </figcaption></figure>
+                </figcaption></figure>
 </div>
 </section>
 </div>
 <div id="mac-requirements">
-<section id="section-4.1.1.4">
-            <h5 id="name-alternative-hop-field-mac-a">
-<a href="#section-4.1.1.4" class="section-number selfRef">4.1.1.4. </a><a href="#name-alternative-hop-field-mac-a" class="section-name selfRef">Alternative Hop Field MAC Algorithms</a>
-            </h5>
-<p id="section-4.1.1.4-1">For alternative algorithms, the following requirements <span class="bcp14">MUST</span> all be met:<a href="#section-4.1.1.4-1" class="pilcrow">¶</a></p>
+<section id="section-4.1.1.3.2">
+              <h6 id="name-alternative-hop-field-mac-a">
+<a href="#section-4.1.1.3.2" class="section-number selfRef">4.1.1.3.2. </a><a href="#name-alternative-hop-field-mac-a" class="section-name selfRef">Alternative Hop Field MAC Algorithms</a>
+              </h6>
+<p id="section-4.1.1.3.2-1">For alternative MAC algorithms, the following requirements <span class="bcp14">MUST</span> all be met:<a href="#section-4.1.1.3.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.1.1.4-2.1">
-                <p id="section-4.1.1.4-2.1.1">The Hop Field MAC field is computed as a function of the secret forwarding key, the <code>Acc</code> and <code>Timestamp</code> fields of the Info Field, and the <code>ExpTime</code>, <code>ConsIngress</code> and <code>ConsEgress</code> fields of the Hop Field. Function is used in the mathematical sense that for for any values of these inputs there is exactly one result.<a href="#section-4.1.1.4-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.1.1.3.2-2.1">
+                  <p id="section-4.1.1.3.2-2.1.1">The Hop Field MAC field is computed as a function of the secret forwarding key, the <code>Acc</code> and <code>Timestamp</code> fields of the Info Field, and the <code>ExpTime</code>, <code>ConsIngress</code> and <code>ConsEgress</code> fields of the Hop Field. Function is used in the mathematical sense that for for any values of these inputs there is exactly one result.<a href="#section-4.1.1.3.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1.1.4-2.2">
-                <p id="section-4.1.1.4-2.2.1">The algorithm returns an unforgable 48-bit value. Unforgable specifically means "existentially unforgable under a chosen message attack" (<span>[<a href="#CRYPTOBOOK" class="cite xref">CRYPTOBOOK</a>]</span>). Informally, this means an attacker without access to the secret key has no computationally efficient means to create a valid MAC for some attacker chosen input values, even if it has access to an "oracle" providing a valid MAC for any other input values.<a href="#section-4.1.1.4-2.2.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-4.1.1.3.2-2.2">
+                  <p id="section-4.1.1.3.2-2.2.1">The algorithm returns an unforgable 48-bit value. Unforgable specifically means "existentially unforgable under a chosen message attack" (<span>[<a href="#CRYPTOBOOK" class="cite xref">CRYPTOBOOK</a>]</span>). Informally, this means an attacker without access to the secret key has no computationally efficient means to create a valid MAC for some attacker chosen input values, even if it has access to an "oracle" providing a valid MAC for any other input values.<a href="#section-4.1.1.3.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-4.1.1.4-2.3">
-                <p id="section-4.1.1.4-2.3.1">The truncation of the result value to the first 16 bits of the result value:<a href="#section-4.1.1.4-2.3.1" class="pilcrow">¶</a></p>
+                <li class="normal" id="section-4.1.1.3.2-2.3">
+                  <p id="section-4.1.1.3.2-2.3.1">The truncation of the result value to the first 16 bits of the result value:<a href="#section-4.1.1.3.2-2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.1.1.4-2.3.2.1">
-                    <p id="section-4.1.1.4-2.3.2.1.1">is not degenerate, i.e. any small change in any input value <span class="bcp14">SHOULD</span> have an "avalanche effect" on these bits, and<a href="#section-4.1.1.4-2.3.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.1.1.3.2-2.3.2.1">
+                      <p id="section-4.1.1.3.2-2.3.2.1.1">is not degenerate, i.e. any small change in any input value <span class="bcp14">SHOULD</span> have an "avalanche effect" on these bits, and<a href="#section-4.1.1.3.2-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-4.1.1.4-2.3.2.2">
-                    <p id="section-4.1.1.4-2.3.2.2.1">is roughly uniformly distributed when considering all possible input values.<a href="#section-4.1.1.4-2.3.2.2.1" class="pilcrow">¶</a></p>
+                    <li class="normal" id="section-4.1.1.3.2-2.3.2.2">
+                      <p id="section-4.1.1.3.2-2.3.2.2.1">is roughly uniformly distributed when considering all possible input values.<a href="#section-4.1.1.3.2-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
-                </ul>
+                  </ul>
 </li>
-            </ul>
-<p id="section-4.1.1.4-3">This additional requirement is naturally satisfied for MAC algorithms based on typical block ciphers or hash algorithms. It ensures that the MAC chaining via the <code>Acc</code> field is not degenerate.<a href="#section-4.1.1.4-3" class="pilcrow">¶</a></p>
+              </ul>
+<p id="section-4.1.1.3.2-3">This additional requirement is naturally satisfied for MAC algorithms based on typical block ciphers or hash algorithms. It ensures that the MAC chaining via the <code>Acc</code> field is not degenerate.<a href="#section-4.1.1.3.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -4237,7 +4246,7 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
 <dd class="break"></dd>
 <dt id="I-D.dekater-scion-pki">[I-D.dekater-scion-pki]</dt>
         <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-pki-09</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-09">https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-09</a>&gt;</span>. </dd>
+<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-pki-10</span>, <time datetime="2025-09-06" class="refDate">6 September 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-10">https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>

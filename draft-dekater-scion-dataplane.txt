@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 17 January 2026                               SCION Association
+Expires: 10 April 2026                                 SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            16 July 2025
+                                                          7 October 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 January 2026.
+   This Internet-Draft will expire on 10 April 2026.
 
 Copyright Notice
 
@@ -505,6 +505,10 @@ Table of Contents
 
    *  For the routers that do not manage the interface: the address of
       the intra-domain protocol on the router that does.
+
+   *  The algorithm used to compute the Hop Field MAC (Section 4.1.1)
+      which must be the same as that used by the Control Services within
+      the AS.
 
    In order to forward traffic to a service endpoint address (DT/DS ==
    0b01 in the common header (Section 2.1)), a border router translates
@@ -1906,7 +1910,7 @@ Table of Contents
    preceding MACs.  In order to effectively prevent path-splicing, the
    cryptographic checksum function used MUST ensure that the truncation
    of the MACs is non-degenerate and roughly uniformly distributed (see
-   Section 4.1.1.4).
+   Section 4.1.1.3.2).
 
 4.1.1.2.  Accumulator Acc - Definition
 
@@ -1942,13 +1946,14 @@ Table of Contents
    *  MAC_i [:2] = The Hop Field MAC for the current AS_i, truncated to
       2 bytes
 
-4.1.1.3.  Default Hop Field MAC Algorithm
+4.1.1.3.  Hop Field MAC Algorithm
 
    The algorithm used to compute the Hop Field MAC is an AS-specific
-   choice.  The operator of an AS can freely choose any MAC algorithm
-   and the control service and routers of the AS do need to agree on the
-   algorithm used, but all implementations MUST support the Default Hop
-   Field MAC algorithm described below.
+   choice, although the Control Services and border routers within an AS
+   MUST use the same algorithm.  Implementations MUST also support the
+   Default Hop Field MAC algorithm as described below.
+
+4.1.1.3.1.  Default Hop Field MAC Algorithm
 
    The default MAC algorithm is AES-CMAC ([RFC4493]) truncated to
    48-bits, computed over the Info Field and the first 6 bytes of the
@@ -1974,10 +1979,10 @@ Table of Contents
      Figure 18: Input data to calculate the Hop Field MAC for the
                    default hop-field MAC algorithm
 
-4.1.1.4.  Alternative Hop Field MAC Algorithms
+4.1.1.3.2.  Alternative Hop Field MAC Algorithms
 
-   For alternative algorithms, the following requirements MUST all be
-   met:
+   For alternative MAC algorithms, the following requirements MUST all
+   be met:
 
    *  The Hop Field MAC field is computed as a function of the secret
       forwarding key, the Acc and Timestamp fields of the Info Field,
@@ -2725,9 +2730,9 @@ Table of Contents
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-09, 3 March 2025,
+              dekater-scion-pki-10, 6 September 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-09>.
+              scion-pki-10>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
