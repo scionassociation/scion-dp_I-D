@@ -146,6 +146,7 @@ Table of Contents
      Assignment
    Change Log
      draft-dekater-scion-dataplane-06
+     draft-dekater-scion-dataplane-06
      draft-dekater-scion-dataplane-05
      draft-dekater-scion-dataplane-04
      draft-dekater-scion-dataplane-03
@@ -2704,11 +2705,11 @@ Table of Contents
 
    This document has no IANA actions.
 
-   The SCION AS and ISD number are SCION-specific numbers.  They are
+   The ISD and SCION AS number are SCION-specific numbers.  They are
    currently allocated by Anapaya Systems, a provider of SCION-based
-   networking software and solutions (see [ISD-AS-assignments]).  This
-   task is currently being transitioned from Anapaya to the SCION
-   Association.
+   networking software and solutions (see [ISD-AS-assignments-Anapaya]).
+   This task is being transitioned from Anapaya to the SCION Association
+   (see [ISD-AS-assignments]).
 
 9.  References
 
@@ -2795,7 +2796,10 @@ Table of Contents
               panrg-scion-overview-06>.
 
    [ISD-AS-assignments]
-              "SCION ISD and AS Assignments", 2024,
+              "SCION Registry", 2025, <http://scion.org/registry/>.
+
+   [ISD-AS-assignments-Anapaya]
+              "SCION ISD and AS Assignments", 2025,
               <https://docs.anapaya.net/en/latest/resources/isd-as-
               assignments/>.
 
@@ -2905,6 +2909,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-06
+
+   *  Clarify MAC algorithm configuration, minor formatting fixes
 
 draft-dekater-scion-dataplane-06
 
