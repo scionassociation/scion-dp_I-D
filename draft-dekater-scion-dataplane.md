@@ -88,10 +88,14 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  ISD-AS-assignments:
+  ISD-AS-assignments-Anapaya:
     title: "SCION ISD and AS Assignments"
-    date: 2024
+    date: 2025
     target: https://docs.anapaya.net/en/latest/resources/isd-as-assignments/
+  ISD-AS-assignments:
+    title: "SCION Registry"
+    date: 2025
+    target: http://scion.org/registry/
   RFC1918:
   RFC2711:
   RFC4821:
@@ -1516,7 +1520,7 @@ However, the path choice of the endpoint may possibly be exploited by an attacke
 
 This document has no IANA actions.
 
-The SCION AS and ISD number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}). This task is currently being transitioned from Anapaya to the SCION Association.
+The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This task is being transitioned from Anapaya to the SCION Association (see {{ISD-AS-assignments}}).
 
 
 --- back
@@ -1574,6 +1578,11 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-dataplane-06
+{:numbered="false"}
+
+- Clarify MAC algorithm configuration, minor formatting fixes
 
 ## draft-dekater-scion-dataplane-06
 {:numbered="false"}
