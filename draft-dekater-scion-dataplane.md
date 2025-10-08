@@ -1285,7 +1285,7 @@ The source endpoint MUST perform the following steps to correctly initialize a p
      - The Construction Direction flag `C` = "1"
      - The value of the `Acc` = Acc<sub>i+1</sub>. For more details, see [](#def-acc).
 
-   - **UCase 3** <br> The path segment is traversed against construction direction. The full segment has "n" hops. In this case:
+   - **Case 3** <br> The path segment is traversed against construction direction. The full segment has "n" hops. In this case:
 
      - The Peering flag `P` = "0" or "1" (depending on whether the last Hop Field in the up-segment is a peering Hop Field)
      - The Construction Direction flag `C` = "0"
