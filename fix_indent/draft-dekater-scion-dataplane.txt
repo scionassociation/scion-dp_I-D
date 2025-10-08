@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 10 April 2026                                 SCION Association
+Expires: 11 April 2026                                 SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                          7 October 2025
+                                                          8 October 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 April 2026.
+   This Internet-Draft will expire on 11 April 2026.
 
 Copyright Notice
 
@@ -2113,7 +2113,7 @@ Table of Contents
           -  The value of the Acc = Acc_(i+1).  For more details, see
              Section 4.1.1.2.
 
-       *  *UCase 3*
+       *  *Case 3*
           The path segment is traversed against construction direction.
           The full segment has "n" hops.  In this case:
 
