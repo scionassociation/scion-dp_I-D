@@ -831,6 +831,7 @@ When a destination endpoint receives a SCION packet, it MAY use the path informa
    - Set the `CurrINF` and `CurrHF` to "0".
    - Reverse the order of the non-zero `SegLen` fields.
 
+Note that the destination endpoint, upon receiving a first packet, is not aware of the path MTU. When using a reversed path, it should use a mechanism to estimate its MTU (e.g., MTU discovery or estimate MTU from the largest packet received).
 
 ## Extension Headers {#ext-header}
 
@@ -1392,7 +1393,7 @@ Each administrator of SCION control services and routers is responsible for main
 
 SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{RFC2460}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.
 
-The MTU of a SCION path is defined as the minimum of the MTUs of the links traversed by that path. The control plane disseminates such values and makes them available to endpoints (see 'Path MTU in {{I-D.dekater-scion-controlplane}}).
+The MTU of a SCION path is defined as the minimum of the MTUs of the intra-AS and inter-AS links traversed by that path. The control plane disseminates such values and makes them available to the source endpoint (see 'Path MTU in {{I-D.dekater-scion-controlplane}}).
 
 The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the link's underlay encapsulation or native link-layer in either direction.
 
