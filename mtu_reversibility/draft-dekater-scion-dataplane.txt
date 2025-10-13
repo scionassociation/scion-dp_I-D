@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 15 April 2026                                 SCION Association
+Expires: 16 April 2026                                 SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         12 October 2025
+                                                         13 October 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 April 2026.
+   This Internet-Draft will expire on 16 April 2026.
 
 Copyright Notice
 
@@ -2382,9 +2382,9 @@ Table of Contents
    protocols such as SCMP rely only on such minimum MTU.
 
    The MTU of a SCION path is defined as the minimum of the MTUs of the
-   links traversed by that path.  The control plane disseminates such
-   values and makes them available to the source endpoint (see 'Path MTU
-   in [I-D.dekater-scion-controlplane]).
+   intra-AS and inter-AS links traversed by that path.  The control
+   plane disseminates such values and makes them available to the source
+   endpoint (see 'Path MTU in [I-D.dekater-scion-controlplane]).
 
    The MTU of each link may be discovered or administratively configured
    (current practice is for it to be configured).  It must be less than
