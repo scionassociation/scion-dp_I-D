@@ -2859,10 +2859,10 @@ Acknowledgments
    to this document.  We also thank the Information Security Group at
    ETH Zurich for their inputs based on their formal verification work
    of the SCION open source router implementation [PEREIRA2025].
-   Finally, we are indebted to the SCION development teams of Anapaya
-   and ETH Zurich, for their practical knowledge and for the
-   documentation about the SCION Data Plane, as well as to the authors
-   of [CHUAT22] - the book is an important source of input and
+   Finally, we are indebted to the SCION development teams of Anapaya,
+   ETH Zurich, and SCION Association for their practical knowledge and
+   for the documentation about the SCION Data Plane, as well as to the
+   authors of [CHUAT22] - the book is an important source of input and
    inspiration for this draft.
 
 Deployment Testing: SCIONLab
