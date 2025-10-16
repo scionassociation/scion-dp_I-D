@@ -1582,11 +1582,6 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-dataplane-06
 {:numbered="false"}
 
-- Clarify MAC algorithm configuration, minor formatting fixes
-
-## draft-dekater-scion-dataplane-06
-{:numbered="false"}
-
 - Figures: redraw and add aasvg version when possible
 - Clarify 0 as "unspecified" Interface ID
 - Use ASes within the documentation range in examples
