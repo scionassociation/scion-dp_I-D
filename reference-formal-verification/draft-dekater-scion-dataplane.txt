@@ -145,6 +145,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-07
      draft-dekater-scion-dataplane-06
      draft-dekater-scion-dataplane-05
      draft-dekater-scion-dataplane-04
@@ -2927,6 +2928,14 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-07
+
+   *  reference formal verification work
+
+   *  minor clarifications (MTU of reversed paths, MAC algorithm)
+
+   *  nits & indentation
 
 draft-dekater-scion-dataplane-06
 
