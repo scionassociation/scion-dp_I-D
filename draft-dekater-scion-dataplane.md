@@ -1627,6 +1627,14 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-dataplane-07
+{:numbered="false"}
+
+- reference formal verification work
+- minor clarifications (MTU of reversed paths, MAC algorithm)
+- nits & indentation
+
+
 ## draft-dekater-scion-dataplane-06
 {:numbered="false"}
 
