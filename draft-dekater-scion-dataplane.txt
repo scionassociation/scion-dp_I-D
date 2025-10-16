@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 18 April 2026                                 SCION Association
+Expires: 19 April 2026                                 SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         15 October 2025
+                                                         16 October 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 April 2026.
+   This Internet-Draft will expire on 19 April 2026.
 
 Copyright Notice
 
@@ -2118,7 +2118,7 @@ Table of Contents
           -  The value of the Acc = Acc_(i+1).  For more details, see
              Section 4.1.1.2.
 
-       *  *UCase 3*
+       *  *Case 3*
           The path segment is traversed against construction direction.
           The full segment has "n" hops.  In this case:
 
@@ -2172,105 +2172,99 @@ Table of Contents
    2.  If there is a segment switch at the current router, check that
        the ingress and egress interface links are either:
 
-   *  Both core
+       *  Both core
 
-   *  Parent-child or vice-versa
+       *  Parent-child or vice-versa
 
-   *  Peering-child or vice-versa
+       *  Peering-child or vice-versa
 
-   Link types above are defined in 'Path and Links' in
-   [I-D.dekater-scion-controlplane].  This check prevents valley use of
-   peering links or hair-pin segments. 3.  Check if the current Hop
-   Field is expired or originated in the future, i.e. the current Info
-   Field MUST NOT have a timestamp in the future, as defined in
-   Section 2.3.2.3.  If either is true, the router MUST drop the packet.
+       Link types above are defined in 'Path and Links' in
+       [I-D.dekater-scion-controlplane].  This check prevents valley use
+       of peering links or hair-pin segments.
 
-   The next steps depend on the direction of travel and whether this
-   segment includes a peering Hop Field.  Both features are indicated by
-   the settings of the Construction Direction flag C and the Peering
-   flag P in the current Info Field, so the settings of both flags MUST
-   be checked.  The following combinations are possible:
+   3.  Check if the current Hop Field is expired or originated in the
+       future, i.e. the current Info Field MUST NOT have a timestamp in
+       the future, as defined in Section 2.3.2.3.  If either is true,
+       the router MUST drop the packet.
 
-   *  The packet traverses the path segment in *construction direction*
-      (C = "1" and P = "0" or "1").  In this case, proceed with step 4.
+   4.  If the packet traverses the path segment *against construction
+       direction* (Construction Direction flag C = "0") perform this
+       step:
 
-   *  The packet traverses the path segment *against construction
-      direction* (C = "0").  The following cases are possible:
+       *  *Case 1*
+          The path segment includes *no peering Hop Field* (Peering flag
+          P = "0").  In this case, the ingress border router MUST take
+          the following step(s):
 
-      -  *Case 1*
-         The path segment includes *no peering Hop Field* (P = "0").  In
-         this case, the ingress border router MUST take the following
-         step(s):
+          -  Compute the value of the Accumulator Acc as follows:
 
-         o  Compute the value of the Accumulator Acc as follows:
+             Acc = Acc_(i+1) XOR MAC_i
+             where
+             Acc_(i+1) = the current value of the field Acc in the
+             current Info Field
+             MAC_i = the value of MAC_i in the current Hop Field
+             representing AS_i
 
-            Acc = Acc_(i+1) XOR MAC_i
-            where
-            Acc_(i+1) = the current value of the field Acc in the
-            current Info Field
-            MAC_i = the value of MAC_i in the current Hop Field
-            representing AS_i
+             *Note:* In the case described here, the packet travels
+             against direction of beaconing, i.e. the packet comes from
+             AS_(i+1) and will enter AS_i.  This means that the Acc
+             field of this incoming packet represents the value of
+             Acc_(i+1), but to compute the MAC_i for the current AS_i,
+             we need the value of Acc_i (see Section 4.1.1.2).  As the
+             border router knows that the formula for Acc_(i+1) = Acc_i
+             XOR MAC_i [:2] (see also Section 4.1.1.2), and because the
+             values of Acc_(i+1) and MAC_i are known, the router will be
+             able to recover the value Acc_i based on the aforementioned
+             formula for Acc.
 
-            *Note:* In the case described here, the packet travels
-            against direction of beaconing, i.e. the packet comes from
-            AS_(i+1) and will enter AS_i.  This means that the Acc field
-            of this incoming packet represents the value of Acc_(i+1),
-            but to compute the MAC_i for the current AS_i, we need the
-            value of Acc_i (see Section 4.1.1.2).  As the border router
-            knows that the formula for Acc_(i+1) = Acc_i XOR MAC_i [:2]
-            (see also Section 4.1.1.2), and because the values of
-            Acc_(i+1) and MAC_i are known, the router will be able to
-            recover the value Acc_i based on the aforementioned formula
-            for Acc.
+          -  Replace the current value of the field Acc in the current
+             Info Field with the newly calculated value of Acc.
 
-         o  Replace the current value of the field Acc in the current
-            Info Field with the newly calculated value of Acc.
+          -  Compute the MAC^Verify_i over the Hop Field of the current
+             AS_i.  For this, use the formula in Section 4.1.1.1, but
+             replace SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2] in the
+             formula with the value of Acc as just set in the Acc field
+             in the current Info Field.
 
-         o  Compute the MAC^Verify_i over the Hop Field of the current
-            AS_i.  For this, use the formula in Section 4.1.1.1, but
-            replace SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2] in the
-            formula with the value of Acc as just set in the Acc field
-            in the current Info Field.
+          -  If the MAC_i in the current Hop Field does not match the
+             just calculated MAC^Verify_i, drop the packet.
 
-         o  If the MAC_i in the current Hop Field does not match the
-            just calculated MAC^Verify_i, drop the packet.
+          -  If the current Hop Field is the last Hop Field in the path
+             segment as determined by the value of the current SegLen
+             and other metadata in the path meta header, increment both
+             CurrInf and CurrHF in the path meta header.  Proceed with
+             step 5.
 
-         o  If the current Hop Field is the last Hop Field in the path
-            segment as determined by the value of the current SegLen and
-            other metadata in the path meta header, increment both
-            CurrInf and CurrHF in the path meta header.  Proceed with
-            step 4.
+       *  *Case 2*
+          The path segment includes a *peering Hop Field* (P = "1"), but
+          the current hop is *not* the peering hop (i.e. the current hop
+          is *neither* the last hop of the first segment *nor* the first
+          hop of the second segment).  In this case, the ingress border
+          router needs to perform the steps previously described for the
+          path segment without peering Hop Field, but the border router
+          MUST NOT increment CurrInf and MUST NOT increment CurrHF in
+          the path meta header.  Proceed with step 5.
 
-      -  *Case 2*
-         The path segment includes a *peering Hop Field* (P = "1"), but
-         the current hop is *not* the peering hop (i.e. the current hop
-         is *neither* the last hop of the first segment *nor* the first
-         hop of the second segment).  In this case, the ingress border
-         router needs to perform the steps previously described for the
-         path segment without peering Hop Field, but the border router
-         MUST NOT increment CurrInf and MUST NOT increment CurrHF in the
-         path meta header.  Proceed with step 4.
+       *  *Case 3*
+          The path segment includes a *peering Hop Field* (P = "1"), and
+          the current Hop Field _is_ the peering Hop Field (i.e. the
+          current hop is *either* the last hop of the first segment *or*
+          the first hop of the second segment).  In this case, the
+          ingress border router MUST take the following step(s):
 
-      -  *Case 3*
-         The path segment includes a *peering Hop Field* (P = "1"), and
-         the current Hop Field _is_ the peering Hop Field (i.e. the
-         current hop is *either* the last hop of the first segment *or*
-         the first hop of the second segment).  In this case, the
-         ingress border router MUST take the following step(s):
+          -  Compute MAC^Peer_i.  For this, use the formula in
+             Section 4.1.2, but replace SegID XOR MAC_0[:2] ... XOR
+             MAC_i [:2] in the formula with the value of Acc as set in
+             the Acc field in the current Info Field (this is the value
+             of Acc as it comes with the packet).
 
-         o  Compute MAC^Peer_i.  For this, use the formula in
-            Section 4.1.2, but replace SegID XOR MAC_0[:2] ... XOR MAC_i
-            [:2] in the formula with the value of Acc as set in the Acc
-            field in the current Info Field (this is the value of Acc as
-            it comes with the packet).
+          -  If the MAC_i in the current Hop Field does not match the
+             just calculated MAC^Peer_i, drop the packet.
 
-         o  If the MAC_i in the current Hop Field does not match the
-            just calculated MAC^Peer_i, drop the packet.
+          -  Increment both CurrInf and CurrHF in the path meta header.
+             Proceed with step 5.
 
-         o  Increment both CurrInf and CurrHF in the path meta header.
-            Proceed with step 4.
-
-   1.  Forward the packet to the egress border router (based on the
+   5.  Forward the packet to the egress border router (based on the
        egress Interface ID in the current Hop Field) or to the
        destination endpoint, if this is the destination AS.
 
@@ -2715,11 +2709,11 @@ Table of Contents
 
    This document has no IANA actions.
 
-   The SCION AS and ISD number are SCION-specific numbers.  They are
+   The ISD and SCION AS number are SCION-specific numbers.  They are
    currently allocated by Anapaya Systems, a provider of SCION-based
-   networking software and solutions (see [ISD-AS-assignments]).  This
-   task is currently being transitioned from Anapaya to the SCION
-   Association.
+   networking software and solutions (see [ISD-AS-assignments-Anapaya]).
+   This task is being transitioned from Anapaya to the SCION Association
+   (see [ISD-AS-assignments]).
 
 9.  References
 
@@ -2806,7 +2800,10 @@ Table of Contents
               panrg-scion-overview-06>.
 
    [ISD-AS-assignments]
-              "SCION ISD and AS Assignments", 2024,
+              "SCION Registry", 2025, <http://scion.org/registry/>.
+
+   [ISD-AS-assignments-Anapaya]
+              "SCION ISD and AS Assignments", 2025,
               <https://docs.anapaya.net/en/latest/resources/isd-as-
               assignments/>.
 
@@ -2846,13 +2843,15 @@ Acknowledgments
 
    Many thanks go to Matthias Frei (SCION Association), Juan A.  Garcia
    Prado (ETH Zurich) and Kevin Meynell (SCION Association) for
-   reviewing this document.  We are also very grateful to Adrian Perrig
-   (ETH Zurich), for providing guidance and feedback about each aspect
-   of SCION.  Finally, we are indebted to the SCION development teams of
+   contributing to this document.  We are also very grateful to Adrian
+   Perrig (ETH Zurich), for providing guidance and feedback about each
+   aspect of SCION.  We are also indebted to the development teams of
    Anapaya and ETH Zurich, for their practical knowledge and for the
    documentation about the SCION Data Plane, as well as to the authors
    of [CHUAT22] - the book is an important source of input and
-   inspiration for this draft.
+   inspiration for this draft.  Finally, we thank our reviewers Harald
+   Alvestrand, Joel Halpern, Ron Bonica, Michael McBride, David Galan
+   for their valuable feedback.
 
 Deployment Testing: SCIONLab
 
