@@ -112,6 +112,54 @@ informative:
         -
          ins: V. Shoup
          name: Victor Shoup
+  PEREIRA2025:
+    title: "Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router"
+    date: 2025
+    author:
+      -
+        ins: J. Pereira
+        name: João Pereira
+        org: ETH Zürich
+      -
+        ins: T. Klenze
+        name: Tobias Klenze
+        org: Independent
+      -
+        ins: S. Giampietro
+        name: Sofia Giampietro
+        org: ETH Zürich
+      -
+        ins:  M. Limbeck
+        name:  Markus Limbeck
+        org: ETH Zürich
+      -
+        ins: Dionysios Spiliopoulos
+        name: D. Spiliopoulos
+        org: ETH Zürich
+      -
+        ins:  F. Wolf
+        name:  Felix Wolf
+        org: ETH Zürich
+      -
+        ins:  M. Eilers
+        name:  Marco Eilers
+        org: ETH Zürich
+      -
+        ins:  C. Sprenger
+        name:  Christoph Sprenger
+        org: ETH Zürich
+      -
+        ins:  D. Basin
+        name:  David Basin
+        org: ETH Zürich
+      -
+        ins:  P. Müller
+        name:  Peter Müller
+        org: ETH Zürich
+      -
+        ins:  A. Perrig
+        name:  Adrian Perrig
+        org: ETH Zürich
   SCIONLAB:
     title: SCIONLAB - A Next-Generation Internet Testbed
     date: 2020
@@ -1529,7 +1577,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association) for contributing to this document. We are also very grateful to Adrian Perrig (ETH Zurich), for providing guidance and feedback about each aspect of SCION. We are also indebted to the development teams of Anapaya and ETH Zurich, for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft. Finally, we thank our reviewers Harald Alvestrand, Joel Halpern, Ron Bonica, Michael McBride, David Galan for their valuable feedback.
+Many thanks go to Harald Alvestrand (Google), Joel Halpern (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper) for reviewing this document. We also thank Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs to this document. We also thank the Information Security Group at ETH Zurich for their inputs based on their formal verification work of the SCION open source router implementation [PEREIRA2025]. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and SCION Association for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Deployment Testing: SCIONLab
@@ -1579,6 +1627,14 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-dataplane-07
+{:numbered="false"}
+
+- reference formal verification work
+- minor clarifications (MTU of reversed paths, MAC algorithm)
+- nits & indentation
+
 
 ## draft-dekater-scion-dataplane-06
 {:numbered="false"}
