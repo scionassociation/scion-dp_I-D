@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 19 April 2026                                 SCION Association
+Expires: 22 April 2026                                 SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         16 October 2025
+                                                         19 October 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2026.
+   This Internet-Draft will expire on 22 April 2026.
 
 Copyright Notice
 
@@ -145,6 +145,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-07
      draft-dekater-scion-dataplane-06
      draft-dekater-scion-dataplane-05
      draft-dekater-scion-dataplane-04
@@ -2807,6 +2808,13 @@ Table of Contents
               <https://docs.anapaya.net/en/latest/resources/isd-as-
               assignments/>.
 
+   [PEREIRA2025]
+              Pereira, J., Klenze, T., Giampietro, S., Limbeck, M.,
+              Dionysios Spiliopoulos, Wolf, F., Eilers, M., Sprenger,
+              C., Basin, D., Müller, P., and A. Perrig, "Protocols to
+              Code: Formal Verification of a Secure Next-Generation
+              Internet Router", 2025.
+
    [RFC1918]  Rekhter, Y., Moskowitz, B., Karrenberg, D., de Groot, G.
               J., and E. Lear, "Address Allocation for Private
               Internets", BCP 5, RFC 1918, DOI 10.17487/RFC1918,
@@ -2841,17 +2849,19 @@ Table of Contents
 
 Acknowledgments
 
-   Many thanks go to Matthias Frei (SCION Association), Juan A.  Garcia
-   Prado (ETH Zurich) and Kevin Meynell (SCION Association) for
-   contributing to this document.  We are also very grateful to Adrian
-   Perrig (ETH Zurich), for providing guidance and feedback about each
-   aspect of SCION.  We are also indebted to the development teams of
-   Anapaya and ETH Zurich, for their practical knowledge and for the
-   documentation about the SCION Data Plane, as well as to the authors
-   of [CHUAT22] - the book is an important source of input and
-   inspiration for this draft.  Finally, we thank our reviewers Harald
-   Alvestrand, Joel Halpern, Ron Bonica, Michael McBride, David Galan
-   for their valuable feedback.
+   Many thanks go to Harald Alvestrand (Google), Joel Halpern
+   (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper) for
+   reviewing this document.  We also thank Matthias Frei (SCION
+   Association), Juan A.  Garcia Prado (ETH Zurich) and Kevin Meynell
+   (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs
+   to this document.  We also thank the Information Security Group at
+   ETH Zurich for their inputs based on their formal verification work
+   of the SCION open source router implementation [PEREIRA2025].
+   Finally, we are indebted to the SCION development teams of Anapaya,
+   ETH Zurich, and SCION Association for their practical knowledge and
+   for the documentation about the SCION Data Plane, as well as to the
+   authors of [CHUAT22] - the book is an important source of input and
+   inspiration for this draft.
 
 Deployment Testing: SCIONLab
 
@@ -2915,6 +2925,14 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-07
+
+   *  reference formal verification work
+
+   *  minor clarifications (MTU of reversed paths, MAC algorithm)
+
+   *  nits & indentation
 
 draft-dekater-scion-dataplane-06
 
