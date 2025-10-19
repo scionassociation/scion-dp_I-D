@@ -88,10 +88,14 @@ informative:
         ins: A. Perrig
         name: Adrian Perrig
         org: ETH Zuerich
-  ISD-AS-assignments:
+  ISD-AS-assignments-Anapaya:
     title: "SCION ISD and AS Assignments"
-    date: 2024
+    date: 2025
     target: https://docs.anapaya.net/en/latest/resources/isd-as-assignments/
+  ISD-AS-assignments:
+    title: "SCION Registry"
+    date: 2025
+    target: http://scion.org/registry/
   RFC1918:
   RFC2711:
   RFC4821:
@@ -1334,7 +1338,7 @@ The source endpoint MUST perform the following steps to correctly initialize a p
      - The Construction Direction flag `C` = "1"
      - The value of the `Acc` = Acc<sub>i+1</sub>. For more details, see [](#def-acc).
 
-   - **UCase 3** <br> The path segment is traversed against construction direction. The full segment has "n" hops. In this case:
+   - **Case 3** <br> The path segment is traversed against construction direction. The full segment has "n" hops. In this case:
 
      - The Peering flag `P` = "0" or "1" (depending on whether the last Hop Field in the up-segment is a peering Hop Field)
      - The Construction Direction flag `C` = "0"
@@ -1358,44 +1362,41 @@ A SCION ingress border router MUST perform the following steps when it receives 
 1. Check that the interface through which the packet was received is equal to the ingress interface in the current Hop Field. If not, the router MUST drop the packet.
 2. If there is a segment switch at the current router, check that the ingress and egress interface links are either:
 
-  - Both core
-  - Parent-child or vice-versa
-  - Peering-child or vice-versa
+    - Both core
+    - Parent-child or vice-versa
+    - Peering-child or vice-versa
 
-Link types above are defined in 'Path and Links' in {{I-D.dekater-scion-controlplane}}. This check prevents valley use of peering links or hair-pin segments.
+    Link types above are defined in 'Path and Links' in {{I-D.dekater-scion-controlplane}}. This check prevents valley use of peering links or hair-pin segments.
+
 3. Check if the current Hop Field is expired or originated in the future, i.e. the current Info Field MUST NOT have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 
-The next steps depend on the direction of travel and whether this segment includes a peering Hop Field. Both features are indicated by the settings of the Construction Direction flag `C` and the Peering flag `P` in the current Info Field, so the settings of both flags MUST be checked. The following combinations are possible:
+4. If the packet traverses the path segment **against construction direction** (Construction Direction flag `C` = "0") perform this step:
 
-- The packet traverses the path segment in **construction direction** (`C` = "1" and `P` = "0" or "1"). In this case, proceed with step 4.
+    - **Case 1** <br> The path segment includes **no peering Hop Field** (Peering flag `P` = "0"). In this case, the ingress border router MUST take the following step(s):
 
-- The packet traverses the path segment **against construction direction** (`C` = "0"). The following cases are possible:
+        - Compute the value of the Accumulator Acc as follows:
 
-  - **Case 1** <br> The path segment includes **no peering Hop Field** (`P` = "0"). In this case, the ingress border router MUST take the following step(s):
+            Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
+            where <br>
+            Acc<sub>i+1</sub> = the current value of the field `Acc` in the current Info Field <br>
+            MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current Hop Field representing AS<sub>i</sub>
 
-    - Compute the value of the Accumulator Acc as follows:
+            **Note:** In the case described here, the packet travels against direction of beaconing, i.e. the packet comes from AS<sub>i+1</sub> and will enter AS<sub>i</sub>. This means that the `Acc` field of this incoming packet represents the value of Acc<sub>i+1</sub>, but to compute the MAC<sub>i</sub> for the current AS<sub>i</sub>, we need the value of Acc<sub>i</sub> (see [](#def-acc)). As the border router knows that the formula for Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2] (see also [](#def-acc)), and because the values of Acc<sub>i+1</sub> and MAC<sub>i</sub> are known, the router will be able to recover the value Acc<sub>i</sub> based on the aforementioned formula for Acc.
 
-        Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
-        where <br>
-        Acc<sub>i+1</sub> = the current value of the field `Acc` in the current Info Field <br>
-        MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current Hop Field representing AS<sub>i</sub>
+        - Replace the current value of the field `Acc` in the current Info Field with the newly calculated value of Acc.
+        - Compute the MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in [](#hf-mac-calc), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of Acc as just set in the `Acc` field in the current Info Field.
+        - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Verify</sup><sub>i</sub>, drop the packet.
+        - If the current Hop Field is the last Hop Field in the path segment as determined by the value of the current `SegLen` and other metadata in the path meta header, increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 5.
 
-        **Note:** In the case described here, the packet travels against direction of beaconing, i.e. the packet comes from AS<sub>i+1</sub> and will enter AS<sub>i</sub>. This means that the `Acc` field of this incoming packet represents the value of Acc<sub>i+1</sub>, but to compute the MAC<sub>i</sub> for the current AS<sub>i</sub>, we need the value of Acc<sub>i</sub> (see [](#def-acc)). As the border router knows that the formula for Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2] (see also [](#def-acc)), and because the values of Acc<sub>i+1</sub> and MAC<sub>i</sub> are known, the router will be able to recover the value Acc<sub>i</sub> based on the aforementioned formula for Acc.
+    - **Case 2** <br> The path segment includes a **peering Hop Field** (`P` = "1"), but the current hop is **not** the peering hop (i.e. the current hop is **neither** the last hop of the first segment **nor** the first hop of the second segment). In this case, the ingress border router needs to perform the steps previously described for the path segment without peering Hop Field, but the border router MUST NOT increment `CurrInf` and MUST NOT increment `CurrHF` in the path meta header. Proceed with step 5.
 
-    - Replace the current value of the field `Acc` in the current Info Field with the newly calculated value of Acc.
-    - Compute the MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in [](#hf-mac-calc), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of Acc as just set in the `Acc` field in the current Info Field.
-    - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Verify</sup><sub>i</sub>, drop the packet.
-    - If the current Hop Field is the last Hop Field in the path segment as determined by the value of the current `SegLen` and other metadata in the path meta header, increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
+    - **Case 3** <br> The path segment includes a **peering Hop Field** (`P` = "1"), and the current Hop Field *is* the peering Hop Field (i.e. the current hop is **either** the last hop of the first segment **or** the first hop of the second segment). In this case, the ingress border router MUST take the following step(s):
 
-  - **Case 2** <br> The path segment includes a **peering Hop Field** (`P` = "1"), but the current hop is **not** the peering hop (i.e. the current hop is **neither** the last hop of the first segment **nor** the first hop of the second segment). In this case, the ingress border router needs to perform the steps previously described for the path segment without peering Hop Field, but the border router MUST NOT increment `CurrInf` and MUST NOT increment `CurrHF` in the path meta header. Proceed with step 4.
+        - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i [:2]` in the formula with the value of Acc as set in the `Acc` field in the current Info Field (this is the value of Acc as it comes with the packet).
+        - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.
+        - Increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 5.
 
-  - **Case 3** <br> The path segment includes a **peering Hop Field** (`P` = "1"), and the current Hop Field *is* the peering Hop Field (i.e. the current hop is **either** the last hop of the first segment **or** the first hop of the second segment). In this case, the ingress border router MUST take the following step(s):
-
-    - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i [:2]` in the formula with the value of Acc as set in the `Acc` field in the current Info Field (this is the value of Acc as it comes with the packet).
-    - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.
-    - Increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 4.
-
-4. Forward the packet to the egress border router (based on the egress Interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS.
+5. Forward the packet to the egress border router (based on the egress Interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS.
 
 #### Steps at Egress Border Router
 
@@ -1568,7 +1569,7 @@ However, the path choice of the endpoint may possibly be exploited by an attacke
 
 This document has no IANA actions.
 
-The SCION AS and ISD number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments}}). This task is currently being transitioned from Anapaya to the SCION Association.
+The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This task is being transitioned from Anapaya to the SCION Association (see {{ISD-AS-assignments}}).
 
 
 --- back
