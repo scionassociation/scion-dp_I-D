@@ -1631,9 +1631,10 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-dataplane-07
 {:numbered="false"}
 
-- reference formal verification work
-- minor clarifications (MTU of reversed paths, MAC algorithm)
-- nits & indentation
+- Clarify MTU of reversed paths and MAC algorithm
+- Fix and reduce nested indentations in "Steps at Ingress Border Router"
+- Reference formal verification work and acknowledge reviewers
+- Nits
 
 
 ## draft-dekater-scion-dataplane-06
