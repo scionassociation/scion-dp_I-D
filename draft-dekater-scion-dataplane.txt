@@ -2928,11 +2928,14 @@ Change Log
 
 draft-dekater-scion-dataplane-07
 
-   *  reference formal verification work
+   *  Clarify MTU of reversed paths and MAC algorithm
 
-   *  minor clarifications (MTU of reversed paths, MAC algorithm)
+   *  Fix and reduce nested indentations in "Steps at Ingress Border
+      Router"
 
-   *  nits & indentation
+   *  Reference formal verification work and acknowledge reviewers
+
+   *  Nits
 
 draft-dekater-scion-dataplane-06
 
