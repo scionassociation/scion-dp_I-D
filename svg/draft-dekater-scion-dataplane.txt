@@ -638,7 +638,7 @@ Table of Contents
  |    |         |            |       |         |         |           |
  |    |         |            |       |         |         |           |
  |  +-+-+     +-+-+        +-+-+   +-+-+     +-+-+     +-+-+       +-+-+
- v  |*  |     |*  |        |*  |   | * |     |*  |     |*  |       |*  |
+ v  |*  |     |*  |        |*  |   |*  |     |*  |     |*  |       |*  |
     +---+     +---+        +---+   +---+     +---+     +---+       +---+
 
  Figure 2: Illustration of valid path segment combinations.  Each node
