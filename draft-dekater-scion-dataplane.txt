@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 22 April 2026                                 SCION Association
+Expires: 23 April 2026                                 SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         19 October 2025
+                                                         20 October 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 April 2026.
+   This Internet-Draft will expire on 23 April 2026.
 
 Copyright Notice
 
@@ -582,8 +582,8 @@ Table of Contents
 
   +---+                            :
   | C | = Core AS                  :  - - - - = unused links
-  +---+                            :
-
+  +---+
+                                   p---p = peering link
   +---+
   |*  | = source/destination AS    ------> = direction of beaconing
   +---+
