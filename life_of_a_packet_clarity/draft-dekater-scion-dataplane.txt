@@ -1616,10 +1616,10 @@ Table of Contents
       destined for destination Endpoint B in AS ff00:0:3, with payload
       P.  Endpoint A sends the packet (for the chosen forwarding path)
       to the next SCION router as provided by its control service, which
-      is in this case Router R1.  Endpoint A encapsulates the SCION
+      is in this case router R1.  Endpoint A encapsulates the SCION
       packet into an underlay UDP/IPv4 header for the local delivery to
-      Router R1, utilizing AS ff00:0:2's internal routing protocol.  The
-      current Info Field is _IF1_. Upon receiving the packet, Router R1
+      router R1, utilizing AS ff00:0:2's internal routing protocol.  The
+      current Info Field is _IF1_. Upon receiving the packet, router R1
       will forward the packet on the egress interface that Endpoint A
       has included into the first Hop Field of the SCION header.
 
@@ -1648,8 +1648,8 @@ Table of Contents
       Info Field of the specified SCION path, which is the Info Field
       indicated by the current Info Field pointer.  In this case, it is
       the first Info Field _IF1_. The current Hop Field is the first Hop
-      Field (0,i2a), which instructs Router R1 to forward the packet on
-      its interface i2a.  After reading the current Hop Field, Router R1
+      Field (0,i2a), which instructs router R1 to forward the packet on
+      its interface i2a.  After reading the current Hop Field, router R1
       moves the pointer forward by one position to the second Hop Field
       (i1a,0).
 
@@ -1682,8 +1682,8 @@ Table of Contents
       the last Hop Field of the current path segment, and hence moves
       the pointer from the current Info Field to the next Info Field
       _IF2_. The corresponding current Hop Field is (0,i1b), which
-      contains egress interface i1b.  Router maps the i1b interface ID
-      to egress router R3, it therefore encapsulates the SCION packet
+      contains egress interface i1b.  The router maps the i1b interface
+      ID to egress router R3, it therefore encapsulates the SCION packet
       inside an intra-AS underlay IP packet with the address of router
       R3 as the underlay destination.
 
@@ -1711,7 +1711,7 @@ Table of Contents
       router R3 inspects the current Hop Field in the SCION header, uses
       interface i1b to forward the packet to its neighbor SCION router
       R4 of AS ff00:0:3, and moves the current hop-field pointer
-      forward.  It adds an IP header to reach Router R4.
+      forward.  It adds an IP header to reach router R4.
 
        +=============+==============================+=============+
        | Field       | Value                        | Description |

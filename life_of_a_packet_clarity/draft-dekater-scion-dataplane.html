@@ -3562,7 +3562,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 The current Info Field (with metadata on the current path segment) in the SCION header is depicted as <em>italic</em> in the tables. The current Hop Field, representing the current AS, is shown <strong>bold</strong>. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel the SCION packet.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2-2.1">
-            <p id="section-3.2-2.1.1"><em>Step 1 -</em> <strong>A-&gt;R1</strong>: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case Router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to Router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is <em>IF1</em>. Upon receiving the packet, Router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-2.1.1"><em>Step 1 -</em> <strong>A-&gt;R1</strong>: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is <em>IF1</em>. Upon receiving the packet, router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <span id="name-snapshot-header-step-1-a-r1"></span><table class="center" id="table-6">
@@ -3607,7 +3607,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
         </table>
 <ul class="normal">
 <li class="normal" id="section-3.2-4.1">
-            <p id="section-3.2-4.1.1"><em>Step 2 -</em> <strong>R1-&gt;R2</strong>: <br> Router R1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field <em>IF1</em>. The current Hop Field is the first Hop Field (0,i2a), which instructs Router R1 to forward the packet on its interface i2a. After reading the current Hop Field, Router R1 moves the pointer forward by one position to the second Hop Field (i1a,0).<a href="#section-3.2-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-4.1.1"><em>Step 2 -</em> <strong>R1-&gt;R2</strong>: <br> Router R1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field <em>IF1</em>. The current Hop Field is the first Hop Field (0,i2a), which instructs router R1 to forward the packet on its interface i2a. After reading the current Hop Field, router R1 moves the pointer forward by one position to the second Hop Field (i1a,0).<a href="#section-3.2-4.1.1" class="pilcrow">¶</a></p>
 <p id="section-3.2-4.1.2">
 The link shown here is an example of not using a UDP/IP underlay. Although most implementations use such an encapsulation, SCION only requires link-layer connectivity. What is used for one given inter-AS link is a function of the available implementations at each end, the available infrastructure, and the joint preference of the two ASes administrators.<a href="#section-3.2-4.1.2" class="pilcrow">¶</a></p>
 </li>
@@ -3644,7 +3644,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
         </table>
 <ul class="normal">
 <li class="normal" id="section-3.2-6.1">
-            <p id="section-3.2-6.1.1"><em>Step 3 -</em> <strong>R2-&gt;R3</strong>: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field. Otherwise, the packet is dropped by router R2. The router notices that it has consumed the last Hop Field of the current path segment, and hence moves the pointer from the current Info Field to the next Info Field <em>IF2</em>. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. Router maps the i1b interface ID to egress router R3, it therefore encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-6.1.1"><em>Step 3 -</em> <strong>R2-&gt;R3</strong>: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field. Otherwise, the packet is dropped by router R2. The router notices that it has consumed the last Hop Field of the current path segment, and hence moves the pointer from the current Info Field to the next Info Field <em>IF2</em>. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. The router maps the i1b interface ID to egress router R3, it therefore encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <span id="name-snapshot-header-step-3-r2-r"></span><table class="center" id="table-8">
@@ -3690,7 +3690,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
         </table>
 <ul class="normal">
 <li class="normal" id="section-3.2-8.1">
-            <p id="section-3.2-8.1.1"><em>Step 4 -</em> <strong>R3-&gt;R4</strong>: <br> router R3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION router R4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach Router R4.<a href="#section-3.2-8.1.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-8.1.1"><em>Step 4 -</em> <strong>R3-&gt;R4</strong>: <br> router R3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION router R4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach router R4.<a href="#section-3.2-8.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <span id="name-snapshot-header-step-4-r3-r"></span><table class="center" id="table-9">
