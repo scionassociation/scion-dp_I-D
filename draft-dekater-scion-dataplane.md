@@ -1107,7 +1107,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | SCION path  | - *IF1* **(0,i2a)** (i1a,0) <br> - IF2 (0,i1b) (i3a,0)        |                             |
 | UDP port    | SRC = 30041  <br> DST = 30041                                 |                             |
 | IP          | SRC = 203.0.113.6 <br> DST = 203.0.113.17                     |  Endpoint A <br>  Router R1 |
-| Link layer  | SRC=A, DST=R1                                                 |                             |
+| Link layer  | SRC=A <br> DST=R1                                                 |                             |
 {: title="Snapshot header - step 1 - A->R1"}
 
 
@@ -1119,7 +1119,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 |-------------+---------------------------------------------------------------+-----------------------------|
 | SCION addr. | SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7  | Endpoint A <br> Endpoint B  |
 | SCION path  | - *IF1* (0,i2a) **(i1a,0)**  <br>  - IF2 (0,i1b) (i3a,0)      |                             |
-| Link layer  | SRC=R1, DST=R2                                                |                             |
+| Link layer  | SRC=R1 <br> DST=R2                                            |                             |
 {: title="Snapshot header - step 2 - R1 -> R2"}
 
 
@@ -1129,9 +1129,9 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 |-------------+--------------------------------------------------------------+----------------------------|
 | SCION addr. | SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7 | Endpoint A <br> Endpoint B |
 | SCION path  | - IF1 (0,i2a) (i1a,0) <br>   - *IF2* **(0,i1b)** (i3a,0)     |                            |
-| UDP port    | SRC = 30041 <br> DST = 30041 <br>     |
-| IP          | SRC = 198.51.100.1 <br> DST = 198.51.100.4                   | Router R2 <br> Router R3 |
-| Link layer  | SRC=R2, DST=R3                                        |
+| UDP port    | SRC = 30041 <br> DST = 30041                                 |                            |
+| IP          | SRC = 198.51.100.1 <br> DST = 198.51.100.4                   | Router R2 <br> Router R3   |
+| Link layer  | SRC=R2 <br> DST=R3                                           |                            |
 {: title="Snapshot header - step 3 -  R2 -> R3"}
 
 
@@ -1144,7 +1144,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | SCION path  | - IF1 (0,i2a) (i1a,0) <br>   - *IF2* (0,i1b) **(i3a,0)**       |                             |
 | UDP port    | SRC = 30041 <br> DST = 30041 <br>                              |                             |
 | IP          | SRC = 198.51.100.17 <br> DST = 198.51.100.18                   | Router R3 <br> Router R4    |
-| Link layer  | SRC=R3, DST=R4                                                 |                             |
+| Link layer  | SRC=R3 <br> DST=R4                                             |                             |
 {: title="Snapshot header - step 4 - R3 -> R4"}
 
 
@@ -1156,7 +1156,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | SCION path  | - IF1 (0,i2a) (i1a,0) <br>  - *IF2* (0,i1b) **(i3a,0)** <br>   |                             |
 | UDP port    | SRC = 30041  <br> DST = 30041 <br>                             |                             |
 | IP          | SRC = 192.0.2.34 <br> DST = 192.0.2.7                          | Router R4 <br> Endpoint B   |
-| Link layer  | SRC=R4, DST=B                                                  |                             |
+| Link layer  | SRC=R4 <br> DST=B                                              |                             |
 {: title="Snapshot header - step 5 - R4 -> B"}
 
 When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also [](#reverse)).
