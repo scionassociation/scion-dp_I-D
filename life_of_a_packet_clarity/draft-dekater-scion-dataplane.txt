@@ -2900,6 +2900,8 @@ draft-dekater-scion-dataplane-08
 
    *  Small clarifications and nits
 
+   *  Life of a SCION Data Packet: improve clarity if text and tables
+
    *  Remove use of decimal notation in tables 3 and 4
 
 draft-dekater-scion-dataplane-07
