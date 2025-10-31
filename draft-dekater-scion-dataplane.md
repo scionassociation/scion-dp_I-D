@@ -435,6 +435,8 @@ The SCION Data Plane provides *path authorization*. This property ensures that d
 
 The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an OPTIONAL extension header, see {{figure-2}} below.
 
+The 4 byte alignment is to allow header length to be computed based on the HdrLen field (see [](#common-header)).
+
 <figure anchor="_figure-2">
 <name>High-level SCION header structure, non-byte aligned</name>
 <artset>
