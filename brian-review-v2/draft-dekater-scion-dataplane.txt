@@ -145,6 +145,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-08
      draft-dekater-scion-dataplane-07
      draft-dekater-scion-dataplane-06
      draft-dekater-scion-dataplane-05
@@ -695,7 +696,9 @@ Table of Contents
 
    The SCION packet header is aligned to 4 bytes.  It is composed of a
    common header, an address header, a path header, and an OPTIONAL
-   extension header, see Figure 3 below.
+   extension header, see Figure 3 below.  The 4 byte alignment is to
+   allow header length to be computed based on the HdrLen field (see
+   Section 2.1).
 
    +--------------------------------------------------------+
    |                     Common header                      |
@@ -2849,18 +2852,18 @@ Table of Contents
 Acknowledgments
 
    Many thanks go to Harald Alvestrand (Google), Joel Halpern
-   (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper) for
-   reviewing this document.  We also thank Matthias Frei (SCION
-   Association), Juan A.  Garcia Prado (ETH Zurich) and Kevin Meynell
-   (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs
-   to this document.  We also thank the Information Security Group at
-   ETH Zurich for their inputs based on their formal verification work
-   of the SCION open source router implementation [PEREIRA2025].
-   Finally, we are indebted to the SCION development teams of Anapaya,
-   ETH Zurich, and SCION Association for their practical knowledge and
-   for the documentation about the SCION Data Plane, as well as to the
-   authors of [CHUAT22] - the book is an important source of input and
-   inspiration for this draft.
+   (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper), Brian
+   Trammel (Google) for reviewing this document.  We also thank Matthias
+   Frei (SCION Association), Juan A.  Garcia Prado (ETH Zurich) and
+   Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for
+   providing inputs to this document.  We also thank the Information
+   Security Group at ETH Zurich for their inputs based on their formal
+   verification work of the SCION open source router implementation
+   [PEREIRA2025].  Finally, we are indebted to the SCION development
+   teams of Anapaya, ETH Zurich, and SCION Association for their
+   practical knowledge and for the documentation about the SCION Data
+   Plane, as well as to the authors of [CHUAT22] - the book is an
+   important source of input and inspiration for this draft.
 
 Deployment Testing: SCIONLab
 
@@ -2924,6 +2927,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-08
+
+   *  Small clarifications
 
 draft-dekater-scion-dataplane-07
 
