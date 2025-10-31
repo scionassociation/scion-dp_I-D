@@ -144,6 +144,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-08
      draft-dekater-scion-dataplane-07
      draft-dekater-scion-dataplane-06
      draft-dekater-scion-dataplane-05
@@ -287,9 +288,7 @@ Table of Contents
    *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
    organized into logical groups called Isolation Domains or ISDs.  Each
    ISD consists of ASes that span an area with a uniform trust
-   environment (e.g. a common jurisdiction).  A possible model is for
-   ISDs to be formed along national boundaries or federations of
-   nations.
+   environment (e.g. a common jurisdiction).
 
    *Leaf AS*: An AS at the "edge" of an ISD, with no other downstream
    ASes.
@@ -510,13 +509,12 @@ Table of Contents
       which must be the same as that used by the Control Services within
       the AS.
 
-   In order to forward traffic to a service endpoint address (DT/DS ==
-   0b01 in the common header (Section 2.1)), a border router translates
-   the service number into a specific destination address.  The method
-   used to accomplish the translation is not defined by this document
-   and is only dependent on the implementation and the choices of each
-   AS's administrator.  In current practice this is accomplished by way
-   of a configuration file.
+   In order to forward traffic to a service endpoint address (DT/DS as
+   per Table 3), a border router translates the service number into a
+   specific destination address.  The method used to accomplish the
+   translation is not defined by this document and is only dependent on
+   the implementation and the choices of each AS's administrator.  In
+   current practice this is accomplished by way of a configuration file.
 
    *Note:* The current SCION implementation runs over the UDP/IP
    protocol.  However, the use of other lower layers protocols is
@@ -696,7 +694,9 @@ Table of Contents
 
    The SCION packet header is aligned to 4 bytes.  It is composed of a
    common header, an address header, a path header, and an OPTIONAL
-   extension header, see Figure 3 below.
+   extension header, see Figure 3 below.  The 4 byte alignment is to
+   allow header length to be computed based on the HdrLen field (see
+   Section 2.1).
 
    +--------------------------------------------------------+
    |                     Common header                      |
@@ -837,20 +837,19 @@ Table of Contents
 
                       Table 2: Address length values
 
-    +================+======+=========================+==============+
-    | Length (bytes) | Type | DT/DL or ST/SL encoding | Conventional |
-    |                |      |                         | Use          |
-    +================+======+=========================+==============+
-    | 4              | 0    | 0b0000                  | IPv4         |
-    +----------------+------+-------------------------+--------------+
-    | 4              | 1    | 0b0100                  | Service      |
-    +----------------+------+-------------------------+--------------+
-    | 16             | 0    | 0b0011                  | IPv6         |
-    +----------------+------+-------------------------+--------------+
-    | other          |      |                         | Unassigned   |
-    +----------------+------+-------------------------+--------------+
+           +==============+================+==================+
+           | Type (DT/ST) | Length (DL/SL) | Conventional Use |
+           +==============+================+==================+
+           | 0            | 0              | IPv4             |
+           +--------------+----------------+------------------+
+           | 0            | 3              | IPv6             |
+           +--------------+----------------+------------------+
+           | 1            | 0              | Service          |
+           +--------------+----------------+------------------+
+           | other        | other          | Unassigned       |
+           +--------------+----------------+------------------+
 
-           Table 3: Allocations of type values to length values
+           Table 3: Allocations of length and type combinations
 
    A service address designates a set of endpoint addresses rather than
    a singular one.  A packet addressed to a service is redirected to any
@@ -891,8 +890,8 @@ Table of Contents
       are defined in the DT/DL/ST/SL fields of the common header.
 
    If a service address is implied by the DT/DL or ST/SL field of the
-   common header, the corresponding address field has the following
-   format:
+   common header according to Table 3, the corresponding address field
+   has the following format:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -909,11 +908,11 @@ Table of Contents
       +======================+============+========================+
       | Service Number (hex) | Short Name | Description            |
       +======================+============+========================+
-      | 0x0001               | DS         | Discovery Service      |
+      | 0001                 | DS         | Discovery Service      |
       +----------------------+------------+------------------------+
-      | 0x0002               | CS         | Control Service        |
+      | 0002                 | CS         | Control Service        |
       +----------------------+------------+------------------------+
-      | 0xFFFF               | None       | Reserved invalid value |
+      | FFFF                 | None       | Reserved invalid value |
       +----------------------+------------+------------------------+
 
                       Table 4: Known Service Numbers
@@ -1078,14 +1077,14 @@ Table of Contents
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   | C |  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
+   | CI|  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
       Figure 9: SCION path type - Format of the Path Meta Header field
 
-   *  C (urrINF): Specifies a 2-bits index (0-based) pointing to the
-      current Info Field for the packet on its way through the network.
-      For details, see Section 2.3.2.2 below.
+   *  CurrINF (shown as CI above): Specifies a 2-bits index (0-based)
+      pointing to the current Info Field for the packet on its way
+      through the network.  For details, see Section 2.3.2.2 below.
 
    *  CurrHF: Specifies a 6-bits index (0-based) pointing to the current
       Hop Field for the packet on its way through the network.  For
@@ -1508,7 +1507,7 @@ Table of Contents
 
    This pseudo-header is used in current implementations of UDP on top
    of SCION.  However, as checksums across layers are not recommended,
-   this should be re-evaluated in future revisions.
+   their use is discouraged in future revisions.
 
 3.  Life of a SCION Data Packet
 
@@ -2400,7 +2399,7 @@ Table of Contents
    the ingress and egress points of the SCION network.
 
    IP tunneling over SCION is an application from the perspective of the
-   Data Plane and is outwith the scope of this document.
+   Data Plane and is outside the scope of this document.
 
    More information about the reference open source SCION IP Gateway
    implementation can be found at [SIG].
@@ -2822,18 +2821,18 @@ Table of Contents
 Acknowledgments
 
    Many thanks go to Harald Alvestrand (Google), Joel Halpern
-   (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper) for
-   reviewing this document.  We also thank Matthias Frei (SCION
-   Association), Juan A.  Garcia Prado (ETH Zurich) and Kevin Meynell
-   (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs
-   to this document.  We also thank the Information Security Group at
-   ETH Zurich for their inputs based on their formal verification work
-   of the SCION open source router implementation [PEREIRA2025].
-   Finally, we are indebted to the SCION development teams of Anapaya,
-   ETH Zurich, and SCION Association for their practical knowledge and
-   for the documentation about the SCION Data Plane, as well as to the
-   authors of [CHUAT22] - the book is an important source of input and
-   inspiration for this draft.
+   (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper), Brian
+   Trammel (Google) for reviewing this document.  We also thank Matthias
+   Frei (SCION Association), Juan A.  Garcia Prado (ETH Zurich) and
+   Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for
+   providing inputs to this document.  We also thank the Information
+   Security Group at ETH Zurich for their inputs based on their formal
+   verification work of the SCION open source router implementation
+   [PEREIRA2025].  Finally, we are indebted to the SCION development
+   teams of Anapaya, ETH Zurich, and SCION Association for their
+   practical knowledge and for the documentation about the SCION Data
+   Plane, as well as to the authors of [CHUAT22] - the book is an
+   important source of input and inspiration for this draft.
 
 Deployment Testing: SCIONLab
 
@@ -2897,6 +2896,12 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-08
+
+   *  Small clarifications and nits
+
+   *  Remove use of decimal notation in tables 3 and 4
 
 draft-dekater-scion-dataplane-07
 
