@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 3 May 2026</td>
+<td class="center">Expires 4 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-30" class="published">30 October 2025</time>
+<time datetime="2025-10-31" class="published">31 October 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-03">3 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-05-04">4 May 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 4 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3111,10 +3111,11 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-scion-header-specification" class="section-name selfRef">SCION Header Specification</a>
       </h2>
 <p id="section-2-1">The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an <span class="bcp14">OPTIONAL</span> extension header, see <a href="#_figure-2" class="auto internal xref">Figure 3</a> below.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">The 4 byte alignment is to allow header length to be computed based on the HdrLen field (see <a href="#common-header" class="auto internal xref">Section 2.1</a>).<a href="#section-2-2" class="pilcrow">¶</a></p>
 <span id="name-high-level-scion-header-str"></span><div id="_figure-2">
 <figure id="figure-3">
-        <div id="section-2-2.1">
-          <div class="alignLeft art-svg artwork" id="section-2-2.1.1">
+        <div id="section-2-3.1">
+          <div class="alignLeft art-svg artwork" id="section-2-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="407" height="170" viewBox="0 0 407.0 170.0">
               <path d="M 2.878906 13.319336 L 2.878906 6.412109 L 6.729980 6.412109 L 6.729980 7.335938 L 3.738281 7.335938 L 3.738281 13.319336 Z " fill="black" fill-opacity="1.000000"></path>
               <path d="M 2.878906 26.319336 L 2.878906 12.300781 L 3.738281 12.300781 L 3.738281 26.319336 Z " fill="black" fill-opacity="1.000000"></path>
@@ -3482,17 +3483,17 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
               <path d="M 384.892578 7.335938 L 384.892578 6.412109 L 391.729980 6.412109 L 391.729980 7.335938 Z " fill="black" fill-opacity="1.000000"></path>
               <path d="M 391.892578 7.335938 L 391.892578 6.412109 L 398.729980 6.412109 L 398.729980 7.335938 Z " fill="black" fill-opacity="1.000000"></path>
               <path d="M 401.878906 13.319336 L 401.878906 7.335938 L 398.892578 7.335938 L 398.892578 6.412109 L 402.738281 6.412109 L 402.738281 13.319336 Z " fill="black" fill-opacity="1.000000"></path>
-            </svg><a href="#section-2-2.1.1" class="pilcrow">¶</a>
+            </svg><a href="#section-2-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
 <a href="#name-high-level-scion-header-str" class="selfRef">High-level SCION header structure, non-byte aligned</a>
         </figcaption></figure>
 </div>
-<p id="section-2-3">The <em>common header</em> contains important meta information including version number and the lengths of the header and payload. In particular, it contains flags that control the format of subsequent headers such as the address and path headers. For more details, see <a href="#common-header" class="auto internal xref">Section 2.1</a>.<a href="#section-2-3" class="pilcrow">¶</a></p>
-<p id="section-2-4">The <em>address header</em> contains the ISD, AS and endpoint addresses of source and destination. The type and length of endpoint addresses are variable and can be set independently using flags in the common header. For more details, see <a href="#address-header" class="auto internal xref">Section 2.2</a>.<a href="#section-2-4" class="pilcrow">¶</a></p>
-<p id="section-2-5">The <em>path header</em> contains the full AS-level forwarding path of the packet. A path type field in the common header specifies the path format used in the path header. For more details, see <a href="#path-header" class="auto internal xref">Section 2.3</a>.<a href="#section-2-5" class="pilcrow">¶</a></p>
-<p id="section-2-6">The <span class="bcp14">OPTIONAL</span> <em>extension</em> header contains a variable number of hop-by-hop and end-to-end options, similar to extensions in the IPv6 header <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>. For more details, see <a href="#ext-header" class="auto internal xref">Section 2.4</a>.<a href="#section-2-6" class="pilcrow">¶</a></p>
+<p id="section-2-4">The <em>common header</em> contains important meta information including version number and the lengths of the header and payload. In particular, it contains flags that control the format of subsequent headers such as the address and path headers. For more details, see <a href="#common-header" class="auto internal xref">Section 2.1</a>.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5">The <em>address header</em> contains the ISD, AS and endpoint addresses of source and destination. The type and length of endpoint addresses are variable and can be set independently using flags in the common header. For more details, see <a href="#address-header" class="auto internal xref">Section 2.2</a>.<a href="#section-2-5" class="pilcrow">¶</a></p>
+<p id="section-2-6">The <em>path header</em> contains the full AS-level forwarding path of the packet. A path type field in the common header specifies the path format used in the path header. For more details, see <a href="#path-header" class="auto internal xref">Section 2.3</a>.<a href="#section-2-6" class="pilcrow">¶</a></p>
+<p id="section-2-7">The <span class="bcp14">OPTIONAL</span> <em>extension</em> header contains a variable number of hop-by-hop and end-to-end options, similar to extensions in the IPv6 header <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>. For more details, see <a href="#ext-header" class="auto internal xref">Section 2.4</a>.<a href="#section-2-7" class="pilcrow">¶</a></p>
 <div id="common-header">
 <section id="section-2.1">
         <h3 id="name-common-header">

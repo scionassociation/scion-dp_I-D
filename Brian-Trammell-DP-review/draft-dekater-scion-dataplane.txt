@@ -5,10 +5,10 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                             N. Rustignoli
 Intended status: Informational                               J. C. Hugly
-Expires: 3 May 2026                                    SCION Association
+Expires: 4 May 2026                                    SCION Association
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         30 October 2025
+                                                         31 October 2025
 
 
                             SCION Data Plane
@@ -70,7 +70,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 May 2026.
+   This Internet-Draft will expire on 4 May 2026.
 
 Copyright Notice
 
@@ -689,6 +689,9 @@ Table of Contents
    The SCION packet header is aligned to 4 bytes.  It is composed of a
    common header, an address header, a path header, and an OPTIONAL
    extension header, see Figure 3 below.
+
+   The 4 byte alignment is to allow header length to be computed based
+   on the HdrLen field (see Section 2.1).
 
    +--------------------------------------------------------+
    |                     Common header                      |
