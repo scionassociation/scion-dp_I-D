@@ -273,7 +273,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Interface Identifier (Interface ID)**: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of Interface IDs called `ConsIngress` and `ConsEgress`, as they refer to the ingress and egress interfaces in the direction of path construction (beaconing). Each Interface ID MUST be unique within each AS. 0 is a reserved value that indicates the lack of an Interface ID. It is used as the unspecified Interface ID (e.g., in [](#onehop)).
 
-**Isolation Domain (ISD)**: In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction). A possible model is for ISDs to be formed along national boundaries or federations of nations.
+**Isolation Domain (ISD)**: In SCION, Autonomous Systems (ASes) are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction).
 
 **Leaf AS**: An AS at the "edge" of an ISD, with no other downstream ASes.
 
@@ -367,7 +367,7 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - For the routers that do not manage the interface: the address of the intra-domain protocol on the router that does.
 - The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) which must be the same as that used by the Control Services within the AS.
 
-In order to forward traffic to a service endpoint address (`DT/DS` == 0b01 in the [common header](#common-header)), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
+In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
 **Note:** The current SCION implementation runs over the UDP/IP protocol. However, the use of other lower layers protocols is possible.
 
@@ -480,6 +480,7 @@ The SCION Data Plane provides *path authorization*. This property ensures that d
 # SCION Header Specification {#header}
 
 The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an OPTIONAL extension header, see {{figure-2}} below.
+The 4 byte alignment is to allow header length to be computed based on the `HdrLen` field (see [](#common-header)).
 
 ~~~ aasvg
 
@@ -554,13 +555,13 @@ The SCION common header has the following packet format:
 | 3           | 16 bytes       |
 {: #table-2 title="Address length values"}
 
-| Length (bytes) | Type | DT/DL or ST/SL encoding | Conventional Use |
-|----------------+------+-------------------------+------------------|
-| 4              | 0    | 0b0000                  | IPv4             |
-| 4              | 1    | 0b0100                  | Service          |
-| 16             | 0    | 0b0011                  | IPv6             |
-| other          |      |                         | Unassigned       |
-{: #table-3 title="Allocations of type values to length values"}
+| Type (DT/ST) | Length (DL/SL) | Conventional Use |
+|--------------+----------------+------------------|
+| 0            | 0              | IPv4             |
+| 0            | 3              | IPv6             |
+| 1            | 0              | Service          |
+| other        | other          | Unassigned       |
+{: #table-3 title="Allocations of length and type combinations"}
 
 A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set. {{table-4}} lists the known services.
 
@@ -595,7 +596,7 @@ The SCION address header has the following format:
 - `DstAS, SrcAS`: The 48-bit AS identifier of the destination/source.
 - `DstHostAddr, SrcHostAddr`: Specifies the variable length endpoint address of the destination/source. The accepted type and length are defined in the `DT/DL/ST/SL` fields of the common header.
 
-If a service address is implied by the `DT/DL` or `ST/SL` field of the common header, the corresponding address field has the following format:
+If a service address is implied by the `DT/DL` or `ST/SL` field of the common header according to {{table-3}}, the corresponding address field has the following format:
 
 ~~~ aasvg
 
@@ -612,11 +613,11 @@ If a service address is implied by the `DT/DL` or `ST/SL` field of the common he
 
 The currently known service numbers are:
 
-| Service Number (hex) | Short Name | Description            |
+| Service Number (hex) | Short Name | Description         |
 |-------------------+------------+------------------------|
-| 0x0001            | DS         | Discovery Service      |
-| 0x0002            | CS         | Control Service        |
-| 0xFFFF            | None       | Reserved invalid value |
+| 0001              | DS         | Discovery Service      |
+| 0002              | CS         | Control Service        |
+| FFFF              | None       | Reserved invalid value |
 {: #table-4 title="Known Service Numbers"}
 
 
@@ -756,13 +757,13 @@ The 4-byte Path Meta Header field (`PathMetaHdr`) defines meta information about
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-| C |  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
+| CI|  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 ~~~
 {: #figure-7 title="SCION path type - Format of the Path Meta Header field"}
 
-- `C` (urrINF): Specifies a 2-bits index (0-based) pointing to the current Info Field for the packet on its way through the network. For details, see [](#offset-calc) below.
+- `CurrINF` (shown as `CI` above): Specifies a 2-bits index (0-based) pointing to the current Info Field for the packet on its way through the network. For details, see [](#offset-calc) below.
 - `CurrHF`: Specifies a 6-bits index (0-based) pointing to the current Hop Field for the packet on its way through the network. For details, see [](#offset-calc) below. Note that the `CurrHF` index MUST point to a Hop Field that is part of the current path segment, as indicated by the `CurrINF` index.
 
 Both indices are used by SCION routers when forwarding data traffic through the network. The SCION routers also increment the indexes if required. For more details, see [](#process-router).
@@ -1036,7 +1037,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 - `Upper-Layer Packet Length`: The length of the upper-layer header and data. Some upper-layer protocols define headers that carry the length information explicitly (e.g. UDP). This information is used as the upper-layer packet length in the pseudo header for these protocols. The remaining protocols, which do not carry the length information directly, use the value from the `PayloadLen` field in the SCION common header, minus the sum of the extension header lengths.
 - `Next Header`: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also [](#protnum)). This field can differ from the `NextHdr` field in the SCION common header, if extensions are present.
 
-This pseudo-header is used in current implementations of UDP on top of SCION. However, as checksums across layers are not recommended, this should be re-evaluated in future revisions.
+This pseudo-header is used in current implementations of UDP on top of SCION. However, as checksums across layers are not recommended, their use is discouraged in future revisions.
 
 # Life of a SCION Data Packet {#life-of-a-packet}
 
@@ -1467,7 +1468,7 @@ SCION is agnostic to datagram fragmentation by the underlay network layer, (e.g.
 
 The SCION IP Gateway (SIG) enables IP packets to be tunneled over SCION to support communication between hosts that do not run a SCION implementation. A SIG acts as a router from the perspective of IP, whilst acting as SCION endpoint from the perspective of the SCION network. It is typically deployed inside the same AS-internal network as its non-SCION hosts, or at the edge of an enterprise network. Tunneling IP traffic over SCION requires a pair of SIGs: at the ingress and egress points of the SCION network.
 
-IP tunneling over SCION is an application from the perspective of the Data Plane and is outwith the scope of this document.
+IP tunneling over SCION is an application from the perspective of the Data Plane and is outside the scope of this document.
 
 More information about the reference open source SCION IP Gateway implementation can be found at {{SIG}}.
 
@@ -1578,7 +1579,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Harald Alvestrand (Google), Joel Halpern (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper) for reviewing this document. We also thank Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs to this document. We also thank the Information Security Group at ETH Zurich for their inputs based on their formal verification work of the SCION open source router implementation [PEREIRA2025]. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and SCION Association for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Harald Alvestrand (Google), Joel Halpern (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper), Brian Trammel (Google) for reviewing this document. We also thank Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs to this document. We also thank the Information Security Group at ETH Zurich for their inputs based on their formal verification work of the SCION open source router implementation [PEREIRA2025]. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and SCION Association for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Deployment Testing: SCIONLab
@@ -1628,6 +1629,13 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+
+## draft-dekater-scion-dataplane-08
+{:numbered="false"}
+
+- Small clarifications and nits
+- Remove use of decimal notation in tables 3 and 4
 
 ## draft-dekater-scion-dataplane-07
 {:numbered="false"}
