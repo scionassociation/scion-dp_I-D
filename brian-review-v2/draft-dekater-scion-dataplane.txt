@@ -510,13 +510,12 @@ Table of Contents
       which must be the same as that used by the Control Services within
       the AS.
 
-   In order to forward traffic to a service endpoint address (DT/DS ==
-   0b01 in the common header (Section 2.1)), a border router translates
-   the service number into a specific destination address.  The method
-   used to accomplish the translation is not defined by this document
-   and is only dependent on the implementation and the choices of each
-   AS's administrator.  In current practice this is accomplished by way
-   of a configuration file.
+   In order to forward traffic to a service endpoint address (DT/DS as
+   per Table 3), a border router translates the service number into a
+   specific destination address.  The method used to accomplish the
+   translation is not defined by this document and is only dependent on
+   the implementation and the choices of each AS's administrator.  In
+   current practice this is accomplished by way of a configuration file.
 
    *Note:* The current SCION implementation runs over the UDP/IP
    protocol.  However, the use of other lower layers protocols is
@@ -839,20 +838,19 @@ Table of Contents
 
                       Table 2: Address length values
 
-    +================+======+=========================+==============+
-    | Length (bytes) | Type | DT/DL or ST/SL encoding | Conventional |
-    |                |      |                         | Use          |
-    +================+======+=========================+==============+
-    | 4              | 0    | 0b0000                  | IPv4         |
-    +----------------+------+-------------------------+--------------+
-    | 4              | 1    | 0b0100                  | Service      |
-    +----------------+------+-------------------------+--------------+
-    | 16             | 0    | 0b0011                  | IPv6         |
-    +----------------+------+-------------------------+--------------+
-    | other          |      |                         | Unassigned   |
-    +----------------+------+-------------------------+--------------+
+           +==============+================+==================+
+           | Type (DT/ST) | Length (DL/SL) | Conventional Use |
+           +==============+================+==================+
+           | 0            | 0              | IPv4             |
+           +--------------+----------------+------------------+
+           | 0            | 3              | IPv6             |
+           +--------------+----------------+------------------+
+           | 1            | 0              | Service          |
+           +--------------+----------------+------------------+
+           | other        | other          | Unassigned       |
+           +--------------+----------------+------------------+
 
-           Table 3: Allocations of type values to length values
+           Table 3: Allocations of length and type combinations
 
    A service address designates a set of endpoint addresses rather than
    a singular one.  A packet addressed to a service is redirected to any
@@ -893,8 +891,8 @@ Table of Contents
       are defined in the DT/DL/ST/SL fields of the common header.
 
    If a service address is implied by the DT/DL or ST/SL field of the
-   common header, the corresponding address field has the following
-   format:
+   common header according to Table 3, the corresponding address field
+   has the following format:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -911,11 +909,11 @@ Table of Contents
       +======================+============+========================+
       | Service Number (hex) | Short Name | Description            |
       +======================+============+========================+
-      | 0x0001               | DS         | Discovery Service      |
+      | 0001                 | DS         | Discovery Service      |
       +----------------------+------------+------------------------+
-      | 0x0002               | CS         | Control Service        |
+      | 0002                 | CS         | Control Service        |
       +----------------------+------------+------------------------+
-      | 0xFFFF               | None       | Reserved invalid value |
+      | FFFF                 | None       | Reserved invalid value |
       +----------------------+------------+------------------------+
 
                       Table 4: Known Service Numbers
@@ -2930,7 +2928,9 @@ Change Log
 
 draft-dekater-scion-dataplane-08
 
-   *  Small clarifications
+   *  Small clarifications and nits
+
+   *  Remove use of decimal notation in tables 3 and 4
 
 draft-dekater-scion-dataplane-07
 
