@@ -1510,7 +1510,7 @@ Table of Contents
 
    This pseudo-header is used in current implementations of UDP on top
    of SCION.  However, as checksums across layers are not recommended,
-   their use is not recommended in future revisions.
+   their use is discouraged in future revisions.
 
 3.  Life of a SCION Data Packet
 

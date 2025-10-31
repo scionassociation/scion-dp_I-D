@@ -2028,7 +2028,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-scion-header-specification" class="section-name selfRef">SCION Header Specification</a>
       </h2>
 <p id="section-2-1">The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an <span class="bcp14">OPTIONAL</span> extension header, see <a href="#_figure-2" class="auto internal xref">Figure 3</a> below.
-The 4 byte alignment is to allow header length to be computed based on the HdrLen field (see <a href="#common-header" class="auto internal xref">Section 2.1</a>).<a href="#section-2-1" class="pilcrow">¶</a></p>
+The 4 byte alignment is to allow header length to be computed based on the <code>HdrLen</code> field (see <a href="#common-header" class="auto internal xref">Section 2.1</a>).<a href="#section-2-1" class="pilcrow">¶</a></p>
 <span id="name-high-level-scion-header-str"></span><div id="_figure-2">
 <figure id="figure-3">
         <div id="section-2-2.1">
@@ -3499,7 +3499,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
             <p id="section-2.5-3.3.1"><code>Next Header</code>: The protocol identifier associated with the upper-layer protocol (e.g., 17 for UDP - see also <a href="#protnum" class="auto internal xref">Appendix "Assigned SCION Protocol Numbers"</a>). This field can differ from the <code>NextHdr</code> field in the SCION common header, if extensions are present.<a href="#section-2.5-3.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-2.5-4">This pseudo-header is used in current implementations of UDP on top of SCION. However, as checksums across layers are not recommended, their use is not recommended in future revisions.<a href="#section-2.5-4" class="pilcrow">¶</a></p>
+<p id="section-2.5-4">This pseudo-header is used in current implementations of UDP on top of SCION. However, as checksums across layers are not recommended, their use is discouraged in future revisions.<a href="#section-2.5-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
