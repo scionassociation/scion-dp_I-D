@@ -1612,17 +1612,16 @@ Table of Contents
    packet.
 
    *  _Step 1 -_ *A->R1*:
-      The SCION-enabled Endpoint A in AS ff00:0:2 creates a new SCION
-      packet destined for destination Endpoint B in AS ff00:0:3, with
-      payload P.  Endpoint A sends the packet (for the chosen forwarding
-      path) to the next SCION router as provided by its control service,
-      which is in this case Router R1.  Endpoint A encapsulates the
-      SCION packet into an underlay UDP/IPv4 header for the local
-      delivery to Router R1, utilizing AS ff00:0:2's internal routing
-      protocol.  The current Info Field is _IF1_. Upon receiving the
-      packet, Router R1 will forward the packet on the egress interface
-      that Endpoint A has included into the first Hop Field of the SCION
-      header.
+      The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet
+      destined for destination Endpoint B in AS ff00:0:3, with payload
+      P.  Endpoint A sends the packet (for the chosen forwarding path)
+      to the next SCION router as provided by its control service, which
+      is in this case Router R1.  Endpoint A encapsulates the SCION
+      packet into an underlay UDP/IPv4 header for the local delivery to
+      Router R1, utilizing AS ff00:0:2's internal routing protocol.  The
+      current Info Field is _IF1_. Upon receiving the packet, Router R1
+      will forward the packet on the egress interface that Endpoint A
+      has included into the first Hop Field of the SCION header.
 
        +=============+==============================+=============+
        | Field       | Value                        | Description |
@@ -1710,8 +1709,8 @@ Table of Contents
 
    *  _Step 4 -_ *R3->R4*:
       router R3 inspects the current Hop Field in the SCION header, uses
-      interface i1b to forward the packet to its neighbor SCION-enabled
-      Router 4 of AS ff00:0:3, and moves the current hop-field pointer
+      interface i1b to forward the packet to its neighbor SCION router
+      R4 of AS ff00:0:3, and moves the current hop-field pointer
       forward.  It adds an IP header to reach Router R4.
 
        +=============+==============================+=============+
@@ -1735,17 +1734,17 @@ Table of Contents
                Table 9: Snapshot header - step 4 - R3 -> R4
 
    *  _Step 5 -_ *R4->B*:
-      SCION-enabled Router 4 first checks whether the packet has been
-      received through the ingress interface i3a as specified by the
-      current Hop Field.  Router 4 will then also realize, based on the
-      fields CurrHF and SegLen in the SCION header, that the packet has
-      reached the last hop in its SCION path.  Therefore, instead of
-      stepping up the pointers to the next Info Field or Hop Field,
-      Router 4 inspects the SCION destination address and extracts the
-      endpoint address 192.0.2.7.  It creates a fresh underlay UDP/IP
-      header with this address as destination and with itself as source.
-      The intra-domain forwarding can now deliver the packet to its
-      destination at Endpoint B.
+      SCION router R4 first checks whether the packet has been received
+      through the ingress interface i3a as specified by the current Hop
+      Field. router R4 will then also realize, based on the fields
+      CurrHF and SegLen in the SCION header, that the packet has reached
+      the last hop in its SCION path.  Therefore, instead of stepping up
+      the pointers to the next Info Field or Hop Field, router R4
+      inspects the SCION destination address and extracts the endpoint
+      address 192.0.2.7.  It creates a fresh underlay UDP/IP header with
+      this address as destination and with itself as source.  The intra-
+      domain forwarding can now deliver the packet to its destination at
+      Endpoint B.
 
        +=============+==============================+=============+
        | Field       | Value                        | Description |
