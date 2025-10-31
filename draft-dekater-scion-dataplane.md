@@ -480,6 +480,7 @@ The SCION Data Plane provides *path authorization*. This property ensures that d
 # SCION Header Specification {#header}
 
 The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an OPTIONAL extension header, see {{figure-2}} below.
+The 4 byte alignment is to allow header length to be computed based on the HdrLen field (see [](#common-header)).
 
 ~~~ aasvg
 
@@ -1578,7 +1579,7 @@ The ISD and SCION AS number are SCION-specific numbers. They are currently alloc
 # Acknowledgments
 {:numbered="false"}
 
-Many thanks go to Harald Alvestrand (Google), Joel Halpern (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper) for reviewing this document. We also thank Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs to this document. We also thank the Information Security Group at ETH Zurich for their inputs based on their formal verification work of the SCION open source router implementation [PEREIRA2025]. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and SCION Association for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
+Many thanks go to Harald Alvestrand (Google), Joel Halpern (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper), Brian Trammel (Google) for reviewing this document. We also thank Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs to this document. We also thank the Information Security Group at ETH Zurich for their inputs based on their formal verification work of the SCION open source router implementation [PEREIRA2025]. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and SCION Association for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Deployment Testing: SCIONLab
@@ -1628,6 +1629,12 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+
+## draft-dekater-scion-dataplane-08
+{:numbered="false"}
+
+- Small clarifications
 
 ## draft-dekater-scion-dataplane-07
 {:numbered="false"}
