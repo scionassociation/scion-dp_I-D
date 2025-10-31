@@ -1638,7 +1638,8 @@ Table of Contents
        | IP          | SRC = 203.0.113.6            | Endpoint A  |
        |             | DST = 203.0.113.17           | Router R1   |
        +-------------+------------------------------+-------------+
-       | Link layer  | SRC=A, DST=R1                |             |
+       | Link layer  | SRC=A                        |             |
+       |             | DST=R1                       |             |
        +-------------+------------------------------+-------------+
 
                 Table 6: Snapshot header - step 1 - A->R1
@@ -1669,7 +1670,8 @@ Table of Contents
        | SCION path  | - _IF1_ (0,i2a) *(i1a,0)*    |             |
        |             | - IF2 (0,i1b) (i3a,0)        |             |
        +-------------+------------------------------+-------------+
-       | Link layer  | SRC=R1, DST=R2               |             |
+       | Link layer  | SRC=R1                       |             |
+       |             | DST=R2                       |             |
        +-------------+------------------------------+-------------+
 
                Table 7: Snapshot header - step 2 - R1 -> R2
@@ -1702,7 +1704,8 @@ Table of Contents
        | IP          | SRC = 198.51.100.1           | Router R2   |
        |             | DST = 198.51.100.4           | Router R3   |
        +-------------+------------------------------+-------------+
-       | Link layer  | SRC=R2, DST=R3               |             |
+       | Link layer  | SRC=R2                       |             |
+       |             | DST=R3                       |             |
        +-------------+------------------------------+-------------+
 
                Table 8: Snapshot header - step 3 - R2 -> R3
@@ -1728,7 +1731,8 @@ Table of Contents
        | IP          | SRC = 198.51.100.17          | Router R3   |
        |             | DST = 198.51.100.18          | Router R4   |
        +-------------+------------------------------+-------------+
-       | Link layer  | SRC=R3, DST=R4               |             |
+       | Link layer  | SRC=R3                       |             |
+       |             | DST=R4                       |             |
        +-------------+------------------------------+-------------+
 
                Table 9: Snapshot header - step 4 - R3 -> R4
@@ -1761,7 +1765,8 @@ Table of Contents
        | IP          | SRC = 192.0.2.34             | Router R4   |
        |             | DST = 192.0.2.7              | Endpoint B  |
        +-------------+------------------------------+-------------+
-       | Link layer  | SRC=R4, DST=B                |             |
+       | Link layer  | SRC=R4                       |             |
+       |             | DST=B                        |             |
        +-------------+------------------------------+-------------+
 
                Table 10: Snapshot header - step 5 - R4 -> B
