@@ -367,7 +367,7 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - For the routers that do not manage the interface: the address of the intra-domain protocol on the router that does.
 - The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) which must be the same as that used by the Control Services within the AS.
 
-In order to forward traffic to a service endpoint address (`DT/DS` == 0b01 in the [common header](#common-header)), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
+In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
 **Note:** The current SCION implementation runs over the UDP/IP protocol. However, the use of other lower layers protocols is possible.
 
@@ -555,13 +555,13 @@ The SCION common header has the following packet format:
 | 3           | 16 bytes       |
 {: #table-2 title="Address length values"}
 
-| Length (bytes) | Type | DT/DL or ST/SL encoding | Conventional Use |
-|----------------+------+-------------------------+------------------|
-| 4              | 0    | 0b0000                  | IPv4             |
-| 4              | 1    | 0b0100                  | Service          |
-| 16             | 0    | 0b0011                  | IPv6             |
-| other          |      |                         | Unassigned       |
-{: #table-3 title="Allocations of type values to length values"}
+| Type (DT/ST) | Length (DL/SL) | Conventional Use |
+|--------------+----------------+------------------|
+| 0            | 0              | IPv4             |
+| 0            | 3              | IPv6             |
+| 1            | 0              | Service          |
+| other        | other          | Unassigned       |
+{: #table-3 title="Allocations of length and type combinations"}
 
 A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set. {{table-4}} lists the known services.
 
@@ -596,7 +596,7 @@ The SCION address header has the following format:
 - `DstAS, SrcAS`: The 48-bit AS identifier of the destination/source.
 - `DstHostAddr, SrcHostAddr`: Specifies the variable length endpoint address of the destination/source. The accepted type and length are defined in the `DT/DL/ST/SL` fields of the common header.
 
-If a service address is implied by the `DT/DL` or `ST/SL` field of the common header, the corresponding address field has the following format:
+If a service address is implied by the `DT/DL` or `ST/SL` field of the common header according to {{table-3}}, the corresponding address field has the following format:
 
 ~~~ aasvg
 
@@ -613,11 +613,11 @@ If a service address is implied by the `DT/DL` or `ST/SL` field of the common he
 
 The currently known service numbers are:
 
-| Service Number (hex) | Short Name | Description            |
+| Service Number (hex) | Short Name | Description         |
 |-------------------+------------+------------------------|
-| 0x0001            | DS         | Discovery Service      |
-| 0x0002            | CS         | Control Service        |
-| 0xFFFF            | None       | Reserved invalid value |
+| 0001              | DS         | Discovery Service      |
+| 0002              | CS         | Control Service        |
+| FFFF              | None       | Reserved invalid value |
 {: #table-4 title="Known Service Numbers"}
 
 
@@ -1634,7 +1634,8 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-dataplane-08
 {:numbered="false"}
 
-- Small clarifications
+- Small clarifications and nits
+- Remove use of decimal notation in tables 3 and 4
 
 ## draft-dekater-scion-dataplane-07
 {:numbered="false"}
