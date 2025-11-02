@@ -1599,7 +1599,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Small clarifications and nits
-- Life of a SCION Data Packet: improve clarity if text and tables
+- Life of a SCION Data Packet: improve clarity in text and tables
 - Remove use of decimal notation in tables 3 and 4
 
 ## draft-dekater-scion-dataplane-07
