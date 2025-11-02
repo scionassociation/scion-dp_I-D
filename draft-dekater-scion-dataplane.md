@@ -1030,7 +1030,7 @@ This section gives an overall description of the life cycle of a SCION packet: h
 
 This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. In the case of inter-ISD forwarding, the complete end-to-end path from source endpoint to destination endpoint would always require a core path segment as well, although this makes no difference for the forwarding process which works the same in an intra-ISD and inter-ISD context.
 
-~~~
+~~~aasvg
 
                   +-------------------------+
                   |                         |
@@ -1038,13 +1038,13 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
                   |                         | (1-ff00:0:1,
                   |                         | 198.51.100.17)
                   |          198.51.100.4 +-+-+ i1b
-                  |            +----------+R3 +#-+
+                  |            +----------+R3 +--+
             i1a +-+-+          |          +-+-+  |
-             +-#+R2 +----------+            |    |
+             +--+R2 +----------+            |    |
              |  +-+-+ 198.51.100.1          |    |
              |    |                         |    |
              |    +-------------------------+    | (1-ff00:0:3,
-             *                                   * 198.51.100.18)
+             o                                   o 198.51.100.18)
        i2a +-+-+                               +-+-+ i3a
 +----------+R1 +----------+         +----------+R4 +----------+
 |          +-+-+          |         |          +-+-+          |
