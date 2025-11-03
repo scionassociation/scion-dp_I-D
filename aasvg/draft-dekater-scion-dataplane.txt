@@ -1498,7 +1498,7 @@ Table of Contents
 
 3.  Life of a SCION Data Packet
 
-   This section gives a high-level description of the life cycle of a
+   This section gives an overall description of the life cycle of a
    SCION packet: how it is created at its source endpoint, passes
    through a number of SCION routers, and finally reaches its
    destination endpoint.  It is assumed that both source and destination
