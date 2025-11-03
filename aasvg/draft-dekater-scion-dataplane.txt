@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 6 May 2026                                    SCION Association
+Expires: 7 May 2026                                    SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         2 November 2025
+                                                         3 November 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 May 2026.
+   This Internet-Draft will expire on 7 May 2026.
 
 Copyright Notice
 
@@ -1498,7 +1498,7 @@ Table of Contents
 
 3.  Life of a SCION Data Packet
 
-   This section gives an overall description of the life cycle of a
+   This section gives a high-level description of the life cycle of a
    SCION packet: how it is created at its source endpoint, passes
    through a number of SCION routers, and finally reaches its
    destination endpoint.  It is assumed that both source and destination
@@ -2335,7 +2335,7 @@ Table of Contents
 
    SCION requires its underlay protocol to provide a minimum MTU of 1232
    bytes.  This number results from 1280, the minimum IPv6 MTU as of
-   [RFC2460]), minus 48, assuming UDP/IPv6 as underlay.  Higher layer
+   [RFC8200]), minus 48, assuming UDP/IPv6 as underlay.  Higher layer
    protocols such as SCMP rely only on such minimum MTU.
 
    The MTU of a SCION path is defined as the minimum of the MTUs of the
@@ -2600,7 +2600,7 @@ Table of Contents
    Modifications of the SCION path and address header can be discovered
    by the destination endpoint by a data integrity protection system.
    Such a data integrity protection system, loosely analogous to the
-   IPSec Authentication Header, exists for SCION but is out of scope for
+   IPsec Authentication Header, exists for SCION but is out of scope for
    this document.  This is described as the SCION Packet Authentication
    Option (SPAO) in [CHUAT22].
 
@@ -2700,10 +2700,6 @@ Table of Contents
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
-
-   [RFC2460]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
-              (IPv6) Specification", RFC 2460, DOI 10.17487/RFC2460,
-              December 1998, <https://www.rfc-editor.org/rfc/rfc2460>.
 
    [RFC2474]  Nichols, K., Blake, S., Baker, F., and D. Black,
               "Definition of the Differentiated Services Field (DS
@@ -2890,7 +2886,8 @@ Change Log
 
 draft-dekater-scion-dataplane-08
 
-   *  Small clarifications and nits
+   *  Small clarifications and nits (e.g, replace RFC2460 reference with
+      more recent RFC8200)
 
    *  Life of a SCION Data Packet: improve clarity in text and tables
 
