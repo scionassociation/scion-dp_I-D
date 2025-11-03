@@ -682,8 +682,7 @@ The SCION header is created by extracting the required Info Fields and Hop Field
 
 In the Hop Field that represents the last Hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
 
-~~~
-
+~~~aasvg
                       +-----------------------+
                       |      ISD Core         |
 +--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
@@ -695,55 +694,41 @@ In the Hop Field that represents the last Hop in the first segment (seen in the 
     Up-Segment           Core-Segment        Down-Segment
    +---------+           +---------+         +---------+
    | +-----+ |           | +-----+ |         | +-----+ |
-   | | INF | +--------+  | | INF | +--+      | | INF | +--+
+   | | INF |----------+  | | INF |----+      | | INF |----+
    | +-----+ |        |  | +-----+ |  |      | +-----+ |  |
-   | +-----+ |        |  | +-----+ |  |      | +-----+ |  |
-   | | HF  | +------+ |  | | HF  | +----+    | | HF  | +----+
+   | | HF  |--------+ |  | | HF  |------+    | | HF  |------+
    | +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
-   | +-----+ |      | |  | +-----+ |  | |    | +-----+ |  | |
-   | | HF  | +----+ | |  | | HF  | +------+  | | HF  | +------+
+   | | HF  |------+ | |  | | HF  |--------+  | | HF  |--------+
    | +-----+ |    | | |  | +-----+ |  | | |  | +-----+ |  | | |
-   | +-----+ |    | | |  +---------+  | | |  | +-----+ |  | | |
-   | | HF  | +--+ | | |               | | |  | | HF  | +--------+
-   | +-----+ |  | | | |  +---------+  | | |  | +-----+ |  | | | |
-   +---------+  | | | |  | +++++++ |  | | |  +---------+  | | | |
-                | | | |  | |Meta | |  | | |               | | | |
-                | | | |  | +++++++ |  | | |               | | | |
+   | | HF  |----+ | | |  +---------+  | | |  | | HF  |----------+
+   | +-----+ |  | | | |               | | |  | +-----+ |  | | | |
+   +---------+  | | | |  +---------+  | | |  +---------+  | | | |
                 | | | |  | +-----+ |  | | |               | | | |
-                | | | +->| | INF | |  | | |               | | | |
+                | | | |  | |Meta | |  | | |               | | | |
+                | | | |  | +-----+ |  | | |               | | | |
+                | | | +--->| INF | |  | | |               | | | |
                 | | |    | +-----+ |  | | |               | | | |
-                | | |    | +-----+ |  | | |               | | | |
-                | | |    | | INF | |<-+ | |               | | | |
+                | | |    | | INF |<---+ | |               | | | |
                 | | |    | +-----+ |    | |               | | | |
-                | | |    | +-----+ |    | |               | | | |
-                | | |    | | INF | |<---------------------+ | | |
+                | | |    | | INF |<-----------------------+ | | |
                 | | |    | +-----+ |    | |                 | | |
-                | | |    | +-----+ |    | |                 | | |
-                | | +--->| | HF  | |    | |                 | | |
+                | | +----->| HF  | |    | |                 | | |
                 | |      | +-----+ |    | |                 | | |
-                | |      | +-----+ |    | |                 | | |
-                | +----->| | HF  | |    | |                 | | |
+                | +------->| HF  | |    | |                 | | |
                 |        | +-----+ |    | |                 | | |
-                |        | +-----+ |    | |                 | | |
-                +------->| | HF  | |    | |                 | | |
+                +--------->| HF  | |    | |                 | | |
                          | +-----+ |    | |                 | | |
-                         | +-----+ |    | |                 | | |
-                         | | HF  | |<---+ |                 | | |
+                         | | HF  |<-----+ |                 | | |
                          | +-----+ |      |                 | | |
-                         | +-----+ |      |                 | | |
-        Forwarding Path  | | HF  | |<-----+                 | | |
+        Forwarding Path  | | HF  |<-------+                 | | |
                          | +-----+ |                        | | |
-                         | +-----+ |                        | | |
-                         | | HF  | |<-----------------------+ | |
+                         | | HF  |<-------------------------+ | |
                          | +-----+ |                          | |
-                         | +-----+ |                          | |
-                         | | HF  | |<-------------------------+ |
+                         | | HF  |<---------------------------+ |
                          | +-----+ |                            |
-                         | +-----+ |                            |
-                         | | HF  | |<---------------------------+
+                         | | HF  |<-----------------------------+
                          | +-----+ |
                          +---------+
-
 ~~~
 {: #figure-6 title="Path construction example"}
 
@@ -1045,7 +1030,7 @@ This section gives an overall description of the life cycle of a SCION packet: h
 
 This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. In the case of inter-ISD forwarding, the complete end-to-end path from source endpoint to destination endpoint would always require a core path segment as well, although this makes no difference for the forwarding process which works the same in an intra-ISD and inter-ISD context.
 
-~~~
+~~~aasvg
 
                   +-------------------------+
                   |                         |
@@ -1053,13 +1038,13 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
                   |                         | (1-ff00:0:1,
                   |                         | 198.51.100.17)
                   |          198.51.100.4 +-+-+ i1b
-                  |            +----------+R3 +#-+
+                  |            +----------+R3 +--+
             i1a +-+-+          |          +-+-+  |
-             +-#+R2 +----------+            |    |
+             +--+R2 +----------+            |    |
              |  +-+-+ 198.51.100.1          |    |
              |    |                         |    |
              |    +-------------------------+    | (1-ff00:0:3,
-             *                                   * 198.51.100.18)
+             o                                   o 198.51.100.18)
        i2a +-+-+                               +-+-+ i3a
 +----------+R1 +----------+         +----------+R4 +----------+
 |          +-+-+          |         |          +-+-+          |
@@ -1614,7 +1599,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Small clarifications and nits (e.g, replace RFC2460 reference with more recent RFC8200)
-- Life of a SCION Data Packet: improve clarity if text and tables
+- Life of a SCION Data Packet: improve clarity in text and tables
 - Remove use of decimal notation in tables 3 and 4
 
 ## draft-dekater-scion-dataplane-07
