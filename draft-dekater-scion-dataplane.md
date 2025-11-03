@@ -251,7 +251,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 ==Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}.==
 
 
-## Terminology {#terms}
+# Terminology {#terms}
 
 **Autonomous System (AS)**: An autonomous system is a network under a common administrative control. For example, the network of an Internet service provider or organization can constitute an AS.
 
