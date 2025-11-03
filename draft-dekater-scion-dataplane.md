@@ -42,7 +42,7 @@ author:
 normative:
   I-D.dekater-scion-pki:
   I-D.dekater-scion-controlplane:
-  RFC2460:
+  RFC8200:
   RFC2474:
   RFC3168:
   RFC4493:
@@ -1026,7 +1026,7 @@ This pseudo-header is used in current implementations of UDP on top of SCION. Ho
 
 # Life of a SCION Data Packet {#life-of-a-packet}
 
-This section gives an overall description of the life cycle of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).
+This section gives a high-level description of the life cycle of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).
 
 This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. In the case of inter-ISD forwarding, the complete end-to-end path from source endpoint to destination endpoint would always require a core path segment as well, although this makes no difference for the forwarding process which works the same in an intra-ISD and inter-ISD context.
 
@@ -1066,7 +1066,7 @@ Based on the above topology, this example shows the life of a SCION packet sent 
 
 ## Path Lookup and Segment Combination at Source
 
-In this example, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3. Both AS ff00:0:2 and AS ff00:0:3 are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3.  The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g., i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
+In this example, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3. Both AS ff00:0:2 and AS ff00:0:3 are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g., i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
 
 **Note:** For more details on the lookup of path segments, see 'Path Lookup' in {{I-D.dekater-scion-controlplane}}.
 
@@ -1406,7 +1406,7 @@ Each administrator of SCION control services and routers is responsible for main
 
 ## MTU  {#mtu}
 
-SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{RFC2460}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.
+SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of {{RFC8200}}), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.
 
 The MTU of a SCION path is defined as the minimum of the MTUs of the intra-AS and inter-AS links traversed by that path. The control plane disseminates such values and makes them available to the source endpoint (see 'Path MTU in {{I-D.dekater-scion-controlplane}}).
 
@@ -1507,7 +1507,7 @@ An on-path adversary could modify the SCION path header and replace the remainin
 
 The already traversed portion of the current segment and past segments can also be modified by the adversary (e.g. by deleting and adding valid and invalid Hop Fields). On reply packets from the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M) where the new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M which can then transparently change the invalid path back to the valid path to A. In addition, the endpoint address header can also be modified.
 
-Modifications of the SCION path and address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, loosely analogous to the IPSec Authentication Header, exists for SCION but is out of scope for this document. This is described as the SCION Packet Authentication Option (SPAO) in [CHUAT22].
+Modifications of the SCION path and address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, loosely analogous to the IPsec Authentication Header, exists for SCION but is out of scope for this document. This is described as the SCION Packet Authentication Option (SPAO) in [CHUAT22].
 
 Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. However, such an attack is of little value. An on-path adversary may inspect/copy/disrupt its traffic without diverting it away from the sender-chosen path. For this reason proof-of-transit, which would be required to detect such an attack, has marginal benefit in the context of SCION and it is not in scope for this document.
 
@@ -1598,7 +1598,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-dataplane-08
 {:numbered="false"}
 
-- Small clarifications and nits
+- Small clarifications and nits (e.g, replace RFC2460 reference with more recent RFC8200)
 - Life of a SCION Data Packet: improve clarity in text and tables
 - Remove use of decimal notation in tables 3 and 4
 
