@@ -1048,11 +1048,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCION DP</td>
-<td class="right">October 2025</td>
+<td class="right">November 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 4 May 2026</td>
+<td class="center">Expires 7 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-31" class="published">31 October 2025</time>
+<time datetime="2025-11-03" class="published">3 November 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-04">4 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-05-07">7 May 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 4 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1229,13 +1229,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-life-of-a-scion-data-packet" class="internal xref">Life of a SCION Data Packet</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-description" class="internal xref">Description</a></p>
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-path-lookup-and-segment-com" class="internal xref">Path Lookup and Segment Combination at Source</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-creating-an-end-to-end-scio" class="internal xref">Creating an End-to-End SCION Forwarding Path</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-step-by-step-explanation" class="internal xref">Step-by-Step Explanation</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-steps-at-intermediate-route" class="internal xref">Steps at Intermediate Routers</a></p>
 </li>
             </ul>
 </li>
@@ -3504,20 +3501,15 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
       <h2 id="name-life-of-a-scion-data-packet">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-life-of-a-scion-data-packet" class="section-name selfRef">Life of a SCION Data Packet</a>
       </h2>
-<p id="section-3-1">This section gives a high-level description of the life cycle of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">This section gives an overall description of the life cycle of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. In the case of inter-ISD forwarding, the complete end-to-end path from source endpoint to destination endpoint would always require a core path segment as well, although this makes no difference for the forwarding process which works the same in an intra-ISD and inter-ISD context.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<div id="description">
-<section id="section-3.1">
-        <h3 id="name-description">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-description" class="section-name selfRef">Description</a>
-        </h3>
-<span id="name-sample-topology-to-illustra"></span><div id="_figure-16">
+<span id="name-example-topology-as-ff0001-"></span><div id="_figure-16">
 <figure id="figure-17">
-          <div class="alignLeft art-text artwork" id="section-3.1-1.1">
+        <div class="alignLeft art-text artwork" id="section-3-3.1">
 <pre>
                   +-------------------------+
                   |                         |
-                  |       AS ff00:0:1       |
+                  |    Core AS ff00:0:1     |
                   |                         | (1-ff00:0:1,
                   |                         | 198.51.100.17)
                   |          198.51.100.4 +-+-+ i1b
@@ -3544,334 +3536,252 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 </pre>
 </div>
 <figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
-<a href="#name-sample-topology-to-illustra" class="selfRef">Sample topology to illustrate the life cycle of a SCION packet. AS ff00:0:1 is the core AS of ISD 1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.</a>
-          </figcaption></figure>
+<a href="#name-example-topology-as-ff0001-" class="selfRef">Example topology. AS ff00:0:1 is the core AS of ISD 1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.</a>
+        </figcaption></figure>
 </div>
-<p id="section-3.1-2">Based on the network topology in <a href="#_figure-16" class="auto internal xref">Figure 17</a> above, this example shows the path of a SCION packet sent from its source at Endpoint A to its destination at Endpoint B, and how it will be processed by each router on the path using simplified snapshots of the packet header after each processing step. These snapshots, which are depicted in tables, show the most relevant information of the header, i.e. the SCION path and IP encapsulation for local communication.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3-4">Based on the above topology, this example shows the life of a SCION packet sent from source at Endpoint A to destination at Endpoint B. It also shows simplified snapshots of the packet header after each on-path router.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<div id="path-lookup-and-segment-combination-at-source">
+<section id="section-3.1">
+        <h3 id="name-path-lookup-and-segment-com">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-path-lookup-and-segment-com" class="section-name selfRef">Path Lookup and Segment Combination at Source</a>
+        </h3>
+<p id="section-3.1-1">In this example, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3. Both AS ff00:0:2 and AS ff00:0:3 are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g., i2a, i1a, ...), as described in detail in <a href="#header" class="auto internal xref">Section 2</a> - (x,y) represents one Hop Field.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2"><strong>Note:</strong> For more details on the lookup of path segments, see 'Path Lookup' in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS ff00:0:2 control service.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">To obtain an end-to-end forwarding path from the source AS to the destination AS, Endpoint A combines the two path segments into the resulting SCION forwarding path, which contains the two Info Fields <em>IF1</em> and <em>IF2</em> and the Hop Fields (0,i2a), (i1a,0), (0,i1b), and (i3a,0).<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5"><strong>Note:</strong> As this brief sample path does not contain a core segment, the end-to-end path only consists of two path segments.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-6">Endpoint A now adds this end-to-end forwarding path to the header of the packet that it wants to send to Endpoint B, and starts transferring the packet.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="creating-an-end-to-end-scion-forwarding-path">
+<div id="steps-at-intermediate-routers">
 <section id="section-3.2">
-        <h3 id="name-creating-an-end-to-end-scio">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-creating-an-end-to-end-scio" class="section-name selfRef">Creating an End-to-End SCION Forwarding Path</a>
+        <h3 id="name-steps-at-intermediate-route">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-steps-at-intermediate-route" class="section-name selfRef">Steps at Intermediate Routers</a>
         </h3>
-<p id="section-3.2-1">In this example, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3. Both AS ff00:0:2 and AS ff00:0:3 are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first requests its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service will return up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A will also query its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:3 control service will return down segments from the ISD core down to AS ff00:0:3.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2"><strong>Note:</strong> For more details on the lookup of path segments, see 'Path Lookup' in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS ff00:0:2 control service. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g., i2a, i1a, ...), as described in detail in <a href="#header" class="auto internal xref">Section 2</a> - (x,y) represents one Hop Field.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2-4">To obtain an end-to-end forwarding path from the source AS to the destination AS, Endpoint A combines the two path segments into the resulting SCION forwarding path, which contains the two Info Fields <em>IF1</em> and <em>IF2</em> and the Hop Fields (0,i2a), (i1a,0), (0,i1b), and (i3a,0).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5"><strong>Note:</strong> As this brief sample path does not contain a core segment, the end-to-end path only consists of two path segments.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
-<p id="section-3.2-6">Endpoint A now adds this end-to-end forwarding path to the header of the packet that it wants to send to Endpoint B, and starts transferring the packet.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="step-by-step-explanation">
-<section id="section-3.3">
-        <h3 id="name-step-by-step-explanation">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-step-by-step-explanation" class="section-name selfRef">Step-by-Step Explanation</a>
-        </h3>
-<p id="section-3.3-1">This section explains what happens with the SCION packet header at each router, based on the network topology in described <a href="#_figure-16" class="auto internal xref">Figure 17</a> above. Each step includes a table that represents a simplified snapshot of the packet header at the end of this specific step. Regarding the notation used in the figure/tables, each source and destination entry should be read as router (or endpoint) followed by its address. The current Info Field (with metadata on the current path segment) in the SCION header is depicted as italic/cursive in the tables. The current Hop Field, representing the current AS, is shown bold. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel of SCION data packets.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">This section contains simplified snapshots of the packet header at each hop. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.
+The current Info Field (with metadata on the current path segment) in the SCION header is depicted as <em>italic</em> in the tables. The current Hop Field, representing the current AS, is shown <strong>bold</strong>. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel the SCION packet.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3-2.1">
-            <p id="section-3.3-2.1.1"><em>Step 1</em> <br> <strong>A-&gt;R1</strong>: The SCION-enabled Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case Router 1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to Router 1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is <em>IF1</em>. Upon receiving the packet, Router 1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.<a href="#section-3.3-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.2-2.1">
+            <p id="section-3.2-2.1.1"><em>Step 1 -</em> <strong>A-&gt;R1</strong>: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is <em>IF1</em>. Upon receiving the packet, router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-1"></span><table class="center" id="table-6">
+<span id="name-snapshot-header-step-1-a-r1"></span><table class="center" id="table-6">
           <caption>
 <a href="#table-6" class="selfRef">Table 6</a>:
-<a href="#name-snapshot-header-step-1" class="selfRef">Snapshot header - step 1</a>
+<a href="#name-snapshot-header-step-1-a-r1" class="selfRef">Snapshot header - step 1 - A-&gt;R1</a>
           </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">A -&gt; R1</th>
-              <th class="text-left" rowspan="1" colspan="1"> </th>
+              <th class="text-left" rowspan="1" colspan="1">Field</th>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">SCION</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) <br>
-</td>
+              <td class="text-left" rowspan="1" colspan="1">SCION addr.</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7</td>
+              <td class="text-left" rowspan="1" colspan="1">Endpoint A <br> Endpoint B</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">SCION path</td>
+              <td class="text-left" rowspan="1" colspan="1">- <em>IF1</em> <strong>(0,i2a)</strong> (i1a,0) <br> - IF2 (0,i1b) (i3a,0)</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">DST = 1-ff00:0:3,192.0.2.7 (dest. Endpoint B) <br>
-</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">UDP port</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 30041  <br> DST = 30041</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">PATH = <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- <em>IF1</em> <strong>(0,i2a)</strong> (i1a,0) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- IF2 (0,i1b) (i3a,0) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">UDP</td>
-              <td class="text-left" rowspan="1" colspan="1">P<sub>S</sub> = 30041, P<sub>D</sub> = 30041 <br>
-</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">IP</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 203.0.113.6 (Endpoint A) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">DST = 203.0.113.17 (Router 1) <br>
-</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 203.0.113.6 <br> DST = 203.0.113.17</td>
+              <td class="text-left" rowspan="1" colspan="1">Endpoint A <br>  Router R1</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">Link layer</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC=A, DST=R1</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC=A <br> DST=R1</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
 <ul class="normal">
-<li class="normal" id="section-3.3-4.1">
-            <p id="section-3.3-4.1.1"><em>Step 2</em> <br> <strong>R1-&gt;R2</strong>: Router 1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field <em>IF1</em>. The current Hop Field is the first Hop Field (0,i2a), which instructs router 1 to forward the packet on its interface i2a. After reading the current Hop Field, Router 1 moves the pointer forward by one position to the second Hop Field (i1a,0).<a href="#section-3.3-4.1.1" class="pilcrow">¶</a></p>
-<p id="section-3.3-4.1.2">
-The link shown here is an example of not using a UDP/IP underlay. Although most implementations use such an encapsulation, SCION only requires link-layer connectivity. What is used for one given inter-AS link is a function of the available implementations at each end, the available infrastructure, and the joint preference of the two ASes administrators.<a href="#section-3.3-4.1.2" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.2-4.1">
+            <p id="section-3.2-4.1.1"><em>Step 2 -</em> <strong>R1-&gt;R2</strong>: <br> Router R1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field <em>IF1</em>. The current Hop Field is the first Hop Field (0,i2a), which instructs router R1 to forward the packet on its interface i2a. After reading the current Hop Field, router R1 moves the pointer forward by one position to the second Hop Field (i1a,0).<a href="#section-3.2-4.1.1" class="pilcrow">¶</a></p>
+<p id="section-3.2-4.1.2">
+The link shown here is an example of not using a UDP/IP underlay. Although most implementations use such an encapsulation, SCION only requires link-layer connectivity. What is used for one given inter-AS link is a function of the available implementations at each end, the available infrastructure, and the joint preference of the two ASes administrators.<a href="#section-3.2-4.1.2" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-2"></span><table class="center" id="table-7">
+<span id="name-snapshot-header-step-2-r1-r"></span><table class="center" id="table-7">
           <caption>
 <a href="#table-7" class="selfRef">Table 7</a>:
-<a href="#name-snapshot-header-step-2" class="selfRef">Snapshot header - step 2</a>
+<a href="#name-snapshot-header-step-2-r1-r" class="selfRef">Snapshot header - step 2 - R1 -&gt; R2</a>
           </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">R1 -&gt; R2</th>
-              <th class="text-left" rowspan="1" colspan="1"> </th>
+              <th class="text-left" rowspan="1" colspan="1">Field</th>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">SCION</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) <br>
-</td>
+              <td class="text-left" rowspan="1" colspan="1">SCION addr.</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7</td>
+              <td class="text-left" rowspan="1" colspan="1">Endpoint A <br> Endpoint B</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">SCION path</td>
+              <td class="text-left" rowspan="1" colspan="1">- <em>IF1</em> (0,i2a) <strong>(i1a,0)</strong>  <br>  - IF2 (0,i1b) (i3a,0)</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">DST = 1-ff00:0:3,192.0.2.7 (dest. Endpoint B) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">PATH = <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- <em>IF1</em> (0,i2a) <strong>(i1a,0)</strong>  <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- IF2 (0,i1b) (i3a,0) <br>
-</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">Link layer</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC=R1, DST=R2</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC=R1 <br> DST=R2</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
 <ul class="normal">
-<li class="normal" id="section-3.3-6.1">
-            <p id="section-3.3-6.1.1"><em>Step 3</em> <br> <strong>R2-&gt;R3</strong>: When receiving the packet, Router 2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field. Otherwise, the packet is dropped by Router 2. The router notices that it has consumed the last Hop Field of the current path segment, and hence moves the pointer from the current Info Field to the next Info Field <em>IF2</em>. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. Router maps the i1b interface ID to egress Router 3, it therefore encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of Router 3 as the underlay destination.<a href="#section-3.3-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.2-6.1">
+            <p id="section-3.2-6.1.1"><em>Step 3 -</em> <strong>R2-&gt;R3</strong>: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field. Otherwise, the packet is dropped by router R2. The router notices that it has consumed the last Hop Field of the current path segment, and hence moves the pointer from the current Info Field to the next Info Field <em>IF2</em>. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. The router maps the i1b interface ID to egress router R3, it therefore encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-3"></span><table class="center" id="table-8">
+<span id="name-snapshot-header-step-3-r2-r"></span><table class="center" id="table-8">
           <caption>
 <a href="#table-8" class="selfRef">Table 8</a>:
-<a href="#name-snapshot-header-step-3" class="selfRef">Snapshot header - step 3</a>
+<a href="#name-snapshot-header-step-3-r2-r" class="selfRef">Snapshot header - step 3 -  R2 -&gt; R3</a>
           </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">R2 -&gt; R3</th>
-              <th class="text-left" rowspan="1" colspan="1"> </th>
+              <th class="text-left" rowspan="1" colspan="1">Field</th>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">SCION</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) <br>
-</td>
+              <td class="text-left" rowspan="1" colspan="1">SCION addr.</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7</td>
+              <td class="text-left" rowspan="1" colspan="1">Endpoint A <br> Endpoint B</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">SCION path</td>
+              <td class="text-left" rowspan="1" colspan="1">- IF1 (0,i2a) (i1a,0) <br>   - <em>IF2</em> <strong>(0,i1b)</strong> (i3a,0)</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">DST = 1-ff00:0:3,192.0.2.7 (dest. Endpoint B) <br>
-</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">UDP port</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 30041 <br> DST = 30041</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">PATH =  <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- IF1 (0,i2a) (i1a,0) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- <em>IF2</em> <strong>(0,i1b)</strong> (i3a,0) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">UDP</td>
-              <td class="text-left" rowspan="1" colspan="1">P<sub>S</sub> = 30041, P<sub>D</sub> = 30041 <br>
-</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">IP</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 198.51.100.1 (Router 2) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">DST = 198.51.100.4 (Router 3) <br>
-</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 198.51.100.1 <br> DST = 198.51.100.4</td>
+              <td class="text-left" rowspan="1" colspan="1">Router R2 <br> Router R3</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">Link layer</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC=R2, DST=R3</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC=R2 <br> DST=R3</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
 <ul class="normal">
-<li class="normal" id="section-3.3-8.1">
-            <p id="section-3.3-8.1.1"><em>Step 4</em> <br> <strong>R3-&gt;R4</strong>: Router 3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION-enabled Router 4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach Router 4.<a href="#section-3.3-8.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.2-8.1">
+            <p id="section-3.2-8.1.1"><em>Step 4 -</em> <strong>R3-&gt;R4</strong>: <br> router R3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION router R4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach router R4.<a href="#section-3.2-8.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-4"></span><table class="center" id="table-9">
+<span id="name-snapshot-header-step-4-r3-r"></span><table class="center" id="table-9">
           <caption>
 <a href="#table-9" class="selfRef">Table 9</a>:
-<a href="#name-snapshot-header-step-4" class="selfRef">Snapshot header - step 4</a>
+<a href="#name-snapshot-header-step-4-r3-r" class="selfRef">Snapshot header - step 4 - R3 -&gt; R4</a>
           </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">R3 -&gt; R4</th>
-              <th class="text-left" rowspan="1" colspan="1"> </th>
+              <th class="text-left" rowspan="1" colspan="1">Field</th>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">SCION</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) <br>
-</td>
+              <td class="text-left" rowspan="1" colspan="1">SCION addr.</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7</td>
+              <td class="text-left" rowspan="1" colspan="1">Endpoint A <br> Endpoint B</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">SCION path</td>
+              <td class="text-left" rowspan="1" colspan="1">- IF1 (0,i2a) (i1a,0) <br>   - <em>IF2</em> (0,i1b) <strong>(i3a,0)</strong>
+</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">DST = 1-ff00:0:3,192.0.2.7 (dest. Endpoint B) <br>
-</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">UDP port</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 30041 <br> DST = 30041 <br>
+</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">PATH =  <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- IF1 (0,i2a) (i1a,0) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- <em>IF2</em> (0,i1b) <strong>(i3a,0)</strong> <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">UDP</td>
-              <td class="text-left" rowspan="1" colspan="1">P<sub>S</sub> = 30041, P<sub>D</sub> = 30041 <br>
-</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">IP</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 198.51.100.17 (Router 3) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">DST = 198.51.100.18 (Router 4) <br>
-</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 198.51.100.17 <br> DST = 198.51.100.18</td>
+              <td class="text-left" rowspan="1" colspan="1">Router R3 <br> Router R4</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">Link layer</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC=R3, DST=R4</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC=R3 <br> DST=R4</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
 <ul class="normal">
-<li class="normal" id="section-3.3-10.1">
-            <p id="section-3.3-10.1.1"><em>Step 5</em> <br> <strong>R4-&gt;B</strong>: SCION-enabled Router 4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. Router 4 will then also realize, based on the fields <code>CurrHF</code> and <code>SegLen</code> in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, Router 4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination and with itself as source. The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.<a href="#section-3.3-10.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.2-10.1">
+            <p id="section-3.2-10.1.1"><em>Step 5 -</em> <strong>R4-&gt;B</strong>: <br> SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. router R4 will then also realize, based on the fields <code>CurrHF</code> and <code>SegLen</code> in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination and with itself as source. The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.<a href="#section-3.2-10.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-5"></span><table class="center" id="table-10">
+<span id="name-snapshot-header-step-5-r4-b"></span><table class="center" id="table-10">
           <caption>
 <a href="#table-10" class="selfRef">Table 10</a>:
-<a href="#name-snapshot-header-step-5" class="selfRef">Snapshot header - step 5</a>
+<a href="#name-snapshot-header-step-5-r4-b" class="selfRef">Snapshot header - step 5 - R4 -&gt; B</a>
           </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">R4 -&gt; B</th>
-              <th class="text-left" rowspan="1" colspan="1"> </th>
+              <th class="text-left" rowspan="1" colspan="1">Field</th>
+              <th class="text-left" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">SCION</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6 (source Endpoint A) <br>
-</td>
+              <td class="text-left" rowspan="1" colspan="1">SCION addr.</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 1-ff00:0:2,203.0.113.6  <br> DST = 1-ff00:0:3,192.0.2.7</td>
+              <td class="text-left" rowspan="1" colspan="1">Endpoint A <br> Endpoint B</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">SCION path</td>
+              <td class="text-left" rowspan="1" colspan="1">- IF1 (0,i2a) (i1a,0) <br>  - <em>IF2</em> (0,i1b) <strong>(i3a,0)</strong> <br>
+</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">DST = 1-ff00:0:3,192.0.2.7 (dest. Endpoint B) <br>
-</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">UDP port</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 30041  <br> DST = 30041 <br>
+</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">PATH =  <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- IF1 (0,i2a) (i1a,0) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">- <em>IF2</em> (0,i1b) <strong>(i3a,0)</strong> <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">UDP</td>
-              <td class="text-left" rowspan="1" colspan="1">P<sub>S</sub> = 30041, P<sub>D</sub> = 30041 <br>
-</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">IP</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 192.0.2.34 (Router 4) <br>
-</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">DST = 192.0.2.7 (Endpoint B) <br>
-</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 192.0.2.34 <br> DST = 192.0.2.7</td>
+              <td class="text-left" rowspan="1" colspan="1">Router R4 <br> Endpoint B</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">Link layer</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC=R4, DST=B</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC=R4 <br> DST=B</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
-<p id="section-3.3-12">When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also <a href="#reverse" class="auto internal xref">Section 2.3.4</a>).<a href="#section-3.3-12" class="pilcrow">¶</a></p>
+<p id="section-3.2-12">When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also <a href="#reverse" class="auto internal xref">Section 2.3.4</a>).<a href="#section-3.2-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4374,7 +4284,7 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
         <h3 id="name-mtu">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-mtu" class="section-name selfRef">MTU</a>
         </h3>
-<p id="section-5.1-1">SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of <span>[<a href="#RFC2460" class="cite xref">RFC2460</a>]</span>), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">SCION requires its underlay protocol to provide a minimum MTU of 1232 bytes. This number results from 1280, the minimum IPv6 MTU as of <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>), minus 48, assuming UDP/IPv6 as underlay. Higher layer protocols such as SCMP rely only on such minimum MTU.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">The MTU of a SCION path is defined as the minimum of the MTUs of the intra-AS and inter-AS links traversed by that path. The control plane disseminates such values and makes them available to the source endpoint (see 'Path MTU in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>).<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1-3">The MTU of each link may be discovered or administratively configured (current practice is for it to be configured). It must be less than or equal to the MTU of the link's underlay encapsulation or native link-layer in either direction.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1-4">SCION assumes that the MTUs of a path segment remains correct for the life time of that segment. This is generally a safe assumption because:<a href="#section-5.1-4" class="pilcrow">¶</a></p>
@@ -4497,7 +4407,7 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
           </h4>
 <p id="section-7.2.1-1">An on-path adversary could modify the SCION path header and replace the remaining part of path segments to the destination with different segments. Such replaced segments must include authorized segments as otherwise the packet would be simply dropped on its way to the destination.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.2.1-2">The already traversed portion of the current segment and past segments can also be modified by the adversary (e.g. by deleting and adding valid and invalid Hop Fields). On reply packets from the destination, the adversary can transparently revert the changes to the path header again. For instance, if an adversary M is an intermediate AS on the path of a packet from A to B, then M can replace the packet’s past path (leading up to, but not including M) where the new path may not be a valid end-to-end path. However, when B reverses the path and sends a reply packet, that packet would go via M which can then transparently change the invalid path back to the valid path to A. In addition, the endpoint address header can also be modified.<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-3">Modifications of the SCION path and address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, loosely analogous to the IPSec Authentication Header, exists for SCION but is out of scope for this document. This is described as the SCION Packet Authentication Option (SPAO) in <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span>.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-3">Modifications of the SCION path and address header can be discovered by the destination endpoint by a data integrity protection system. Such a data integrity protection system, loosely analogous to the IPsec Authentication Header, exists for SCION but is out of scope for this document. This is described as the SCION Packet Authentication Option (SPAO) in <span>[<a href="#CHUAT22" class="cite xref">CHUAT22</a>]</span>.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.2.1-4">Moreover, packet integrity protection is not enough if there are two colluding adversaries on the path. These colluding adversaries can forward the packet between them using a different path than selected by the source endpoint: The first on-path attacker remodels the packet header arbitrarily, and the second on-path attacker changes the path back to the original source-selected path, such that the integrity check by the destination endpoint succeeds. However, such an attack is of little value. An on-path adversary may inspect/copy/disrupt its traffic without diverting it away from the sender-chosen path. For this reason proof-of-transit, which would be required to detect such an attack, has marginal benefit in the context of SCION and it is not in scope for this document.<a href="#section-7.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4563,10 +4473,6 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC2460">[RFC2460]</dt>
-        <dd>
-<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">RFC 2460</span>, <span class="seriesInfo">DOI 10.17487/RFC2460</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2460">https://www.rfc-editor.org/rfc/rfc2460</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2474">[RFC2474]</dt>
         <dd>
@@ -4804,10 +4710,13 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-D.1-1.1">
-            <p id="appendix-D.1-1.1.1">Small clarifications and nits<a href="#appendix-D.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.1.1">Small clarifications and nits (e.g, replace RFC2460 reference with more recent RFC8200)<a href="#appendix-D.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-D.1-1.2">
-            <p id="appendix-D.1-1.2.1">Remove use of decimal notation in tables 3 and 4<a href="#appendix-D.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-D.1-1.2.1">Life of a SCION Data Packet: improve clarity if text and tables<a href="#appendix-D.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.3">
+            <p id="appendix-D.1-1.3.1">Remove use of decimal notation in tables 3 and 4<a href="#appendix-D.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
