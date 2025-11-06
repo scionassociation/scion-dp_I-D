@@ -518,6 +518,9 @@ Table of Contents
    the implementation and the choices of each AS's administrator.  In
    current practice this is accomplished by way of a configuration file.
 
+   In addition, routers require coarse time synchronization with control
+   plane instances (see Section 4.2.2.3).
+
    *Note:* The current SCION implementation runs over the UDP/IP
    protocol.  However, the use of other lower layers protocols is
    possible.
