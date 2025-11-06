@@ -369,6 +369,8 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 
 In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
+In addition, routers require coarse time synchronization with control plane instances (see [](#clock-inaccuracy)).
+
 **Note:** The current SCION implementation runs over the UDP/IP protocol. However, the use of other lower layers protocols is possible.
 
 
