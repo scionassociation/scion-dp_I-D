@@ -227,21 +227,17 @@ This document contains new approaches to secure path aware networking. It is not
 
 SCION is a path-aware internetworking routing architecture as described in {{RFC9217}}. It allows endpoints and applications to select paths across the network to use for traffic, based on trusted path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.
 
-SCION has been developed with the following goals:
+SCION relies on three main components:
 
-*Availability* - to provide highly available communication that can send traffic over paths with optimal or required characteristics, quickly handle inter-domain link or router failures (both on the last hop or anywhere along the path) and provide continuity in the presence of adversaries.
+*PKI* - providing cryptographic material within an unique trust model. It is described in {{I-D.dekater-scion-pki}}.
 
-*Security* - to introduce a new approach to inter-domain path security that leverages path awareness in combination with a unique trust model. The goal is to provide higher levels of trust in routing information to prevent traffic hijacking, and enable users to decide where their data travels based on routing information that can be unambiguously attributed to an AS, ensuring that packets are only forwarded along authorized path segments. A particular use case is to enable geofencing.
+*Control Plane* -  performing inter-domain routing by discovering and securely disseminating path information. It is described in {{I-D.dekater-scion-controlplane}}.
 
-*Scalability* - to improve the scalability of the inter-domain control plane and data plane, avoiding existing limitations related to convergence and forwarding table size. The advertising of path segments is separated into a beaconing process within each Isolation Domain (ISD) and between ISDs which incurs minimal overhead and resource requirements on routers.
+*Data Plane* - described in this document. It carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints.
 
-This document describes the SCION Data Plane component that carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. A SCION border router reuses existing intra-domain infrastructure to communicate to other SCION routers or SCION endpoints within its AS.
-
-It should be read in conjunction with the documents that describe the SCION PKI (see {{I-D.dekater-scion-pki}}) and Control Plane (see {{I-D.dekater-scion-controlplane}}) components.
+A more detailed introduction, motivation, and problem statement are provided in {{I-D.dekater-scion-controlplane}}. Readers are encouraged to read the introduction in that document first.
 
 The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
-
-==Note (to be removed before publication): this document, together with the other components {{I-D.dekater-scion-pki}} and {{I-D.dekater-scion-controlplane}}, deprecates {{I-D.dekater-panrg-scion-overview}}.==
 
 
 ## Terminology {#terms}
@@ -1046,8 +1042,6 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
 |     | Endpoint A |      |         |      | Endpoint B |     |
 |     +------------+      |         |      +------------+     |
 | 1-ff00:0:2,203.0.113.6  |         |  1-ff00:0:3,192.0.2.7   |
-|                         |         |                         |
-|       AS ff00:0:2       |         |       AS ff00:0:3       |
 |                         |         |                         |
 |       AS ff00:0:2       |         |       AS ff00:0:3       |
 |                         |         |                         |
