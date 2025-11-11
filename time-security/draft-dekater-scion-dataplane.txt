@@ -2484,7 +2484,8 @@ Table of Contents
    properties, this does not affect access control or data security for
    the hosts in the affected AS.  Unauthorized paths are available to
    the attacker, but the routing of packets from legitimate senders is
-   not affected.
+   not affected.  Future work may tackle this with alternative
+   forwarding key distribution approaches.
 
 7.1.2.  Forging Hop Field MAC
 
@@ -2858,6 +2859,9 @@ Change Log
    removed before publication.
 
 draft-dekater-scion-dataplane-09
+
+   *  Intro: remove duplicated motivation and component description and
+      add a reference to the same text in -controlplane
 
    *  Clarify coarse time synchronization requirement between routers
       and control services and add reference to -controlplane security
