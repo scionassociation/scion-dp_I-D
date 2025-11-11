@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 10 May 2026                                   SCION Association
+Expires: 15 May 2026                                   SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         6 November 2025
+                                                        11 November 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 May 2026.
+   This Internet-Draft will expire on 15 May 2026.
 
 Copyright Notice
 
@@ -133,8 +133,7 @@ Table of Contents
        7.2.1.  Modification of the Path Header
        7.2.2.  Payload Integrity
      7.3.  Off-Path Attacks
-     7.4.  Attacks on time sources
-     7.5.  Volumetric Denial of Service Attacks
+     7.4.  Volumetric Denial of Service Attacks
    8.  IANA Considerations
    9.  References
      9.1.  Normative References
@@ -2332,9 +2331,14 @@ Table of Contents
    In comparison to these time scales, clock offsets in the order of
    minutes are immaterial.
 
-   Each AS operator is responsible for maintaining sufficient coarse
-   time synchronization between its SCION control services and routers.
-   No particular method is assumed for this.
+   Care should be taken to ensure that control-plane instances and
+   routers maintain coarse time synchronization.  The specific methods
+   used to achieve this synchronization are outside the scope of this
+   document.  If the clock drift between a router and its AS control-
+   plane instances exceeds the expiration time (which can range from
+   337.5 seconds to one day, seeSection 2.3.2.4), packets may be
+   dropped.  Security considerations related to this issue are discussed
+   in [I-D.dekater-scion-controlplane].
 
 5.  Deployment Considerations
 
@@ -2641,20 +2645,11 @@ Table of Contents
    to influence forwarding in the data plane.  Once a packet is en-route
    it will follow its determined path regardless of the actions of the
    adversary.  An adversary can attempt to disrupt the connectivity of
-   the path by flooding a link with excessive traffic (see Section 7.5
+   the path by flooding a link with excessive traffic (see Section 7.4
    below), but after detecting congestion, the endpoint can switch to
    another non-congested path for subsequent packets.
 
-7.4.  Attacks on time sources
-
-   Care should be taken to ensure coarse time synchronization between
-   control-plane instances and routers, as discussed in Section 4.2.2.3.
-   An attacker could alter time sources.  Should the clock drift between
-   a router and control plane instance be greater than the expiration
-   time (between 337.5s and a day, seeSection 2.3.2.4), packets would be
-   dropped.
-
-7.5.  Volumetric Denial of Service Attacks
+7.4.  Volumetric Denial of Service Attacks
 
    An adversary can attempt to disrupt the connectivity of a network
    path by flooding a link with excessive traffic.  In this case, the
@@ -2903,8 +2898,8 @@ Change Log
 draft-dekater-scion-dataplane-09
 
    *  Clarify coarse time synchronization requirement between routers
-      and control services with a dedicated security consideration
-      section
+      and control services and add reference to -controlplane security
+      considerations
 
 draft-dekater-scion-dataplane-08
 
