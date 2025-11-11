@@ -1804,22 +1804,22 @@ Table of Contents
    follows:
 
    *  Consider a path segment with "n" hops, containing ASes AS_0, ... ,
-      AS_(n-1), with forwarding keys K_0, ... , K_(n-1) in this order.
+      AS_(n-1), with forwarding keys K0, ... , K(n-1) in this order.
 
    *  AS_0 is the core AS that created the PCB representing the path
       segment and that added a random initial 16-bit segment identifier
       SegID to the Segment Info field of the PCB.
 
    MAC_i =
-   Ck_i (SegID XOR MAC_0 [:2] ... XOR MAC_(i-1) [:2], Timestamp,
+   C_ki (SegID XOR MAC_0 [:2] ... XOR MAC_(i-1) [:2], Timestamp,
    ExpTime_i, ConsIngress_i, ConsEgress_i)
 
    where
 
-   *  k_i = The forwarding key k of the current AS_i
+   *  ki = The forwarding key k of the current AS_i
 
-   *  Ck_i (...) = Cryptographic checksum C over (...) computed with
-      forwarding key k_i
+   *  C_ki (...) = Cryptographic checksum C over (...) computed with
+      forwarding key ki
 
    *  SegID = The random initial 16-bit segment identifier set by the
       core AS when creating the corresponding PCB
@@ -1857,7 +1857,7 @@ Table of Contents
    [:2] is replaced by Acc_i.  This results in the following alternative
    procedure for the computation of MAC_i at SCION routers:
 
-   MAC_i = Ck_i (Acc_i, Timestamp, ExpTime_i, ConsIngress_i,
+   MAC_i = C_ki (Acc_i, Timestamp, ExpTime_i, ConsIngress_i,
    ConsEgress_i)
 
    During forwarding, SCION routers at each AS_i update the Acc field in
@@ -1966,7 +1966,7 @@ Table of Contents
    Field^Peer_i as follows:
 
    MAC^Peer_i =
-   Ck^Peer_i (SegID XOR MAC_0 [:2] ... XOR MAC_i [:2], Timestamp,
+   C^Peer_ki (SegID XOR MAC_0 [:2] ... XOR MAC_i [:2], Timestamp,
    ExpTime^Peer_i, ConsIngress^Peer_i, ConsEgress^Peer_i)
 
    *Note:* The XOR-sum of the MACs in the formula of the peering Hop
