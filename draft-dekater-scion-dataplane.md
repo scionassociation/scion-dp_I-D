@@ -1402,8 +1402,9 @@ This bias comes in addition to a structural delay: PCBs are propagated at a conf
 
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
-Each AS operator is responsible for maintaining sufficient coarse time synchronization between its SCION control services and routers. No particular method is assumed for this.
-
+Care should be taken to ensure that control-plane instances and routers maintain coarse time synchronization. The specific methods used to achieve this synchronization are outside the scope of this document.
+If the clock drift between a router and its AS control-plane instances exceeds the expiration time (which can range from 337.5 seconds to one day, see[](#hopfld)), packets may be dropped.
+Security considerations related to this issue are discussed in {{I-D.dekater-scion-controlplane}}.
 
 # Deployment Considerations
 
@@ -1522,10 +1523,6 @@ An on-path attacker can modify the payload of a SCION packet. Existing higher la
 
 SCION's path awareness limits the abilities of an off-path adversary to influence forwarding in the data plane. Once a packet is en-route it will follow its determined path regardless of the actions of the adversary. An adversary can attempt to disrupt the connectivity of the path by flooding a link with excessive traffic (see [](#dos) below), but after detecting congestion, the endpoint can switch to another non-congested path for subsequent packets.
 
-## Attacks on time sources
-
-Care should be taken to ensure coarse time synchronization between control-plane instances and routers, as discussed in [](#clock-inaccuracy). An attacker could alter time sources. Should the clock drift between a router and control plane instance be greater than the expiration time (between 337.5s and a day, see[](#hopfld)), packets would be dropped.
-
 ## Volumetric Denial of Service Attacks {#dos}
 
 An adversary can attempt to disrupt the connectivity of a network path by flooding a link with excessive traffic. In this case, the endpoint can switch to another non-congested path for subsequent packets.
@@ -1603,7 +1600,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-dataplane-09
 {:numbered="false"}
 
-- Clarify coarse time synchronization requirement between routers and control services with a dedicated security consideration section
+- Clarify coarse time synchronization requirement between routers and control services and add reference to -controlplane security considerations
 
 ## draft-dekater-scion-dataplane-08
 {:numbered="false"}
