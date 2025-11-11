@@ -233,7 +233,7 @@ SCION relies on three main components:
 
 *Control Plane* -  performing inter-domain routing by discovering and securely disseminating path information. It is described in {{I-D.dekater-scion-controlplane}}.
 
-*Data Plane* - described in this document. It carries out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints.
+*Data Plane* - carrying out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. It is described in this document.
 
 A more detailed introduction, motivation, and problem statement are provided in {{I-D.dekater-scion-controlplane}}. Readers are encouraged to read the introduction in that document first.
 
