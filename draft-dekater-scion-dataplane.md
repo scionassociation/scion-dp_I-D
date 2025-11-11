@@ -1169,15 +1169,15 @@ The aggregated 16-bit path segment identifier and preceding MACs prevent splicin
 
 The Hop Field MAC is generally calculated at a current AS<sub>i</sub> as follows:
 
-- Consider a path segment with "n" hops, containing ASes AS<sub>0</sub>, ... , AS<sub>n-1</sub>, with forwarding keys K<sub>0</sub>, ... , K<sub>n-1</sub> in this order.
+- Consider a path segment with "n" hops, containing ASes AS<sub>0</sub>, ... , AS<sub>n-1</sub>, with forwarding keys K0, ... , K(n-1) in this order.
 - AS<sub>0</sub> is the core AS that created the PCB representing the path segment and that added a random initial 16-bit segment identifier `SegID` to the `Segment Info` field of the PCB.
 
-MAC<sub>i</sub> = <br> Ck<sub>i</sub> (`SegID` XOR MAC<sub>0</sub> \[:2] ... XOR MAC<sub>i-1</sub> \[:2], Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
+MAC<sub>i</sub> = <br> C<sub>ki</sub> (`SegID` XOR MAC<sub>0</sub> \[:2] ... XOR MAC<sub>i-1</sub> \[:2], Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
 
 where
 
-- k<sub>i</sub> = The forwarding key k of the current AS<sub>i</sub>
-- Ck<sub>i</sub> (...) = Cryptographic checksum C over (...) computed with forwarding key k<sub>i</sub>
+- ki = The forwarding key k of the current AS<sub>i</sub>
+- C<sub>ki</sub> (...) = Cryptographic checksum C over (...) computed with forwarding key ki
 - `SegID` = The random initial 16-bit segment identifier set by the core AS when creating the corresponding PCB
 - XOR = The bitwise "exclusive or" operation
 - MAC<sub>i</sub> \[:2] = The Hop Field MAC for AS<sub>i</sub>, truncated to 2 bytes
@@ -1192,7 +1192,7 @@ The Accumulator Acc<sub>i</sub> is an updatable counter introduced in the data p
 
 [](#hf-mac-calc) provides a general formula to compute MAC<sub>i</sub>, but at each SCION router the expression `SegID XOR MAC_0 [:2] ... XOR MAC_i-1 [:2]` is replaced by Acc<sub>i</sub>. This results in the following alternative procedure for the computation of MAC<sub>i</sub> at SCION routers:
 
-MAC<sub>i</sub> = Ck<sub>i</sub> (Acc<sub>i</sub>, Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
+MAC<sub>i</sub> = C<sub>ki</sub> (Acc<sub>i</sub>, Timestamp, ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub>)
 
 During forwarding, SCION routers at each AS<sub>i</sub> update the Acc field in the packet header so that it contains the correct input value of Acc for the next AS in the path segment to be able to calculate the MAC over its Hop Field. Note that the correct input value of the `Acc` field depends on the direction of travel.
 
@@ -1258,7 +1258,7 @@ See {{I-D.dekater-scion-controlplane}} for more information.
 
 This results in the calculation of the MAC for the peering Hop Field<sup>Peer</sup><sub>i</sub> as follows:
 
-MAC<sup>Peer</sup><sub>i</sub> = <br> Ck<sup>Peer</sup><sub>i</sub> (`SegID` XOR MAC<sub>0</sub> \[:2] ... XOR MAC<sub>i</sub> \[:2], Timestamp, ExpTime<sup>Peer</sup><sub>i</sub>, ConsIngress<sup>Peer</sup><sub>i</sub>, ConsEgress<sup>Peer</sup><sub>i</sub>)
+MAC<sup>Peer</sup><sub>i</sub> = <br> C<sup>Peer</sup><sub>ki</sub> (`SegID` XOR MAC<sub>0</sub> \[:2] ... XOR MAC<sub>i</sub> \[:2], Timestamp, ExpTime<sup>Peer</sup><sub>i</sub>, ConsIngress<sup>Peer</sup><sub>i</sub>, ConsEgress<sup>Peer</sup><sub>i</sub>)
 
 **Note:** The XOR-sum of the MACs in the formula of the peering Hop Field **also includes** the MAC of the main Hop Field (whereas for the calculation of the MAC for the main Hop Field itself only the XOR-sum of the *previous* MACs is used).
 
