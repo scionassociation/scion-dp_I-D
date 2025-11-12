@@ -2296,11 +2296,8 @@ Table of Contents
    Care should be taken to ensure that control plane instances and
    routers maintain coarse time synchronization.  The specific methods
    used to achieve this synchronization are outside the scope of this
-   document.  If the clock drift between a router and its AS control
-   plane instances exceeds the expiration time (which can range from
-   337.5 seconds to one day, seeSection 2.3.2.4), packets may be
-   dropped.  Security considerations related to this issue are discussed
-   in [I-D.dekater-scion-controlplane].
+   document.  Security considerations related to this issue are
+   discussed in [I-D.dekater-scion-controlplane].
 
 5.  Deployment Considerations
 
@@ -2484,7 +2481,9 @@ Table of Contents
    properties, this does not affect access control or data security for
    the hosts in the affected AS.  Unauthorized paths are available to
    the attacker, but the routing of packets from legitimate senders is
-   not affected.
+   not affected.  Such compromise can be mitigated with a forwarding key
+   rotation, that can be carried out as soon an the AS hop field
+   expiration time is past.
 
 7.1.2.  Forging Hop Field MAC
 
