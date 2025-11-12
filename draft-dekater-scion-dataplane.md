@@ -1391,7 +1391,6 @@ This bias comes in addition to a structural delay: PCBs are propagated at a conf
 In comparison to these time scales, clock offsets in the order of minutes are immaterial.
 
 Care should be taken to ensure that control plane instances and routers maintain coarse time synchronization. The specific methods used to achieve this synchronization are outside the scope of this document.
-If the clock drift between a router and its AS control plane instances exceeds the expiration time (which can range from 337.5 seconds to one day, see[](#hopfld)), packets may be dropped.
 Security considerations related to this issue are discussed in {{I-D.dekater-scion-controlplane}}.
 
 # Deployment Considerations
@@ -1466,7 +1465,7 @@ When an AS's forwarding key is compromised, an attacker can forge Hop Field MACs
 Unless an attacker has access to the forwarding keys of all ASes on the illegitimate path it wants to fabricate, it will need to splice fragments of two legitimate path segments with an illegitimate Hop Field. For this, it needs to create a Hop Field with a MAC that fits into the MAC chain expected by the second path segment fragment. The only input that the attacker can vary relatively freely is the 8-bit ``ExpTime``, but the resulting MAC needs to match a specific 16 bit ``Acc`` value. While there is a low probability of this working for a specific attempt (1/256), the attack will succeed eventually if the attacker can keep retrying over a longer time period or with many different path segment fragments.
 
 While a forwarding key compromise and the resulting loss of path authorization is a serious degradation of SCION's routing security properties, this does not affect access control or data security for the hosts in the affected AS. Unauthorized paths are available to the attacker, but the routing of packets from legitimate senders is not affected.
-
+Such compromise can be mitigated with a forwarding key rotation, that can be carried out as soon an the AS hop field expiration time is past.
 
 ### Forging Hop Field MAC
 
