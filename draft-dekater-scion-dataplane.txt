@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 16 May 2026                                   SCION Association
+Expires: 17 May 2026                                   SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        12 November 2025
+                                                        13 November 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 May 2026.
+   This Internet-Draft will expire on 17 May 2026.
 
 Copyright Notice
 
@@ -2482,8 +2482,7 @@ Table of Contents
    the hosts in the affected AS.  Unauthorized paths are available to
    the attacker, but the routing of packets from legitimate senders is
    not affected.  Such compromise can be mitigated with a forwarding key
-   rotation, that can be carried out as soon an the AS hop field
-   expiration time is past.
+   rotation.
 
 7.1.2.  Forging Hop Field MAC
 
