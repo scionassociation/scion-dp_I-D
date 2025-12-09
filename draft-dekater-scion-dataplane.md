@@ -1589,6 +1589,11 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-dataplane-10
+{:numbered="false"}
+
+- Add normative reference to POSIX time
+
 ## draft-dekater-scion-dataplane-09
 {:numbered="false"}
 
