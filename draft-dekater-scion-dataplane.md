@@ -242,7 +242,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 ## Terminology {#terms}
 
-**Autonomous System (AS)**: An autonomous system is a network under a common administrative control. For example, the network of an Internet service provider, company, or university can constitute an AS. Although SCION ASes have a similar role to BGP ASes, they have a different address scheme and serve as a locator in the addressing of end hosts. References to ASes throughout this document refer to SCION ASes.
+**SCION Autonomous System (AS)**: A SCION Autonomous System is a network under a common administrative control. For example, the network of a SCION service provider, company, or university can constitute an AS. While functionally similar to a BGP AS, a SCION AS operates within an Isolation Domain (ISD), it utilizes a different address scheme and serves as a locator in the addressing of end hosts. References to ASes throughout this document refer to SCION ASes.
 
 **Core AS**: Each SCION isolation domain (ISD) is administered by a set of distinguished autonomous systems (ASes) called core ASes, which are responsible for initiating the path discovery and path construction process (in SCION called "beaconing").
 
@@ -1044,8 +1044,6 @@ This example illustrates an intra-ISD case, i.e. all communication happening wit
 |     | Endpoint A |      |         |      | Endpoint B |     |
 |     +------------+      |         |      +------------+     |
 | 1-ff00:0:2,203.0.113.6  |         |  1-ff00:0:3,192.0.2.7   |
-|                         |         |                         |
-|       AS ff00:0:2       |         |       AS ff00:0:3       |
 |                         |         |                         |
 |       AS ff00:0:2       |         |       AS ff00:0:3       |
 |                         |         |                         |
