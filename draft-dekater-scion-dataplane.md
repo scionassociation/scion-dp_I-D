@@ -1594,6 +1594,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Add normative reference to POSIX time and clarify timestamp behavior at wraparound
+- Clarify distinction between SCION ASes and BGP ASes through the text
 
 ## draft-dekater-scion-dataplane-09
 {:numbered="false"}
