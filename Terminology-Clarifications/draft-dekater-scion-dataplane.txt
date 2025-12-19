@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 3 June 2026                                   SCION Association
+Expires: 22 June 2026                                  SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        30 November 2025
+                                                        19 December 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 June 2026.
+   This Internet-Draft will expire on 22 June 2026.
 
 Copyright Notice
 
@@ -190,13 +190,14 @@ Table of Contents
 
 1.1.  Terminology
 
-   *Autonomous System (AS)*: An autonomous system is a network under a
-   common administrative control.  For example, the network of an
-   Internet service provider, company, or university can constitute an
-   AS.  Although SCION ASes have a similar role to BGP ASes, they have a
-   different address scheme and serve as a locator in the addressing of
-   end hosts.  References to ASes throughout this document refer to
-   SCION ASes.
+   *SCION Autonomous System (AS)*: A SCION Autonomous System is a
+   network under a common administrative control.  For example, the
+   network of a SCION service provider, company, or university can
+   constitute an AS.  While functionally similar to a BGP AS, a SCION AS
+   operates within an Isolation Domain (ISD), it utilizes a different
+   address scheme and serves as a locator in the addressing of end
+   hosts.  References to ASes throughout this document refer to SCION
+   ASes.
 
    *Core AS*: Each SCION isolation domain (ISD) is administered by a set
    of distinguished autonomous systems (ASes) called core ASes, which
@@ -1509,8 +1510,6 @@ Table of Contents
    |                         |         |                         |
    |       AS ff00:0:2       |         |       AS ff00:0:3       |
    |                         |         |                         |
-   |       AS ff00:0:2       |         |       AS ff00:0:3       |
-   |                         |         |                         |
    +-------------------------+         +-------------------------+
 
       Figure 17: Example topology.  AS ff00:0:1 is the core AS of ISD
@@ -2662,9 +2661,9 @@ Table of Contents
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-12, 14 November 2025,
+              scion-controlplane-13, 4 December 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-12>.
+              scion-controlplane-13>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
