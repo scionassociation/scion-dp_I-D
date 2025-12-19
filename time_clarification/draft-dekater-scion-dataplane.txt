@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 12 June 2026                                  SCION Association
+Expires: 22 June 2026                                  SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         9 December 2025
+                                                        19 December 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 June 2026.
+   This Internet-Draft will expire on 22 June 2026.
 
 Copyright Notice
 
@@ -1131,7 +1131,10 @@ Table of Contents
       Info field with a timestamp in the future is invalid.  For the
       purpose of validation, a timestamp is considered "future" if it is
       later than the locally available current time plus 337.5 seconds
-      (i.e. the minimum time to live of a hop).
+      (i.e. the minimum time to live of a hop).  This timestamp wraps
+      around every 2^32 seconds (roughly 136 years).  The next
+      wraparound will occur in year 2106.  Care should be taken by
+      implementations while computing validity during a wraparound.
 
 2.3.2.4.  Hop Field
 
@@ -2864,7 +2867,8 @@ Change Log
 
 draft-dekater-scion-dataplane-10
 
-   *  Add normative reference to POSIX time
+   *  Add normative reference to POSIX time and clarify timestamp
+      behavior at wraparound
 
 draft-dekater-scion-dataplane-09
 
