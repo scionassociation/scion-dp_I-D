@@ -2870,6 +2870,9 @@ draft-dekater-scion-dataplane-10
    *  Add normative reference to POSIX time and clarify timestamp
       behavior at wraparound
 
+   *  Clarify distinction between SCION ASes and BGP ASes through the
+      text
+
 draft-dekater-scion-dataplane-09
 
    *  Intro: remove duplicated motivation and component description and
