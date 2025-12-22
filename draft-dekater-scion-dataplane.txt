@@ -144,6 +144,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-10
      draft-dekater-scion-dataplane-09
      draft-dekater-scion-dataplane-08
      draft-dekater-scion-dataplane-07
@@ -1127,16 +1128,19 @@ Table of Contents
       Section 4.1.
 
    *  Timestamp: Timestamp created by the initiator of the corresponding
-      beacon.  The timestamp is defined as the number of seconds elapsed
-      since the POSIX Epoch (1970-01-01 00:00:00 UTC), encoded as a
-      32-bit unsigned integer.  This timestamp enables the validation of
-      a Hop Field in the segment represented by this Info Field, by
-      verifying the expiration time and MAC set in the Hop Field - the
-      expiration time of a Hop Field is calculated relative to the
-      timestamp.  An Info field with a timestamp in the future is
-      invalid.  For the purpose of validation, a timestamp is considered
-      "future" if it is later than the locally available current time
-      plus 337.5 seconds (i.e. the minimum time to live of a hop).
+      beacon.  The timestamp is defined as the seconds since Epoch
+      according to [POSIX.1-2024] Section 4.19, encoded as a 32-bit
+      unsigned integer.  This timestamp enables the validation of a Hop
+      Field in the segment represented by this Info Field, by verifying
+      the expiration time and MAC set in the Hop Field - the expiration
+      time of a Hop Field is calculated relative to the timestamp.  An
+      Info field with a timestamp in the future is invalid.  For the
+      purpose of validation, a timestamp is considered "future" if it is
+      later than the locally available current time plus 337.5 seconds
+      (i.e. the minimum time to live of a hop).  This timestamp wraps
+      around every 2^32 seconds (roughly 136 years).  The next
+      wraparound will occur in year 2106.  Care should be taken by
+      implementations while computing validity during a wraparound.
 
 2.3.2.4.  Hop Field
 
@@ -2673,6 +2677,12 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-dekater-
               scion-pki-10>.
 
+   [POSIX.1-2024]
+              "Standard for Information Technology--Portable Operating
+              System Interface (POSIX™) Base Specifications, Issue 8",
+              2024, <https://pubs.opengroup.org/onlinepubs/9799919799/
+              basedefs/V1_chap04.html>.
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -2860,6 +2870,14 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-10
+
+   *  Add normative reference to POSIX time and clarify timestamp
+      behavior at wraparound
+
+   *  Clarify distinction between SCION ASes and BGP ASes through the
+      text
 
 draft-dekater-scion-dataplane-09
 
