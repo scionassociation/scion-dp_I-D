@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 17 May 2026                                   SCION Association
+Expires: 25 June 2026                                  SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        13 November 2025
+                                                        22 December 2025
 
 
                             SCION Data Plane
@@ -34,8 +34,8 @@ Abstract
    a detailed specification of the SCION data packet format as well as
    the structure of the SCION header.  SCION also supports extension
    headers, which are additionally described.  The document continues
-   with the life cycle of a SCION packet while traversing the SCION
-   Internet, followed by a specification of the SCION path authorization
+   with the life cycle of a SCION packet while traversing a SCION
+   network, followed by a specification of the SCION path authorization
    mechanisms and the packet processing at routers.
 
    This document contains new approaches to secure path aware
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 May 2026.
+   This Internet-Draft will expire on 25 June 2026.
 
 Copyright Notice
 
@@ -190,9 +190,14 @@ Table of Contents
 
 1.1.  Terminology
 
-   *Autonomous System (AS)*: An autonomous system is a network under a
-   common administrative control.  For example, the network of an
-   Internet service provider or organization can constitute an AS.
+   *SCION Autonomous System (AS)*: A SCION Autonomous System is a
+   network under a common administrative control.  For example, the
+   network of a SCION service provider, company, or university can
+   constitute an AS.  While functionally similar to a BGP AS, a SCION AS
+   operates within an Isolation Domain (ISD), it utilizes a different
+   address scheme and serves as a locator in the addressing of end
+   hosts.  References to ASes throughout this document refer to SCION
+   ASes.
 
    *Core AS*: Each SCION isolation domain (ISD) is administered by a set
    of distinguished autonomous systems (ASes) called core ASes, which
@@ -248,13 +253,13 @@ Table of Contents
    value that indicates the lack of an Interface ID.  It is used as the
    unspecified Interface ID (e.g., in Section 2.3.3).
 
-   *Isolation Domain (ISD)*: In SCION, Autonomous Systems (ASes) are
-   organized into logical groups called Isolation Domains or ISDs.  Each
-   ISD consists of ASes that span an area with a uniform trust
-   environment (e.g. a common jurisdiction).
+   *Isolation Domain (ISD)*: SCION ASes are organized into logical
+   groups called Isolation Domains or ISDs.  Each ISD consists of ASes
+   that span an area with a uniform trust environment (e.g. a common
+   jurisdiction).
 
-   *Leaf AS*: An AS at the "edge" of an ISD, with no other downstream
-   ASes.
+   *Leaf AS*: A SCION AS at the "edge" of an ISD, with no other
+   downstream ASes.
 
    *Message Authentication Code (MAC)*: In the rest of this document,
    "MAC" always refers to "Message Authentication Code" and never to
@@ -315,12 +320,12 @@ Table of Contents
 
 1.3.  Overview
 
-   The SCION Data Plane forwards inter-domain packets between SCION-
-   enabled ASes.  SCION routers are normally deployed at the edge of an
-   AS, and peer with neighbor SCION routers.  Inter-domain forwarding is
-   based on end-to-end path information contained in the packet header.
-   This path information consists of a sequence of Hop Fields (HFs).
-   Each Hop Field corresponds to an AS on the path, and it includes an
+   The SCION Data Plane forwards inter-domain packets between SCION
+   ASes.  SCION routers are normally deployed at the edge of an AS, and
+   peer with neighbor SCION routers.  Inter-domain forwarding is based
+   on end-to-end path information contained in the packet header.  This
+   path information consists of a sequence of Hop Fields (HFs).  Each
+   Hop Field corresponds to an AS on the path, and it includes an
    ingress Interface ID as well as an egress Interface ID, which
    unequivocally identifies the ingress and egress interfaces within the
    AS.  The information is authenticated with a Message Authentication
@@ -686,10 +691,10 @@ Table of Contents
    headers such as the address and path headers.  For more details, see
    Section 2.1.
 
-   The _address header_ contains the ISD, AS and endpoint addresses of
-   source and destination.  The type and length of endpoint addresses
-   are variable and can be set independently using flags in the common
-   header.  For more details, see Section 2.2.
+   The _address header_ contains the ISD, SCION AS and endpoint
+   addresses of source and destination.  The type and length of endpoint
+   addresses are variable and can be set independently using flags in
+   the common header.  For more details, see Section 2.2.
 
    The _path header_ contains the full AS-level forwarding path of the
    packet.  A path type field in the common header specifies the path
@@ -849,7 +854,8 @@ Table of Contents
    *  DstISD, SrcISD: The 16-bit ISD identifier of the destination/
       source.
 
-   *  DstAS, SrcAS: The 48-bit AS identifier of the destination/source.
+   *  DstAS, SrcAS: The 48-bit SCION AS identifier of the destination/
+      source.
 
    *  DstHostAddr, SrcHostAddr: Specifies the variable length endpoint
       address of the destination/source.  The accepted type and length
@@ -2656,9 +2662,9 @@ Table of Contents
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-11, 2 November 2025,
+              scion-controlplane-13, 4 December 2025,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-11>.
+              scion-controlplane-13>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
