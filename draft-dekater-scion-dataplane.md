@@ -55,7 +55,7 @@ normative:
   RFC5880:
   RFC6437:
   RFC8200:
-
+informative:
   ISD-AS-assignments:
     title: "SCION Registry"
     date: 2026
