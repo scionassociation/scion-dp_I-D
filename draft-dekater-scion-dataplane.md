@@ -221,7 +221,7 @@ informative:
 
 This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). One of the basic characteristics of SCION is that it gives path control to endpoints. The SCION Control Plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION Data Plane is to combine the path segments into end-to-end paths, and forward data between endpoints according to the specified path.
 
-The SCION Data Plane fundamentally differs from today's IP-based data plane in that it is *path-aware*: In SCION, interdomain forwarding directives are embedded in the packet header. This document provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers, which are additionally described. The document continues with the life cycle of a SCION packet while traversing a SCION network, followed by a specification of the SCION path authorization mechanisms and the packet processing at routers.
+The SCION Data Plane fundamentally differs from today's IP-based data plane in that it is *path-aware*: In SCION, interdomain forwarding directives are embedded in the packet header. This document provides a detailed specification of the SCION data packet format as well as the structure of the SCION header. SCION also supports extension headers, which are additionally described. The document continues with the life of a SCION packet while traversing a SCION network, followed by a specification of the SCION path authorization mechanisms and the packet processing at routers.
 
 This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet.
 
@@ -265,11 +265,9 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **Info Field (INF)**: Each path segment construction beacon (PCB) contains a single Info field, which provides basic information about the PCB. Together with Hop Fields (HFs), these are used to create forwarding paths.
 
-**Interface Identifier (Interface ID)**: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of Interface IDs called `ConsIngress` and `ConsEgress`, as they refer to the ingress and egress interfaces in the direction of path construction (beaconing). Each Interface ID MUST be unique within each AS. 0 is a reserved value that indicates the lack of an Interface ID. It is used as the unspecified Interface ID (e.g., in [](#onehop)).
+**Interface Identifier (Interface ID)**: A 16-bit identifier that designates a SCION interface at the end of a link connecting two SCION ASes, with each interface belonging to one border router. Hop fields describe the traversal of an AS by a pair of Interface IDs called `ConsIngress` and `ConsEgress`, as they refer to the ingress and egress interfaces in the direction of path construction (beaconing). Each Interface ID MUST be unique within each AS. 0 is a reserved value that indicates the lack of an Interface ID. It is used as the unspecified Interface ID (see [](#onehop)).
 
 **Isolation Domain (ISD)**: SCION ASes are organized into logical groups called Isolation Domains or ISDs. Each ISD consists of ASes that span an area with a uniform trust environment (e.g. a common jurisdiction).
-
-**Leaf AS**: A SCION AS at the "edge" of an ISD, with no other downstream ASes.
 
 **Message Authentication Code (MAC)**: In the rest of this document, "MAC" always refers to "Message Authentication Code" and never to "Medium Access Control". When "Medium Access Control address" is implied, the phrase "Link Layer Address" is used.
 
@@ -301,14 +299,14 @@ This concept allows SCION routers to forward packets to a neighbor AS without in
 This SCION design choice has the following advantages:
 
 - It provides control and transparency over forwarding paths to endpoints.
-- It simplifies the packet processing at routers. Instead of having to perform longest prefix matching on IP addresses which requires expensive hardware and substantial amounts of energy, a router can simply access the next hop from the packet header after having verified the authenticity of the Hop Field's MAC.
+- It simplifies the packet processing at routers. Instead of having to perform longest prefix matching on IP addresses which requires dedicated hardware and substantial amounts of energy, a router can simply access the next hop from the packet header after having verified the authenticity of the Hop Field's MAC.
 
 
 ### Inter- and Intra-Domain Forwarding
 
 As SCION is an inter-domain network architecture, it is not concerned with intra-domain forwarding. This corresponds to the general practice today where BGP and IP are used for inter-domain routing and forwarding, respectively, but ASes use an intra-domain protocol of their choice - for example OSPF or IS-IS for routing and IP, MPLS, and various Layer 2 protocols for forwarding. In fact, even if ASes use IP forwarding internally today, they typically encapsulate the original IP packet they receive at the edge of their network into another IP packet with the destination address set to the egress border router, to avoid full inter-domain forwarding tables at internal routers.
 
-SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; re-using the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION. In practice, in most existing SCION deployments, SCION routers communicate among themselves and with endpoints by enclosing the SCION header inside an UDP/IPv6 or UDP/IPv4 packet. The choice of using an UDP/IP as an intra-domain protocol between routers was driven by the need to maximize compatibility with existing networks. This does not exclude that a SCION packet may be enclosed directly on top of a L2 protocol, since the choice of intra-domain protocol is AS specific.
+SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; re-using the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION. In practice, in most existing SCION deployments, SCION routers communicate among themselves and with endpoints by enclosing the SCION header inside an UDP/IPv6 or UDP/IPv4 packet. The choice of using an UDP/IP as an intra-domain protocol between routers was driven by the need to maximize compatibility with existing networks. This does not exclude that a SCION packet may be enclosed directly on top of a layer 2 protocol, since the choice of intra-domain protocol is AS specific.
 
 {{figure-30}} shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is later presented in [](#life-of-a-packet). A list of currently used upper layer protocols on top of SCION is presented in [](#protnum).
 
@@ -357,8 +355,8 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - Interface ID.
 - Link type (core, parent, child, peer). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number.
-- For the router that manages the interface: the neighbor interface underlay address.
-- For the routers that do not manage the interface: the address of the intra-domain protocol on the router that does.
+- Neighbor interface's underlay address.
+- For intra-domain forwarding: mapping of the AS interface IDs to intra-domain protocol address of the corresponding routers.
 - The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) which must be the same as that used by the Control Services within the AS.
 
 In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
@@ -387,12 +385,9 @@ Note that the type of segment is known to the endpoint but it is not explicitly 
 
 Besides enabling the enforcement of path policies, the above rules also protect the economic interest of ASes as they prevent building "valley paths". A valley path contains ASes that do not profit economically from traffic on this route, with the name coming from the fact that such paths go "down" (following parent-child links) before going "up" (following child-parent links).
 
-{{figure-1}} below shows valid segment combinations.
-
-**Note:** It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).
+{{figure-1}} and {{figure-1bis}} show valid segment combinations. Each node represents a SCION Autonomous System. It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).
 
 ~~~aasvg
-
  +---+                            :
  | C | = Core AS                  :  - - - - = unused links
  +---+
@@ -418,8 +413,21 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 |   +-+-+     +-+-+           +-+-+               +-+-+   1d    +-+-+
 v   |*  |     |*  |           |*  |               |* C|         |* C|
     +---+     +---+           +---+               +---+         +---+
+~~~
+{: #figure-1 title="Illustration of valid path segment combinations through multiple core ASes."}
 
+Valid path segment combinations:
 
+- **Communication through core ASes**:
+
+  - **Core segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is REQUIRED to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up or down segments are REQUIRED to connect the respective ASes to the core segment.
+  - **Immediate combination** (Cases 2a, 2b in {{figure-1bis}}): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.
+
+- **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
+- **AS shortcut** (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.
+- **On-path** (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.
+
+~~~aasvg
          +---+                +---+                 +---+
 +     +--+ C +--+             +* C|              :- + C +- :
 |     |  +---+  |             +-+-+              :  +---+  :
@@ -453,21 +461,9 @@ v   |*  |     |*  |           |*  |            |*  |     |*  |
 |  +-+-+     +-+-+        +-+-+   +-+-+     +-+-+     +-+-+       +-+-+
 v  |*  |     |*  |        |*  |   |*  |     |*  |     |*  |       |*  |
    +---+     +---+        +---+   +---+     +---+     +---+       +---+
-
 ~~~
-{: #figure-1 title="Illustration of valid path segment combinations. Each node represents a SCION Autonomous System."}
+{: #figure-1bis title="Illustration of valid path segment combinations through one or no core ASes."}
 
-
-Valid path segment combinations:
-
-- **Communication through core ASes**:
-
-  - **Core segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is REQUIRED to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up or down segments are REQUIRED to connect the respective ASes to the core segment.
-  - **Immediate combination** (Cases 2a, 2b in {{figure-1}}): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.
-
-- **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
-- **AS shortcut** (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.
-- **On-path** (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.
 
 ## Path Authorization
 
@@ -559,7 +555,7 @@ The SCION common header has the following packet format:
 | other        | other          | Unassigned       |
 {: #table-3 title="Allocations of length and type combinations"}
 
-A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set. {{table-4}} lists the known services.
+A service address designates a set of endpoint addresses rather than a single one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set. {{table-4}} lists the known services.
 
 - `RSV`: These bits are currently reserved for future use.
 
@@ -679,14 +675,6 @@ The SCION header is created by extracting the required Info Fields and Hop Field
 In the Hop Field that represents the last Hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
 
 ~~~aasvg
-                      +-----------------------+
-                      |      ISD Core         |
-+--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
-|   AS   +-+   AS   +---+   AS   +-+   AS   +---+   AS   +-+   AS   |
-|ff00:0:3| |ff00:0:4| | |ff00:0:1| +ff00:0:2| | |ff00:0:5| |ff00:0:6|
-+--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
-                      +-----------------------+
-
     Up-Segment           Core-Segment        Down-Segment
    +---------+           +---------+         +---------+
    | +-----+ |           | +-----+ |         | +-----+ |
@@ -759,7 +747,7 @@ Both indices are used by SCION routers when forwarding data traffic through the 
 
 #### Path Offset Calculations {#offset-calc}
 
-The path offset calculations are used by the SCION border routers to determine the Info Field and Hop Field that are currently valid for the packet on its way through the network.
+SCION border routers use path offsets to determine the currently active Info Field and Hop Field for the packet.
 
 The following rules apply when calculating the path offsets:
 
@@ -842,15 +830,13 @@ Setting multiple router alert flags on a path SHOULD be avoided. This is because
 
 ### One-Hop Path Type {#onehop}
 
-The `OneHopPath` path type (`PathType=2`) is currently used to bootstrap beaconing between neighboring ASes. This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.
+Bootstrapping beaconing between neighboring ASes relies on the `OneHopPath` path type (`PathType=2`). This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.
 
-A one-hop path has exactly one Info Field and two Hop Fields. The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
+A one-hop path has exactly one Info Field and two Hop Fields. Any entity with access to the AS forwarding key can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively. The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
 
 - At the source endpoint AS, *CurrHF := 0*.
 - At the destination endpoint AS, *CurrHF := 1*.
 
-
-Any entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively.
 
 Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to the unspecified value 0, ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.
 
@@ -1023,7 +1009,7 @@ This pseudo-header is used in current implementations of UDP on top of SCION. Ho
 
 # Life of a SCION Data Packet {#life-of-a-packet}
 
-This section gives an overall description of the life cycle of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).
+This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).
 
 This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. In the case of inter-ISD forwarding, the complete end-to-end path from source endpoint to destination endpoint would always require a core path segment as well, although this makes no difference for the forwarding process which works the same in an intra-ISD and inter-ISD context.
 
@@ -1595,6 +1581,9 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Add normative reference to POSIX time and clarify timestamp behavior at wraparound
 - Clarify distinction between SCION ASes and BGP ASes through the text
+- Figure 1: split into two smaller figures to fit in a single page
+- Figure 9 (Path construction example): shorten and remove superfluous AS chain
+- Configuration: clarify text on intra vs inter-domain interface id mappings
 
 ## draft-dekater-scion-dataplane-09
 {:numbered="false"}
