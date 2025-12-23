@@ -355,8 +355,8 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - Interface ID.
 - Link type (core, parent, child, peer). Link type depends on mutual agreements between the organizations operating the ASes at each end of each link.
 - Neighbor ISD-AS number.
-- The neighbor interface underlay address.
-- For intra-domain forwarding: mapping of an AS interface IDs to the corresponding intra-domain protocol address the corresponding router.
+- Neighbor interface's underlay address.
+- For intra-domain forwarding: mapping of the AS interface IDs to intra-domain protocol address of the corresponding routers.
 - The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) which must be the same as that used by the Control Services within the AS.
 
 In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
