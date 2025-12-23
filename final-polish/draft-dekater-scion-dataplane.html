@@ -1598,135 +1598,55 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
         </ul>
 <p id="section-1.4-5">Note that the type of segment is known to the endpoint but it is not explicitly visible in the path header of data packets. Therefore, a SCION router needs to explicitly verify that these rules were followed correctly by performing checks described in <a href="#process-router-ingress" class="auto internal xref">Section 4.2.2.1</a>.<a href="#section-1.4-5" class="pilcrow">¶</a></p>
 <p id="section-1.4-6">Besides enabling the enforcement of path policies, the above rules also protect the economic interest of ASes as they prevent building "valley paths". A valley path contains ASes that do not profit economically from traffic on this route, with the name coming from the fact that such paths go "down" (following parent-child links) before going "up" (following child-parent links).<a href="#section-1.4-6" class="pilcrow">¶</a></p>
-<p id="section-1.4-7"><a href="#_figure-1" class="auto internal xref">Figure 2</a> below shows valid segment combinations.<a href="#section-1.4-7" class="pilcrow">¶</a></p>
-<p id="section-1.4-8"><strong>Note:</strong> It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).<a href="#section-1.4-8" class="pilcrow">¶</a></p>
+<p id="section-1.4-7"><a href="#_figure-1" class="auto internal xref">Figure 2</a> and <a href="#_figure-1bis" class="auto internal xref">Figure 3</a> show valid segment combinations. Each node represents a SCION Autonomous System. It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).<a href="#section-1.4-7" class="pilcrow">¶</a></p>
 <span id="name-illustration-of-valid-path-"></span><div id="_figure-1">
 <figure id="figure-2">
-          <div id="section-1.4-9.1">
-            <div class="alignLeft art-svg artwork" id="section-1.4-9.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1008" width="576" viewBox="0 0 576 1008" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+          <div id="section-1.4-8.1">
+            <div class="alignLeft art-svg artwork" id="section-1.4-8.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="432" width="560" viewBox="0 0 560 432" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 8,208 L 8,400" fill="none" stroke="black"></path>
-                <path d="M 8,480 L 8,672" fill="none" stroke="black"></path>
-                <path d="M 8,768 L 8,960" fill="none" stroke="black"></path>
                 <path d="M 16,32 L 16,64" fill="none" stroke="black"></path>
                 <path d="M 16,96 L 16,128" fill="none" stroke="black"></path>
-                <path d="M 32,752 L 32,784" fill="none" stroke="black"></path>
-                <path d="M 32,848 L 32,880" fill="none" stroke="black"></path>
-                <path d="M 32,944 L 32,976" fill="none" stroke="black"></path>
                 <path d="M 40,192 L 40,224" fill="none" stroke="black"></path>
                 <path d="M 40,288 L 40,320" fill="none" stroke="black"></path>
                 <path d="M 40,384 L 40,416" fill="none" stroke="black"></path>
-                <path d="M 40,560 L 40,592" fill="none" stroke="black"></path>
-                <path d="M 40,656 L 40,688" fill="none" stroke="black"></path>
                 <path d="M 48,32 L 48,64" fill="none" stroke="black"></path>
                 <path d="M 48,96 L 48,128" fill="none" stroke="black"></path>
-                <path d="M 48,880 L 48,944" fill="none" stroke="black"></path>
                 <path d="M 56,224 L 56,288" fill="none" stroke="black"></path>
                 <path d="M 56,320 L 56,384" fill="none" stroke="black"></path>
-                <path d="M 56,480 L 56,560" fill="none" stroke="black"></path>
-                <path d="M 56,592 L 56,656" fill="none" stroke="black"></path>
-                <path d="M 64,752 L 64,784" fill="none" stroke="black"></path>
-                <path d="M 64,848 L 64,880" fill="none" stroke="black"></path>
-                <path d="M 64,944 L 64,976" fill="none" stroke="black"></path>
                 <path d="M 72,192 L 72,224" fill="none" stroke="black"></path>
                 <path d="M 72,288 L 72,320" fill="none" stroke="black"></path>
                 <path d="M 72,384 L 72,416" fill="none" stroke="black"></path>
-                <path d="M 72,560 L 72,592" fill="none" stroke="black"></path>
-                <path d="M 72,656 L 72,688" fill="none" stroke="black"></path>
-                <path d="M 80,464 L 80,496" fill="none" stroke="black"></path>
-                <path d="M 112,464 L 112,496" fill="none" stroke="black"></path>
-                <path d="M 112,752 L 112,784" fill="none" stroke="black"></path>
-                <path d="M 112,848 L 112,880" fill="none" stroke="black"></path>
-                <path d="M 112,944 L 112,976" fill="none" stroke="black"></path>
                 <path d="M 120,192 L 120,224" fill="none" stroke="black"></path>
                 <path d="M 120,288 L 120,320" fill="none" stroke="black"></path>
                 <path d="M 120,384 L 120,416" fill="none" stroke="black"></path>
-                <path d="M 120,560 L 120,592" fill="none" stroke="black"></path>
-                <path d="M 120,656 L 120,688" fill="none" stroke="black"></path>
-                <path d="M 128,880 L 128,944" fill="none" stroke="black"></path>
                 <path d="M 136,224 L 136,288" fill="none" stroke="black"></path>
                 <path d="M 136,320 L 136,384" fill="none" stroke="black"></path>
-                <path d="M 136,480 L 136,560" fill="none" stroke="black"></path>
-                <path d="M 136,592 L 136,656" fill="none" stroke="black"></path>
-                <path d="M 144,752 L 144,784" fill="none" stroke="black"></path>
-                <path d="M 144,848 L 144,880" fill="none" stroke="black"></path>
-                <path d="M 144,944 L 144,976" fill="none" stroke="black"></path>
                 <path d="M 152,192 L 152,224" fill="none" stroke="black"></path>
                 <path d="M 152,288 L 152,320" fill="none" stroke="black"></path>
                 <path d="M 152,384 L 152,416" fill="none" stroke="black"></path>
-                <path d="M 152,560 L 152,592" fill="none" stroke="black"></path>
-                <path d="M 152,656 L 152,688" fill="none" stroke="black"></path>
-                <path d="M 216,944 L 216,976" fill="none" stroke="black"></path>
-                <path d="M 232,864 L 232,944" fill="none" stroke="black"></path>
                 <path d="M 248,192 L 248,224" fill="none" stroke="black"></path>
                 <path d="M 248,288 L 248,320" fill="none" stroke="black"></path>
                 <path d="M 248,384 L 248,416" fill="none" stroke="black"></path>
-                <path d="M 248,464 L 248,496" fill="none" stroke="black"></path>
-                <path d="M 248,560 L 248,592" fill="none" stroke="black"></path>
-                <path d="M 248,656 L 248,688" fill="none" stroke="black"></path>
-                <path d="M 248,752 L 248,784" fill="none" stroke="black"></path>
-                <path d="M 248,848 L 248,880" fill="none" stroke="black"></path>
-                <path d="M 248,944 L 248,976" fill="none" stroke="black"></path>
                 <path d="M 264,224 L 264,288" fill="none" stroke="black"></path>
                 <path d="M 264,320 L 264,384" fill="none" stroke="black"></path>
-                <path d="M 264,496 L 264,560" fill="none" stroke="black"></path>
-                <path d="M 264,592 L 264,656" fill="none" stroke="black"></path>
                 <path d="M 280,192 L 280,224" fill="none" stroke="black"></path>
                 <path d="M 280,288 L 280,320" fill="none" stroke="black"></path>
                 <path d="M 280,384 L 280,416" fill="none" stroke="black"></path>
-                <path d="M 280,464 L 280,496" fill="none" stroke="black"></path>
-                <path d="M 280,560 L 280,592" fill="none" stroke="black"></path>
-                <path d="M 280,656 L 280,688" fill="none" stroke="black"></path>
-                <path d="M 280,752 L 280,784" fill="none" stroke="black"></path>
-                <path d="M 280,848 L 280,880" fill="none" stroke="black"></path>
-                <path d="M 280,944 L 280,976" fill="none" stroke="black"></path>
-                <path d="M 296,864 L 296,944" fill="none" stroke="black"></path>
-                <path d="M 312,944 L 312,976" fill="none" stroke="black"></path>
                 <path d="M 328,192 L 328,224" fill="none" stroke="black"></path>
                 <path d="M 360,192 L 360,224" fill="none" stroke="black"></path>
-                <path d="M 360,752 L 360,784" fill="none" stroke="black"></path>
-                <path d="M 360,944 L 360,976" fill="none" stroke="black"></path>
-                <path d="M 376,864 L 376,944" fill="none" stroke="black"></path>
-                <path d="M 384,560 L 384,592" fill="none" stroke="black"></path>
-                <path d="M 384,656 L 384,688" fill="none" stroke="black"></path>
-                <path d="M 392,752 L 392,784" fill="none" stroke="black"></path>
-                <path d="M 392,944 L 392,976" fill="none" stroke="black"></path>
-                <path d="M 400,592 L 400,656" fill="none" stroke="black"></path>
-                <path d="M 400,848 L 400,880" fill="none" stroke="black"></path>
                 <path d="M 408,384 L 408,416" fill="none" stroke="black"></path>
-                <path d="M 416,560 L 416,592" fill="none" stroke="black"></path>
-                <path d="M 416,656 L 416,688" fill="none" stroke="black"></path>
                 <path d="M 424,192 L 424,224" fill="none" stroke="black"></path>
                 <path d="M 424,336 L 424,384" fill="none" stroke="black"></path>
-                <path d="M 424,464 L 424,496" fill="none" stroke="black"></path>
-                <path d="M 432,848 L 432,880" fill="none" stroke="black"></path>
                 <path d="M 440,384 L 440,416" fill="none" stroke="black"></path>
-                <path d="M 440,752 L 440,784" fill="none" stroke="black"></path>
-                <path d="M 440,944 L 440,976" fill="none" stroke="black"></path>
                 <path d="M 456,192 L 456,224" fill="none" stroke="black"></path>
-                <path d="M 456,464 L 456,496" fill="none" stroke="black"></path>
-                <path d="M 456,864 L 456,944" fill="none" stroke="black"></path>
                 <path d="M 464,320 L 464,352" fill="none" stroke="black"></path>
-                <path d="M 464,560 L 464,592" fill="none" stroke="black"></path>
-                <path d="M 464,656 L 464,688" fill="none" stroke="black"></path>
-                <path d="M 472,752 L 472,784" fill="none" stroke="black"></path>
-                <path d="M 472,944 L 472,976" fill="none" stroke="black"></path>
-                <path d="M 480,592 L 480,656" fill="none" stroke="black"></path>
                 <path d="M 496,320 L 496,352" fill="none" stroke="black"></path>
-                <path d="M 496,560 L 496,592" fill="none" stroke="black"></path>
-                <path d="M 496,656 L 496,688" fill="none" stroke="black"></path>
                 <path d="M 504,192 L 504,224" fill="none" stroke="black"></path>
                 <path d="M 520,384 L 520,416" fill="none" stroke="black"></path>
                 <path d="M 536,192 L 536,224" fill="none" stroke="black"></path>
                 <path d="M 536,336 L 536,384" fill="none" stroke="black"></path>
-                <path d="M 536,752 L 536,784" fill="none" stroke="black"></path>
-                <path d="M 536,848 L 536,880" fill="none" stroke="black"></path>
-                <path d="M 536,944 L 536,976" fill="none" stroke="black"></path>
                 <path d="M 552,384 L 552,416" fill="none" stroke="black"></path>
-                <path d="M 552,880 L 552,944" fill="none" stroke="black"></path>
-                <path d="M 568,752 L 568,784" fill="none" stroke="black"></path>
-                <path d="M 568,848 L 568,880" fill="none" stroke="black"></path>
-                <path d="M 568,944 L 568,976" fill="none" stroke="black"></path>
                 <path d="M 16,32 L 48,32" fill="none" stroke="black"></path>
                 <path d="M 16,64 L 48,64" fill="none" stroke="black"></path>
                 <path d="M 288,80 L 304,80" fill="none" stroke="black"></path>
@@ -1772,111 +1692,21 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                 <path d="M 248,416 L 280,416" fill="none" stroke="black"></path>
                 <path d="M 408,416 L 440,416" fill="none" stroke="black"></path>
                 <path d="M 520,416 L 552,416" fill="none" stroke="black"></path>
-                <path d="M 80,464 L 112,464" fill="none" stroke="black"></path>
-                <path d="M 248,464 L 280,464" fill="none" stroke="black"></path>
-                <path d="M 424,464 L 456,464" fill="none" stroke="black"></path>
-                <path d="M 56,480 L 80,480" fill="none" stroke="black"></path>
-                <path d="M 112,480 L 136,480" fill="none" stroke="black"></path>
-                <path d="M 80,496 L 112,496" fill="none" stroke="black"></path>
-                <path d="M 248,496 L 280,496" fill="none" stroke="black"></path>
-                <path d="M 424,496 L 456,496" fill="none" stroke="black"></path>
-                <path d="M 40,560 L 72,560" fill="none" stroke="black"></path>
-                <path d="M 120,560 L 152,560" fill="none" stroke="black"></path>
-                <path d="M 248,560 L 280,560" fill="none" stroke="black"></path>
-                <path d="M 384,560 L 416,560" fill="none" stroke="black"></path>
-                <path d="M 464,560 L 496,560" fill="none" stroke="black"></path>
-                <path d="M 432,576 L 448,576" fill="none" stroke="black"></path>
-                <path d="M 40,592 L 72,592" fill="none" stroke="black"></path>
-                <path d="M 120,592 L 152,592" fill="none" stroke="black"></path>
-                <path d="M 248,592 L 280,592" fill="none" stroke="black"></path>
-                <path d="M 384,592 L 416,592" fill="none" stroke="black"></path>
-                <path d="M 464,592 L 496,592" fill="none" stroke="black"></path>
-                <path d="M 40,656 L 72,656" fill="none" stroke="black"></path>
-                <path d="M 120,656 L 152,656" fill="none" stroke="black"></path>
-                <path d="M 248,656 L 280,656" fill="none" stroke="black"></path>
-                <path d="M 384,656 L 416,656" fill="none" stroke="black"></path>
-                <path d="M 464,656 L 496,656" fill="none" stroke="black"></path>
-                <path d="M 40,688 L 72,688" fill="none" stroke="black"></path>
-                <path d="M 120,688 L 152,688" fill="none" stroke="black"></path>
-                <path d="M 248,688 L 280,688" fill="none" stroke="black"></path>
-                <path d="M 384,688 L 416,688" fill="none" stroke="black"></path>
-                <path d="M 464,688 L 496,688" fill="none" stroke="black"></path>
-                <path d="M 48,736 L 128,736" fill="none" stroke="black"></path>
-                <path d="M 376,736 L 456,736" fill="none" stroke="black"></path>
-                <path d="M 32,752 L 64,752" fill="none" stroke="black"></path>
-                <path d="M 112,752 L 144,752" fill="none" stroke="black"></path>
-                <path d="M 248,752 L 280,752" fill="none" stroke="black"></path>
-                <path d="M 360,752 L 392,752" fill="none" stroke="black"></path>
-                <path d="M 440,752 L 472,752" fill="none" stroke="black"></path>
-                <path d="M 536,752 L 568,752" fill="none" stroke="black"></path>
-                <path d="M 32,784 L 64,784" fill="none" stroke="black"></path>
-                <path d="M 112,784 L 144,784" fill="none" stroke="black"></path>
-                <path d="M 248,784 L 280,784" fill="none" stroke="black"></path>
-                <path d="M 360,784 L 392,784" fill="none" stroke="black"></path>
-                <path d="M 440,784 L 472,784" fill="none" stroke="black"></path>
-                <path d="M 536,784 L 568,784" fill="none" stroke="black"></path>
-                <path d="M 32,848 L 64,848" fill="none" stroke="black"></path>
-                <path d="M 112,848 L 144,848" fill="none" stroke="black"></path>
-                <path d="M 248,848 L 280,848" fill="none" stroke="black"></path>
-                <path d="M 400,848 L 432,848" fill="none" stroke="black"></path>
-                <path d="M 536,848 L 568,848" fill="none" stroke="black"></path>
-                <path d="M 80,864 L 96,864" fill="none" stroke="black"></path>
-                <path d="M 232,864 L 248,864" fill="none" stroke="black"></path>
-                <path d="M 280,864 L 296,864" fill="none" stroke="black"></path>
-                <path d="M 376,864 L 400,864" fill="none" stroke="black"></path>
-                <path d="M 432,864 L 456,864" fill="none" stroke="black"></path>
-                <path d="M 32,880 L 64,880" fill="none" stroke="black"></path>
-                <path d="M 112,880 L 144,880" fill="none" stroke="black"></path>
-                <path d="M 248,880 L 280,880" fill="none" stroke="black"></path>
-                <path d="M 400,880 L 432,880" fill="none" stroke="black"></path>
-                <path d="M 536,880 L 568,880" fill="none" stroke="black"></path>
-                <path d="M 32,944 L 64,944" fill="none" stroke="black"></path>
-                <path d="M 112,944 L 144,944" fill="none" stroke="black"></path>
-                <path d="M 216,944 L 248,944" fill="none" stroke="black"></path>
-                <path d="M 280,944 L 312,944" fill="none" stroke="black"></path>
-                <path d="M 360,944 L 392,944" fill="none" stroke="black"></path>
-                <path d="M 440,944 L 472,944" fill="none" stroke="black"></path>
-                <path d="M 536,944 L 568,944" fill="none" stroke="black"></path>
-                <path d="M 32,976 L 64,976" fill="none" stroke="black"></path>
-                <path d="M 112,976 L 144,976" fill="none" stroke="black"></path>
-                <path d="M 216,976 L 248,976" fill="none" stroke="black"></path>
-                <path d="M 280,976 L 312,976" fill="none" stroke="black"></path>
-                <path d="M 360,976 L 392,976" fill="none" stroke="black"></path>
-                <path d="M 440,976 L 472,976" fill="none" stroke="black"></path>
-                <path d="M 536,976 L 568,976" fill="none" stroke="black"></path>
                 <polygon class="arrowhead" points="544,304 532,298.4 532,309.6" fill="black" transform="rotate(0,536,304)"></polygon>
                 <polygon class="arrowhead" points="528,176 516,170.4 516,181.6" fill="black" transform="rotate(0,520,176)"></polygon>
-                <polygon class="arrowhead" points="464,736 452,730.4 452,741.6" fill="black" transform="rotate(0,456,736)"></polygon>
                 <polygon class="arrowhead" points="352,176 340,170.4 340,181.6" fill="black" transform="rotate(0,344,176)"></polygon>
                 <polygon class="arrowhead" points="336,112 324,106.4 324,117.6" fill="black" transform="rotate(0,328,112)"></polygon>
                 <polygon class="arrowhead" points="144,176 132,170.4 132,181.6" fill="black" transform="rotate(0,136,176)"></polygon>
-                <polygon class="arrowhead" points="136,736 124,730.4 124,741.6" fill="black" transform="rotate(0,128,736)"></polygon>
-                <polygon class="arrowhead" points="16,960 4,954.4 4,965.6" fill="black" transform="rotate(90,8,960)"></polygon>
-                <polygon class="arrowhead" points="16,672 4,666.4 4,677.6" fill="black" transform="rotate(90,8,672)"></polygon>
                 <polygon class="arrowhead" points="16,400 4,394.4 4,405.6" fill="black" transform="rotate(90,8,400)"></polygon>
                 <circle cx="24" cy="112" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="40" cy="960" r="6" class="closeddot" fill="black"></circle>
                 <circle cx="48" cy="400" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="48" cy="672" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="120" cy="960" r="6" class="closeddot" fill="black"></circle>
                 <circle cx="128" cy="400" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="128" cy="672" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="224" cy="960" r="6" class="closeddot" fill="black"></circle>
                 <circle cx="256" cy="400" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="256" cy="480" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="256" cy="672" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="288" cy="960" r="6" class="closeddot" fill="black"></circle>
                 <circle cx="336" cy="208" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="368" cy="960" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="392" cy="672" r="6" class="closeddot" fill="black"></circle>
                 <circle cx="416" cy="400" r="6" class="closeddot" fill="black"></circle>
                 <circle cx="432" cy="208" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="448" cy="960" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="472" cy="672" r="6" class="closeddot" fill="black"></circle>
                 <circle cx="512" cy="208" r="6" class="closeddot" fill="black"></circle>
                 <circle cx="528" cy="400" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="544" cy="864" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="544" cy="960" r="6" class="closeddot" fill="black"></circle>
                 <g class="text">
                   <text x="280" y="36">:</text>
                   <text x="32" y="52">C</text>
@@ -1920,94 +1750,277 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
                   <text x="476" y="388">1d</text>
                   <text x="432" y="404">C</text>
                   <text x="544" y="404">C</text>
-                  <text x="96" y="484">C</text>
-                  <text x="272" y="484">C</text>
-                  <text x="404" y="484">:-</text>
-                  <text x="440" y="484">C</text>
-                  <text x="464" y="484">-</text>
-                  <text x="480" y="484">:</text>
-                  <text x="400" y="500">:</text>
-                  <text x="480" y="500">:</text>
-                  <text x="400" y="516">:</text>
-                  <text x="480" y="516">:</text>
-                  <text x="92" y="532">2a</text>
-                  <text x="236" y="532">2b</text>
-                  <text x="400" y="532">:</text>
-                  <text x="444" y="532">3a</text>
-                  <text x="480" y="532">:</text>
-                  <text x="400" y="548">:</text>
-                  <text x="480" y="548">:</text>
-                  <text x="424" y="580">p</text>
-                  <text x="456" y="580">p</text>
-                  <text x="92" y="724">Core</text>
-                  <text x="420" y="724">Core</text>
-                  <text x="48" y="772">C</text>
-                  <text x="80" y="772">-</text>
-                  <text x="96" y="772">-</text>
-                  <text x="128" y="772">C</text>
-                  <text x="264" y="772">C</text>
-                  <text x="376" y="772">C</text>
-                  <text x="408" y="772">-</text>
-                  <text x="424" y="772">-</text>
-                  <text x="456" y="772">C</text>
-                  <text x="552" y="772">C</text>
-                  <text x="48" y="804">:</text>
-                  <text x="92" y="804">3b</text>
-                  <text x="128" y="804">:</text>
-                  <text x="264" y="804">:</text>
-                  <text x="300" y="804">4a</text>
-                  <text x="376" y="804">:</text>
-                  <text x="412" y="804">4b</text>
-                  <text x="456" y="804">:</text>
-                  <text x="528" y="804">5</text>
-                  <text x="552" y="804">:</text>
-                  <text x="48" y="820">:</text>
-                  <text x="128" y="820">:</text>
-                  <text x="264" y="820">:</text>
-                  <text x="376" y="820">:</text>
-                  <text x="456" y="820">:</text>
-                  <text x="552" y="820">:</text>
-                  <text x="48" y="836">:</text>
-                  <text x="128" y="836">:</text>
-                  <text x="264" y="836">:</text>
-                  <text x="376" y="836">:</text>
-                  <text x="456" y="836">:</text>
-                  <text x="552" y="836">:</text>
-                  <text x="380" y="852">:-</text>
-                  <text x="452" y="852">-:</text>
-                  <text x="72" y="868">p</text>
-                  <text x="104" y="868">p</text>
                 </g>
-              </svg><a href="#section-1.4-9.1.1" class="pilcrow">¶</a>
+              </svg><a href="#section-1.4-8.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
-<a href="#name-illustration-of-valid-path-" class="selfRef">Illustration of valid path segment combinations. Each node represents a SCION Autonomous System.</a>
+<a href="#name-illustration-of-valid-path-" class="selfRef">Illustration of valid path segment combinations through multiple core ASes.</a>
           </figcaption></figure>
 </div>
-<p id="section-1.4-10">Valid path segment combinations:<a href="#section-1.4-10" class="pilcrow">¶</a></p>
+<p id="section-1.4-9">Valid path segment combinations:<a href="#section-1.4-9" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.4-11.1">
-            <p id="section-1.4-11.1.1"><strong>Communication through core ASes</strong>:<a href="#section-1.4-11.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-1.4-10.1">
+            <p id="section-1.4-10.1.1"><strong>Communication through core ASes</strong>:<a href="#section-1.4-10.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1.4-11.1.2.1">
-                <p id="section-1.4-11.1.2.1.1"><strong>Core segment combination</strong> (Cases 1a, 1b, 1c, 1d in <a href="#_figure-1" class="auto internal xref">Figure 2</a>): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is <span class="bcp14">REQUIRED</span> to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up or down segments are <span class="bcp14">REQUIRED</span> to connect the respective ASes to the core segment.<a href="#section-1.4-11.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-1.4-10.1.2.1">
+                <p id="section-1.4-10.1.2.1.1"><strong>Core segment combination</strong> (Cases 1a, 1b, 1c, 1d in <a href="#_figure-1" class="auto internal xref">Figure 2</a>): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is <span class="bcp14">REQUIRED</span> to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up or down segments are <span class="bcp14">REQUIRED</span> to connect the respective ASes to the core segment.<a href="#section-1.4-10.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-1.4-11.1.2.2">
-                <p id="section-1.4-11.1.2.2.1"><strong>Immediate combination</strong> (Cases 2a, 2b in <a href="#_figure-1" class="auto internal xref">Figure 2</a>): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.<a href="#section-1.4-11.1.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-1.4-10.1.2.2">
+                <p id="section-1.4-10.1.2.2.1"><strong>Immediate combination</strong> (Cases 2a, 2b in <a href="#_figure-1bis" class="auto internal xref">Figure 3</a>): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.<a href="#section-1.4-10.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-1.4-11.2">
-            <p id="section-1.4-11.2.1"><strong>Peering shortcut</strong> (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.<a href="#section-1.4-11.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.4-10.2">
+            <p id="section-1.4-10.2.1"><strong>Peering shortcut</strong> (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.<a href="#section-1.4-10.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.4-11.3">
-            <p id="section-1.4-11.3.1"><strong>AS shortcut</strong> (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.<a href="#section-1.4-11.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.4-10.3">
+            <p id="section-1.4-10.3.1"><strong>AS shortcut</strong> (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.<a href="#section-1.4-10.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-1.4-11.4">
-            <p id="section-1.4-11.4.1"><strong>On-path</strong> (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.<a href="#section-1.4-11.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-1.4-10.4">
+            <p id="section-1.4-10.4.1"><strong>On-path</strong> (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.<a href="#section-1.4-10.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<span id="name-illustration-of-valid-path-s"></span><div id="_figure-1bis">
+<figure id="figure-3">
+          <div id="section-1.4-11.1">
+            <div class="alignLeft art-svg artwork" id="section-1.4-11.1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="560" width="576" viewBox="0 0 576 560" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                <path d="M 8,48 L 8,240" fill="none" stroke="black"></path>
+                <path d="M 8,336 L 8,528" fill="none" stroke="black"></path>
+                <path d="M 32,320 L 32,352" fill="none" stroke="black"></path>
+                <path d="M 32,416 L 32,448" fill="none" stroke="black"></path>
+                <path d="M 32,512 L 32,544" fill="none" stroke="black"></path>
+                <path d="M 40,128 L 40,160" fill="none" stroke="black"></path>
+                <path d="M 40,224 L 40,256" fill="none" stroke="black"></path>
+                <path d="M 48,448 L 48,512" fill="none" stroke="black"></path>
+                <path d="M 56,48 L 56,128" fill="none" stroke="black"></path>
+                <path d="M 56,160 L 56,224" fill="none" stroke="black"></path>
+                <path d="M 64,320 L 64,352" fill="none" stroke="black"></path>
+                <path d="M 64,416 L 64,448" fill="none" stroke="black"></path>
+                <path d="M 64,512 L 64,544" fill="none" stroke="black"></path>
+                <path d="M 72,128 L 72,160" fill="none" stroke="black"></path>
+                <path d="M 72,224 L 72,256" fill="none" stroke="black"></path>
+                <path d="M 80,32 L 80,64" fill="none" stroke="black"></path>
+                <path d="M 112,32 L 112,64" fill="none" stroke="black"></path>
+                <path d="M 112,320 L 112,352" fill="none" stroke="black"></path>
+                <path d="M 112,416 L 112,448" fill="none" stroke="black"></path>
+                <path d="M 112,512 L 112,544" fill="none" stroke="black"></path>
+                <path d="M 120,128 L 120,160" fill="none" stroke="black"></path>
+                <path d="M 120,224 L 120,256" fill="none" stroke="black"></path>
+                <path d="M 128,448 L 128,512" fill="none" stroke="black"></path>
+                <path d="M 136,48 L 136,128" fill="none" stroke="black"></path>
+                <path d="M 136,160 L 136,224" fill="none" stroke="black"></path>
+                <path d="M 144,320 L 144,352" fill="none" stroke="black"></path>
+                <path d="M 144,416 L 144,448" fill="none" stroke="black"></path>
+                <path d="M 144,512 L 144,544" fill="none" stroke="black"></path>
+                <path d="M 152,128 L 152,160" fill="none" stroke="black"></path>
+                <path d="M 152,224 L 152,256" fill="none" stroke="black"></path>
+                <path d="M 216,512 L 216,544" fill="none" stroke="black"></path>
+                <path d="M 232,432 L 232,512" fill="none" stroke="black"></path>
+                <path d="M 248,32 L 248,64" fill="none" stroke="black"></path>
+                <path d="M 248,128 L 248,160" fill="none" stroke="black"></path>
+                <path d="M 248,224 L 248,256" fill="none" stroke="black"></path>
+                <path d="M 248,320 L 248,352" fill="none" stroke="black"></path>
+                <path d="M 248,416 L 248,448" fill="none" stroke="black"></path>
+                <path d="M 248,512 L 248,544" fill="none" stroke="black"></path>
+                <path d="M 264,64 L 264,128" fill="none" stroke="black"></path>
+                <path d="M 264,160 L 264,224" fill="none" stroke="black"></path>
+                <path d="M 280,32 L 280,64" fill="none" stroke="black"></path>
+                <path d="M 280,128 L 280,160" fill="none" stroke="black"></path>
+                <path d="M 280,224 L 280,256" fill="none" stroke="black"></path>
+                <path d="M 280,320 L 280,352" fill="none" stroke="black"></path>
+                <path d="M 280,416 L 280,448" fill="none" stroke="black"></path>
+                <path d="M 280,512 L 280,544" fill="none" stroke="black"></path>
+                <path d="M 296,432 L 296,512" fill="none" stroke="black"></path>
+                <path d="M 312,512 L 312,544" fill="none" stroke="black"></path>
+                <path d="M 360,320 L 360,352" fill="none" stroke="black"></path>
+                <path d="M 360,512 L 360,544" fill="none" stroke="black"></path>
+                <path d="M 376,432 L 376,512" fill="none" stroke="black"></path>
+                <path d="M 384,128 L 384,160" fill="none" stroke="black"></path>
+                <path d="M 384,224 L 384,256" fill="none" stroke="black"></path>
+                <path d="M 392,320 L 392,352" fill="none" stroke="black"></path>
+                <path d="M 392,512 L 392,544" fill="none" stroke="black"></path>
+                <path d="M 400,160 L 400,224" fill="none" stroke="black"></path>
+                <path d="M 400,416 L 400,448" fill="none" stroke="black"></path>
+                <path d="M 416,128 L 416,160" fill="none" stroke="black"></path>
+                <path d="M 416,224 L 416,256" fill="none" stroke="black"></path>
+                <path d="M 424,32 L 424,64" fill="none" stroke="black"></path>
+                <path d="M 432,416 L 432,448" fill="none" stroke="black"></path>
+                <path d="M 440,320 L 440,352" fill="none" stroke="black"></path>
+                <path d="M 440,512 L 440,544" fill="none" stroke="black"></path>
+                <path d="M 456,32 L 456,64" fill="none" stroke="black"></path>
+                <path d="M 456,432 L 456,512" fill="none" stroke="black"></path>
+                <path d="M 464,128 L 464,160" fill="none" stroke="black"></path>
+                <path d="M 464,224 L 464,256" fill="none" stroke="black"></path>
+                <path d="M 472,320 L 472,352" fill="none" stroke="black"></path>
+                <path d="M 472,512 L 472,544" fill="none" stroke="black"></path>
+                <path d="M 480,160 L 480,224" fill="none" stroke="black"></path>
+                <path d="M 496,128 L 496,160" fill="none" stroke="black"></path>
+                <path d="M 496,224 L 496,256" fill="none" stroke="black"></path>
+                <path d="M 536,320 L 536,352" fill="none" stroke="black"></path>
+                <path d="M 536,416 L 536,448" fill="none" stroke="black"></path>
+                <path d="M 536,512 L 536,544" fill="none" stroke="black"></path>
+                <path d="M 552,448 L 552,512" fill="none" stroke="black"></path>
+                <path d="M 568,320 L 568,352" fill="none" stroke="black"></path>
+                <path d="M 568,416 L 568,448" fill="none" stroke="black"></path>
+                <path d="M 568,512 L 568,544" fill="none" stroke="black"></path>
+                <path d="M 80,32 L 112,32" fill="none" stroke="black"></path>
+                <path d="M 248,32 L 280,32" fill="none" stroke="black"></path>
+                <path d="M 424,32 L 456,32" fill="none" stroke="black"></path>
+                <path d="M 56,48 L 80,48" fill="none" stroke="black"></path>
+                <path d="M 112,48 L 136,48" fill="none" stroke="black"></path>
+                <path d="M 80,64 L 112,64" fill="none" stroke="black"></path>
+                <path d="M 248,64 L 280,64" fill="none" stroke="black"></path>
+                <path d="M 424,64 L 456,64" fill="none" stroke="black"></path>
+                <path d="M 40,128 L 72,128" fill="none" stroke="black"></path>
+                <path d="M 120,128 L 152,128" fill="none" stroke="black"></path>
+                <path d="M 248,128 L 280,128" fill="none" stroke="black"></path>
+                <path d="M 384,128 L 416,128" fill="none" stroke="black"></path>
+                <path d="M 464,128 L 496,128" fill="none" stroke="black"></path>
+                <path d="M 432,144 L 448,144" fill="none" stroke="black"></path>
+                <path d="M 40,160 L 72,160" fill="none" stroke="black"></path>
+                <path d="M 120,160 L 152,160" fill="none" stroke="black"></path>
+                <path d="M 248,160 L 280,160" fill="none" stroke="black"></path>
+                <path d="M 384,160 L 416,160" fill="none" stroke="black"></path>
+                <path d="M 464,160 L 496,160" fill="none" stroke="black"></path>
+                <path d="M 40,224 L 72,224" fill="none" stroke="black"></path>
+                <path d="M 120,224 L 152,224" fill="none" stroke="black"></path>
+                <path d="M 248,224 L 280,224" fill="none" stroke="black"></path>
+                <path d="M 384,224 L 416,224" fill="none" stroke="black"></path>
+                <path d="M 464,224 L 496,224" fill="none" stroke="black"></path>
+                <path d="M 40,256 L 72,256" fill="none" stroke="black"></path>
+                <path d="M 120,256 L 152,256" fill="none" stroke="black"></path>
+                <path d="M 248,256 L 280,256" fill="none" stroke="black"></path>
+                <path d="M 384,256 L 416,256" fill="none" stroke="black"></path>
+                <path d="M 464,256 L 496,256" fill="none" stroke="black"></path>
+                <path d="M 48,304 L 128,304" fill="none" stroke="black"></path>
+                <path d="M 376,304 L 456,304" fill="none" stroke="black"></path>
+                <path d="M 32,320 L 64,320" fill="none" stroke="black"></path>
+                <path d="M 112,320 L 144,320" fill="none" stroke="black"></path>
+                <path d="M 248,320 L 280,320" fill="none" stroke="black"></path>
+                <path d="M 360,320 L 392,320" fill="none" stroke="black"></path>
+                <path d="M 440,320 L 472,320" fill="none" stroke="black"></path>
+                <path d="M 536,320 L 568,320" fill="none" stroke="black"></path>
+                <path d="M 32,352 L 64,352" fill="none" stroke="black"></path>
+                <path d="M 112,352 L 144,352" fill="none" stroke="black"></path>
+                <path d="M 248,352 L 280,352" fill="none" stroke="black"></path>
+                <path d="M 360,352 L 392,352" fill="none" stroke="black"></path>
+                <path d="M 440,352 L 472,352" fill="none" stroke="black"></path>
+                <path d="M 536,352 L 568,352" fill="none" stroke="black"></path>
+                <path d="M 32,416 L 64,416" fill="none" stroke="black"></path>
+                <path d="M 112,416 L 144,416" fill="none" stroke="black"></path>
+                <path d="M 248,416 L 280,416" fill="none" stroke="black"></path>
+                <path d="M 400,416 L 432,416" fill="none" stroke="black"></path>
+                <path d="M 536,416 L 568,416" fill="none" stroke="black"></path>
+                <path d="M 80,432 L 96,432" fill="none" stroke="black"></path>
+                <path d="M 232,432 L 248,432" fill="none" stroke="black"></path>
+                <path d="M 280,432 L 296,432" fill="none" stroke="black"></path>
+                <path d="M 376,432 L 400,432" fill="none" stroke="black"></path>
+                <path d="M 432,432 L 456,432" fill="none" stroke="black"></path>
+                <path d="M 32,448 L 64,448" fill="none" stroke="black"></path>
+                <path d="M 112,448 L 144,448" fill="none" stroke="black"></path>
+                <path d="M 248,448 L 280,448" fill="none" stroke="black"></path>
+                <path d="M 400,448 L 432,448" fill="none" stroke="black"></path>
+                <path d="M 536,448 L 568,448" fill="none" stroke="black"></path>
+                <path d="M 32,512 L 64,512" fill="none" stroke="black"></path>
+                <path d="M 112,512 L 144,512" fill="none" stroke="black"></path>
+                <path d="M 216,512 L 248,512" fill="none" stroke="black"></path>
+                <path d="M 280,512 L 312,512" fill="none" stroke="black"></path>
+                <path d="M 360,512 L 392,512" fill="none" stroke="black"></path>
+                <path d="M 440,512 L 472,512" fill="none" stroke="black"></path>
+                <path d="M 536,512 L 568,512" fill="none" stroke="black"></path>
+                <path d="M 32,544 L 64,544" fill="none" stroke="black"></path>
+                <path d="M 112,544 L 144,544" fill="none" stroke="black"></path>
+                <path d="M 216,544 L 248,544" fill="none" stroke="black"></path>
+                <path d="M 280,544 L 312,544" fill="none" stroke="black"></path>
+                <path d="M 360,544 L 392,544" fill="none" stroke="black"></path>
+                <path d="M 440,544 L 472,544" fill="none" stroke="black"></path>
+                <path d="M 536,544 L 568,544" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="464,304 452,298.4 452,309.6" fill="black" transform="rotate(0,456,304)"></polygon>
+                <polygon class="arrowhead" points="136,304 124,298.4 124,309.6" fill="black" transform="rotate(0,128,304)"></polygon>
+                <polygon class="arrowhead" points="16,528 4,522.4 4,533.6" fill="black" transform="rotate(90,8,528)"></polygon>
+                <polygon class="arrowhead" points="16,240 4,234.4 4,245.6" fill="black" transform="rotate(90,8,240)"></polygon>
+                <circle cx="40" cy="528" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="48" cy="240" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="120" cy="528" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="128" cy="240" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="224" cy="528" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="256" cy="48" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="256" cy="240" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="288" cy="528" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="368" cy="528" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="392" cy="240" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="448" cy="528" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="472" cy="240" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="544" cy="432" r="6" class="closeddot" fill="black"></circle>
+                <circle cx="544" cy="528" r="6" class="closeddot" fill="black"></circle>
+                <g class="text">
+                  <text x="96" y="52">C</text>
+                  <text x="272" y="52">C</text>
+                  <text x="404" y="52">:-</text>
+                  <text x="440" y="52">C</text>
+                  <text x="464" y="52">-</text>
+                  <text x="480" y="52">:</text>
+                  <text x="400" y="68">:</text>
+                  <text x="480" y="68">:</text>
+                  <text x="400" y="84">:</text>
+                  <text x="480" y="84">:</text>
+                  <text x="92" y="100">2a</text>
+                  <text x="236" y="100">2b</text>
+                  <text x="400" y="100">:</text>
+                  <text x="444" y="100">3a</text>
+                  <text x="480" y="100">:</text>
+                  <text x="400" y="116">:</text>
+                  <text x="480" y="116">:</text>
+                  <text x="424" y="148">p</text>
+                  <text x="456" y="148">p</text>
+                  <text x="92" y="292">Core</text>
+                  <text x="420" y="292">Core</text>
+                  <text x="48" y="340">C</text>
+                  <text x="80" y="340">-</text>
+                  <text x="96" y="340">-</text>
+                  <text x="128" y="340">C</text>
+                  <text x="264" y="340">C</text>
+                  <text x="376" y="340">C</text>
+                  <text x="408" y="340">-</text>
+                  <text x="424" y="340">-</text>
+                  <text x="456" y="340">C</text>
+                  <text x="552" y="340">C</text>
+                  <text x="48" y="372">:</text>
+                  <text x="92" y="372">3b</text>
+                  <text x="128" y="372">:</text>
+                  <text x="264" y="372">:</text>
+                  <text x="300" y="372">4a</text>
+                  <text x="376" y="372">:</text>
+                  <text x="412" y="372">4b</text>
+                  <text x="456" y="372">:</text>
+                  <text x="528" y="372">5</text>
+                  <text x="552" y="372">:</text>
+                  <text x="48" y="388">:</text>
+                  <text x="128" y="388">:</text>
+                  <text x="264" y="388">:</text>
+                  <text x="376" y="388">:</text>
+                  <text x="456" y="388">:</text>
+                  <text x="552" y="388">:</text>
+                  <text x="48" y="404">:</text>
+                  <text x="128" y="404">:</text>
+                  <text x="264" y="404">:</text>
+                  <text x="376" y="404">:</text>
+                  <text x="456" y="404">:</text>
+                  <text x="552" y="404">:</text>
+                  <text x="380" y="420">:-</text>
+                  <text x="452" y="420">-:</text>
+                  <text x="72" y="436">p</text>
+                  <text x="104" y="436">p</text>
+                </g>
+              </svg><a href="#section-1.4-11.1.1" class="pilcrow">¶</a>
+</div>
+</div>
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<a href="#name-illustration-of-valid-path-s" class="selfRef">Illustration of valid path segment combinations through one or no core ASes.</a>
+          </figcaption></figure>
+</div>
 </section>
 </div>
 <div id="path-authorization">
@@ -2025,10 +2038,10 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
       <h2 id="name-scion-header-specification">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-scion-header-specification" class="section-name selfRef">SCION Header Specification</a>
       </h2>
-<p id="section-2-1">The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an <span class="bcp14">OPTIONAL</span> extension header, see <a href="#_figure-2" class="auto internal xref">Figure 3</a> below.
+<p id="section-2-1">The SCION packet header is aligned to 4 bytes. It is composed of a common header, an address header, a path header, and an <span class="bcp14">OPTIONAL</span> extension header, see <a href="#_figure-2" class="auto internal xref">Figure 4</a> below.
 The 4 byte alignment is to allow header length to be computed based on the <code>HdrLen</code> field (see <a href="#common-header" class="auto internal xref">Section 2.1</a>).<a href="#section-2-1" class="pilcrow">¶</a></p>
 <span id="name-high-level-scion-header-str"></span><div id="_figure-2">
-<figure id="figure-3">
+<figure id="figure-4">
         <div id="section-2-2.1">
           <div class="alignLeft art-svg artwork" id="section-2-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="472" viewBox="0 0 472 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2053,7 +2066,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
             </svg><a href="#section-2-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-high-level-scion-header-str" class="selfRef">High-level SCION header structure, non-byte aligned</a>
         </figcaption></figure>
 </div>
@@ -2068,7 +2081,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
         </h3>
 <p id="section-2.1-1">The SCION common header has the following packet format:<a href="#section-2.1-1" class="pilcrow">¶</a></p>
 <span id="name-the-scion-common-header-pac"></span><div id="_figure-3">
-<figure id="figure-4">
+<figure id="figure-5">
           <div id="section-2.1-2.1">
             <div class="alignLeft art-svg artwork" id="section-2.1-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2139,7 +2152,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
               </svg><a href="#section-2.1-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
 <a href="#name-the-scion-common-header-pac" class="selfRef">The SCION common header packet format</a>
           </figcaption></figure>
 </div>
@@ -2276,7 +2289,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
           </tbody>
         </table>
 </div>
-<p id="section-2.1-8">A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set. <a href="#_table-4" class="auto internal xref">Table 4</a> lists the known services.<a href="#section-2.1-8" class="pilcrow">¶</a></p>
+<p id="section-2.1-8">A service address designates a set of endpoint addresses rather than a single one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set. <a href="#_table-4" class="auto internal xref">Table 4</a> lists the known services.<a href="#section-2.1-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1-9.1">
             <p id="section-2.1-9.1.1"><code>RSV</code>: These bits are currently reserved for future use.<a href="#section-2.1-9.1.1" class="pilcrow">¶</a></p>
@@ -2291,7 +2304,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
         </h3>
 <p id="section-2.2-1">The SCION address header has the following format:<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <span id="name-the-scion-address-header-pa"></span><div id="_figure-4">
-<figure id="figure-5">
+<figure id="figure-6">
           <div id="section-2.2-2.1">
             <div class="alignLeft art-svg artwork" id="section-2.2-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="288" width="528" viewBox="0 0 528 288" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2361,7 +2374,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
               </svg><a href="#section-2.2-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
 <a href="#name-the-scion-address-header-pa" class="selfRef">The SCION address header packet format</a>
           </figcaption></figure>
 </div>
@@ -2378,7 +2391,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
         </ul>
 <p id="section-2.2-4">If a service address is implied by the <code>DT/DL</code> or <code>ST/SL</code> field of the common header according to <a href="#_table-3" class="auto internal xref">Table 3</a>, the corresponding address field has the following format:<a href="#section-2.2-4" class="pilcrow">¶</a></p>
 <span id="name-service-address-format"></span><div id="_figure-20">
-<figure id="figure-6">
+<figure id="figure-7">
           <div id="section-2.2-5.1">
             <div class="alignLeft art-svg artwork" id="section-2.2-5.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="128" width="528" viewBox="0 0 528 128" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2431,7 +2444,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
               </svg><a href="#section-2.2-5.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
 <a href="#name-service-address-format" class="selfRef">Service address format</a>
           </figcaption></figure>
 </div>
@@ -2499,7 +2512,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
           </h4>
 <p id="section-2.3.2-1">The <code>SCION</code> path type (<code>PathType=1</code>) is the standard path type. A SCION path has the following layout:<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
 <span id="name-layout-of-a-standard-scion-"></span><div id="_figure-5">
-<figure id="figure-7">
+<figure id="figure-8">
             <div id="section-2.3.2-2.1">
               <div class="alignLeft art-svg artwork" id="section-2.3.2-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="464" width="528" viewBox="0 0 528 464" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2561,7 +2574,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
                 </svg><a href="#section-2.3.2-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
 <a href="#name-layout-of-a-standard-scion-" class="selfRef">Layout of a standard SCION path</a>
             </figcaption></figure>
 </div>
@@ -2577,224 +2590,175 @@ The 4 byte alignment is to allow header length to be computed based on the <code
               <p id="section-2.3.2-4.3.1"><code>HopField</code> represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. This information is authenticated with a Message Authentication Code (MAC) to prevent forgery.<a href="#section-2.3.2-4.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.3.2-5">The SCION header is created by extracting the required Info Fields and Hop Fields from the corresponding path segments. The process of extracting is illustrated in <a href="#_figure-6" class="auto internal xref">Figure 8</a> below. Note that ASes at the intersection of multiple segments are represented by two Hop Fields. Be aware that these Hop Fields are not equal!<a href="#section-2.3.2-5" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-5">The SCION header is created by extracting the required Info Fields and Hop Fields from the corresponding path segments. The process of extracting is illustrated in <a href="#_figure-6" class="auto internal xref">Figure 9</a> below. Note that ASes at the intersection of multiple segments are represented by two Hop Fields. Be aware that these Hop Fields are not equal!<a href="#section-2.3.2-5" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-6">In the Hop Field that represents the last Hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.<a href="#section-2.3.2-6" class="pilcrow">¶</a></p>
 <span id="name-path-construction-example"></span><div id="_figure-6">
-<figure id="figure-8">
+<figure id="figure-9">
             <div id="section-2.3.2-7.1">
               <div class="alignLeft art-svg artwork" id="section-2.3.2-7.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="768" width="560" viewBox="0 0 560 768" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                  <path d="M 8,64 L 8,112" fill="none" stroke="black"></path>
-                  <path d="M 32,176 L 32,336" fill="none" stroke="black"></path>
-                  <path d="M 48,192 L 48,320" fill="none" stroke="black"></path>
-                  <path d="M 80,64 L 80,112" fill="none" stroke="black"></path>
-                  <path d="M 96,64 L 96,112" fill="none" stroke="black"></path>
-                  <path d="M 96,192 L 96,320" fill="none" stroke="black"></path>
-                  <path d="M 112,176 L 112,200" fill="none" stroke="black"></path>
-                  <path d="M 112,312 L 112,336" fill="none" stroke="black"></path>
-                  <path d="M 136,304 L 136,560" fill="none" stroke="black"></path>
-                  <path d="M 152,272 L 152,528" fill="none" stroke="black"></path>
-                  <path d="M 168,64 L 168,112" fill="none" stroke="black"></path>
-                  <path d="M 168,240 L 168,496" fill="none" stroke="black"></path>
-                  <path d="M 184,32 L 184,72" fill="none" stroke="black"></path>
-                  <path d="M 184,88 L 184,128" fill="none" stroke="black"></path>
-                  <path d="M 184,208 L 184,400" fill="none" stroke="black"></path>
-                  <path d="M 200,64 L 200,112" fill="none" stroke="black"></path>
-                  <path d="M 208,176 L 208,304" fill="none" stroke="black"></path>
-                  <path d="M 208,336 L 208,392" fill="none" stroke="black"></path>
-                  <path d="M 208,408 L 208,488" fill="none" stroke="black"></path>
-                  <path d="M 208,568 L 208,752" fill="none" stroke="black"></path>
-                  <path d="M 224,192 L 224,288" fill="none" stroke="black"></path>
-                  <path d="M 224,352 L 224,736" fill="none" stroke="black"></path>
-                  <path d="M 272,64 L 272,112" fill="none" stroke="black"></path>
-                  <path d="M 272,192 L 272,288" fill="none" stroke="black"></path>
-                  <path d="M 272,352 L 272,736" fill="none" stroke="black"></path>
-                  <path d="M 288,64 L 288,112" fill="none" stroke="black"></path>
-                  <path d="M 288,176 L 288,200" fill="none" stroke="black"></path>
-                  <path d="M 288,280 L 288,304" fill="none" stroke="black"></path>
-                  <path d="M 288,336 L 288,424" fill="none" stroke="black"></path>
-                  <path d="M 288,472 L 288,584" fill="none" stroke="black"></path>
-                  <path d="M 288,728 L 288,752" fill="none" stroke="black"></path>
-                  <path d="M 312,208 L 312,232" fill="none" stroke="black"></path>
-                  <path d="M 312,280 L 312,432" fill="none" stroke="black"></path>
-                  <path d="M 328,240 L 328,264" fill="none" stroke="black"></path>
-                  <path d="M 328,280 L 328,456" fill="none" stroke="black"></path>
-                  <path d="M 328,472 L 328,592" fill="none" stroke="black"></path>
-                  <path d="M 344,272 L 344,456" fill="none" stroke="black"></path>
-                  <path d="M 344,472 L 344,624" fill="none" stroke="black"></path>
-                  <path d="M 360,64 L 360,112" fill="none" stroke="black"></path>
-                  <path d="M 368,176 L 368,336" fill="none" stroke="black"></path>
-                  <path d="M 376,32 L 376,72" fill="none" stroke="black"></path>
-                  <path d="M 376,88 L 376,128" fill="none" stroke="black"></path>
-                  <path d="M 384,192 L 384,320" fill="none" stroke="black"></path>
-                  <path d="M 392,64 L 392,112" fill="none" stroke="black"></path>
-                  <path d="M 432,192 L 432,320" fill="none" stroke="black"></path>
-                  <path d="M 448,176 L 448,200" fill="none" stroke="black"></path>
-                  <path d="M 448,312 L 448,336" fill="none" stroke="black"></path>
-                  <path d="M 464,64 L 464,112" fill="none" stroke="black"></path>
-                  <path d="M 472,208 L 472,232" fill="none" stroke="black"></path>
-                  <path d="M 472,312 L 472,464" fill="none" stroke="black"></path>
-                  <path d="M 480,64 L 480,112" fill="none" stroke="black"></path>
-                  <path d="M 488,240 L 488,264" fill="none" stroke="black"></path>
-                  <path d="M 488,312 L 488,656" fill="none" stroke="black"></path>
-                  <path d="M 504,272 L 504,296" fill="none" stroke="black"></path>
-                  <path d="M 504,312 L 504,688" fill="none" stroke="black"></path>
-                  <path d="M 520,304 L 520,720" fill="none" stroke="black"></path>
-                  <path d="M 552,64 L 552,112" fill="none" stroke="black"></path>
-                  <path d="M 184,32 L 376,32" fill="none" stroke="black"></path>
-                  <path d="M 8,64 L 80,64" fill="none" stroke="black"></path>
-                  <path d="M 96,64 L 168,64" fill="none" stroke="black"></path>
-                  <path d="M 200,64 L 272,64" fill="none" stroke="black"></path>
-                  <path d="M 288,64 L 360,64" fill="none" stroke="black"></path>
-                  <path d="M 392,64 L 464,64" fill="none" stroke="black"></path>
-                  <path d="M 480,64 L 552,64" fill="none" stroke="black"></path>
-                  <path d="M 80,80 L 96,80" fill="none" stroke="black"></path>
-                  <path d="M 168,80 L 200,80" fill="none" stroke="black"></path>
-                  <path d="M 272,80 L 288,80" fill="none" stroke="black"></path>
-                  <path d="M 360,80 L 392,80" fill="none" stroke="black"></path>
-                  <path d="M 464,80 L 480,80" fill="none" stroke="black"></path>
-                  <path d="M 8,112 L 80,112" fill="none" stroke="black"></path>
-                  <path d="M 96,112 L 168,112" fill="none" stroke="black"></path>
-                  <path d="M 200,112 L 272,112" fill="none" stroke="black"></path>
-                  <path d="M 288,112 L 360,112" fill="none" stroke="black"></path>
-                  <path d="M 392,112 L 464,112" fill="none" stroke="black"></path>
-                  <path d="M 480,112 L 552,112" fill="none" stroke="black"></path>
-                  <path d="M 184,128 L 376,128" fill="none" stroke="black"></path>
-                  <path d="M 32,176 L 112,176" fill="none" stroke="black"></path>
-                  <path d="M 208,176 L 288,176" fill="none" stroke="black"></path>
-                  <path d="M 368,176 L 448,176" fill="none" stroke="black"></path>
-                  <path d="M 48,192 L 96,192" fill="none" stroke="black"></path>
-                  <path d="M 224,192 L 272,192" fill="none" stroke="black"></path>
-                  <path d="M 384,192 L 432,192" fill="none" stroke="black"></path>
-                  <path d="M 104,208 L 184,208" fill="none" stroke="black"></path>
-                  <path d="M 280,208 L 312,208" fill="none" stroke="black"></path>
-                  <path d="M 440,208 L 472,208" fill="none" stroke="black"></path>
-                  <path d="M 48,224 L 96,224" fill="none" stroke="black"></path>
-                  <path d="M 224,224 L 272,224" fill="none" stroke="black"></path>
-                  <path d="M 384,224 L 432,224" fill="none" stroke="black"></path>
-                  <path d="M 104,240 L 168,240" fill="none" stroke="black"></path>
-                  <path d="M 280,240 L 328,240" fill="none" stroke="black"></path>
-                  <path d="M 440,240 L 488,240" fill="none" stroke="black"></path>
-                  <path d="M 48,256 L 96,256" fill="none" stroke="black"></path>
-                  <path d="M 224,256 L 272,256" fill="none" stroke="black"></path>
-                  <path d="M 384,256 L 432,256" fill="none" stroke="black"></path>
-                  <path d="M 104,272 L 152,272" fill="none" stroke="black"></path>
-                  <path d="M 280,272 L 344,272" fill="none" stroke="black"></path>
-                  <path d="M 440,272 L 504,272" fill="none" stroke="black"></path>
-                  <path d="M 48,288 L 96,288" fill="none" stroke="black"></path>
-                  <path d="M 224,288 L 272,288" fill="none" stroke="black"></path>
-                  <path d="M 384,288 L 432,288" fill="none" stroke="black"></path>
-                  <path d="M 104,304 L 136,304" fill="none" stroke="black"></path>
-                  <path d="M 208,304 L 288,304" fill="none" stroke="black"></path>
-                  <path d="M 440,304 L 520,304" fill="none" stroke="black"></path>
-                  <path d="M 48,320 L 96,320" fill="none" stroke="black"></path>
-                  <path d="M 384,320 L 432,320" fill="none" stroke="black"></path>
-                  <path d="M 32,336 L 112,336" fill="none" stroke="black"></path>
-                  <path d="M 208,336 L 288,336" fill="none" stroke="black"></path>
-                  <path d="M 368,336 L 448,336" fill="none" stroke="black"></path>
-                  <path d="M 224,352 L 272,352" fill="none" stroke="black"></path>
-                  <path d="M 224,384 L 272,384" fill="none" stroke="black"></path>
-                  <path d="M 184,400 L 216,400" fill="none" stroke="black"></path>
-                  <path d="M 224,416 L 272,416" fill="none" stroke="black"></path>
-                  <path d="M 280,432 L 312,432" fill="none" stroke="black"></path>
-                  <path d="M 224,448 L 272,448" fill="none" stroke="black"></path>
-                  <path d="M 280,464 L 472,464" fill="none" stroke="black"></path>
-                  <path d="M 224,480 L 272,480" fill="none" stroke="black"></path>
-                  <path d="M 168,496 L 216,496" fill="none" stroke="black"></path>
-                  <path d="M 224,512 L 272,512" fill="none" stroke="black"></path>
-                  <path d="M 152,528 L 216,528" fill="none" stroke="black"></path>
-                  <path d="M 224,544 L 272,544" fill="none" stroke="black"></path>
-                  <path d="M 136,560 L 216,560" fill="none" stroke="black"></path>
-                  <path d="M 224,576 L 272,576" fill="none" stroke="black"></path>
-                  <path d="M 280,592 L 328,592" fill="none" stroke="black"></path>
-                  <path d="M 224,608 L 272,608" fill="none" stroke="black"></path>
-                  <path d="M 280,624 L 344,624" fill="none" stroke="black"></path>
-                  <path d="M 224,640 L 272,640" fill="none" stroke="black"></path>
-                  <path d="M 280,656 L 488,656" fill="none" stroke="black"></path>
-                  <path d="M 224,672 L 272,672" fill="none" stroke="black"></path>
-                  <path d="M 280,688 L 504,688" fill="none" stroke="black"></path>
-                  <path d="M 224,704 L 272,704" fill="none" stroke="black"></path>
-                  <path d="M 280,720 L 520,720" fill="none" stroke="black"></path>
-                  <path d="M 224,736 L 272,736" fill="none" stroke="black"></path>
-                  <path d="M 208,752 L 288,752" fill="none" stroke="black"></path>
-                  <polygon class="arrowhead" points="288,720 276,714.4 276,725.6" fill="black" transform="rotate(180,280,720)"></polygon>
-                  <polygon class="arrowhead" points="288,688 276,682.4 276,693.6" fill="black" transform="rotate(180,280,688)"></polygon>
-                  <polygon class="arrowhead" points="288,656 276,650.4 276,661.6" fill="black" transform="rotate(180,280,656)"></polygon>
-                  <polygon class="arrowhead" points="288,624 276,618.4 276,629.6" fill="black" transform="rotate(180,280,624)"></polygon>
-                  <polygon class="arrowhead" points="288,592 276,586.4 276,597.6" fill="black" transform="rotate(180,280,592)"></polygon>
-                  <polygon class="arrowhead" points="288,464 276,458.4 276,469.6" fill="black" transform="rotate(180,280,464)"></polygon>
-                  <polygon class="arrowhead" points="288,432 276,426.4 276,437.6" fill="black" transform="rotate(180,280,432)"></polygon>
-                  <polygon class="arrowhead" points="224,560 212,554.4 212,565.6" fill="black" transform="rotate(0,216,560)"></polygon>
-                  <polygon class="arrowhead" points="224,528 212,522.4 212,533.6" fill="black" transform="rotate(0,216,528)"></polygon>
-                  <polygon class="arrowhead" points="224,496 212,490.4 212,501.6" fill="black" transform="rotate(0,216,496)"></polygon>
-                  <polygon class="arrowhead" points="224,400 212,394.4 212,405.6" fill="black" transform="rotate(0,216,400)"></polygon>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="656" width="504" viewBox="0 0 504 656" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+                  <path d="M 8,48 L 8,208" fill="none" stroke="black"></path>
+                  <path d="M 24,64 L 24,192" fill="none" stroke="black"></path>
+                  <path d="M 72,64 L 72,192" fill="none" stroke="black"></path>
+                  <path d="M 88,48 L 88,72" fill="none" stroke="black"></path>
+                  <path d="M 88,184 L 88,208" fill="none" stroke="black"></path>
+                  <path d="M 112,176 L 112,432" fill="none" stroke="black"></path>
+                  <path d="M 128,144 L 128,400" fill="none" stroke="black"></path>
+                  <path d="M 144,112 L 144,368" fill="none" stroke="black"></path>
+                  <path d="M 160,80 L 160,272" fill="none" stroke="black"></path>
+                  <path d="M 184,48 L 184,176" fill="none" stroke="black"></path>
+                  <path d="M 184,208 L 184,264" fill="none" stroke="black"></path>
+                  <path d="M 184,280 L 184,360" fill="none" stroke="black"></path>
+                  <path d="M 184,440 L 184,624" fill="none" stroke="black"></path>
+                  <path d="M 200,64 L 200,160" fill="none" stroke="black"></path>
+                  <path d="M 200,224 L 200,608" fill="none" stroke="black"></path>
+                  <path d="M 248,64 L 248,160" fill="none" stroke="black"></path>
+                  <path d="M 248,224 L 248,608" fill="none" stroke="black"></path>
+                  <path d="M 264,48 L 264,72" fill="none" stroke="black"></path>
+                  <path d="M 264,152 L 264,176" fill="none" stroke="black"></path>
+                  <path d="M 264,208 L 264,296" fill="none" stroke="black"></path>
+                  <path d="M 264,344 L 264,456" fill="none" stroke="black"></path>
+                  <path d="M 264,600 L 264,624" fill="none" stroke="black"></path>
+                  <path d="M 288,80 L 288,104" fill="none" stroke="black"></path>
+                  <path d="M 288,152 L 288,304" fill="none" stroke="black"></path>
+                  <path d="M 304,112 L 304,136" fill="none" stroke="black"></path>
+                  <path d="M 304,152 L 304,328" fill="none" stroke="black"></path>
+                  <path d="M 304,344 L 304,464" fill="none" stroke="black"></path>
+                  <path d="M 320,144 L 320,328" fill="none" stroke="black"></path>
+                  <path d="M 320,344 L 320,496" fill="none" stroke="black"></path>
+                  <path d="M 344,48 L 344,208" fill="none" stroke="black"></path>
+                  <path d="M 360,64 L 360,192" fill="none" stroke="black"></path>
+                  <path d="M 408,64 L 408,192" fill="none" stroke="black"></path>
+                  <path d="M 424,48 L 424,72" fill="none" stroke="black"></path>
+                  <path d="M 424,184 L 424,208" fill="none" stroke="black"></path>
+                  <path d="M 448,80 L 448,104" fill="none" stroke="black"></path>
+                  <path d="M 448,184 L 448,336" fill="none" stroke="black"></path>
+                  <path d="M 464,112 L 464,136" fill="none" stroke="black"></path>
+                  <path d="M 464,184 L 464,528" fill="none" stroke="black"></path>
+                  <path d="M 480,144 L 480,168" fill="none" stroke="black"></path>
+                  <path d="M 480,184 L 480,560" fill="none" stroke="black"></path>
+                  <path d="M 496,176 L 496,592" fill="none" stroke="black"></path>
+                  <path d="M 8,48 L 88,48" fill="none" stroke="black"></path>
+                  <path d="M 184,48 L 264,48" fill="none" stroke="black"></path>
+                  <path d="M 344,48 L 424,48" fill="none" stroke="black"></path>
+                  <path d="M 24,64 L 72,64" fill="none" stroke="black"></path>
+                  <path d="M 200,64 L 248,64" fill="none" stroke="black"></path>
+                  <path d="M 360,64 L 408,64" fill="none" stroke="black"></path>
+                  <path d="M 80,80 L 160,80" fill="none" stroke="black"></path>
+                  <path d="M 256,80 L 288,80" fill="none" stroke="black"></path>
+                  <path d="M 416,80 L 448,80" fill="none" stroke="black"></path>
+                  <path d="M 24,96 L 72,96" fill="none" stroke="black"></path>
+                  <path d="M 200,96 L 248,96" fill="none" stroke="black"></path>
+                  <path d="M 360,96 L 408,96" fill="none" stroke="black"></path>
+                  <path d="M 80,112 L 144,112" fill="none" stroke="black"></path>
+                  <path d="M 256,112 L 304,112" fill="none" stroke="black"></path>
+                  <path d="M 416,112 L 464,112" fill="none" stroke="black"></path>
+                  <path d="M 24,128 L 72,128" fill="none" stroke="black"></path>
+                  <path d="M 200,128 L 248,128" fill="none" stroke="black"></path>
+                  <path d="M 360,128 L 408,128" fill="none" stroke="black"></path>
+                  <path d="M 80,144 L 128,144" fill="none" stroke="black"></path>
+                  <path d="M 256,144 L 320,144" fill="none" stroke="black"></path>
+                  <path d="M 416,144 L 480,144" fill="none" stroke="black"></path>
+                  <path d="M 24,160 L 72,160" fill="none" stroke="black"></path>
+                  <path d="M 200,160 L 248,160" fill="none" stroke="black"></path>
+                  <path d="M 360,160 L 408,160" fill="none" stroke="black"></path>
+                  <path d="M 80,176 L 112,176" fill="none" stroke="black"></path>
+                  <path d="M 184,176 L 264,176" fill="none" stroke="black"></path>
+                  <path d="M 416,176 L 496,176" fill="none" stroke="black"></path>
+                  <path d="M 24,192 L 72,192" fill="none" stroke="black"></path>
+                  <path d="M 360,192 L 408,192" fill="none" stroke="black"></path>
+                  <path d="M 8,208 L 88,208" fill="none" stroke="black"></path>
+                  <path d="M 184,208 L 264,208" fill="none" stroke="black"></path>
+                  <path d="M 344,208 L 424,208" fill="none" stroke="black"></path>
+                  <path d="M 200,224 L 248,224" fill="none" stroke="black"></path>
+                  <path d="M 200,256 L 248,256" fill="none" stroke="black"></path>
+                  <path d="M 160,272 L 192,272" fill="none" stroke="black"></path>
+                  <path d="M 200,288 L 248,288" fill="none" stroke="black"></path>
+                  <path d="M 256,304 L 288,304" fill="none" stroke="black"></path>
+                  <path d="M 200,320 L 248,320" fill="none" stroke="black"></path>
+                  <path d="M 256,336 L 448,336" fill="none" stroke="black"></path>
+                  <path d="M 200,352 L 248,352" fill="none" stroke="black"></path>
+                  <path d="M 144,368 L 192,368" fill="none" stroke="black"></path>
+                  <path d="M 200,384 L 248,384" fill="none" stroke="black"></path>
+                  <path d="M 128,400 L 192,400" fill="none" stroke="black"></path>
+                  <path d="M 200,416 L 248,416" fill="none" stroke="black"></path>
+                  <path d="M 112,432 L 192,432" fill="none" stroke="black"></path>
+                  <path d="M 200,448 L 248,448" fill="none" stroke="black"></path>
+                  <path d="M 256,464 L 304,464" fill="none" stroke="black"></path>
+                  <path d="M 200,480 L 248,480" fill="none" stroke="black"></path>
+                  <path d="M 256,496 L 320,496" fill="none" stroke="black"></path>
+                  <path d="M 200,512 L 248,512" fill="none" stroke="black"></path>
+                  <path d="M 256,528 L 464,528" fill="none" stroke="black"></path>
+                  <path d="M 200,544 L 248,544" fill="none" stroke="black"></path>
+                  <path d="M 256,560 L 480,560" fill="none" stroke="black"></path>
+                  <path d="M 200,576 L 248,576" fill="none" stroke="black"></path>
+                  <path d="M 256,592 L 496,592" fill="none" stroke="black"></path>
+                  <path d="M 200,608 L 248,608" fill="none" stroke="black"></path>
+                  <path d="M 184,624 L 264,624" fill="none" stroke="black"></path>
+                  <polygon class="arrowhead" points="264,592 252,586.4 252,597.6" fill="black" transform="rotate(180,256,592)"></polygon>
+                  <polygon class="arrowhead" points="264,560 252,554.4 252,565.6" fill="black" transform="rotate(180,256,560)"></polygon>
+                  <polygon class="arrowhead" points="264,528 252,522.4 252,533.6" fill="black" transform="rotate(180,256,528)"></polygon>
+                  <polygon class="arrowhead" points="264,496 252,490.4 252,501.6" fill="black" transform="rotate(180,256,496)"></polygon>
+                  <polygon class="arrowhead" points="264,464 252,458.4 252,469.6" fill="black" transform="rotate(180,256,464)"></polygon>
+                  <polygon class="arrowhead" points="264,336 252,330.4 252,341.6" fill="black" transform="rotate(180,256,336)"></polygon>
+                  <polygon class="arrowhead" points="264,304 252,298.4 252,309.6" fill="black" transform="rotate(180,256,304)"></polygon>
+                  <polygon class="arrowhead" points="200,432 188,426.4 188,437.6" fill="black" transform="rotate(0,192,432)"></polygon>
+                  <polygon class="arrowhead" points="200,400 188,394.4 188,405.6" fill="black" transform="rotate(0,192,400)"></polygon>
+                  <polygon class="arrowhead" points="200,368 188,362.4 188,373.6" fill="black" transform="rotate(0,192,368)"></polygon>
+                  <polygon class="arrowhead" points="200,272 188,266.4 188,277.6" fill="black" transform="rotate(0,192,272)"></polygon>
                   <g class="text">
-                    <text x="248" y="52">ISD</text>
-                    <text x="284" y="52">Core</text>
-                    <text x="44" y="84">AS</text>
-                    <text x="132" y="84">AS</text>
-                    <text x="236" y="84">AS</text>
-                    <text x="324" y="84">AS</text>
-                    <text x="428" y="84">AS</text>
-                    <text x="516" y="84">AS</text>
-                    <text x="44" y="100">ff00:0:3</text>
-                    <text x="132" y="100">ff00:0:4</text>
-                    <text x="236" y="100">ff00:0:1</text>
-                    <text x="324" y="100">ff00:0:2</text>
-                    <text x="428" y="100">ff00:0:5</text>
-                    <text x="516" y="100">ff00:0:6</text>
-                    <text x="76" y="164">Up-Segment</text>
-                    <text x="252" y="164">Core-Segment</text>
-                    <text x="412" y="164">Down-Segment</text>
-                    <text x="72" y="212">INF</text>
-                    <text x="248" y="212">INF</text>
-                    <text x="408" y="212">INF</text>
-                    <text x="112" y="228">|</text>
-                    <text x="288" y="228">|</text>
-                    <text x="448" y="228">|</text>
-                    <text x="68" y="244">HF</text>
-                    <text x="244" y="244">HF</text>
-                    <text x="404" y="244">HF</text>
-                    <text x="112" y="260">|</text>
-                    <text x="288" y="260">|</text>
-                    <text x="312" y="260">|</text>
-                    <text x="448" y="260">|</text>
-                    <text x="472" y="260">|</text>
-                    <text x="68" y="276">HF</text>
-                    <text x="244" y="276">HF</text>
-                    <text x="404" y="276">HF</text>
-                    <text x="112" y="292">|</text>
-                    <text x="448" y="292">|</text>
-                    <text x="472" y="292">|</text>
-                    <text x="488" y="292">|</text>
-                    <text x="68" y="308">HF</text>
-                    <text x="404" y="308">HF</text>
-                    <text x="244" y="372">Meta</text>
-                    <text x="248" y="404">INF</text>
-                    <text x="248" y="436">INF</text>
-                    <text x="288" y="452">|</text>
-                    <text x="248" y="468">INF</text>
-                    <text x="244" y="500">HF</text>
-                    <text x="208" y="516">|</text>
-                    <text x="244" y="532">HF</text>
-                    <text x="208" y="548">|</text>
-                    <text x="244" y="564">HF</text>
-                    <text x="244" y="596">HF</text>
-                    <text x="288" y="612">|</text>
-                    <text x="108" y="628">Forwarding</text>
-                    <text x="172" y="628">Path</text>
-                    <text x="244" y="628">HF</text>
-                    <text x="288" y="644">|</text>
-                    <text x="244" y="660">HF</text>
-                    <text x="288" y="676">|</text>
-                    <text x="244" y="692">HF</text>
-                    <text x="288" y="708">|</text>
-                    <text x="244" y="724">HF</text>
+                    <text x="52" y="36">Up-Segment</text>
+                    <text x="228" y="36">Core-Segment</text>
+                    <text x="388" y="36">Down-Segment</text>
+                    <text x="48" y="84">INF</text>
+                    <text x="224" y="84">INF</text>
+                    <text x="384" y="84">INF</text>
+                    <text x="88" y="100">|</text>
+                    <text x="264" y="100">|</text>
+                    <text x="424" y="100">|</text>
+                    <text x="44" y="116">HF</text>
+                    <text x="220" y="116">HF</text>
+                    <text x="380" y="116">HF</text>
+                    <text x="88" y="132">|</text>
+                    <text x="264" y="132">|</text>
+                    <text x="288" y="132">|</text>
+                    <text x="424" y="132">|</text>
+                    <text x="448" y="132">|</text>
+                    <text x="44" y="148">HF</text>
+                    <text x="220" y="148">HF</text>
+                    <text x="380" y="148">HF</text>
+                    <text x="88" y="164">|</text>
+                    <text x="424" y="164">|</text>
+                    <text x="448" y="164">|</text>
+                    <text x="464" y="164">|</text>
+                    <text x="44" y="180">HF</text>
+                    <text x="380" y="180">HF</text>
+                    <text x="220" y="244">Meta</text>
+                    <text x="224" y="276">INF</text>
+                    <text x="224" y="308">INF</text>
+                    <text x="264" y="324">|</text>
+                    <text x="224" y="340">INF</text>
+                    <text x="220" y="372">HF</text>
+                    <text x="184" y="388">|</text>
+                    <text x="220" y="404">HF</text>
+                    <text x="184" y="420">|</text>
+                    <text x="220" y="436">HF</text>
+                    <text x="220" y="468">HF</text>
+                    <text x="264" y="484">|</text>
+                    <text x="84" y="500">Forwarding</text>
+                    <text x="148" y="500">Path</text>
+                    <text x="220" y="500">HF</text>
+                    <text x="264" y="516">|</text>
+                    <text x="220" y="532">HF</text>
+                    <text x="264" y="548">|</text>
+                    <text x="220" y="564">HF</text>
+                    <text x="264" y="580">|</text>
+                    <text x="220" y="596">HF</text>
                   </g>
                 </svg><a href="#section-2.3.2-7.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
 <a href="#name-path-construction-example" class="selfRef">Path construction example</a>
             </figcaption></figure>
 </div>
@@ -2805,7 +2769,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
             </h5>
 <p id="section-2.3.2.1-1">The 4-byte Path Meta Header field (<code>PathMetaHdr</code>) defines meta information about the SCION path that is contained in the path header. It has the following format:<a href="#section-2.3.2.1-1" class="pilcrow">¶</a></p>
 <span id="name-scion-path-type-format-of-t"></span><div id="_figure-7">
-<figure id="figure-9">
+<figure id="figure-10">
               <div id="section-2.3.2.1-2.1">
                 <div class="alignLeft art-svg artwork" id="section-2.3.2.1-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="128" width="528" viewBox="0 0 528 128" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2865,7 +2829,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
                   </svg><a href="#section-2.3.2.1-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
 <a href="#name-scion-path-type-format-of-t" class="selfRef">SCION path type - Format of the Path Meta Header field</a>
               </figcaption></figure>
 </div>
@@ -2929,7 +2893,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
             </h5>
 <p id="section-2.3.2.3-1">The 8-byte Info Field (<code>InfoField</code>) has the following format:<a href="#section-2.3.2.3-1" class="pilcrow">¶</a></p>
 <span id="name-scion-path-type-format-of-th"></span><div id="_figure-8">
-<figure id="figure-10">
+<figure id="figure-11">
               <div id="section-2.3.2.3-2.1">
                 <div class="alignLeft art-svg artwork" id="section-2.3.2.3-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="160" width="528" viewBox="0 0 528 160" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -2989,7 +2953,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
                   </svg><a href="#section-2.3.2.3-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
 <a href="#name-scion-path-type-format-of-th" class="selfRef">SCION path type - Format of the Info Field</a>
               </figcaption></figure>
 </div>
@@ -3020,7 +2984,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
             </h5>
 <p id="section-2.3.2.4-1">The 12-byte Hop Field (<code>HopField</code>) has the following format:<a href="#section-2.3.2.4-1" class="pilcrow">¶</a></p>
 <span id="name-scion-path-type-format-of-the"></span><div id="_figure-9">
-<figure id="figure-11">
+<figure id="figure-12">
               <div id="section-2.3.2.4-2.1">
                 <div class="alignLeft art-svg artwork" id="section-2.3.2.4-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="528" viewBox="0 0 528 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3082,7 +3046,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
                   </svg><a href="#section-2.3.2.4-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
+<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
 <a href="#name-scion-path-type-format-of-the" class="selfRef">SCION path type - Format of the Hop Field</a>
               </figcaption></figure>
 </div>
@@ -3188,7 +3152,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
 <p id="section-2.4-4"><strong>Note:</strong> The SCION extension headers are defined and used based on and similar to the IPv6 extensions as specified in section 4 of <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>. The SCION Hop-by-Hop Options header and End-to-End Options header resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC) and Destination Options Header (section 4.6), respectively.<a href="#section-2.4-4" class="pilcrow">¶</a></p>
 <p id="section-2.4-5">The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 bytes and have the following format:<a href="#section-2.4-5" class="pilcrow">¶</a></p>
 <span id="name-extension-headers-options-h"></span><div id="_figure-11">
-<figure id="figure-12">
+<figure id="figure-13">
           <div id="section-2.4-6.1">
             <div class="alignLeft art-svg artwork" id="section-2.4-6.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="160" width="528" viewBox="0 0 528 160" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3243,7 +3207,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
               </svg><a href="#section-2.4-6.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
+<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
 <a href="#name-extension-headers-options-h" class="selfRef">Extension headers: Options header</a>
           </figcaption></figure>
 </div>
@@ -3265,7 +3229,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
           </h4>
 <p id="section-2.4.1-1">The <code>Options</code> field of the Hop-by-Hop Options and the End-to-End Options headers carries a variable number of options that are type-length-value (TLV) encoded. Each TLV-encoded option has the following format:<a href="#section-2.4.1-1" class="pilcrow">¶</a></p>
 <span id="name-options-field-tlv-encoded-o"></span><div id="_figure-12">
-<figure id="figure-13">
+<figure id="figure-14">
             <div id="section-2.4.1-2.1">
               <div class="alignLeft art-svg artwork" id="section-2.4.1-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="160" width="528" viewBox="0 0 528 160" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3323,7 +3287,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
                 </svg><a href="#section-2.4.1-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
 <a href="#name-options-field-tlv-encoded-o" class="selfRef">Options field: TLV-encoded options</a>
             </figcaption></figure>
 </div>
@@ -3398,7 +3362,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
             </h5>
 <p id="section-2.4.1.1-1">Alignment requirement: none.<a href="#section-2.4.1.1-1" class="pilcrow">¶</a></p>
 <span id="name-tlv-encoded-options-pad1-op"></span><div id="_figure-13">
-<figure id="figure-14">
+<figure id="figure-15">
               <div id="section-2.4.1.1-2.1">
                 <div class="alignLeft art-svg artwork" id="section-2.4.1.1-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="128" width="520" viewBox="0 0 520 128" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3448,7 +3412,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
                   </svg><a href="#section-2.4.1.1-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
+<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
 <a href="#name-tlv-encoded-options-pad1-op" class="selfRef">TLV-encoded options - Pad1 option</a>
               </figcaption></figure>
 </div>
@@ -3463,7 +3427,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
             </h5>
 <p id="section-2.4.1.2-1">Alignment requirement: none.<a href="#section-2.4.1.2-1" class="pilcrow">¶</a></p>
 <span id="name-tlv-encoded-options-padn-op"></span><div id="_figure-14">
-<figure id="figure-15">
+<figure id="figure-16">
               <div id="section-2.4.1.2-2.1">
                 <div class="alignLeft art-svg artwork" id="section-2.4.1.2-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="160" width="528" viewBox="0 0 528 160" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3521,7 +3485,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
                   </svg><a href="#section-2.4.1.2-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
+<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
 <a href="#name-tlv-encoded-options-padn-op" class="selfRef">TLV-encoded options - PadN option</a>
               </figcaption></figure>
 </div>
@@ -3540,7 +3504,7 @@ This timestamp wraps around every 2^32 seconds (roughly 136 years). The next wra
 <p id="section-2.5-1">The SCION Data Plane does not provide payload integrity protection, as further clarified in <a href="#payload-integrity" class="auto internal xref">Section 7.2.2</a>.
 Should any transport or other upper-layer protocols compute a checksum of the SCION header, then they <span class="bcp14">SHOULD</span> use the following pseudo header:<a href="#section-2.5-1" class="pilcrow">¶</a></p>
 <span id="name-layout-of-the-pseudo-header"></span><div id="_figure-15">
-<figure id="figure-16">
+<figure id="figure-17">
           <div id="section-2.5-2.1">
             <div class="alignLeft art-svg artwork" id="section-2.5-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="352" width="624" viewBox="0 0 624 352" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3627,7 +3591,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
               </svg><a href="#section-2.5-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
 <a href="#name-layout-of-the-pseudo-header" class="selfRef">Layout of the pseudo header for the upper-layer checksum</a>
           </figcaption></figure>
 </div>
@@ -3655,7 +3619,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 <p id="section-3-1">This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. In the case of inter-ISD forwarding, the complete end-to-end path from source endpoint to destination endpoint would always require a core path segment as well, although this makes no difference for the forwarding process which works the same in an intra-ISD and inter-ISD context.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <span id="name-example-topology-as-ff0001-"></span><div id="_figure-16">
-<figure id="figure-17">
+<figure id="figure-18">
         <div id="section-3-3.1">
           <div class="alignLeft art-svg artwork" id="section-3-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="448" width="528" viewBox="0 0 528 448" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3744,7 +3708,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
             </svg><a href="#section-3-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
+<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-example-topology-as-ff0001-" class="selfRef">Example topology. AS ff00:0:1 is the core AS of ISD 1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.</a>
         </figcaption></figure>
 </div>
@@ -4102,9 +4066,9 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
 <a href="#section-4.1.1.3.1" class="section-number selfRef">4.1.1.3.1. </a><a href="#name-default-hop-field-mac-algor" class="section-name selfRef">Default Hop Field MAC Algorithm</a>
               </h6>
 <p id="section-4.1.1.3.1-1">The default MAC algorithm is AES-CMAC (<span>[<a href="#RFC4493" class="cite xref">RFC4493</a>]</span>) truncated to 48-bits, computed over the Info Field and the first 6 bytes of the Hop Field with flags and reserved fields zeroed out. The input is padded to 16 bytes. The <em>first</em> 6 bytes of the AES-CMAC output are used as resulting Hop Field MAC.<a href="#section-4.1.1.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1.1.3.1-2"><a href="#_figure-18" class="auto internal xref">Figure 18</a> below shows the layout of the input data to calculate the Hop Field MAC.<a href="#section-4.1.1.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1.1.3.1-2"><a href="#_figure-18" class="auto internal xref">Figure 19</a> below shows the layout of the input data to calculate the Hop Field MAC.<a href="#section-4.1.1.3.1-2" class="pilcrow">¶</a></p>
 <span id="name-input-data-to-calculate-the"></span><div id="_figure-18">
-<figure id="figure-18">
+<figure id="figure-19">
                 <div id="section-4.1.1.3.1-3.1">
                   <div class="alignLeft art-svg artwork" id="section-4.1.1.3.1-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="224" width="608" viewBox="0 0 608 224" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4178,7 +4142,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
                     </svg><a href="#section-4.1.1.3.1-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
+<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
 <a href="#name-input-data-to-calculate-the" class="selfRef">Input data to calculate the Hop Field MAC for the default hop-field MAC algorithm</a>
                 </figcaption></figure>
 </div>
@@ -4930,6 +4894,15 @@ Such compromise can be mitigated with a forwarding key rotation.<a href="#sectio
 </li>
           <li class="normal" id="appendix-D.1-1.2">
             <p id="appendix-D.1-1.2.1">Clarify distinction between SCION ASes and BGP ASes through the text<a href="#appendix-D.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.3">
+            <p id="appendix-D.1-1.3.1">Figure 1: split into two smaller figures to fit in a single page<a href="#appendix-D.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.4">
+            <p id="appendix-D.1-1.4.1">Figure 9 (Path construction example): shorten and remove superfluous AS chain<a href="#appendix-D.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.5">
+            <p id="appendix-D.1-1.5.1">Configuration: clarify text on intra vs inter-domain interface id mappings<a href="#appendix-D.1-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
