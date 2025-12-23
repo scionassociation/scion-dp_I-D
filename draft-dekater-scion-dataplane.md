@@ -385,12 +385,9 @@ Note that the type of segment is known to the endpoint but it is not explicitly 
 
 Besides enabling the enforcement of path policies, the above rules also protect the economic interest of ASes as they prevent building "valley paths". A valley path contains ASes that do not profit economically from traffic on this route, with the name coming from the fact that such paths go "down" (following parent-child links) before going "up" (following child-parent links).
 
-{{figure-1}} below shows valid segment combinations.
-
-**Note:** It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).
+{{figure-1}} and {{figure-1bis}} show valid segment combinations. Each node represents a SCION Autonomous System. It is assumed that the source and destination endpoints are in different ASes (as endpoints from the same AS use an empty forwarding path to communicate with each other).
 
 ~~~aasvg
-
  +---+                            :
  | C | = Core AS                  :  - - - - = unused links
  +---+
@@ -416,8 +413,21 @@ Besides enabling the enforcement of path policies, the above rules also protect 
 |   +-+-+     +-+-+           +-+-+               +-+-+   1d    +-+-+
 v   |*  |     |*  |           |*  |               |* C|         |* C|
     +---+     +---+           +---+               +---+         +---+
+~~~
+{: #figure-1 title="Illustration of valid path segment combinations through multiple core ASes."}
 
+Valid path segment combinations:
 
+- **Communication through core ASes**:
+
+  - **Core segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is REQUIRED to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up or down segments are REQUIRED to connect the respective ASes to the core segment.
+  - **Immediate combination** (Cases 2a, 2b in {{figure-1bis}}): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.
+
+- **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
+- **AS shortcut** (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.
+- **On-path** (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.
+
+~~~aasvg
          +---+                +---+                 +---+
 +     +--+ C +--+             +* C|              :- + C +- :
 |     |  +---+  |             +-+-+              :  +---+  :
@@ -451,21 +461,9 @@ v   |*  |     |*  |           |*  |            |*  |     |*  |
 |  +-+-+     +-+-+        +-+-+   +-+-+     +-+-+     +-+-+       +-+-+
 v  |*  |     |*  |        |*  |   |*  |     |*  |     |*  |       |*  |
    +---+     +---+        +---+   +---+     +---+     +---+       +---+
-
 ~~~
-{: #figure-1 title="Illustration of valid path segment combinations. Each node represents a SCION Autonomous System."}
+{: #figure-1bis title="Illustration of valid path segment combinations through one or no core ASes."}
 
-
-Valid path segment combinations:
-
-- **Communication through core ASes**:
-
-  - **Core segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is REQUIRED to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d), then no up or down segments are REQUIRED to connect the respective ASes to the core segment.
-  - **Immediate combination** (Cases 2a, 2b in {{figure-1}}): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.
-
-- **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
-- **AS shortcut** (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.
-- **On-path** (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.
 
 ## Path Authorization
 
@@ -557,7 +555,7 @@ The SCION common header has the following packet format:
 | other        | other          | Unassigned       |
 {: #table-3 title="Allocations of length and type combinations"}
 
-A service address designates a set of endpoint addresses rather than a singular one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set. {{table-4}} lists the known services.
+A service address designates a set of endpoint addresses rather than a single one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set. {{table-4}} lists the known services.
 
 - `RSV`: These bits are currently reserved for future use.
 
@@ -677,14 +675,6 @@ The SCION header is created by extracting the required Info Fields and Hop Field
 In the Hop Field that represents the last Hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
 
 ~~~aasvg
-                      +-----------------------+
-                      |      ISD Core         |
-+--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
-|   AS   +-+   AS   +---+   AS   +-+   AS   +---+   AS   +-+   AS   |
-|ff00:0:3| |ff00:0:4| | |ff00:0:1| +ff00:0:2| | |ff00:0:5| |ff00:0:6|
-+--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
-                      +-----------------------+
-
     Up-Segment           Core-Segment        Down-Segment
    +---------+           +---------+         +---------+
    | +-----+ |           | +-----+ |         | +-----+ |
@@ -1593,6 +1583,9 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Add normative reference to POSIX time and clarify timestamp behavior at wraparound
 - Clarify distinction between SCION ASes and BGP ASes through the text
+- Figure 1: split into two smaller figures to fit in a single page
+- Figure 9 (Path construction example): shorten and remove superfluous AS chain
+- Configuration: clarify text on intra vs inter-domain interface id mappings
 
 ## draft-dekater-scion-dataplane-09
 {:numbered="false"}
