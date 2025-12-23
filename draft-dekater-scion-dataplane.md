@@ -747,7 +747,7 @@ Both indices are used by SCION routers when forwarding data traffic through the 
 
 #### Path Offset Calculations {#offset-calc}
 
-The path offset calculations are used by the SCION border routers to determine the Info Field and Hop Field that are currently valid for the packet on its way through the network.
+SCION border routers use path offsets to determine the currently active Info Field and Hop Field for the packet.
 
 The following rules apply when calculating the path offsets:
 
@@ -830,15 +830,14 @@ Setting multiple router alert flags on a path SHOULD be avoided. This is because
 
 ### One-Hop Path Type {#onehop}
 
-The `OneHopPath` path type (`PathType=2`) is currently used to bootstrap beaconing between neighboring ASes. This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.
+Bootstrapping beaconing between neighboring ASes relies on the `OneHopPath` path type (`PathType=2`). This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.
 
-A one-hop path has exactly one Info Field and two Hop Fields. The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
+A one-hop path has exactly one Info Field and two Hop Fields. Any entity with access to the AS forwarding key can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively.
+The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
 
 - At the source endpoint AS, *CurrHF := 0*.
 - At the destination endpoint AS, *CurrHF := 1*.
 
-
-Any entity with access to the forwarding key of the source endpoint AS can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld), respectively.
 
 Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to the unspecified value 0, ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.
 
