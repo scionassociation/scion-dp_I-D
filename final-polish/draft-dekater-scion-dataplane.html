@@ -2865,7 +2865,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
             <h5 id="name-path-offset-calculations">
 <a href="#section-2.3.2.2" class="section-number selfRef">2.3.2.2. </a><a href="#name-path-offset-calculations" class="section-name selfRef">Path Offset Calculations</a>
             </h5>
-<p id="section-2.3.2.2-1">SCION border routers use path offsets to determine the currently active Info Field and Hop Field for the packet.<a href="#section-2.3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2.2-1">Path offset calculations enable SCION border routers to locate the currently active Info Field and Hop Field during packet processing.<a href="#section-2.3.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.2.2-2">The following rules apply when calculating the path offsets:<a href="#section-2.3.2.2-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.2.2-3">
 <pre>
@@ -3616,7 +3616,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-life-of-a-scion-data-packet" class="section-name selfRef">Life of a SCION Data Packet</a>
       </h2>
 <p id="section-3-1">This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. In the case of inter-ISD forwarding, the complete end-to-end path from source endpoint to destination endpoint would always require a core path segment as well, although this makes no difference for the forwarding process which works the same in an intra-ISD and inter-ISD context.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An inter-ISD scenario would use an additional core path segment or a peering link.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <span id="name-example-topology-as-ff0001-"></span><div id="_figure-16">
 <figure id="figure-18">
         <div id="section-3-3.1">
@@ -4787,7 +4787,7 @@ Such compromise can be mitigated with a forwarding key rotation.<a href="#sectio
 <p id="appendix-C.1-2">The protocol numbers are used in the SCION header to identify the upper layer protocol.<a href="#appendix-C.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="assignment">
+<div id="protnum-table">
 <section id="appendix-C.2">
         <h3 id="name-assignment">
 <a href="#name-assignment" class="section-name selfRef">Assignment</a>
