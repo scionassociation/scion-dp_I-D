@@ -2685,12 +2685,6 @@ Table of Contents
               AES-CMAC Algorithm", RFC 4493, DOI 10.17487/RFC4493, June
               2006, <https://www.rfc-editor.org/rfc/rfc4493>.
 
-   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
-              Housley, R., and W. Polk, "Internet X.509 Public Key
-              Infrastructure Certificate and Certificate Revocation List
-              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
-              <https://www.rfc-editor.org/rfc/rfc5280>.
-
    [RFC5880]  Katz, D. and D. Ward, "Bidirectional Forwarding Detection
               (BFD)", RFC 5880, DOI 10.17487/RFC5880, June 2010,
               <https://www.rfc-editor.org/rfc/rfc5880>.
@@ -2860,6 +2854,8 @@ draft-dekater-scion-dataplane-10
    *  Remove unused informative reference to I-D.dekater-panrg-scion-
       overview and to Anapaya's ISD assignments, since they are taken
       over by SCION Association in 2026
+
+   *  Remove unused reference to RFC5280
 
 draft-dekater-scion-dataplane-09
 
