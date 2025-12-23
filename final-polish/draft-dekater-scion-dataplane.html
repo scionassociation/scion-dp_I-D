@@ -1328,7 +1328,15 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
             <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
@@ -4618,105 +4626,121 @@ Such compromise can be mitigated with a forwarding key rotation.<a href="#sectio
 <p id="section-8-2">The ISD and SCION AS number are SCION-specific numbers. They are allocated by the SCION Association (see <span>[<a href="#ISD-AS-assignments" class="cite xref">ISD-AS-assignments</a>]</span>).<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="sec-normative-references">
+<div id="sec-combined-references">
 <section id="section-9">
-      <h2 id="name-normative-references">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      <h2 id="name-references">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
+<section id="section-9.1">
+        <h3 id="name-normative-references">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
 <dl class="references">
-<dt id="CRYPTOBOOK">[CRYPTOBOOK]</dt>
-      <dd>
-<span class="refAuthor">Boneh, D.</span> and <span class="refAuthor">V. Shoup</span>, <span class="refTitle">"A Graduate Course in Applied Cryptography"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://toc.cryptobook.us/">https://toc.cryptobook.us/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="I-D.dekater-scion-controlplane">[I-D.dekater-scion-controlplane]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-controlplane-13</span>, <time datetime="2025-12-04" class="refDate">4 December 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-13">https://datatracker.ietf.org/doc/html/draft-dekater-scion-controlplane-13</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.dekater-scion-pki">[I-D.dekater-scion-pki]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">S. Hitz</span>, <span class="refTitle">"SCION Control Plane PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-scion-pki-10</span>, <time datetime="2025-09-06" class="refDate">6 September 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-10">https://datatracker.ietf.org/doc/html/draft-dekater-scion-pki-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="ISD-AS-assignments">[ISD-AS-assignments]</dt>
-      <dd>
-<span class="refTitle">"SCION Registry"</span>, <time datetime="2026" class="refDate">2026</time>, <span>&lt;<a href="http://scion.org/registry/">http://scion.org/registry/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="PEREIRA2025">[PEREIRA2025]</dt>
-      <dd>
-<span class="refAuthor">Pereira, J.</span>, <span class="refAuthor">Klenze, T.</span>, <span class="refAuthor">Giampietro, S.</span>, <span class="refAuthor">Limbeck, M.</span>, <span class="refAuthor">Dionysios Spiliopoulos</span>, <span class="refAuthor">Wolf, F.</span>, <span class="refAuthor">Eilers, M.</span>, <span class="refAuthor">Sprenger, C.</span>, <span class="refAuthor">Basin, D.</span>, <span class="refAuthor">Müller, P.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router"</span>, <time datetime="2025" class="refDate">2025</time>. </dd>
-<dd class="break"></dd>
 <dt id="POSIX.1-2024">[POSIX.1-2024]</dt>
-      <dd>
+        <dd>
 <span class="refTitle">"Standard for Information Technology--Portable Operating System Interface (POSIX™) Base Specifications, Issue 8"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html">https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC1918">[RFC1918]</dt>
-      <dd>
-<span class="refAuthor">Rekhter, Y.</span>, <span class="refAuthor">Moskowitz, B.</span>, <span class="refAuthor">Karrenberg, D.</span>, <span class="refAuthor">de Groot, G. J.</span>, and <span class="refAuthor">E. Lear</span>, <span class="refTitle">"Address Allocation for Private Internets"</span>, <span class="seriesInfo">BCP 5</span>, <span class="seriesInfo">RFC 1918</span>, <span class="seriesInfo">DOI 10.17487/RFC1918</span>, <time datetime="1996-02" class="refDate">February 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1918">https://www.rfc-editor.org/rfc/rfc1918</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2474">[RFC2474]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Nichols, K.</span>, <span class="refAuthor">Blake, S.</span>, <span class="refAuthor">Baker, F.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"Definition of the Differentiated Services Field (DS Field) in the IPv4 and IPv6 Headers"</span>, <span class="seriesInfo">RFC 2474</span>, <span class="seriesInfo">DOI 10.17487/RFC2474</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2474">https://www.rfc-editor.org/rfc/rfc2474</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC2711">[RFC2711]</dt>
-      <dd>
-<span class="refAuthor">Partridge, C.</span> and <span class="refAuthor">A. Jackson</span>, <span class="refTitle">"IPv6 Router Alert Option"</span>, <span class="seriesInfo">RFC 2711</span>, <span class="seriesInfo">DOI 10.17487/RFC2711</span>, <time datetime="1999-10" class="refDate">October 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2711">https://www.rfc-editor.org/rfc/rfc2711</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC3168">[RFC3168]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Ramakrishnan, K.</span>, <span class="refAuthor">Floyd, S.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"The Addition of Explicit Congestion Notification (ECN) to IP"</span>, <span class="seriesInfo">RFC 3168</span>, <span class="seriesInfo">DOI 10.17487/RFC3168</span>, <time datetime="2001-09" class="refDate">September 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3168">https://www.rfc-editor.org/rfc/rfc3168</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC4493">[RFC4493]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Song, JH.</span>, <span class="refAuthor">Poovendran, R.</span>, <span class="refAuthor">Lee, J.</span>, and <span class="refAuthor">T. Iwata</span>, <span class="refTitle">"The AES-CMAC Algorithm"</span>, <span class="seriesInfo">RFC 4493</span>, <span class="seriesInfo">DOI 10.17487/RFC4493</span>, <time datetime="2006-06" class="refDate">June 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4493">https://www.rfc-editor.org/rfc/rfc4493</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC4821">[RFC4821]</dt>
-      <dd>
-<span class="refAuthor">Mathis, M.</span> and <span class="refAuthor">J. Heffner</span>, <span class="refTitle">"Packetization Layer Path MTU Discovery"</span>, <span class="seriesInfo">RFC 4821</span>, <span class="seriesInfo">DOI 10.17487/RFC4821</span>, <time datetime="2007-03" class="refDate">March 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4821">https://www.rfc-editor.org/rfc/rfc4821</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC5280">[RFC5280]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Cooper, D.</span>, <span class="refAuthor">Santesson, S.</span>, <span class="refAuthor">Farrell, S.</span>, <span class="refAuthor">Boeyen, S.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">W. Polk</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"</span>, <span class="seriesInfo">RFC 5280</span>, <span class="seriesInfo">DOI 10.17487/RFC5280</span>, <time datetime="2008-05" class="refDate">May 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5280">https://www.rfc-editor.org/rfc/rfc5280</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5880">[RFC5880]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Katz, D.</span> and <span class="refAuthor">D. Ward</span>, <span class="refTitle">"Bidirectional Forwarding Detection (BFD)"</span>, <span class="seriesInfo">RFC 5880</span>, <span class="seriesInfo">DOI 10.17487/RFC5880</span>, <time datetime="2010-06" class="refDate">June 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5880">https://www.rfc-editor.org/rfc/rfc5880</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6437">[RFC6437]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Amante, S.</span>, <span class="refAuthor">Carpenter, B.</span>, <span class="refAuthor">Jiang, S.</span>, and <span class="refAuthor">J. Rajahalme</span>, <span class="refTitle">"IPv6 Flow Label Specification"</span>, <span class="seriesInfo">RFC 6437</span>, <span class="seriesInfo">DOI 10.17487/RFC6437</span>, <time datetime="2011-11" class="refDate">November 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6437">https://www.rfc-editor.org/rfc/rfc6437</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8200">[RFC8200]</dt>
       <dd>
 <span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-9.2">
+        <h3 id="name-informative-references">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="CRYPTOBOOK">[CRYPTOBOOK]</dt>
+        <dd>
+<span class="refAuthor">Boneh, D.</span> and <span class="refAuthor">V. Shoup</span>, <span class="refTitle">"A Graduate Course in Applied Cryptography"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://toc.cryptobook.us/">https://toc.cryptobook.us/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="ISD-AS-assignments">[ISD-AS-assignments]</dt>
+        <dd>
+<span class="refTitle">"SCION Registry"</span>, <time datetime="2026" class="refDate">2026</time>, <span>&lt;<a href="http://scion.org/registry/">http://scion.org/registry/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="PEREIRA2025">[PEREIRA2025]</dt>
+        <dd>
+<span class="refAuthor">Pereira, J.</span>, <span class="refAuthor">Klenze, T.</span>, <span class="refAuthor">Giampietro, S.</span>, <span class="refAuthor">Limbeck, M.</span>, <span class="refAuthor">Dionysios Spiliopoulos</span>, <span class="refAuthor">Wolf, F.</span>, <span class="refAuthor">Eilers, M.</span>, <span class="refAuthor">Sprenger, C.</span>, <span class="refAuthor">Basin, D.</span>, <span class="refAuthor">Müller, P.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"Protocols to Code: Formal Verification of a Secure Next-Generation Internet Router"</span>, <time datetime="2025" class="refDate">2025</time>. </dd>
+<dd class="break"></dd>
+<dt id="RFC1918">[RFC1918]</dt>
+        <dd>
+<span class="refAuthor">Rekhter, Y.</span>, <span class="refAuthor">Moskowitz, B.</span>, <span class="refAuthor">Karrenberg, D.</span>, <span class="refAuthor">de Groot, G. J.</span>, and <span class="refAuthor">E. Lear</span>, <span class="refTitle">"Address Allocation for Private Internets"</span>, <span class="seriesInfo">BCP 5</span>, <span class="seriesInfo">RFC 1918</span>, <span class="seriesInfo">DOI 10.17487/RFC1918</span>, <time datetime="1996-02" class="refDate">February 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1918">https://www.rfc-editor.org/rfc/rfc1918</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2711">[RFC2711]</dt>
+        <dd>
+<span class="refAuthor">Partridge, C.</span> and <span class="refAuthor">A. Jackson</span>, <span class="refTitle">"IPv6 Router Alert Option"</span>, <span class="seriesInfo">RFC 2711</span>, <span class="seriesInfo">DOI 10.17487/RFC2711</span>, <time datetime="1999-10" class="refDate">October 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2711">https://www.rfc-editor.org/rfc/rfc2711</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4821">[RFC4821]</dt>
+        <dd>
+<span class="refAuthor">Mathis, M.</span> and <span class="refAuthor">J. Heffner</span>, <span class="refTitle">"Packetization Layer Path MTU Discovery"</span>, <span class="seriesInfo">RFC 4821</span>, <span class="seriesInfo">DOI 10.17487/RFC4821</span>, <time datetime="2007-03" class="refDate">March 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4821">https://www.rfc-editor.org/rfc/rfc4821</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC9217">[RFC9217]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Trammell, B.</span>, <span class="refTitle">"Current Open Questions in Path-Aware Networking"</span>, <span class="seriesInfo">RFC 9217</span>, <span class="seriesInfo">DOI 10.17487/RFC9217</span>, <time datetime="2022-03" class="refDate">March 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9217">https://www.rfc-editor.org/rfc/rfc9217</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9473">[RFC9473]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Enghardt, R.</span> and <span class="refAuthor">C. Krähenbühl</span>, <span class="refTitle">"A Vocabulary of Path Properties"</span>, <span class="seriesInfo">RFC 9473</span>, <span class="seriesInfo">DOI 10.17487/RFC9473</span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9473">https://www.rfc-editor.org/rfc/rfc9473</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCIONLAB">[SCIONLAB]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Kown, J.</span>, <span class="refAuthor">García-Pardo, J.</span>, <span class="refAuthor">Legner, M.</span>, <span class="refAuthor">Wirz, F.</span>, <span class="refAuthor">Frei, M.</span>, <span class="refAuthor">Hausheer, D.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"SCIONLAB - A Next-Generation Internet Testbed"</span>, <time datetime="2020" class="refDate">2020</time>, <span>&lt;<a href="https://ieeexplore.ieee.org/abstract/document/9259355">https://ieeexplore.ieee.org/abstract/document/9259355</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCIONLAB_WEBSITE">[SCIONLAB_WEBSITE]</dt>
-      <dd>
+        <dd>
 <span class="refTitle">"SCIONLab website"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://www.scionlab.org/">https://www.scionlab.org/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SIG">[SIG]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Anapaya</span>, <span class="refAuthor">ETH</span>, and <span class="refAuthor">SCION</span>, <span class="refTitle">"SCION IP Gateway Documentation"</span>, <time datetime="2024" class="refDate">2024</time>, <span>&lt;<a href="https://docs.scion.org/en/latest/sig.html">https://docs.scion.org/en/latest/sig.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
+</section>
+</div>
 </section>
 </div>
 <div id="acknowledgments">

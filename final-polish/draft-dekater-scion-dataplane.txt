@@ -135,7 +135,9 @@ Table of Contents
      7.3.  Off-Path Attacks
      7.4.  Volumetric Denial of Service Attacks
    8.  IANA Considerations
-   9.  Normative References
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Acknowledgments
    Deployment Testing: SCIONLab
    Assigned SCION Protocol Numbers
@@ -2639,11 +2641,9 @@ Table of Contents
    The ISD and SCION AS number are SCION-specific numbers.  They are
    allocated by the SCION Association (see [ISD-AS-assignments]).
 
-9.  Normative References
+9.  References
 
-   [CRYPTOBOOK]
-              Boneh, D. and V. Shoup, "A Graduate Course in Applied
-              Cryptography", 2023, <https://toc.cryptobook.us/>.
+9.1.  Normative References
 
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
@@ -2659,26 +2659,11 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-dekater-
               scion-pki-10>.
 
-   [ISD-AS-assignments]
-              "SCION Registry", 2026, <http://scion.org/registry/>.
-
-   [PEREIRA2025]
-              Pereira, J., Klenze, T., Giampietro, S., Limbeck, M.,
-              Dionysios Spiliopoulos, Wolf, F., Eilers, M., Sprenger,
-              C., Basin, D., Müller, P., and A. Perrig, "Protocols to
-              Code: Formal Verification of a Secure Next-Generation
-              Internet Router", 2025.
-
    [POSIX.1-2024]
               "Standard for Information Technology--Portable Operating
               System Interface (POSIX™) Base Specifications, Issue 8",
               2024, <https://pubs.opengroup.org/onlinepubs/9799919799/
               basedefs/V1_chap04.html>.
-
-   [RFC1918]  Rekhter, Y., Moskowitz, B., Karrenberg, D., de Groot, G.
-              J., and E. Lear, "Address Allocation for Private
-              Internets", BCP 5, RFC 1918, DOI 10.17487/RFC1918,
-              February 1996, <https://www.rfc-editor.org/rfc/rfc1918>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2691,10 +2676,6 @@ Table of Contents
               DOI 10.17487/RFC2474, December 1998,
               <https://www.rfc-editor.org/rfc/rfc2474>.
 
-   [RFC2711]  Partridge, C. and A. Jackson, "IPv6 Router Alert Option",
-              RFC 2711, DOI 10.17487/RFC2711, October 1999,
-              <https://www.rfc-editor.org/rfc/rfc2711>.
-
    [RFC3168]  Ramakrishnan, K., Floyd, S., and D. Black, "The Addition
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
@@ -2703,10 +2684,6 @@ Table of Contents
    [RFC4493]  Song, JH., Poovendran, R., Lee, J., and T. Iwata, "The
               AES-CMAC Algorithm", RFC 4493, DOI 10.17487/RFC4493, June
               2006, <https://www.rfc-editor.org/rfc/rfc4493>.
-
-   [RFC4821]  Mathis, M. and J. Heffner, "Packetization Layer Path MTU
-              Discovery", RFC 4821, DOI 10.17487/RFC4821, March 2007,
-              <https://www.rfc-editor.org/rfc/rfc4821>.
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
@@ -2731,6 +2708,35 @@ Table of Contents
               (IPv6) Specification", STD 86, RFC 8200,
               DOI 10.17487/RFC8200, July 2017,
               <https://www.rfc-editor.org/rfc/rfc8200>.
+
+9.2.  Informative References
+
+   [CRYPTOBOOK]
+              Boneh, D. and V. Shoup, "A Graduate Course in Applied
+              Cryptography", 2023, <https://toc.cryptobook.us/>.
+
+   [ISD-AS-assignments]
+              "SCION Registry", 2026, <http://scion.org/registry/>.
+
+   [PEREIRA2025]
+              Pereira, J., Klenze, T., Giampietro, S., Limbeck, M.,
+              Dionysios Spiliopoulos, Wolf, F., Eilers, M., Sprenger,
+              C., Basin, D., Müller, P., and A. Perrig, "Protocols to
+              Code: Formal Verification of a Secure Next-Generation
+              Internet Router", 2025.
+
+   [RFC1918]  Rekhter, Y., Moskowitz, B., Karrenberg, D., de Groot, G.
+              J., and E. Lear, "Address Allocation for Private
+              Internets", BCP 5, RFC 1918, DOI 10.17487/RFC1918,
+              February 1996, <https://www.rfc-editor.org/rfc/rfc1918>.
+
+   [RFC2711]  Partridge, C. and A. Jackson, "IPv6 Router Alert Option",
+              RFC 2711, DOI 10.17487/RFC2711, October 1999,
+              <https://www.rfc-editor.org/rfc/rfc2711>.
+
+   [RFC4821]  Mathis, M. and J. Heffner, "Packetization Layer Path MTU
+              Discovery", RFC 4821, DOI 10.17487/RFC4821, March 2007,
+              <https://www.rfc-editor.org/rfc/rfc4821>.
 
    [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
               Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
