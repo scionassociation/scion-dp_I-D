@@ -135,9 +135,7 @@ Table of Contents
      7.3.  Off-Path Attacks
      7.4.  Volumetric Denial of Service Attacks
    8.  IANA Considerations
-   9.  References
-     9.1.  Normative References
-     9.2.  Informative References
+   9.  Normative References
    Acknowledgments
    Deployment Testing: SCIONLab
    Assigned SCION Protocol Numbers
@@ -1561,15 +1559,15 @@ Table of Contents
 
    *  _Step 1 -_ *A->R1*:
       The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet
-      destined for destination Endpoint B in AS ff00:0:3, with payload
-      P.  Endpoint A sends the packet (for the chosen forwarding path)
-      to the next SCION router as provided by its control service, which
-      is in this case router R1.  Endpoint A encapsulates the SCION
-      packet into an underlay UDP/IPv4 header for the local delivery to
-      router R1, utilizing AS ff00:0:2's internal routing protocol.  The
-      current Info Field is _IF1_. Upon receiving the packet, router R1
-      will forward the packet on the egress interface that Endpoint A
-      has included into the first Hop Field of the SCION header.
+      destined for destination Endpoint B in AS ff00:0:3.  Endpoint A
+      sends the packet (for the chosen forwarding path) to the next
+      SCION router as provided by its control service, which is in this
+      case router R1.  Endpoint A encapsulates the SCION packet into an
+      underlay UDP/IPv4 header for the local delivery to router R1,
+      utilizing AS ff00:0:2's internal routing protocol.  The current
+      Info Field is _IF1_. Upon receiving the packet, router R1 will
+      forward the packet on the egress interface that Endpoint A has
+      included into the first Hop Field of the SCION header.
 
        +=============+==============================+=============+
        | Field       | Value                        | Description |
@@ -1754,7 +1752,7 @@ Table of Contents
    The MAC in the Hop Fields of a SCION path has two purposes:
 
    *  Preventing malicious endpoints from adding, removing or reordering
-      hops within a path segment created during beaconing in the control
+      hops within a path segment created during beaconing by the control
       plane.  In particular, preventing path splicing, i.e. the
       combination of parts of different valid path segments into a new
       and unauthorized path segment.
@@ -1782,8 +1780,8 @@ Table of Contents
    To avoid this overhead for the MAC chaining in path authorization in
    the data plane, the XOR-sum is tracked incrementally for each of the
    path segments in a path as a separate, updatable Accumulator Field
-   Acc. The routers update Acc by adding/subtracting only a single
-   16-bit value each.
+   Acc. Routers update Acc by adding/subtracting only a single 16-bit
+   value each.
 
    When combining path segments to create a path to the destination
    endpoint, the source endpoint MUST also initialize the value of
@@ -1998,12 +1996,12 @@ Table of Contents
        the Info Fields and Hop Fields into the corresponding InfoFields
        and Hopfields in the data packet header.
 
-   3.  Each 8-byte Info Field InfoField in the packet header contains
-       the updatable Acc field as well as a Peering flag P and a
-       Construction Direction flag C (see also Section 2.3.2.3).  As a
-       next step in the path initialization process, the source MUST
-       correctly set the flags and the Acc field of all InfoFields
-       included in the path, according to the following rules:
+   3.  Each 8-byte InfoField in the packet header contains the updatable
+       Acc field as well as a Peering flag P and a Construction
+       Direction flag C (see also Section 2.3.2.3).  As a next step in
+       the path initialization process, the source MUST correctly set
+       the flags and the Acc field of all InfoFields included in the
+       path, according to the following rules:
 
        *  The Construction Direction flag C MUST be set to "1" whenever
           the corresponding segment is traversed in construction
@@ -2639,14 +2637,13 @@ Table of Contents
    This document has no IANA actions.
 
    The ISD and SCION AS number are SCION-specific numbers.  They are
-   currently allocated by Anapaya Systems, a provider of SCION-based
-   networking software and solutions (see [ISD-AS-assignments-Anapaya]).
-   This task is being transitioned from Anapaya to the SCION Association
-   (see [ISD-AS-assignments]).
+   allocated by the SCION Association (see [ISD-AS-assignments]).
 
-9.  References
+9.  Normative References
 
-9.1.  Normative References
+   [CRYPTOBOOK]
+              Boneh, D. and V. Shoup, "A Graduate Course in Applied
+              Cryptography", 2023, <https://toc.cryptobook.us/>.
 
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
@@ -2662,11 +2659,26 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-dekater-
               scion-pki-10>.
 
+   [ISD-AS-assignments]
+              "SCION Registry", 2026, <http://scion.org/registry/>.
+
+   [PEREIRA2025]
+              Pereira, J., Klenze, T., Giampietro, S., Limbeck, M.,
+              Dionysios Spiliopoulos, Wolf, F., Eilers, M., Sprenger,
+              C., Basin, D., Müller, P., and A. Perrig, "Protocols to
+              Code: Formal Verification of a Secure Next-Generation
+              Internet Router", 2025.
+
    [POSIX.1-2024]
               "Standard for Information Technology--Portable Operating
               System Interface (POSIX™) Base Specifications, Issue 8",
               2024, <https://pubs.opengroup.org/onlinepubs/9799919799/
               basedefs/V1_chap04.html>.
+
+   [RFC1918]  Rekhter, Y., Moskowitz, B., Karrenberg, D., de Groot, G.
+              J., and E. Lear, "Address Allocation for Private
+              Internets", BCP 5, RFC 1918, DOI 10.17487/RFC1918,
+              February 1996, <https://www.rfc-editor.org/rfc/rfc1918>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -2679,6 +2691,10 @@ Table of Contents
               DOI 10.17487/RFC2474, December 1998,
               <https://www.rfc-editor.org/rfc/rfc2474>.
 
+   [RFC2711]  Partridge, C. and A. Jackson, "IPv6 Router Alert Option",
+              RFC 2711, DOI 10.17487/RFC2711, October 1999,
+              <https://www.rfc-editor.org/rfc/rfc2711>.
+
    [RFC3168]  Ramakrishnan, K., Floyd, S., and D. Black, "The Addition
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
@@ -2687,6 +2703,10 @@ Table of Contents
    [RFC4493]  Song, JH., Poovendran, R., Lee, J., and T. Iwata, "The
               AES-CMAC Algorithm", RFC 4493, DOI 10.17487/RFC4493, June
               2006, <https://www.rfc-editor.org/rfc/rfc4493>.
+
+   [RFC4821]  Mathis, M. and J. Heffner, "Packetization Layer Path MTU
+              Discovery", RFC 4821, DOI 10.17487/RFC4821, March 2007,
+              <https://www.rfc-editor.org/rfc/rfc4821>.
 
    [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
               Housley, R., and W. Polk, "Internet X.509 Public Key
@@ -2711,52 +2731,6 @@ Table of Contents
               (IPv6) Specification", STD 86, RFC 8200,
               DOI 10.17487/RFC8200, July 2017,
               <https://www.rfc-editor.org/rfc/rfc8200>.
-
-9.2.  Informative References
-
-   [CHUAT22]  Chuat, L., Legner, M., Basin, D., Hausheer, D., Hitz, S.,
-              Mueller, P., and A. Perrig, "The Complete Guide to SCION",
-              ISBN 978-3-031-05287-3, 2022,
-              <https://doi.org/10.1007/978-3-031-05288-0>.
-
-   [CRYPTOBOOK]
-              Boneh, D. and V. Shoup, "A Graduate Course in Applied
-              Cryptography", 2023, <https://toc.cryptobook.us/>.
-
-   [I-D.dekater-panrg-scion-overview]
-              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
-              Overview", Work in Progress, Internet-Draft, draft-
-              dekater-panrg-scion-overview-06, 7 May 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              panrg-scion-overview-06>.
-
-   [ISD-AS-assignments]
-              "SCION Registry", 2025, <http://scion.org/registry/>.
-
-   [ISD-AS-assignments-Anapaya]
-              "SCION ISD and AS Assignments", 2025,
-              <https://docs.anapaya.net/en/latest/resources/isd-as-
-              assignments/>.
-
-   [PEREIRA2025]
-              Pereira, J., Klenze, T., Giampietro, S., Limbeck, M.,
-              Dionysios Spiliopoulos, Wolf, F., Eilers, M., Sprenger,
-              C., Basin, D., Müller, P., and A. Perrig, "Protocols to
-              Code: Formal Verification of a Secure Next-Generation
-              Internet Router", 2025.
-
-   [RFC1918]  Rekhter, Y., Moskowitz, B., Karrenberg, D., de Groot, G.
-              J., and E. Lear, "Address Allocation for Private
-              Internets", BCP 5, RFC 1918, DOI 10.17487/RFC1918,
-              February 1996, <https://www.rfc-editor.org/rfc/rfc1918>.
-
-   [RFC2711]  Partridge, C. and A. Jackson, "IPv6 Router Alert Option",
-              RFC 2711, DOI 10.17487/RFC2711, October 1999,
-              <https://www.rfc-editor.org/rfc/rfc2711>.
-
-   [RFC4821]  Mathis, M. and J. Heffner, "Packetization Layer Path MTU
-              Discovery", RFC 4821, DOI 10.17487/RFC4821, March 2007,
-              <https://www.rfc-editor.org/rfc/rfc4821>.
 
    [RFC9217]  Trammell, B., "Current Open Questions in Path-Aware
               Networking", RFC 9217, DOI 10.17487/RFC9217, March 2022,
