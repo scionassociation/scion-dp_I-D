@@ -56,50 +56,9 @@ normative:
   RFC6437:
   RFC8200:
 
-informative:
-  I-D.dekater-panrg-scion-overview:
-  CHUAT22:
-    title: "The Complete Guide to SCION"
-    date: 2022
-    target: https://doi.org/10.1007/978-3-031-05288-0
-    seriesinfo:
-      ISBN: 978-3-031-05287-3
-    author:
-      -
-        ins: L. Chuat
-        name: Laurent Chuat
-        org: ETH Zuerich
-      -
-        ins: M. Legner
-        name: Markus Legner
-        org: ETH Zuerich
-      -
-        ins: D. Basin
-        name: David Basin
-        org: ETH Zuerich
-      -
-        ins: D. Hausheer
-        name: David Hausheer
-        org: Otto von Guericke University Magdeburg
-      -
-        ins: S. Hitz
-        name: Samuel Hitz
-        org: Anapaya Systems
-      -
-        ins: P. Mueller
-        name: Peter Mueller
-        org: ETH Zuerich
-      -
-        ins: A. Perrig
-        name: Adrian Perrig
-        org: ETH Zuerich
-  ISD-AS-assignments-Anapaya:
-    title: "SCION ISD and AS Assignments"
-    date: 2025
-    target: https://docs.anapaya.net/en/latest/resources/isd-as-assignments/
   ISD-AS-assignments:
     title: "SCION Registry"
-    date: 2025
+    date: 2026
     target: http://scion.org/registry/
   RFC1918:
   RFC2711:
@@ -1066,7 +1025,7 @@ Endpoint A now adds this end-to-end forwarding path to the header of the packet 
 This section contains simplified snapshots of the packet header at each hop. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.
 The current Info Field (with metadata on the current path segment) in the SCION header is depicted as _italic_ in the tables. The current Hop Field, representing the current AS, is shown **bold**. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel the SCION packet.
 
-- *Step 1 -* **A->R1**: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is *IF1*. Upon receiving the packet, router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.
+- *Step 1 -* **A->R1**: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is *IF1*. Upon receiving the packet, router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.
 
 |  Field      | Value                                                         | Description                 |
 |-------------+---------------------------------------------------------------+-----------------------------|
@@ -1145,14 +1104,14 @@ When authorizing SCION PCBs and path segments in the control plane and forwardin
 
 The MAC in the Hop Fields of a SCION path has two purposes:
 
-- Preventing malicious endpoints from adding, removing or reordering hops within a path segment created during beaconing in the control plane. In particular, preventing path splicing, i.e. the combination of parts of different valid path segments into a new and unauthorized path segment.
+- Preventing malicious endpoints from adding, removing or reordering hops within a path segment created during beaconing by the control plane. In particular, preventing path splicing, i.e. the combination of parts of different valid path segments into a new and unauthorized path segment.
 - Authentication of the information contained in the Hop Field itself, in particular the `ExpTime`, `ConsIngress`, and `ConsEgress`.
 
 To fulfill these purposes, the MAC for the Hop Field of AS<sub>i</sub> includes both the components of the current Hop Field HF<sub>i</sub> and an aggregation of the path segment identifier and all preceding Hop Fields/entries in the path segment. The aggregation is a 16-bit XOR-sum of the path segment identifier and the Hop Field MACs.
 
 When originating a path segment construction beacon PCB in the control plane, a core AS chooses a random 16-bit value as segment identifier `SegID` for the path segment and includes it in the PCB's `Segment Info` component. In the control plane, each AS<sub>i</sub> on the path segment computes the MAC for the current HF<sub>i</sub>, based on the value of `SegID` and the MACs of the preceding hop entries. Here, the full XOR-sum is computed explicitly.
 
-For high-speed packet processing in the data plane, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each of the path segments in a path as a separate, updatable Accumulator Field `Acc`. The routers update `Acc` by adding/subtracting only a single 16-bit value each.
+For high-speed packet processing in the data plane, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each of the path segments in a path as a separate, updatable Accumulator Field `Acc`. Routers update `Acc` by adding/subtracting only a single 16-bit value each.
 
 When combining path segments to create a path to the destination endpoint, the source endpoint MUST also initialize the value of accumulator field `Acc` for each path segment. The `Acc` field MUST contain the correct XOR-sum of the path segment identifier and preceding Hop Field MACs expected by the first router that is traversed.
 
@@ -1268,7 +1227,7 @@ The source endpoint MUST perform the following steps to correctly initialize a p
 
 1. Combine the preferred end-to-end path from the path segments obtained during path lookup.
 2. Extract the Info Fields and Hop Fields from the different path segments that together build the end-to-end path to the destination endpoint. Then insert the relevant information from the Info Fields and Hop Fields into the corresponding `InfoFields` and `Hopfields` in the data packet header.
-3. Each 8-byte Info Field `InfoField` in the packet header contains the updatable `Acc` field as well as a Peering flag `P` and a Construction Direction flag `C` (see also [](#inffield)). As a next step in the path initialization process, the source MUST correctly set the flags and the `Acc` field of all `InfoFields` included in the path, according to the following rules:
+3. Each 8-byte `InfoField` in the packet header contains the updatable `Acc` field as well as a Peering flag `P` and a Construction Direction flag `C` (see also [](#inffield)). As a next step in the path initialization process, the source MUST correctly set the flags and the `Acc` field of all `InfoFields` included in the path, according to the following rules:
    - The Construction Direction flag `C` MUST be set to "1" whenever the corresponding segment is traversed in construction direction, i.e., for down-path segments and potentially for core segments. It MUST be set to "0" for up-path segments and "reversed" core segments.
    - The Peering flag `P` MUST be set to "1" for up-segments and down-segments if the path contains a peering Hop Field.
 
@@ -1517,7 +1476,7 @@ However, the path choice of the endpoint may possibly be exploited by an attacke
 
 This document has no IANA actions.
 
-The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see {{ISD-AS-assignments-Anapaya}}). This task is being transitioned from Anapaya to the SCION Association (see {{ISD-AS-assignments}}).
+The ISD and SCION AS number are SCION-specific numbers. They are allocated by the SCION Association (see {{ISD-AS-assignments}}).
 
 
 --- back
