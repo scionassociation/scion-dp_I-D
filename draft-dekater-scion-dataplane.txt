@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 25 June 2026                                  SCION Association
+Expires: 26 June 2026                                  SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        22 December 2025
+                                                        23 December 2025
 
 
                             SCION Data Plane
@@ -34,8 +34,8 @@ Abstract
    a detailed specification of the SCION data packet format as well as
    the structure of the SCION header.  SCION also supports extension
    headers, which are additionally described.  The document continues
-   with the life cycle of a SCION packet while traversing a SCION
-   network, followed by a specification of the SCION path authorization
+   with the life of a SCION packet while traversing a SCION network,
+   followed by a specification of the SCION path authorization
    mechanisms and the packet processing at routers.
 
    This document contains new approaches to secure path aware
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 June 2026.
+   This Internet-Draft will expire on 26 June 2026.
 
 Copyright Notice
 
@@ -252,15 +252,12 @@ Table of Contents
    egress interfaces in the direction of path construction (beaconing).
    Each Interface ID MUST be unique within each AS. 0 is a reserved
    value that indicates the lack of an Interface ID.  It is used as the
-   unspecified Interface ID (e.g., in Section 2.3.3).
+   unspecified Interface ID (see Section 2.3.3).
 
    *Isolation Domain (ISD)*: SCION ASes are organized into logical
    groups called Isolation Domains or ISDs.  Each ISD consists of ASes
    that span an area with a uniform trust environment (e.g. a common
    jurisdiction).
-
-   *Leaf AS*: A SCION AS at the "edge" of an ISD, with no other
-   downstream ASes.
 
    *Message Authentication Code (MAC)*: In the rest of this document,
    "MAC" always refers to "Message Authentication Code" and never to
@@ -349,7 +346,7 @@ Table of Contents
 
    *  It simplifies the packet processing at routers.  Instead of having
       to perform longest prefix matching on IP addresses which requires
-      expensive hardware and substantial amounts of energy, a router can
+      dedicated hardware and substantial amounts of energy, a router can
       simply access the next hop from the packet header after having
       verified the authenticity of the Hop Field's MAC.
 
@@ -378,8 +375,8 @@ Table of Contents
    using an UDP/IP as an intra-domain protocol between routers was
    driven by the need to maximize compatibility with existing networks.
    This does not exclude that a SCION packet may be enclosed directly on
-   top of a L2 protocol, since the choice of intra-domain protocol is AS
-   specific.
+   top of a layer 2 protocol, since the choice of intra-domain protocol
+   is AS specific.
 
    Figure 1 shows the SCION header within the protocol stack, in an AS
    where the SCION deployment uses UDP/IP as an intra-domain protocol.
@@ -468,11 +465,10 @@ Table of Contents
 
    *  Neighbor ISD-AS number.
 
-   *  For the router that manages the interface: the neighbor interface
-      underlay address.
+   *  Neighbor interface's underlay address.
 
-   *  For the routers that do not manage the interface: the address of
-      the intra-domain protocol on the router that does.
+   *  For intra-domain forwarding: mapping of the AS interface IDs to
+      intra-domain protocol address of the corresponding routers.
 
    *  The algorithm used to compute the Hop Field MAC (Section 4.1.1)
       which must be the same as that used by the Control Services within
@@ -543,38 +539,78 @@ Table of Contents
    the fact that such paths go "down" (following parent-child links)
    before going "up" (following child-parent links).
 
-   Figure 2 below shows valid segment combinations.
+   Figure 2 and Figure 3 show valid segment combinations.  Each node
+   represents a SCION Autonomous System.  It is assumed that the source
+   and destination endpoints are in different ASes (as endpoints from
+   the same AS use an empty forwarding path to communicate with each
+   other).
 
-   *Note:* It is assumed that the source and destination endpoints are
-   in different ASes (as endpoints from the same AS use an empty
-   forwarding path to communicate with each other).
+    +---+                            :
+    | C | = Core AS                  :  - - - - = unused links
+    +---+
+                                     p---p = peering link
+    +---+
+    |*  | = source/destination AS    ------> = direction of beaconing
+    +---+
 
-  +---+                            :
-  | C | = Core AS                  :  - - - - = unused links
-  +---+
-                                   p---p = peering link
-  +---+
-  |*  | = source/destination AS    ------> = direction of beaconing
-  +---+
+            Core                      Core                  Core
+         ---------->               ---------->           ---------->
+       +---+     +---+           +---+     +---+       +---+     +---+
+   +   + C +-----+ C +           + C +-----+* C|       |* C+-----+* C|
+   |   +-+-+     +-+-+           +-+-+     +---+       +---+     +---+
+   |     |   1a    |               |   1b                    1c
+   |     |         |               |
+   |     |         |               |
+   |   +-+-+     +-+-+           +-+-+                      Core
+   |   |   |     |   |           |   |                 -------------->
+   |   +-+-+     +-+-+           +-+-+                      +---+
+   |     |         |               |                   +----+ C +----+
+   |     |         |               |                   |    +---+    |
+   |     |         |               |                   |             |
+   |   +-+-+     +-+-+           +-+-+               +-+-+   1d    +-+-+
+   v   |*  |     |*  |           |*  |               |* C|         |* C|
+       +---+     +---+           +---+               +---+         +---+
 
-          Core                      Core                  Core
-       ---------->               ---------->           ---------->
-     +---+     +---+           +---+     +---+       +---+     +---+
- +   + C +-----+ C +           + C +-----+* C|       |* C+-----+* C|
- |   +-+-+     +-+-+           +-+-+     +---+       +---+     +---+
- |     |   1a    |               |   1b                    1c
- |     |         |               |
- |     |         |               |
- |   +-+-+     +-+-+           +-+-+                      Core
- |   |   |     |   |           |   |                 -------------->
- |   +-+-+     +-+-+           +-+-+                      +---+
- |     |         |               |                   +----+ C +----+
- |     |         |               |                   |    +---+    |
- |     |         |               |                   |             |
- |   +-+-+     +-+-+           +-+-+               +-+-+   1d    +-+-+
- v   |*  |     |*  |           |*  |               |* C|         |* C|
-     +---+     +---+           +---+               +---+         +---+
+     Figure 2: Illustration of valid path segment combinations through
+                            multiple core ASes.
 
+   Valid path segment combinations:
+
+   *  *Communication through core ASes*:
+
+      -  *Core segment combination* (Cases 1a, 1b, 1c, 1d in Figure 2):
+         The up and down segments of source and destination do not have
+         an AS in common.  In this case, a core segment is REQUIRED to
+         connect the source's up segment and the destination's down
+         segment (Case 1a).  If either the source or the destination AS
+         is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d),
+         then no up or down segments are REQUIRED to connect the
+         respective ASes to the core segment.
+
+      -  *Immediate combination* (Cases 2a, 2b in Figure 3): The last AS
+         on the up segment (which is necessarily a core AS) is the same
+         as the first AS on the down segment.  In this case, a simple
+         combination of up and down segments creates a valid forwarding
+         path.  In Case 2b, only one segment is required.
+
+   *  *Peering shortcut* (Cases 3a and 3b): A peering link exists
+      between the up and down segment, and extraneous path segments to
+      the core are cut off.  Note that the up and down segments do not
+      need to originate from the same core AS and the peering link could
+      also be traversing to a different ISD.
+
+   *  *AS shortcut* (Cases 4a and 4b): The up and down segments
+      intersect at a non-core AS below the ISD core, thus creating a
+      shortcut.  In this case, a shorter path is made possible by
+      removing the extraneous part of the path to the core.  Note that
+      the up and down segments do not need to originate from the same
+      core AS.
+
+   *  *On-path* (Case 5): In the case where the source's up segment
+      contains the destination AS or the destination's down segment
+      contains the source AS, a single segment is sufficient to
+      construct a forwarding path.  Again, no core AS is on the final
+      path.
 
           +---+                +---+                 +---+
  +     +--+ C +--+             +* C|              :- + C +- :
@@ -610,46 +646,8 @@ Table of Contents
  v  |*  |     |*  |        |*  |   |*  |     |*  |     |*  |       |*  |
     +---+     +---+        +---+   +---+     +---+     +---+       +---+
 
- Figure 2: Illustration of valid path segment combinations.  Each node
-                 represents a SCION Autonomous System.
-
-   Valid path segment combinations:
-
-   *  *Communication through core ASes*:
-
-      -  *Core segment combination* (Cases 1a, 1b, 1c, 1d in Figure 2):
-         The up and down segments of source and destination do not have
-         an AS in common.  In this case, a core segment is REQUIRED to
-         connect the source's up segment and the destination's down
-         segment (Case 1a).  If either the source or the destination AS
-         is a core AS (Case 1b) or both are core ASes (Cases 1c and 1d),
-         then no up or down segments are REQUIRED to connect the
-         respective ASes to the core segment.
-
-      -  *Immediate combination* (Cases 2a, 2b in Figure 2): The last AS
-         on the up segment (which is necessarily a core AS) is the same
-         as the first AS on the down segment.  In this case, a simple
-         combination of up and down segments creates a valid forwarding
-         path.  In Case 2b, only one segment is required.
-
-   *  *Peering shortcut* (Cases 3a and 3b): A peering link exists
-      between the up and down segment, and extraneous path segments to
-      the core are cut off.  Note that the up and down segments do not
-      need to originate from the same core AS and the peering link could
-      also be traversing to a different ISD.
-
-   *  *AS shortcut* (Cases 4a and 4b): The up and down segments
-      intersect at a non-core AS below the ISD core, thus creating a
-      shortcut.  In this case, a shorter path is made possible by
-      removing the extraneous part of the path to the core.  Note that
-      the up and down segments do not need to originate from the same
-      core AS.
-
-   *  *On-path* (Case 5): In the case where the source's up segment
-      contains the destination AS or the destination's down segment
-      contains the source AS, a single segment is sufficient to
-      construct a forwarding path.  Again, no core AS is on the final
-      path.
+   Figure 3: Illustration of valid path segment combinations through
+                          one or no core ASes.
 
 1.5.  Path Authorization
 
@@ -666,7 +664,7 @@ Table of Contents
 
    The SCION packet header is aligned to 4 bytes.  It is composed of a
    common header, an address header, a path header, and an OPTIONAL
-   extension header, see Figure 3 below.  The 4 byte alignment is to
+   extension header, see Figure 4 below.  The 4 byte alignment is to
    allow header length to be computed based on the HdrLen field (see
    Section 2.1).
 
@@ -684,7 +682,7 @@ Table of Contents
    |                                                        |
    +--------------------------------------------------------+
 
-       Figure 3: High-level SCION header structure, non-byte aligned
+       Figure 4: High-level SCION header structure, non-byte aligned
 
    The _common header_ contains important meta information including
    version number and the lengths of the header and payload.  In
@@ -719,7 +717,7 @@ Table of Contents
    |    PathType   |DT |DL |ST |SL |              RSV              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-              Figure 4: The SCION common header packet format
+              Figure 5: The SCION common header packet format
 
    *  Version: The version of the SCION common header.  Currently, only
       version "0" is supported.
@@ -824,7 +822,7 @@ Table of Contents
            Table 3: Allocations of length and type combinations
 
    A service address designates a set of endpoint addresses rather than
-   a singular one.  A packet addressed to a service is redirected to any
+   a single one.  A packet addressed to a service is redirected to any
    one endpoint address that is known to be part of the set.  Table 4
    lists the known services.
 
@@ -850,7 +848,7 @@ Table of Contents
    |                    SrcHostAddr ( variable Len. )              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-              Figure 5: The SCION address header packet format
+              Figure 6: The SCION address header packet format
 
    *  DstISD, SrcISD: The 16-bit ISD identifier of the destination/
       source.
@@ -872,7 +870,7 @@ Table of Contents
    |         Service Number        |              RSV              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                      Figure 6: Service address format
+                      Figure 7: Service address format
 
    *  RSV: reserved for future use
 
@@ -942,7 +940,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                 Figure 7: Layout of a standard SCION path
+                 Figure 8: Layout of a standard SCION path
 
    It consists of a path meta header, up to 3 Info Fields and up to 64
    Hop Fields.
@@ -966,7 +964,7 @@ Table of Contents
 
    The SCION header is created by extracting the required Info Fields
    and Hop Fields from the corresponding path segments.  The process of
-   extracting is illustrated in Figure 8 below.  Note that ASes at the
+   extracting is illustrated in Figure 9 below.  Note that ASes at the
    intersection of multiple segments are represented by two Hop Fields.
    Be aware that these Hop Fields are not equal!
 
@@ -978,14 +976,6 @@ Table of Contents
    one AS build a full hop through the AS, specifying both the ingress
    and egress interface.  As such, they bring the two adjacent segments
    together.
-
-                         +-----------------------+
-                         |      ISD Core         |
-   +--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
-   |   AS   +-+   AS   +---+   AS   +-+   AS   +---+   AS   +-+   AS   |
-   |ff00:0:3| |ff00:0:4| | |ff00:0:1| +ff00:0:2| | |ff00:0:5| |ff00:0:6|
-   +--------+ +--------+ | +--------+ +--------+ | +--------+ +--------+
-                         +-----------------------+
 
        Up-Segment           Core-Segment        Down-Segment
       +---------+           +---------+         +---------+
@@ -1026,7 +1016,7 @@ Table of Contents
                             | +-----+ |
                             +---------+
 
-                    Figure 8: Path construction example
+                    Figure 9: Path construction example
 
 2.3.2.1.  Path Meta Header Field
 
@@ -1040,7 +1030,7 @@ Table of Contents
    | CI|  CurrHF   |    RSV    |  Seg0Len  |  Seg1Len  |  Seg2Len  |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-      Figure 9: SCION path type - Format of the Path Meta Header field
+     Figure 10: SCION path type - Format of the Path Meta Header field
 
    *  CurrINF (shown as CI above): Specifies a 2-bits index (0-based)
       pointing to the current Info Field for the packet on its way
@@ -1075,9 +1065,8 @@ Table of Contents
 
 2.3.2.2.  Path Offset Calculations
 
-   The path offset calculations are used by the SCION border routers to
-   determine the Info Field and Hop Field that are currently valid for
-   the packet on its way through the network.
+   SCION border routers use path offsets to determine the currently
+   active Info Field and Hop Field for the packet.
 
    The following rules apply when calculating the path offsets:
 
@@ -1109,7 +1098,7 @@ Table of Contents
    |                           Timestamp                           |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-           Figure 10: SCION path type - Format of the Info Field
+           Figure 11: SCION path type - Format of the Info Field
 
    *  RSV: Unused and reserved for future use.
 
@@ -1156,7 +1145,7 @@ Table of Contents
    |                              MAC                              |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            Figure 11: SCION path type - Format of the Hop Field
+            Figure 12: SCION path type - Format of the Hop Field
 
    *  RSV: Unused and reserved for future use.
 
@@ -1208,23 +1197,22 @@ Table of Contents
 
 2.3.3.  One-Hop Path Type
 
-   The OneHopPath path type (PathType=2) is currently used to bootstrap
-   beaconing between neighboring ASes.  This is necessary as neighbor
+   Bootstrapping beaconing between neighboring ASes relies on the
+   OneHopPath path type (PathType=2).  This is necessary as neighbor
    ASes do not have a forwarding path before beaconing is started.
 
-   A one-hop path has exactly one Info Field and two Hop Fields.  The
-   second Hop Field is created by the ingress SCION border router of the
-   neighboring AS while processing the one-hop path.  The appropriate
-   Hop Field can be processed by a border router based on the source and
-   destination address.  In this context, the following rules apply:
+   A one-hop path has exactly one Info Field and two Hop Fields.  Any
+   entity with access to the AS forwarding key can create a valid info
+   and Hop Field as described in Section 2.3.2.3 and Section 2.3.2.4,
+   respectively.  The second Hop Field is created by the ingress SCION
+   border router of the neighboring AS while processing the one-hop
+   path.  The appropriate Hop Field can be processed by a border router
+   based on the source and destination address.  In this context, the
+   following rules apply:
 
    *  At the source endpoint AS, _CurrHF := 0_.
 
    *  At the destination endpoint AS, _CurrHF := 1_.
-
-   Any entity with access to the forwarding key of the source endpoint
-   AS can create a valid info and Hop Field as described in
-   Section 2.3.2.3 and Section 2.3.2.4, respectively.
 
    Upon receiving a packet containing a one-hop path, the ingress border
    router of the destination AS fills in the ConsIngress field in the
@@ -1295,7 +1283,7 @@ Table of Contents
    |                                                               |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 12: Extension headers: Options header
+                Figure 13: Extension headers: Options header
 
    *  NextHdr: Unsigned 8-bit integer.  Identifies the type of header
       immediately following the Hop-by-Hop/End-to-End Options header.
@@ -1330,7 +1318,7 @@ Table of Contents
    |                              . . .                            |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-               Figure 13: Options field: TLV-encoded options
+               Figure 14: Options field: TLV-encoded options
 
    *  OptType: 8-bit identifier of the type of option.  The following
       option types are assigned to the SCION HBH/E2E Options header:
@@ -1394,7 +1382,7 @@ Table of Contents
    |       0       |
    +-+-+-+-+-+-+-+-+
 
-                Figure 14: TLV-encoded options - Pad1 option
+                Figure 15: TLV-encoded options - Pad1 option
 
    *Note:* The format of the Pad1 option is a special case - it does not
    have length and value fields.
@@ -1415,7 +1403,7 @@ Table of Contents
    |                              . . .                            |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-                Figure 15: TLV-encoded options - PadN option
+                Figure 16: TLV-encoded options - PadN option
 
    The PadN option is used to insert two or more bytes of padding into
    the Options field of an extension header.  For N bytes of padding,
@@ -1449,7 +1437,7 @@ Table of Contents
 |                      zero                     |  Next Header  |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
- Figure 16: Layout of the pseudo header for the upper-layer checksum
+ Figure 17: Layout of the pseudo header for the upper-layer checksum
 
    *  DstISD, SrcISD, DstAS, SrcAS, DstHostAddr, SrcHostAddr: These
       values are taken from the SCION address header.
@@ -1474,12 +1462,11 @@ Table of Contents
 
 3.  Life of a SCION Data Packet
 
-   This section gives an overall description of the life cycle of a
-   SCION packet: how it is created at its source endpoint, passes
-   through a number of SCION routers, and finally reaches its
-   destination endpoint.  It is assumed that both source and destination
-   are native SCION endpoints (i.e. they both run a native SCION network
-   stack).
+   This section describes the life of a SCION packet: how it is created
+   at its source endpoint, passes through a number of SCION routers, and
+   finally reaches its destination endpoint.  It is assumed that both
+   source and destination are native SCION endpoints (i.e. they both run
+   a native SCION network stack).
 
    This example illustrates an intra-ISD case, i.e. all communication
    happening within a single ISD.  As the sample ISD only consists of
@@ -1517,7 +1504,7 @@ Table of Contents
    |                         |         |                         |
    +-------------------------+         +-------------------------+
 
-      Figure 17: Example topology.  AS ff00:0:1 is the core AS of ISD
+      Figure 18: Example topology.  AS ff00:0:1 is the core AS of ISD
        1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.
 
    Based on the above topology, this example shows the life of a SCION
@@ -1905,7 +1892,7 @@ Table of Contents
    padded to 16 bytes.  The _first_ 6 bytes of the AES-CMAC output are
    used as resulting Hop Field MAC.
 
-   Figure 18 below shows the layout of the input data to calculate the
+   Figure 19 below shows the layout of the input data to calculate the
    Hop Field MAC.
 
  0                   1                   2                   3
@@ -1920,7 +1907,7 @@ Table of Contents
 |          ConsEgress           |               0               |   |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ <-+
 
-     Figure 18: Input data to calculate the Hop Field MAC for the
+     Figure 19: Input data to calculate the Hop Field MAC for the
                    default hop-field MAC algorithm
 
 4.1.1.3.2.  Alternative Hop Field MAC Algorithms
@@ -2878,6 +2865,14 @@ draft-dekater-scion-dataplane-10
 
    *  Clarify distinction between SCION ASes and BGP ASes through the
       text
+
+   *  Figure 1: split into two smaller figures to fit in a single page
+
+   *  Figure 9 (Path construction example): shorten and remove
+      superfluous AS chain
+
+   *  Configuration: clarify text on intra vs inter-domain interface id
+      mappings
 
 draft-dekater-scion-dataplane-09
 
