@@ -747,7 +747,7 @@ Both indices are used by SCION routers when forwarding data traffic through the 
 
 #### Path Offset Calculations {#offset-calc}
 
-SCION border routers use path offsets to determine the currently active Info Field and Hop Field for the packet.
+Path offset calculations enable SCION border routers to locate the currently active Info Field and Hop Field during packet processing.
 
 The following rules apply when calculating the path offsets:
 
@@ -1011,7 +1011,7 @@ This pseudo-header is used in current implementations of UDP on top of SCION. Ho
 
 This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).
 
-This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. In the case of inter-ISD forwarding, the complete end-to-end path from source endpoint to destination endpoint would always require a core path segment as well, although this makes no difference for the forwarding process which works the same in an intra-ISD and inter-ISD context.
+This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An inter-ISD scenario would use an additional core path segment or a peering link.
 
 ~~~aasvg
                   +-------------------------+
@@ -1549,7 +1549,7 @@ SCION attempts to take the IANA's assigned Internet protocol numbers into consid
 
 The protocol numbers are used in the SCION header to identify the upper layer protocol.
 
-## Assignment
+## Assignment {#protnum-table}
 {:numbered="false"}
 
 
