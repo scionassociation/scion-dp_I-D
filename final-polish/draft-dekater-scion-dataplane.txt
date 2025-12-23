@@ -465,11 +465,10 @@ Table of Contents
 
    *  Neighbor ISD-AS number.
 
-   *  The neighbor interface underlay address.
+   *  Neighbor interface's underlay address.
 
-   *  For intra-domain forwarding: mapping of an AS interface IDs to the
-      corresponding intra-domain protocol address the corresponding
-      router.
+   *  For intra-domain forwarding: mapping of the AS interface IDs to
+      intra-domain protocol address of the corresponding routers.
 
    *  The algorithm used to compute the Hop Field MAC (Section 4.1.1)
       which must be the same as that used by the Control Services within
