@@ -56,6 +56,41 @@ normative:
   RFC6437:
   RFC8200:
 informative:
+  CHUAT22:
+    title: "The Complete Guide to SCION"
+    date: 2022
+    target: https://doi.org/10.1007/978-3-031-05288-0
+    seriesinfo:
+      ISBN: 978-3-031-05287-3
+    author:
+      -
+        ins: L. Chuat
+        name: Laurent Chuat
+        org: ETH Zuerich
+      -
+        ins: M. Legner
+        name: Markus Legner
+        org: ETH Zuerich
+      -
+        ins: D. Basin
+        name: David Basin
+        org: ETH Zuerich
+      -
+        ins: D. Hausheer
+        name: David Hausheer
+        org: Otto von Guericke University Magdeburg
+      -
+        ins: S. Hitz
+        name: Samuel Hitz
+        org: Anapaya Systems
+      -
+        ins: P. Mueller
+        name: Peter Mueller
+        org: ETH Zuerich
+      -
+        ins: A. Perrig
+        name: Adrian Perrig
+        org: ETH Zuerich
   ISD-AS-assignments:
     title: "SCION Registry"
     date: 2026
