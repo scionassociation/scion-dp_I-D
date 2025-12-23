@@ -2711,6 +2711,11 @@ Table of Contents
 
 9.2.  Informative References
 
+   [CHUAT22]  Chuat, L., Legner, M., Basin, D., Hausheer, D., Hitz, S.,
+              Mueller, P., and A. Perrig, "The Complete Guide to SCION",
+              ISBN 978-3-031-05287-3, 2022,
+              <https://doi.org/10.1007/978-3-031-05288-0>.
+
    [CRYPTOBOOK]
               Boneh, D. and V. Shoup, "A Graduate Course in Applied
               Cryptography", 2023, <https://toc.cryptobook.us/>.
