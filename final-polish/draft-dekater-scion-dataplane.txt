@@ -1065,9 +1065,8 @@ Table of Contents
 
 2.3.2.2.  Path Offset Calculations
 
-   The path offset calculations are used by the SCION border routers to
-   determine the Info Field and Hop Field that are currently valid for
-   the packet on its way through the network.
+   SCION border routers use path offsets to determine the currently
+   active Info Field and Hop Field for the packet.
 
    The following rules apply when calculating the path offsets:
 
@@ -1198,23 +1197,22 @@ Table of Contents
 
 2.3.3.  One-Hop Path Type
 
-   The OneHopPath path type (PathType=2) is currently used to bootstrap
-   beaconing between neighboring ASes.  This is necessary as neighbor
+   Bootstrapping beaconing between neighboring ASes relies on the
+   OneHopPath path type (PathType=2).  This is necessary as neighbor
    ASes do not have a forwarding path before beaconing is started.
 
-   A one-hop path has exactly one Info Field and two Hop Fields.  The
-   second Hop Field is created by the ingress SCION border router of the
-   neighboring AS while processing the one-hop path.  The appropriate
-   Hop Field can be processed by a border router based on the source and
-   destination address.  In this context, the following rules apply:
+   A one-hop path has exactly one Info Field and two Hop Fields.  Any
+   entity with access to the AS forwarding key can create a valid info
+   and Hop Field as described in Section 2.3.2.3 and Section 2.3.2.4,
+   respectively.  The second Hop Field is created by the ingress SCION
+   border router of the neighboring AS while processing the one-hop
+   path.  The appropriate Hop Field can be processed by a border router
+   based on the source and destination address.  In this context, the
+   following rules apply:
 
    *  At the source endpoint AS, _CurrHF := 0_.
 
    *  At the destination endpoint AS, _CurrHF := 1_.
-
-   Any entity with access to the forwarding key of the source endpoint
-   AS can create a valid info and Hop Field as described in
-   Section 2.3.2.3 and Section 2.3.2.4, respectively.
 
    Upon receiving a packet containing a one-hop path, the ingress border
    router of the destination AS fills in the ConsIngress field in the
