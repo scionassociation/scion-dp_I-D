@@ -215,7 +215,7 @@ informative:
 This document describes the Data Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, thereby enabling the optimization of network paths.
 
 The SCION Control Plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION Data Plane is to combine these path segments into end-to-end paths, and forward data between endpoints according to the specified path. It fundamentally differs from an IP-based data plane in that it is *path-aware* and interdomain forwarding directives are embedded in the packet header.
- 
+
 This document provides a detailed specification of the SCION data packet format as well as the structure of the SCION header, including extension headers. It also describes the life of a SCION packet while traversing a SCION network, followed by a specification of the SCION path authorization mechanisms and the packet processing at routers.
 
 This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet.
