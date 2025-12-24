@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 26 June 2026                                  SCION Association
+Expires: 27 June 2026                                  SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        23 December 2025
+                                                        24 December 2025
 
 
                             SCION Data Plane
@@ -72,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 June 2026.
+   This Internet-Draft will expire on 27 June 2026.
 
 Copyright Notice
 
@@ -1065,8 +1065,8 @@ Table of Contents
 
 2.3.2.2.  Path Offset Calculations
 
-   SCION border routers use path offsets to determine the currently
-   active Info Field and Hop Field for the packet.
+   Path offset calculations enable SCION border routers to locate the
+   currently active Info Field and Hop Field during packet processing.
 
    The following rules apply when calculating the path offsets:
 
@@ -1471,11 +1471,9 @@ Table of Contents
    This example illustrates an intra-ISD case, i.e. all communication
    happening within a single ISD.  As the sample ISD only consists of
    one core AS, the end-to-end path only includes an up-path and down-
-   path segment.  In the case of inter-ISD forwarding, the complete end-
-   to-end path from source endpoint to destination endpoint would always
-   require a core path segment as well, although this makes no
-   difference for the forwarding process which works the same in an
-   intra-ISD and inter-ISD context.
+   path segment.  The forwarding logic is uniform across intra- and
+   inter-ISD scenarios.  An inter-ISD scenario would use an additional
+   core path segment or a peering link.
 
                      +-------------------------+
                      |                         |
@@ -1563,15 +1561,15 @@ Table of Contents
 
    *  _Step 1 -_ *A->R1*:
       The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet
-      destined for destination Endpoint B in AS ff00:0:3, with payload
-      P.  Endpoint A sends the packet (for the chosen forwarding path)
-      to the next SCION router as provided by its control service, which
-      is in this case router R1.  Endpoint A encapsulates the SCION
-      packet into an underlay UDP/IPv4 header for the local delivery to
-      router R1, utilizing AS ff00:0:2's internal routing protocol.  The
-      current Info Field is _IF1_. Upon receiving the packet, router R1
-      will forward the packet on the egress interface that Endpoint A
-      has included into the first Hop Field of the SCION header.
+      destined for destination Endpoint B in AS ff00:0:3.  Endpoint A
+      sends the packet (for the chosen forwarding path) to the next
+      SCION router as provided by its control service, which is in this
+      case router R1.  Endpoint A encapsulates the SCION packet into an
+      underlay UDP/IPv4 header for the local delivery to router R1,
+      utilizing AS ff00:0:2's internal routing protocol.  The current
+      Info Field is _IF1_. Upon receiving the packet, router R1 will
+      forward the packet on the egress interface that Endpoint A has
+      included into the first Hop Field of the SCION header.
 
        +=============+==============================+=============+
        | Field       | Value                        | Description |
@@ -1756,7 +1754,7 @@ Table of Contents
    The MAC in the Hop Fields of a SCION path has two purposes:
 
    *  Preventing malicious endpoints from adding, removing or reordering
-      hops within a path segment created during beaconing in the control
+      hops within a path segment created during beaconing by the control
       plane.  In particular, preventing path splicing, i.e. the
       combination of parts of different valid path segments into a new
       and unauthorized path segment.
@@ -1784,8 +1782,8 @@ Table of Contents
    To avoid this overhead for the MAC chaining in path authorization in
    the data plane, the XOR-sum is tracked incrementally for each of the
    path segments in a path as a separate, updatable Accumulator Field
-   Acc. The routers update Acc by adding/subtracting only a single
-   16-bit value each.
+   Acc. Routers update Acc by adding/subtracting only a single 16-bit
+   value each.
 
    When combining path segments to create a path to the destination
    endpoint, the source endpoint MUST also initialize the value of
@@ -2000,12 +1998,12 @@ Table of Contents
        the Info Fields and Hop Fields into the corresponding InfoFields
        and Hopfields in the data packet header.
 
-   3.  Each 8-byte Info Field InfoField in the packet header contains
-       the updatable Acc field as well as a Peering flag P and a
-       Construction Direction flag C (see also Section 2.3.2.3).  As a
-       next step in the path initialization process, the source MUST
-       correctly set the flags and the Acc field of all InfoFields
-       included in the path, according to the following rules:
+   3.  Each 8-byte InfoField in the packet header contains the updatable
+       Acc field as well as a Peering flag P and a Construction
+       Direction flag C (see also Section 2.3.2.3).  As a next step in
+       the path initialization process, the source MUST correctly set
+       the flags and the Acc field of all InfoFields included in the
+       path, according to the following rules:
 
        *  The Construction Direction flag C MUST be set to "1" whenever
           the corresponding segment is traversed in construction
@@ -2641,10 +2639,7 @@ Table of Contents
    This document has no IANA actions.
 
    The ISD and SCION AS number are SCION-specific numbers.  They are
-   currently allocated by Anapaya Systems, a provider of SCION-based
-   networking software and solutions (see [ISD-AS-assignments-Anapaya]).
-   This task is being transitioned from Anapaya to the SCION Association
-   (see [ISD-AS-assignments]).
+   allocated by the SCION Association (see [ISD-AS-assignments]).
 
 9.  References
 
@@ -2690,12 +2685,6 @@ Table of Contents
               AES-CMAC Algorithm", RFC 4493, DOI 10.17487/RFC4493, June
               2006, <https://www.rfc-editor.org/rfc/rfc4493>.
 
-   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
-              Housley, R., and W. Polk, "Internet X.509 Public Key
-              Infrastructure Certificate and Certificate Revocation List
-              (CRL) Profile", RFC 5280, DOI 10.17487/RFC5280, May 2008,
-              <https://www.rfc-editor.org/rfc/rfc5280>.
-
    [RFC5880]  Katz, D. and D. Ward, "Bidirectional Forwarding Detection
               (BFD)", RFC 5880, DOI 10.17487/RFC5880, June 2010,
               <https://www.rfc-editor.org/rfc/rfc5880>.
@@ -2725,20 +2714,8 @@ Table of Contents
               Boneh, D. and V. Shoup, "A Graduate Course in Applied
               Cryptography", 2023, <https://toc.cryptobook.us/>.
 
-   [I-D.dekater-panrg-scion-overview]
-              de Kater, C., Rustignoli, N., and A. Perrig, "SCION
-              Overview", Work in Progress, Internet-Draft, draft-
-              dekater-panrg-scion-overview-06, 7 May 2024,
-              <https://datatracker.ietf.org/doc/html/draft-dekater-
-              panrg-scion-overview-06>.
-
    [ISD-AS-assignments]
-              "SCION Registry", 2025, <http://scion.org/registry/>.
-
-   [ISD-AS-assignments-Anapaya]
-              "SCION ISD and AS Assignments", 2025,
-              <https://docs.anapaya.net/en/latest/resources/isd-as-
-              assignments/>.
+              "SCION Registry", 2026, <http://scion.org/registry/>.
 
    [PEREIRA2025]
               Pereira, J., Klenze, T., Giampietro, S., Limbeck, M.,
@@ -2873,6 +2850,12 @@ draft-dekater-scion-dataplane-10
 
    *  Configuration: clarify text on intra vs inter-domain interface id
       mappings
+
+   *  Remove unused informative reference to I-D.dekater-panrg-scion-
+      overview and to Anapaya's ISD assignments, since they are taken
+      over by SCION Association in 2026
+
+   *  Remove unused reference to RFC5280
 
 draft-dekater-scion-dataplane-09
 

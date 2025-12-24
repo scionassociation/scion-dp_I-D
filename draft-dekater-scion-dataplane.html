@@ -1052,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 26 June 2026</td>
+<td class="center">Expires 27 June 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1065,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-12-23" class="published">23 December 2025</time>
+<time datetime="2025-12-24" class="published">24 December 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-06-26">26 June 2026</time></dd>
+<dd class="expires"><time datetime="2026-06-27">27 June 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1129,7 +1129,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 27 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2865,7 +2865,7 @@ The 4 byte alignment is to allow header length to be computed based on the <code
             <h5 id="name-path-offset-calculations">
 <a href="#section-2.3.2.2" class="section-number selfRef">2.3.2.2. </a><a href="#name-path-offset-calculations" class="section-name selfRef">Path Offset Calculations</a>
             </h5>
-<p id="section-2.3.2.2-1">SCION border routers use path offsets to determine the currently active Info Field and Hop Field for the packet.<a href="#section-2.3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2.2-1">Path offset calculations enable SCION border routers to locate the currently active Info Field and Hop Field during packet processing.<a href="#section-2.3.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.2.2-2">The following rules apply when calculating the path offsets:<a href="#section-2.3.2.2-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.2.2-3">
 <pre>
@@ -3616,7 +3616,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-life-of-a-scion-data-packet" class="section-name selfRef">Life of a SCION Data Packet</a>
       </h2>
 <p id="section-3-1">This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. In the case of inter-ISD forwarding, the complete end-to-end path from source endpoint to destination endpoint would always require a core path segment as well, although this makes no difference for the forwarding process which works the same in an intra-ISD and inter-ISD context.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">This example illustrates an intra-ISD case, i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An inter-ISD scenario would use an additional core path segment or a peering link.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <span id="name-example-topology-as-ff0001-"></span><div id="_figure-16">
 <figure id="figure-18">
         <div id="section-3-3.1">
@@ -3734,7 +3734,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 The current Info Field (with metadata on the current path segment) in the SCION header is depicted as <em>italic</em> in the tables. The current Hop Field, representing the current AS, is shown <strong>bold</strong>. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel the SCION packet.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2-2.1">
-            <p id="section-3.2-2.1.1"><em>Step 1 -</em> <strong>A-&gt;R1</strong>: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3, with payload P. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is <em>IF1</em>. Upon receiving the packet, router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-2.1.1"><em>Step 1 -</em> <strong>A-&gt;R1</strong>: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is <em>IF1</em>. Upon receiving the packet, router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <span id="name-snapshot-header-step-1-a-r1"></span><table class="center" id="table-6">
@@ -3979,7 +3979,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
 <p id="section-4.1.1-1">The MAC in the Hop Fields of a SCION path has two purposes:<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.1.1-2.1">
-              <p id="section-4.1.1-2.1.1">Preventing malicious endpoints from adding, removing or reordering hops within a path segment created during beaconing in the control plane. In particular, preventing path splicing, i.e. the combination of parts of different valid path segments into a new and unauthorized path segment.<a href="#section-4.1.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-4.1.1-2.1.1">Preventing malicious endpoints from adding, removing or reordering hops within a path segment created during beaconing by the control plane. In particular, preventing path splicing, i.e. the combination of parts of different valid path segments into a new and unauthorized path segment.<a href="#section-4.1.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-4.1.1-2.2">
               <p id="section-4.1.1-2.2.1">Authentication of the information contained in the Hop Field itself, in particular the <code>ExpTime</code>, <code>ConsIngress</code>, and <code>ConsEgress</code>.<a href="#section-4.1.1-2.2.1" class="pilcrow">¶</a></p>
@@ -3987,7 +3987,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
           </ul>
 <p id="section-4.1.1-3">To fulfill these purposes, the MAC for the Hop Field of AS<sub>i</sub> includes both the components of the current Hop Field HF<sub>i</sub> and an aggregation of the path segment identifier and all preceding Hop Fields/entries in the path segment. The aggregation is a 16-bit XOR-sum of the path segment identifier and the Hop Field MACs.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-4">When originating a path segment construction beacon PCB in the control plane, a core AS chooses a random 16-bit value as segment identifier <code>SegID</code> for the path segment and includes it in the PCB's <code>Segment Info</code> component. In the control plane, each AS<sub>i</sub> on the path segment computes the MAC for the current HF<sub>i</sub>, based on the value of <code>SegID</code> and the MACs of the preceding hop entries. Here, the full XOR-sum is computed explicitly.<a href="#section-4.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-5">For high-speed packet processing in the data plane, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each of the path segments in a path as a separate, updatable Accumulator Field <code>Acc</code>. The routers update <code>Acc</code> by adding/subtracting only a single 16-bit value each.<a href="#section-4.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-5">For high-speed packet processing in the data plane, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each of the path segments in a path as a separate, updatable Accumulator Field <code>Acc</code>. Routers update <code>Acc</code> by adding/subtracting only a single 16-bit value each.<a href="#section-4.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-6">When combining path segments to create a path to the destination endpoint, the source endpoint <span class="bcp14">MUST</span> also initialize the value of accumulator field <code>Acc</code> for each path segment. The <code>Acc</code> field <span class="bcp14">MUST</span> contain the correct XOR-sum of the path segment identifier and preceding Hop Field MACs expected by the first router that is traversed.<a href="#section-4.1.1-6" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-7">The aggregated 16-bit path segment identifier and preceding MACs prevent splicing of different path segments unless there is a collision of the <code>Acc</code> value among compatible path segments in an AS. See <a href="#path-splicing" class="auto internal xref">Section 7.1.3</a> for more details.<a href="#section-4.1.1-7" class="pilcrow">¶</a></p>
 <div id="hf-mac-calc">
@@ -4216,7 +4216,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
               <p id="section-4.2.1-2.2.1">Extract the Info Fields and Hop Fields from the different path segments that together build the end-to-end path to the destination endpoint. Then insert the relevant information from the Info Fields and Hop Fields into the corresponding <code>InfoFields</code> and <code>Hopfields</code> in the data packet header.<a href="#section-4.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-4.2.1-2.3">
-              <p id="section-4.2.1-2.3.1">Each 8-byte Info Field <code>InfoField</code> in the packet header contains the updatable <code>Acc</code> field as well as a Peering flag <code>P</code> and a Construction Direction flag <code>C</code> (see also <a href="#inffield" class="auto internal xref">Section 2.3.2.3</a>). As a next step in the path initialization process, the source <span class="bcp14">MUST</span> correctly set the flags and the <code>Acc</code> field of all <code>InfoFields</code> included in the path, according to the following rules:<a href="#section-4.2.1-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-4.2.1-2.3.1">Each 8-byte <code>InfoField</code> in the packet header contains the updatable <code>Acc</code> field as well as a Peering flag <code>P</code> and a Construction Direction flag <code>C</code> (see also <a href="#inffield" class="auto internal xref">Section 2.3.2.3</a>). As a next step in the path initialization process, the source <span class="bcp14">MUST</span> correctly set the flags and the <code>Acc</code> field of all <code>InfoFields</code> included in the path, according to the following rules:<a href="#section-4.2.1-2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.2.1-2.3.2.1">
                   <p id="section-4.2.1-2.3.2.1.1">The Construction Direction flag <code>C</code> <span class="bcp14">MUST</span> be set to "1" whenever the corresponding segment is traversed in construction direction, i.e., for down-path segments and potentially for core segments. It <span class="bcp14">MUST</span> be set to "0" for up-path segments and "reversed" core segments.<a href="#section-4.2.1-2.3.2.1.1" class="pilcrow">¶</a></p>
@@ -4623,7 +4623,7 @@ Such compromise can be mitigated with a forwarding key rotation.<a href="#sectio
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
 <p id="section-8-1">This document has no IANA actions.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">The ISD and SCION AS number are SCION-specific numbers. They are currently allocated by Anapaya Systems, a provider of SCION-based networking software and solutions (see <span>[<a href="#ISD-AS-assignments-Anapaya" class="cite xref">ISD-AS-assignments-Anapaya</a>]</span>). This task is being transitioned from Anapaya to the SCION Association (see <span>[<a href="#ISD-AS-assignments" class="cite xref">ISD-AS-assignments</a>]</span>).<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-2">The ISD and SCION AS number are SCION-specific numbers. They are allocated by the SCION Association (see <span>[<a href="#ISD-AS-assignments" class="cite xref">ISD-AS-assignments</a>]</span>).<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -4665,10 +4665,6 @@ Such compromise can be mitigated with a forwarding key rotation.<a href="#sectio
         <dd>
 <span class="refAuthor">Song, JH.</span>, <span class="refAuthor">Poovendran, R.</span>, <span class="refAuthor">Lee, J.</span>, and <span class="refAuthor">T. Iwata</span>, <span class="refTitle">"The AES-CMAC Algorithm"</span>, <span class="seriesInfo">RFC 4493</span>, <span class="seriesInfo">DOI 10.17487/RFC4493</span>, <time datetime="2006-06" class="refDate">June 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4493">https://www.rfc-editor.org/rfc/rfc4493</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC5280">[RFC5280]</dt>
-        <dd>
-<span class="refAuthor">Cooper, D.</span>, <span class="refAuthor">Santesson, S.</span>, <span class="refAuthor">Farrell, S.</span>, <span class="refAuthor">Boeyen, S.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">W. Polk</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"</span>, <span class="seriesInfo">RFC 5280</span>, <span class="seriesInfo">DOI 10.17487/RFC5280</span>, <time datetime="2008-05" class="refDate">May 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5280">https://www.rfc-editor.org/rfc/rfc5280</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC5880">[RFC5880]</dt>
         <dd>
 <span class="refAuthor">Katz, D.</span> and <span class="refAuthor">D. Ward</span>, <span class="refTitle">"Bidirectional Forwarding Detection (BFD)"</span>, <span class="seriesInfo">RFC 5880</span>, <span class="seriesInfo">DOI 10.17487/RFC5880</span>, <time datetime="2010-06" class="refDate">June 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5880">https://www.rfc-editor.org/rfc/rfc5880</a>&gt;</span>. </dd>
@@ -4702,17 +4698,9 @@ Such compromise can be mitigated with a forwarding key rotation.<a href="#sectio
         <dd>
 <span class="refAuthor">Boneh, D.</span> and <span class="refAuthor">V. Shoup</span>, <span class="refTitle">"A Graduate Course in Applied Cryptography"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://toc.cryptobook.us/">https://toc.cryptobook.us/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.dekater-panrg-scion-overview">[I-D.dekater-panrg-scion-overview]</dt>
-        <dd>
-<span class="refAuthor">de Kater, C.</span>, <span class="refAuthor">Rustignoli, N.</span>, and <span class="refAuthor">A. Perrig</span>, <span class="refTitle">"SCION Overview"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-dekater-panrg-scion-overview-06</span>, <time datetime="2024-05-07" class="refDate">7 May 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-dekater-panrg-scion-overview-06">https://datatracker.ietf.org/doc/html/draft-dekater-panrg-scion-overview-06</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="ISD-AS-assignments">[ISD-AS-assignments]</dt>
         <dd>
-<span class="refTitle">"SCION Registry"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="http://scion.org/registry/">http://scion.org/registry/</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="ISD-AS-assignments-Anapaya">[ISD-AS-assignments-Anapaya]</dt>
-        <dd>
-<span class="refTitle">"SCION ISD and AS Assignments"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://docs.anapaya.net/en/latest/resources/isd-as-assignments/">https://docs.anapaya.net/en/latest/resources/isd-as-assignments/</a>&gt;</span>. </dd>
+<span class="refTitle">"SCION Registry"</span>, <time datetime="2026" class="refDate">2026</time>, <span>&lt;<a href="http://scion.org/registry/">http://scion.org/registry/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="PEREIRA2025">[PEREIRA2025]</dt>
         <dd>
@@ -4787,7 +4775,7 @@ Such compromise can be mitigated with a forwarding key rotation.<a href="#sectio
 <p id="appendix-C.1-2">The protocol numbers are used in the SCION header to identify the upper layer protocol.<a href="#appendix-C.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="assignment">
+<div id="protnum-table">
 <section id="appendix-C.2">
         <h3 id="name-assignment">
 <a href="#name-assignment" class="section-name selfRef">Assignment</a>
@@ -4902,6 +4890,12 @@ Such compromise can be mitigated with a forwarding key rotation.<a href="#sectio
 </li>
           <li class="normal" id="appendix-D.1-1.5">
             <p id="appendix-D.1-1.5.1">Configuration: clarify text on intra vs inter-domain interface id mappings<a href="#appendix-D.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.6">
+            <p id="appendix-D.1-1.6.1">Remove unused informative reference to I-D.dekater-panrg-scion-overview and to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026<a href="#appendix-D.1-1.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-D.1-1.7">
+            <p id="appendix-D.1-1.7.1">Remove unused reference to RFC5280<a href="#appendix-D.1-1.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
