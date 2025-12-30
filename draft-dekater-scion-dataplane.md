@@ -212,7 +212,7 @@ informative:
 
 --- abstract
 
-This document describes the Data Plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints that can choose between multiple path options, thereby enabling the optimization of network paths.
+This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints.
 
 The SCION Control Plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION Data Plane is to combine these path segments into end-to-end paths, and forward data between endpoints according to the specified path. It fundamentally differs from an IP-based data plane in that it is *path-aware* and interdomain forwarding directives are embedded in the packet header.
 
@@ -229,9 +229,9 @@ SCION is a path-aware internetworking routing architecture as described in {{RFC
 
 SCION relies on three main components:
 
-*PKI* - provides cryptographic material within an unique trust model. It is described in {{I-D.dekater-scion-pki}}.
+*PKI* - providing cryptographic material within an unique trust model. It is described in {{I-D.dekater-scion-pki}}.
 
-*Control Plane* - performs inter-domain routing by discovering and securely disseminating path information. It is described in {{I-D.dekater-scion-controlplane}}.
+*Control Plane* - performing inter-domain routing by discovering and securely disseminating path information. It is described in {{I-D.dekater-scion-controlplane}}.
 
 *Data Plane* - carrying out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. It is described in this document.
 
@@ -244,7 +244,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 **SCION Autonomous System (AS)**: A SCION Autonomous System is a network under a common administrative control. For example, the network of a SCION service provider, company, or university can constitute an AS. While functionally similar to a BGP AS, a SCION AS operates within an Isolation Domain (ISD), utilizes a different address scheme, and serves as a locator in the addressing of end hosts. References to ASes throughout this document refer to SCION ASes.
 
-**Core AS**: Each Isolation Domain (ISD) is administered by a set of distinguished SCION autonomous systems (ASes) called core ASes, which are responsible for initiating the path discovery and path construction process (called "beaconing" in SCION). Each ISD MUST have at least one Core AS.
+**Core AS**: Each Isolation Domain (ISD) is administered by a set of distinguished SCION autonomous systems (ASes) called core ASes, which are responsible for initiating the path discovery and path construction process (called "beaconing" in SCION).
 
 **Data Plane**: The data plane (sometimes also referred to as the forwarding plane) is responsible for forwarding data packets that endpoints have injected into the network. After routing information has been disseminated by the control plane, packets are forwarded by the data plane in accordance with such information.
 
@@ -1133,7 +1133,7 @@ The MAC in the Hop Fields of a SCION path has two purposes:
 
 To fulfil these purposes, the MAC for the Hop Field of AS<sub>i</sub> includes both the components of the current Hop Field HF<sub>i</sub> and an aggregation of the path segment identifier and all preceding Hop Fields/entries in the path segment. The aggregation is a 16-bit XOR-sum of the path segment identifier and the Hop Field MACs.
 
-When originating a path segment construction beacon PCB in the control plane, a core AS chooses a random 16-bit value as segment identifier `SegID` for the path segment and includes it in the PCB's `Segment Info` component. In the control plane, each AS<sub>i</sub> on the path segment computes the MAC for the current HF<sub>i</sub>, based on the value of `SegID` and the MACs of the preceding hop entries. Here, the full XOR-sum is computed explicitly.
+When originating a PCB in the control plane, a core AS chooses a random 16-bit value as segment identifier `SegID` for the path segment and includes it in the PCB's `Segment Info` component. In the control plane, each AS<sub>i</sub> on the path segment computes the MAC for the current HF<sub>i</sub>, based on the value of `SegID` and the MACs of the preceding hop entries. Here, the full XOR-sum is computed explicitly.
 
 For high-speed packet processing in the data plane, computing even cheap operations such as the XOR-sum over a variable number of inputs is complicated, in particular for hardware router implementations. To avoid this overhead for the MAC chaining in path authorization in the data plane, the XOR-sum is tracked incrementally for each of the path segments in a path as a separate, updatable Accumulator Field `Acc`. Routers update `Acc` by adding/subtracting only a single 16-bit value each.
 
