@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 27 June 2026                                  SCION Association
+Expires: 3 July 2026                                   SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        24 December 2025
+                                                        30 December 2025
 
 
                             SCION Data Plane
@@ -18,12 +18,10 @@ Expires: 27 June 2026                                  SCION Association
 
 Abstract
 
-   This document describes the Data Plane of the path-aware, inter-
+   This document describes the data plane of the path-aware, inter-
    domain network architecture SCION (Scalability, Control, and
    Isolation On Next-generation networks).  A fundamental characteristic
-   of SCION is that it gives path control to SCION-capable endpoints
-   that can choose between multiple path options, thereby enabling the
-   optimization of network paths.
+   of SCION is that it gives path control to SCION-capable endpoints.
 
    The SCION Control Plane is responsible for discovering these paths
    and making them available as path segments to the endpoints.  The
@@ -74,7 +72,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 June 2026.
+   This Internet-Draft will expire on 3 July 2026.
 
 Copyright Notice
 
@@ -167,10 +165,10 @@ Table of Contents
 
    SCION relies on three main components:
 
-   _PKI_ - provides cryptographic material within an unique trust model.
-   It is described in [I-D.dekater-scion-pki].
+   _PKI_ - providing cryptographic material within an unique trust
+   model.  It is described in [I-D.dekater-scion-pki].
 
-   _Control Plane_ - performs inter-domain routing by discovering and
+   _Control Plane_ - performing inter-domain routing by discovering and
    securely disseminating path information.  It is described in
    [I-D.dekater-scion-controlplane].
 
@@ -205,8 +203,7 @@ Table of Contents
    *Core AS*: Each Isolation Domain (ISD) is administered by a set of
    distinguished SCION autonomous systems (ASes) called core ASes, which
    are responsible for initiating the path discovery and path
-   construction process (called "beaconing" in SCION).  Each ISD MUST
-   have at least one Core AS.
+   construction process (called "beaconing" in SCION).
 
    *Data Plane*: The data plane (sometimes also referred to as the
    forwarding plane) is responsible for forwarding data packets that
@@ -1767,13 +1764,12 @@ Table of Contents
    in the path segment.  The aggregation is a 16-bit XOR-sum of the path
    segment identifier and the Hop Field MACs.
 
-   When originating a path segment construction beacon PCB in the
-   control plane, a core AS chooses a random 16-bit value as segment
-   identifier SegID for the path segment and includes it in the PCB's
-   Segment Info component.  In the control plane, each AS_i on the path
-   segment computes the MAC for the current HF_i, based on the value of
-   SegID and the MACs of the preceding hop entries.  Here, the full XOR-
-   sum is computed explicitly.
+   When originating a PCB in the control plane, a core AS chooses a
+   random 16-bit value as segment identifier SegID for the path segment
+   and includes it in the PCB's Segment Info component.  In the control
+   plane, each AS_i on the path segment computes the MAC for the current
+   HF_i, based on the value of SegID and the MACs of the preceding hop
+   entries.  Here, the full XOR-sum is computed explicitly.
 
    For high-speed packet processing in the data plane, computing even
    cheap operations such as the XOR-sum over a variable number of inputs
