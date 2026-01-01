@@ -2854,7 +2854,7 @@ draft-dekater-scion-dataplane-10
       overview, to RFC5280, and to Anapaya's ISD assignments, since they
       are taken over by SCION Association in 2026
 
-   *  Overall wording polish
+   *  Overall review and wording polish
 
 draft-dekater-scion-dataplane-09
 
