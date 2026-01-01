@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 3 July 2026                                   SCION Association
+Expires: 5 July 2026                                   SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        30 December 2025
+                                                          1 January 2026
 
 
                             SCION Data Plane
@@ -72,11 +72,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 July 2026.
+   This Internet-Draft will expire on 5 July 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -369,10 +369,10 @@ Table of Contents
    communicate amongst themselves and with endpoints by enclosing the
    SCION header inside an UDP/IPv6 or UDP/IPv4 packet.  The choice of
    using an UDP/IP as an intra-domain protocol between routers was
-   driven by the need to maximize compatibility with existing networks,
-   although does not exclude that a SCION packet may be enclosed
-   directly on top of a Layer 2 protocol since the choice of intra-
-   domain protocol is AS specific.
+   driven by the need to maximize compatibility with existing networks.
+   Id does not exclude that a SCION packet may be enclosed directly on
+   top of a Layer 2 protocol, since the choice of intra-domain protocol
+   is AS specific.
 
    Figure 1 shows the SCION header within the protocol stack, in an AS
    where the SCION deployment uses UDP/IP as an intra-domain protocol.
@@ -2851,10 +2851,10 @@ draft-dekater-scion-dataplane-10
       mappings
 
    *  Remove unused informative reference to I-D.dekater-panrg-scion-
-      overview and to Anapaya's ISD assignments, since they are taken
-      over by SCION Association in 2026
+      overview, to RFC5280, and to Anapaya's ISD assignments, since they
+      are taken over by SCION Association in 2026
 
-   *  Remove unused reference to RFC5280
+   *  Overall wording polish
 
 draft-dekater-scion-dataplane-09
 
