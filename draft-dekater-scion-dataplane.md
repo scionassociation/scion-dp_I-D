@@ -1567,7 +1567,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Figure 9 (Path construction example): shorten and remove superfluous AS chain
 - Configuration: clarify text on intra vs inter-domain interface id mappings
 - Remove unused informative reference to I-D.dekater-panrg-scion-overview, to RFC5280, and to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026
-- Overall wording polish
+- Overall review and wording polish
 
 ## draft-dekater-scion-dataplane-09
 {:numbered="false"}
