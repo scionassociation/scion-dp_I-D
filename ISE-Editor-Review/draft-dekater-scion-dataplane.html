@@ -3617,7 +3617,7 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-life-of-a-scion-data-packet" class="section-name selfRef">Life of a SCION Data Packet</a>
       </h2>
 <p id="section-3-1">This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">This example illustrates an intra-ISD case - i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An inter-ISD scenario would use an additional core path segment or a peering link.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">The example below illustrates an intra-ISD case - i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An inter-ISD scenario would use an additional core path segment or a peering link.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <span id="name-example-topology-as-ff0001-"></span><div id="_figure-16">
 <figure id="figure-18">
         <div id="section-3-3.1">
@@ -3712,13 +3712,13 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
 <a href="#name-example-topology-as-ff0001-" class="selfRef">Example topology. AS ff00:0:1 is the core AS of ISD 1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.</a>
         </figcaption></figure>
 </div>
-<p id="section-3-4">Based on the above topology, this example shows the life of a SCION packet sent from source at Endpoint A to destination at Endpoint B. It also shows simplified snapshots of the packet header after each on-path router.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-4">This example topology shows the life of a SCION packet sent from source at Endpoint A to destination at Endpoint B. It also shows simplified snapshots of the packet header after each on-path router.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <div id="path-lookup-and-segment-combination-at-source">
 <section id="section-3.1">
         <h3 id="name-path-lookup-and-segment-com">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-path-lookup-and-segment-com" class="section-name selfRef">Path Lookup and Segment Combination at Source</a>
         </h3>
-<p id="section-3.1-1">In this example, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3 where both are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as described in detail in <a href="#header" class="auto internal xref">Section 2</a> - (x,y) represents one Hop Field.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">In the <span><a href="#life-of-a-packet" class="internal xref">Life of a SCION Data Packet</a> (<a href="#life-of-a-packet" class="auto internal xref">Section 3</a>)</span> example above, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3 where both are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as described in detail in <a href="#header" class="auto internal xref">Section 2</a> - (x,y) represents one Hop Field.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">For more details on the lookup of path segments, see 'Path Lookup' in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1-3">Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS ff00:0:2 control service.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">To obtain an end-to-end forwarding path from the source AS to the destination AS, Endpoint A combines the two path segments into the resulting SCION forwarding path, which contains the two Info Fields <em>IF1</em> and <em>IF2</em> and the Hop Fields (0,i2a), (i1a,0), (0,i1b), and (i3a,0).<a href="#section-3.1-4" class="pilcrow">¶</a></p>
@@ -3731,17 +3731,17 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
         <h3 id="name-steps-at-intermediate-route">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-steps-at-intermediate-route" class="section-name selfRef">Steps at Intermediate Routers</a>
         </h3>
-<p id="section-3.2-1">This section contains simplified snapshots of the packet header at each hop. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">This section shows simplified snapshots of the packet header at each hop based on the <span><a href="#life-of-a-packet" class="internal xref">Life of a SCION Data Packet</a> (<a href="#life-of-a-packet" class="auto internal xref">Section 3</a>)</span> example above. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">The current Info Field (with metadata on the current path segment) in the SCION header is depicted as <em>italic</em> in the tables. The current Hop Field, representing the current AS, is shown <strong>bold</strong>. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel the SCION packet.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2-3.1">
             <p id="section-3.2-3.1.1"><em>Step 1 -</em> <strong>A-&gt;R1</strong>: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is <em>IF1</em>. Upon receiving the packet, router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.<a href="#section-3.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-1-a-r1"></span><table class="center" id="table-6">
+<span id="name-ssnapshot-header-step-1-a-r"></span><table class="center" id="table-6">
           <caption>
 <a href="#table-6" class="selfRef">Table 6</a>:
-<a href="#name-snapshot-header-step-1-a-r1" class="selfRef">Snapshot header - step 1 - A-&gt;R1</a>
+<a href="#name-ssnapshot-header-step-1-a-r" class="selfRef">Ssnapshot header - step 1 - A-&gt;R1</a>
           </caption>
 <thead>
             <tr>

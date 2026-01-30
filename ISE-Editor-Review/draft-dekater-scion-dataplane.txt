@@ -1452,12 +1452,12 @@ Table of Contents
    source and destination are native SCION endpoints (i.e. they both run
    a native SCION network stack).
 
-   This example illustrates an intra-ISD case - i.e. all communication
-   happening within a single ISD.  As the sample ISD only consists of
-   one core AS, the end-to-end path only includes an up-path and down-
-   path segment.  The forwarding logic is uniform across intra- and
-   inter-ISD scenarios.  An inter-ISD scenario would use an additional
-   core path segment or a peering link.
+   The example below illustrates an intra-ISD case - i.e. all
+   communication happening within a single ISD.  As the sample ISD only
+   consists of one core AS, the end-to-end path only includes an up-path
+   and down-path segment.  The forwarding logic is uniform across intra-
+   and inter-ISD scenarios.  An inter-ISD scenario would use an
+   additional core path segment or a peering link.
 
                      +-------------------------+
                      |                         |
@@ -1489,26 +1489,25 @@ Table of Contents
       Figure 18: Example topology.  AS ff00:0:1 is the core AS of ISD
        1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.
 
-   Based on the above topology, this example shows the life of a SCION
-   packet sent from source at Endpoint A to destination at Endpoint B.
-   It also shows simplified snapshots of the packet header after each
-   on-path router.
+   This example topology shows the life of a SCION packet sent from
+   source at Endpoint A to destination at Endpoint B.  It also shows
+   simplified snapshots of the packet header after each on-path router.
 
 3.1.  Path Lookup and Segment Combination at Source
 
-   In this example, Endpoint A in AS ff00:0:2 wants to send a data
-   packet to Endpoint B in AS ff00:0:3 where both are part of ISD 1.  To
-   create an end-to-end SCION forwarding path, Endpoint A first queries
-   its own AS ff00:0:2 control service for up segments to the core AS in
-   its ISD.  The AS ff00:0:2 control service returns up segments from AS
-   ff00:0:2 to the ISD core AS ff00:0:1.  Endpoint A also queries its AS
-   ff00:0:2 control service for a down segment from its ISD core AS
-   ff00:0:1 to AS ff00:0:3, in which Endpoint B is located.  The AS
-   ff00:0:2 control service will return down segments from the ISD core
-   down to AS ff00:0:3.  The path segments consist of Hop Fields that
-   carry the ingress and egress interfaces of each AS (e.g. i2a, i1a,
-   ...), as described in detail in Section 2 - (x,y) represents one Hop
-   Field.
+   In the Life of a SCION Data Packet (Section 3) example above,
+   Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B
+   in AS ff00:0:3 where both are part of ISD 1.  To create an end-to-end
+   SCION forwarding path, Endpoint A first queries its own AS ff00:0:2
+   control service for up segments to the core AS in its ISD.  The AS
+   ff00:0:2 control service returns up segments from AS ff00:0:2 to the
+   ISD core AS ff00:0:1.  Endpoint A also queries its AS ff00:0:2
+   control service for a down segment from its ISD core AS ff00:0:1 to
+   AS ff00:0:3, in which Endpoint B is located.  The AS ff00:0:2 control
+   service will return down segments from the ISD core down to AS
+   ff00:0:3.  The path segments consist of Hop Fields that carry the
+   ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as
+   described in detail in Section 2 - (x,y) represents one Hop Field.
 
    For more details on the lookup of path segments, see 'Path Lookup' in
    [I-D.dekater-scion-controlplane].
@@ -1532,9 +1531,10 @@ Table of Contents
 
 3.2.  Steps at Intermediate Routers
 
-   This section contains simplified snapshots of the packet header at
-   each hop.  These snapshots are depicted in tables and they show the
-   most relevant information of the header, including the SCION path and
+   This section shows simplified snapshots of the packet header at each
+   hop based on the Life of a SCION Data Packet (Section 3) example
+   above.  These snapshots are depicted in tables and they show the most
+   relevant information of the header, including the SCION path and
    underlay IP encapsulation for local communication.
 
    The current Info Field (with metadata on the current path segment) in
@@ -1575,7 +1575,7 @@ Table of Contents
        |             | DST=R1                       |             |
        +-------------+------------------------------+-------------+
 
-                Table 6: Snapshot header - step 1 - A->R1
+                Table 6: Ssnapshot header - step 1 - A->R1
 
    *  _Step 2 -_ *R1->R2*:
       Router R1 inspects the SCION header and considers the relevant
