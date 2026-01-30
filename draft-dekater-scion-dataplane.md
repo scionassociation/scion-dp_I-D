@@ -237,8 +237,6 @@ SCION relies on three main components:
 
 A more detailed introduction, motivation, and problem statement are provided in {{I-D.dekater-scion-controlplane}}. Readers are encouraged to read the introduction in that document first.
 
-The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
-
 
 ## Terminology {#terms}
 
@@ -359,7 +357,7 @@ In order to forward traffic to a service endpoint address (`DT/DS` as per {{tabl
 
 In addition, routers require coarse time synchronization with control plane instances (see [](#clock-inaccuracy)).
 
-**Note:** The current SCION implementation runs over the UDP/IP protocol. However, the use of other lower layers protocols is possible.
+The current SCION implementation runs over the UDP/IP protocol, although the use of other lower layers protocols is possible.
 
 
 ## Path Construction (Segment Combinations) {#construction}
@@ -419,7 +417,7 @@ Valid path segment combinations:
   - **Core segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is REQUIRED to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b), or both are core ASes (Cases 1c and 1d), then no up or down segments are REQUIRED to connect the respective ASes to the core segment.
   - **Immediate combination** (Cases 2a, 2b in {{figure-1bis}}): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.
 
-- **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
+- **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. The up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
 - **AS shortcut** (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.
 - **On-path** (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.
 
@@ -608,7 +606,7 @@ The currently known service numbers are:
 {: #table-4 title="Known Service Numbers"}
 
 
-**Note:** For more information on addressing, see the ({{I-D.dekater-scion-controlplane}}).
+For more information on addressing, see the ({{I-D.dekater-scion-controlplane}}).
 
 
 ## Path Header {#path-header}
@@ -853,7 +851,7 @@ SCION provides two types of extension headers:
 
 If both headers are present, the Hop-by-Hop Options header MUST come before the End-to-End Options header.
 
-**Note:** The SCION extension headers are defined and used based on and similar to the IPv6 extensions as specified in Section 4 of {{RFC8200}}. The SCION Hop-by-Hop Options header and End-to-End Options header resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC) and Destination Options Header (section 4.6) respectively.
+The SCION extension headers are defined and used based on and similar to the IPv6 extensions as specified in Section 4 of {{RFC8200}}. The SCION Hop-by-Hop Options header and End-to-End Options header resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC) and Destination Options Header (section 4.6) respectively.
 
 The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 bytes and have the following format:
 
@@ -997,7 +995,7 @@ This pseudo-header is used in current implementations of UDP on top of SCION. Ho
 
 This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).
 
-This example illustrates an intra-ISD case - i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An inter-ISD scenario would use an additional core path segment or a peering link.
+The example below illustrates an intra-ISD case - i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An inter-ISD scenario would use an additional core path segment or a peering link.
 
 ~~~aasvg
                   +-------------------------+
@@ -1029,14 +1027,14 @@ This example illustrates an intra-ISD case - i.e. all communication happening wi
 ~~~
 {: #figure-16 title="Example topology. AS ff00:0:1 is the core AS of ISD 1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1."}
 
-Based on the above topology, this example shows the life of a SCION packet sent from source at Endpoint A to destination at Endpoint B. It also shows simplified snapshots of the packet header after each on-path router.
+This example topology shows the life of a SCION packet sent from source at Endpoint A to destination at Endpoint B. It also shows simplified snapshots of the packet header after each on-path router.
 
 
 ## Path Lookup and Segment Combination at Source
 
-In this example, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3 where both are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
+In the [Life of a SCION Data Packet](#life-of-a-packet) example above, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3 where both are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
 
-**Note:** For more details on the lookup of path segments, see 'Path Lookup' in {{I-D.dekater-scion-controlplane}}.
+For more details on the lookup of path segments, see 'Path Lookup' in {{I-D.dekater-scion-controlplane}}.
 
 Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS ff00:0:2 control service.
 
@@ -1049,7 +1047,7 @@ Endpoint A now adds this end-to-end forwarding path to the header of the packet 
 
 ## Steps at Intermediate Routers
 
-This section contains simplified snapshots of the packet header at each hop. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.
+This section shows simplified snapshots of the packet header at each hop based on the [Life of a SCION Data Packet](#life-of-a-packet) example above. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.
 
 The current Info Field (with metadata on the current path segment) in the SCION header is depicted as _italic_ in the tables. The current Hop Field, representing the current AS, is shown **bold**. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel the SCION packet.
 
@@ -1062,7 +1060,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | UDP port    | SRC = 30041  <br> DST = 30041                                 |                             |
 | IP          | SRC = 203.0.113.6 <br> DST = 203.0.113.17                     |  Endpoint A <br>  Router R1 |
 | Link layer  | SRC=A <br> DST=R1                                                 |                             |
-{: title="Snapshot header - step 1 - A->R1"}
+{: title="Ssnapshot header - step 1 - A->R1"}
 
 - *Step 2 -* **R1->R2**: <br> Router R1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field *IF1*. The current Hop Field is the first Hop Field (0,i2a), which instructs router R1 to forward the packet on its interface i2a. After reading the current Hop Field, router R1 moves the pointer forward by one position to the second Hop Field (i1a,0).
 
@@ -1087,7 +1085,6 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 {: title="Snapshot header - step 3 -  R2 -> R3"}
 
 - *Step 4 -* **R3->R4**: <br> router R3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION router R4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach router R4.
-
 
 |  Field      | Value                                                          | Description                 |
 |-------------+----------------------------------------------------------------+-----------------------------|
@@ -1492,7 +1489,7 @@ SCION provides protection against certain reflection-based DoS attacks. Here, th
 
 However, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with a relatively low send rate. The attacker can exploit the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.
 
-**Note** SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering - e.g. by ISD, AS or path length.
+SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering - e.g. by ISD, AS or path length.
 
 
 # IANA Considerations
