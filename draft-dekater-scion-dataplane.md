@@ -237,8 +237,6 @@ SCION relies on three main components:
 
 A more detailed introduction, motivation, and problem statement are provided in {{I-D.dekater-scion-controlplane}}. Readers are encouraged to read the introduction in that document first.
 
-The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
-
 
 ## Terminology {#terms}
 
