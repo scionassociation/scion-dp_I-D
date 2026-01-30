@@ -357,7 +357,7 @@ In order to forward traffic to a service endpoint address (`DT/DS` as per {{tabl
 
 In addition, routers require coarse time synchronization with control plane instances (see [](#clock-inaccuracy)).
 
-**Note:** The current SCION implementation runs over the UDP/IP protocol. However, the use of other lower layers protocols is possible.
+The current SCION implementation runs over the UDP/IP protocol, although the use of other lower layers protocols is possible.
 
 
 ## Path Construction (Segment Combinations) {#construction}
@@ -417,7 +417,7 @@ Valid path segment combinations:
   - **Core segment combination** (Cases 1a, 1b, 1c, 1d in {{figure-1}}): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is REQUIRED to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b), or both are core ASes (Cases 1c and 1d), then no up or down segments are REQUIRED to connect the respective ASes to the core segment.
   - **Immediate combination** (Cases 2a, 2b in {{figure-1bis}}): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.
 
-- **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
+- **Peering shortcut** (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. The up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.
 - **AS shortcut** (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.
 - **On-path** (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.
 
@@ -606,7 +606,7 @@ The currently known service numbers are:
 {: #table-4 title="Known Service Numbers"}
 
 
-**Note:** For more information on addressing, see the ({{I-D.dekater-scion-controlplane}}).
+For more information on addressing, see the ({{I-D.dekater-scion-controlplane}}).
 
 
 ## Path Header {#path-header}
@@ -851,7 +851,7 @@ SCION provides two types of extension headers:
 
 If both headers are present, the Hop-by-Hop Options header MUST come before the End-to-End Options header.
 
-**Note:** The SCION extension headers are defined and used based on and similar to the IPv6 extensions as specified in Section 4 of {{RFC8200}}. The SCION Hop-by-Hop Options header and End-to-End Options header resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC) and Destination Options Header (section 4.6) respectively.
+The SCION extension headers are defined and used based on and similar to the IPv6 extensions as specified in Section 4 of {{RFC8200}}. The SCION Hop-by-Hop Options header and End-to-End Options header resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC) and Destination Options Header (section 4.6) respectively.
 
 The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 bytes and have the following format:
 
@@ -1034,7 +1034,7 @@ Based on the above topology, this example shows the life of a SCION packet sent 
 
 In this example, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3 where both are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
 
-**Note:** For more details on the lookup of path segments, see 'Path Lookup' in {{I-D.dekater-scion-controlplane}}.
+For more details on the lookup of path segments, see 'Path Lookup' in {{I-D.dekater-scion-controlplane}}.
 
 Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS ff00:0:2 control service.
 
@@ -1490,7 +1490,7 @@ SCION provides protection against certain reflection-based DoS attacks. Here, th
 
 However, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with a relatively low send rate. The attacker can exploit the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.
 
-**Note** SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering - e.g. by ISD, AS or path length.
+SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering - e.g. by ISD, AS or path length.
 
 
 # IANA Considerations
