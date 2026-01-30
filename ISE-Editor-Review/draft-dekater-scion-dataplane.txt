@@ -471,9 +471,8 @@ Table of Contents
    In addition, routers require coarse time synchronization with control
    plane instances (see Section 4.2.2.3).
 
-   *Note:* The current SCION implementation runs over the UDP/IP
-   protocol.  However, the use of other lower layers protocols is
-   possible.
+   The current SCION implementation runs over the UDP/IP protocol,
+   although the use of other lower layers protocols is possible.
 
 1.4.  Path Construction (Segment Combinations)
 
@@ -581,9 +580,9 @@ Table of Contents
 
    *  *Peering shortcut* (Cases 3a and 3b): A peering link exists
       between the up and down segment, and extraneous path segments to
-      the core are cut off.  Note that the up and down segments do not
-      need to originate from the same core AS and the peering link could
-      also be traversing to a different ISD.
+      the core are cut off.  The up and down segments do not need to
+      originate from the same core AS and the peering link could also be
+      traversing to a different ISD.
 
    *  *AS shortcut* (Cases 4a and 4b): The up and down segments
       intersect at a non-core AS below the ISD core, thus creating a
@@ -874,7 +873,7 @@ Table of Contents
 
                       Table 4: Known Service Numbers
 
-   *Note:* For more information on addressing, see the
+   For more information on addressing, see the
    ([I-D.dekater-scion-controlplane]).
 
 2.3.  Path Header
@@ -1251,12 +1250,11 @@ Table of Contents
    If both headers are present, the Hop-by-Hop Options header MUST come
    before the End-to-End Options header.
 
-   *Note:* The SCION extension headers are defined and used based on and
-   similar to the IPv6 extensions as specified in Section 4 of
-   [RFC8200].  The SCION Hop-by-Hop Options header and End-to-End
-   Options header resemble the IPv6 Hop-by-Hop Options Header (section
-   4.3 in the RFC) and Destination Options Header (section 4.6)
-   respectively.
+   The SCION extension headers are defined and used based on and similar
+   to the IPv6 extensions as specified in Section 4 of [RFC8200].  The
+   SCION Hop-by-Hop Options header and End-to-End Options header
+   resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC)
+   and Destination Options Header (section 4.6) respectively.
 
    The SCION Hop-by-Hop Options and End-to-End Options headers are
    aligned to 4 bytes and have the following format:
@@ -1512,8 +1510,8 @@ Table of Contents
    ...), as described in detail in Section 2 - (x,y) represents one Hop
    Field.
 
-   *Note:* For more details on the lookup of path segments, see 'Path
-   Lookup' in [I-D.dekater-scion-controlplane].
+   For more details on the lookup of path segments, see 'Path Lookup' in
+   [I-D.dekater-scion-controlplane].
 
    Based on its own selection criteria, Endpoint A selects the up
    segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the
@@ -2618,9 +2616,9 @@ Table of Contents
    available paths, sending at precisely timed intervals to cause short,
    synchronized bursts of packets near the victim.
 
-   *Note* SCION does not protect against two other types of DoS attacks,
-   namely transport protocol attacks and application layer attacks.
-   Such attacks are out of SCION's scope although additional information
+   SCION does not protect against two other types of DoS attacks, namely
+   transport protocol attacks and application layer attacks.  Such
+   attacks are out of SCION's scope although additional information
    contained in the SCION header enables more targeted filtering - e.g.
    by ISD, AS or path length.
 
