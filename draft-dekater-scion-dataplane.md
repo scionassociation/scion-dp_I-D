@@ -225,7 +225,7 @@ This document contains new approaches to secure path aware networking. It is not
 
 # Introduction
 
-SCION is a path-aware internetworking routing architecture as described in {{RFC9217}}. It allows endpoints and applications to select paths across the network to use for traffic, based on trusted path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.
+SCION is a path-aware internetworking routing architecture as described in {{RFC9217}}. A more detailed introduction, motivation, and problem statement are provided in {{I-D.dekater-scion-controlplane}}. Readers are encouraged to read the introduction in that document first.
 
 SCION relies on three main components:
 
@@ -235,9 +235,6 @@ SCION relies on three main components:
 
 *Data Plane* - carrying out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. It is described in this document.
 
-A more detailed introduction, motivation, and problem statement are provided in {{I-D.dekater-scion-controlplane}}. Readers are encouraged to read the introduction in that document first.
-
-The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
 ## Terminology {#terms}
 
@@ -288,12 +285,7 @@ The SCION architecture was initially developed outside of the IETF by ETH Zurich
 
 The SCION Data Plane forwards inter-domain packets between SCION ASes. SCION routers are normally deployed at the edge of an AS and peer with neighboring SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header, which consists of a sequence of Hop Fields (HFs). Each Hop Field corresponds to an AS on the path, and it includes an ingress Interface ID as well as an egress Interface ID which unequivocally identifies the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.
 
-This concept allows SCION routers to forward packets to a neighbor AS without inspecting the destination address and also without consulting an inter-domain forwarding table. A SCION border router reuses existing intra-domain infrastructure (e.g. IP) to communicate to other SCION routers or SCION endpoints within its AS. The last SCION router at the destination AS uses the destination address to forward the packet to the appropriate local endpoint.
-
-This SCION design choice has the following advantages:
-
-- It provides control and transparency over forwarding paths to endpoints.
-- It simplifies the packet processing at routers. Instead of having to perform longest prefix matching on IP addresses which requires dedicated hardware and substantial amounts of energy, a router can simply access the next hop from the packet header after having verified the authenticity of the Hop Field's MAC.
+This concept allows SCION routers to forward packets to a neighbor AS without inspecting the destination address and also without consulting an inter-domain forwarding table, removing the need for specialized hardware. A SCION border router reuses existing intra-domain infrastructure (e.g. IP) to communicate to other SCION routers or SCION endpoints within its AS. The last SCION router at the destination AS uses the destination address to forward the packet to the appropriate local endpoint.
 
 ### Inter- and Intra-Domain Forwarding
 
