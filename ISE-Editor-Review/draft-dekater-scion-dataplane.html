@@ -3934,10 +3934,10 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
             <p id="section-3.3-11.1.1"><em>Step 5 -</em> <strong>R4-&gt;B</strong>: <br> SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. Router R4 will then also realize, based on the fields <code>CurrHF</code> and <code>SegLen</code> in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination and with itself as source. The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.<a href="#section-3.3-11.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-5-r4-b"></span><table class="center" id="table-10">
+<span id="name-example-snapshot-header-step-5"></span><table class="center" id="table-10">
           <caption>
 <a href="#table-10" class="selfRef">Table 10</a>:
-<a href="#name-snapshot-header-step-5-r4-b" class="selfRef">Snapshot header - step 5 - R4 -&gt; B</a>
+<a href="#name-example-snapshot-header-step-5" class="selfRef">Example: snapshot header - step 5 - R4 -&gt; B</a>
           </caption>
 <thead>
             <tr>

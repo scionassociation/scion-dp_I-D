@@ -1691,7 +1691,7 @@ Table of Contents
        |             | DST=B                        |             |
        +-------------+------------------------------+-------------+
 
-               Table 10: Snapshot header - step 5 - R4 -> B
+          Table 10: Example: snapshot header - step 5 - R4 -> B
 
 3.4.  Destination Endpoint
 
