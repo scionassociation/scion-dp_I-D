@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 3 August 2026                                 SCION Association
+Expires: 5 August 2026                                 SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         30 January 2026
+                                                         1 February 2026
 
 
                             SCION Data Plane
@@ -18,25 +18,21 @@ Expires: 3 August 2026                                 SCION Association
 
 Abstract
 
-   This document describes the data plane of the path-aware, inter-
-   domain network architecture SCION (Scalability, Control, and
-   Isolation On Next-generation networks).  A fundamental characteristic
-   of SCION is that it gives path control to SCION-capable endpoints.
+   This document describes the Data Plane of SCION (Scalability,
+   Control, and Isolation On Next-generation networks), a path-aware,
+   inter-domain network architecture.
 
-   The SCION Control Plane is responsible for discovering these paths
-   and making them available as path segments to the endpoints.  The
-   role of the SCION Data Plane is to combine these path segments into
-   end-to-end paths, and forward data between endpoints according to the
-   specified path.  It fundamentally differs from an IP-based data plane
-   in that it is _path-aware_ and interdomain forwarding directives are
-   embedded in the packet header.
+   Unlike IP-based forwarding, SCION embeds inter-domain forwarding
+   directives in the packet header, enabling endpoints to construct and
+   select end-to-end paths from segments discovered by the Control
+   Plane.  The role of the Data Plane is to combine such segments into
+   end-to-end paths, and to forward data according to the specified
+   path.
 
-   This document provides a detailed specification of the SCION data
-   packet format as well as the structure of the SCION header, including
-   extension headers.  It also describes the life of a SCION packet
-   while traversing a SCION network, followed by a specification of the
-   SCION path authorization mechanisms and the packet processing at
-   routers.
+   This document describes the SCION packet format, header structure,
+   and extension headers.  It also describes the cryptographic
+   mechanisms used for path authorization, processing at routers
+   including a life of a packet example.
 
    This document contains new approaches to secure path aware
    networking.  It is not an Internet Standard, has not received any
@@ -72,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 August 2026.
+   This Internet-Draft will expire on 5 August 2026.
 
 Copyright Notice
 
@@ -179,6 +175,15 @@ Table of Contents
    A more detailed introduction, motivation, and problem statement are
    provided in [I-D.dekater-scion-controlplane].  Readers are encouraged
    to read the introduction in that document first.
+
+   The SCION architecture was initially developed outside of the IETF by
+   ETH Zurich with significant contributions from Anapaya Systems.  It
+   is deployed in the Swiss finance sector to provide resilient
+   connectivity between financial institutions.  The aim of this
+   document is to document the existing protocol specification as
+   deployed, to encourage interoperability among implementations, and to
+   introduce new concepts that can potentially be further improved to
+   address particular problems with the current Internet architecture.
 
 1.1.  Terminology
 
