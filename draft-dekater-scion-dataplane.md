@@ -212,11 +212,11 @@ informative:
 
 --- abstract
 
-This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints.
+This document describes the Data Plane of SCION (Scalability, Control, and Isolation On Next-generation networks), a path-aware, inter-domain network architecture.
 
-The SCION Control Plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION Data Plane is to combine these path segments into end-to-end paths, and forward data between endpoints according to the specified path. It fundamentally differs from an IP-based data plane in that it is *path-aware* and interdomain forwarding directives are embedded in the packet header.
+Unlike IP-based forwarding, SCION embeds inter-domain forwarding directives in the packet header, enabling endpoints to construct and select end-to-end paths from segments discovered by the Control Plane. The role of the Data Plane is to combine such segments into end-to-end paths, and to forward data according to the specified path.
 
-This document provides a detailed specification of the SCION data packet format as well as the structure of the SCION header, including extension headers. It also describes the life of a SCION packet while traversing a SCION network, followed by a specification of the SCION path authorization mechanisms and the packet processing at routers.
+This document  describes the SCION packet format, header structure, and extension headers. It also describes the cryptographic mechanisms used for path authorization, processing at routers including a life of a packet example.
 
 This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet.
 
@@ -237,6 +237,7 @@ SCION relies on three main components:
 
 A more detailed introduction, motivation, and problem statement are provided in {{I-D.dekater-scion-controlplane}}. Readers are encouraged to read the introduction in that document first.
 
+The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.
 
 ## Terminology {#terms}
 
