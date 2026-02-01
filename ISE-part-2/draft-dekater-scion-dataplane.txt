@@ -138,7 +138,6 @@ Table of Contents
    9.  References
      9.1.  Normative References
      9.2.  Informative References
-   Acknowledgments
    Deployment Testing: SCIONLab
    Assigned SCION Protocol Numbers
      Considerations
@@ -153,6 +152,7 @@ Table of Contents
      draft-dekater-scion-dataplane-04
      draft-dekater-scion-dataplane-03
      draft-dekater-scion-dataplane-02
+   Acknowledgments
    Authors' Addresses
 
 1.  Introduction
@@ -2756,22 +2756,6 @@ Table of Contents
    [SIG]      Anapaya, ETH, and SCION, "SCION IP Gateway Documentation",
               2024, <https://docs.scion.org/en/latest/sig.html>.
 
-Acknowledgments
-
-   Many thanks go to Harald Alvestrand (Google), Joel Halpern
-   (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper), Brian
-   Trammel (Google) for reviewing this document.  We also thank Matthias
-   Frei (SCION Association), Juan A.  Garcia Prado (ETH Zurich) and
-   Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for
-   providing inputs to this document.  We also thank the Information
-   Security Group at ETH Zurich for their inputs based on their formal
-   verification work of the SCION open source router implementation
-   [PEREIRA2025].  Finally, we are indebted to the SCION development
-   teams of Anapaya, ETH Zurich, and SCION Association for their
-   practical knowledge and for the documentation about the SCION Data
-   Plane, as well as to the authors of [CHUAT22] - the book is an
-   important source of input and inspiration for this draft.
-
 Deployment Testing: SCIONLab
 
    SCIONLab is a global research network that is available to test the
@@ -2976,6 +2960,22 @@ draft-dekater-scion-dataplane-02
       splicing in security considerations
 
    *  Clarified the computation of ExtLen.
+
+Acknowledgments
+
+   Many thanks go to Harald Alvestrand (Google), Joel Halpern
+   (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper), Brian
+   Trammel (Google) for reviewing this document.  We also thank Matthias
+   Frei (SCION Association), Juan A.  Garcia Prado (ETH Zurich) and
+   Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for
+   providing inputs to this document.  We also thank the Information
+   Security Group at ETH Zurich for their inputs based on their formal
+   verification work of the SCION open source router implementation
+   [PEREIRA2025].  Finally, we are indebted to the SCION development
+   teams of Anapaya, ETH Zurich, and SCION Association for their
+   practical knowledge and for the documentation about the SCION Data
+   Plane, as well as to the authors of [CHUAT22] - the book is an
+   important source of input and inspiration for this draft.
 
 Authors' Addresses
 
