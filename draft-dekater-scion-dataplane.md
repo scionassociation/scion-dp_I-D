@@ -344,7 +344,7 @@ When transiting an intermediate SCION AS, a packet gets forwarded by at most two
 5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
 6. The last SCION router on the path forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
 
-### Configuration
+### Configuration {#configuration}
 
 Border routers require mappings from SCION Interface IDs to underlay addresses and such information MUST be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values MUST be configured. A typical implementation will require:
 
@@ -1182,7 +1182,7 @@ Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2]
 
 #### Hop Field MAC Algorithm
 
-The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST use the same algorithm. Implementations MUST also support the Default Hop Field MAC algorithm as described below.
+The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST be configured to use the same algorithm (See [](configuration)). Implementations MUST also support the Default Hop Field MAC algorithm as described below.
 
 ##### Default Hop Field MAC Algorithm
 
