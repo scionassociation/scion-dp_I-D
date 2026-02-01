@@ -599,7 +599,7 @@ The currently known service numbers are:
 {: #table-4 title="Known Service Numbers"}
 
 
-For more information on addressing, see the ({{I-D.dekater-scion-controlplane}}).
+For more information on addressing, see {{I-D.dekater-scion-controlplane}}.
 
 
 ## Path Header {#path-header}
@@ -986,9 +986,9 @@ This pseudo-header is used in current implementations of UDP on top of SCION. Ho
 
 # Life of a SCION Data Packet {#life-of-a-packet}
 
-This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).
+This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint.
 
-The example below illustrates an intra-ISD case - i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An inter-ISD scenario would use an additional core path segment or a peering link.
+## Example Topology {#example-topology}
 
 ~~~aasvg
                   +-------------------------+
@@ -1018,14 +1018,19 @@ The example below illustrates an intra-ISD case - i.e. all communication happeni
 |                         |         |                         |
 +-------------------------+         +-------------------------+
 ~~~
-{: #figure-16 title="Example topology. AS ff00:0:1 is the core AS of ISD 1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1."}
+{: #figure-16 title="Topology used in examples below."}
 
-This example topology shows the life of a SCION packet sent from source at Endpoint A to destination at Endpoint B. It also shows simplified snapshots of the packet header after each on-path router.
+* R1, R2, R3, R4 are SCION routers, deployed at the edge of their AS. Their interface IDs are represented close to their interfaces (e.g., i2a for R1).
+* AS ff00:0:1 is a core AS, ASes ff00:0:2 and ff00:0:3 are non-core. All ASes are part of ISD 1.
+* Endpoint A is the source endpoint and it is in AS ff00:0:2
+* Endpoint B the destination endpoint and it is in AS ff00:0:3
+* both endpoints run a native SCION network stack.
 
+Since this example consists of only one ISD and core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An scenario with more core ASes and/or ISDs would use an additional core path segment or a peering link.
 
-## Path Lookup and Segment Combination at Source
+## Source Endpoint: Path Lookup and Segment Combination
 
-In the [Life of a SCION Data Packet](#life-of-a-packet) example above, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3 where both are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
+To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as described in detail in [](#header) - (x,y) represents one Hop Field.
 
 For more details on the lookup of path segments, see 'Path Lookup' in {{I-D.dekater-scion-controlplane}}.
 
@@ -1038,9 +1043,9 @@ To obtain an end-to-end forwarding path from the source AS to the destination AS
 Endpoint A now adds this end-to-end forwarding path to the header of the packet that it wants to send to Endpoint B, and starts transferring the packet.
 
 
-## Steps at Intermediate Routers
+## Intermediate Routers: Forwarding and Header Snapshots
 
-This section shows simplified snapshots of the packet header at each hop based on the [Life of a SCION Data Packet](#life-of-a-packet) example above. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.
+This section shows simplified snapshots of the packet header at each hop of the example topology. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.
 
 The current Info Field (with metadata on the current path segment) in the SCION header is depicted as _italic_ in the tables. The current Hop Field, representing the current AS, is shown **bold**. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel the SCION packet.
 
@@ -1053,7 +1058,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | UDP port    | SRC = 30041  <br> DST = 30041                                 |                             |
 | IP          | SRC = 203.0.113.6 <br> DST = 203.0.113.17                     |  Endpoint A <br>  Router R1 |
 | Link layer  | SRC=A <br> DST=R1                                                 |                             |
-{: title="Ssnapshot header - step 1 - A->R1"}
+{: title="Example: snapshot header - step 1 - A->R1"}
 
 - *Step 2 -* **R1->R2**: <br> Router R1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field *IF1*. The current Hop Field is the first Hop Field (0,i2a), which instructs router R1 to forward the packet on its interface i2a. After reading the current Hop Field, router R1 moves the pointer forward by one position to the second Hop Field (i1a,0).
 
@@ -1064,7 +1069,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | SCION addr. | SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7  | Endpoint A <br> Endpoint B  |
 | SCION path  | - *IF1* (0,i2a) **(i1a,0)**  <br>  - IF2 (0,i1b) (i3a,0)      |                             |
 | Link layer  | SRC=R1 <br> DST=R2                                            |                             |
-{: title="Snapshot header - step 2 - R1 -> R2"}
+{: title="Example: snapshot header - step 2 - R1 -> R2"}
 
 - *Step 3 -* **R2->R3**: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field, otherwise the packet is dropped by router R2. The router notices that it has consumed the last Hop Field of the current path segment and then moves the pointer from the current Info Field to the next Info Field *IF2*. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. The router maps the i1b interface ID to egress router R3, and encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.
 
@@ -1076,6 +1081,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | IP          | SRC = 198.51.100.1 <br> DST = 198.51.100.4                   | Router R2 <br> Router R3   |
 | Link layer  | SRC=R2 <br> DST=R3                                           |                            |
 {: title="Snapshot header - step 3 -  R2 -> R3"}
+{: title="Example: snapshot header - step 3 -  R2 -> R3"}
 
 - *Step 4 -* **R3->R4**: <br> router R3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION router R4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach router R4.
 
@@ -1086,7 +1092,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | UDP port    | SRC = 30041 <br> DST = 30041 <br>                              |                             |
 | IP          | SRC = 198.51.100.17 <br> DST = 198.51.100.18                   | Router R3 <br> Router R4    |
 | Link layer  | SRC=R3 <br> DST=R4                                             |                             |
-{: title="Snapshot header - step 4 - R3 -> R4"}
+{: title="Example: snapshot header - step 4 - R3 -> R4"}
 
 - *Step 5 -* **R4->B**: <br> SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. Router R4 will then also realize, based on the fields `CurrHF` and `SegLen` in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination and with itself as source. The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.
 
@@ -1098,6 +1104,8 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | IP          | SRC = 192.0.2.34 <br> DST = 192.0.2.7                          | Router R4 <br> Endpoint B   |
 | Link layer  | SRC=R4 <br> DST=B                                              |                             |
 {: title="Snapshot header - step 5 - R4 -> B"}
+
+## Destination Endpoint
 
 When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also [](#reverse)).
 
@@ -1547,6 +1555,12 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-dataplane-11
+{:numbered="false"}
+
+- Abstract, Introduction: reworded and shortened, with reference to longer -controlplane introduction
+- Life of a SCION Data Packet: restructure section and clarify role of example topology
 
 ## draft-dekater-scion-dataplane-10
 {:numbered="false"}
