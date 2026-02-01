@@ -344,7 +344,7 @@ When transiting an intermediate SCION AS, a packet gets forwarded by at most two
 5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
 6. The last SCION router on the path forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
 
-### Configuration
+### Configuration {#configuration}
 
 Border routers require mappings from SCION Interface IDs to underlay addresses and such information MUST be supplied to each router in an out of band fashion (e.g in a configuration file). For each link to a neighbor, these values MUST be configured. A typical implementation will require:
 
@@ -353,7 +353,7 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - Neighbor ISD-AS number.
 - Neighbor interface's underlay address.
 - For intra-domain forwarding: mapping of the AS interface IDs to intra-domain protocol address of the corresponding routers.
-- The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) which must be the same as that used by the Control Services within the AS.
+- The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) and forwarding key, which must be the same as that used by the Control Services within the AS.
 
 In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
@@ -1182,7 +1182,7 @@ Acc<sub>i+1</sub> = Acc<sub>i</sub> XOR MAC<sub>i</sub> \[:2]
 
 #### Hop Field MAC Algorithm
 
-The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST use the same algorithm. Implementations MUST also support the Default Hop Field MAC algorithm as described below.
+The algorithm used to compute the Hop Field MAC is an AS-specific choice, although the Control Services and border routers within an AS MUST be configured to use the same algorithm (see [](configuration)). Implementations MUST also support the Default Hop Field MAC algorithm as described below.
 
 ##### Default Hop Field MAC Algorithm
 
@@ -1433,7 +1433,7 @@ The main protection mechanism is the Hop Field MAC (see [](#auth-chained-macs)) 
 
 For the current default MAC algorithm - AES-CMAC truncated to 48 bits - key recovery attacks from (any number of) known plaintext/MAC combinations is computationally infeasible as far as publicly known. In addition, the MAC algorithm can be freely chosen by each AS, enabling algorithmic agility for MAC computations. Should a MAC algorithm be discovered to be weak or insecure, each AS can quickly switch to a secure algorithm without the need for coordination with other ASes.
 
-A more realistic risk to the secrecy of the forwarding key is exfiltration from a compromised router or control plane service. An AS can optionally rotate its forwarding key at regular intervals to limit the exposure after a temporary device compromise. However, such a key rotation scheme cannot mitigate the impact of an undiscovered compromise of a device.
+A more realistic risk to the secrecy of the forwarding key is exfiltration from a compromised router or control plane service. An AS can optionally rotate its forwarding key at regular intervals using an out-of-band mechanism to limit the exposure after a temporary device compromise. However, such a key rotation scheme cannot mitigate the impact of an undiscovered compromise of a device.
 
 When an AS's forwarding key is compromised, an attacker can forge Hop Field MACs and undermine path authorization. As path segments are checked for validity and policy compliance during the path discovery phase and during forwarding, routers only validate the MAC and basic validity of the current the Hop Field. Consequently, creating fraudulent Hop Fields with valid MACs allows an attacker to bypass most path segment validity checks and to create path segments that violate the AS's local policy and/or general path segment validity requirements. In particular, an attacker could create paths that include loops (limited by the maximum number of Hop Fields of a path).
 
@@ -1503,11 +1503,6 @@ The ISD and SCION AS number are SCION-specific numbers. They are allocated by th
 
 
 --- back
-
-# Acknowledgments
-{:numbered="false"}
-
-Many thanks go to Harald Alvestrand (Google), Joel Halpern (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper), Brian Trammel (Google) for reviewing this document. We also thank Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs to this document. We also thank the Information Security Group at ETH Zurich for their inputs based on their formal verification work of the SCION open source router implementation [PEREIRA2025]. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and SCION Association for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
 
 
 # Deployment Testing: SCIONLab
@@ -1650,3 +1645,8 @@ Minor changes:
 - Added and capitalized RFC2119 compliant terminology.
 - Clarified implications of AS forwarding key compromise and path splicing in security considerations
 - Clarified the computation of ExtLen.
+
+# Acknowledgments
+{:numbered="false"}
+
+Many thanks go to Harald Alvestrand (Google), Joel Halpern (Ericsson), Michael McBride (Futurewei), Ron Bonica (Juniper), Brian Trammel (Google) for reviewing this document. We also thank Matthias Frei (SCION Association), Juan A. Garcia Prado (ETH Zurich) and Kevin Meynell (SCION Association), Adrian Perrig (ETH Zurich) for providing inputs to this document. We also thank the Information Security Group at ETH Zurich for their inputs based on their formal verification work of the SCION open source router implementation [PEREIRA2025]. Finally, we are indebted to the SCION development teams of Anapaya, ETH Zurich, and SCION Association for their practical knowledge and for the documentation about the SCION Data Plane, as well as to the authors of [CHUAT22] - the book is an important source of input and inspiration for this draft.
