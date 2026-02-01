@@ -1080,7 +1080,6 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | UDP port    | SRC = 30041 <br> DST = 30041                                 |                            |
 | IP          | SRC = 198.51.100.1 <br> DST = 198.51.100.4                   | Router R2 <br> Router R3   |
 | Link layer  | SRC=R2 <br> DST=R3                                           |                            |
-{: title="Snapshot header - step 3 -  R2 -> R3"}
 {: title="Example: snapshot header - step 3 -  R2 -> R3"}
 
 - *Step 4 -* **R3->R4**: <br> router R3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION router R4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach router R4.
@@ -1103,7 +1102,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | UDP port    | SRC = 30041  <br> DST = 30041 <br>                             |                             |
 | IP          | SRC = 192.0.2.34 <br> DST = 192.0.2.7                          | Router R4 <br> Endpoint B   |
 | Link layer  | SRC=R4 <br> DST=B                                              |                             |
-{: title="Snapshot header - step 5 - R4 -> B"}
+{: title="Example: snapshot header - step 5 - R4 -> B"}
 
 ## Destination Endpoint
 
