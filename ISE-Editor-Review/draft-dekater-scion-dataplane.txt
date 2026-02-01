@@ -1481,9 +1481,9 @@ Table of Contents
 
    Since this example consists of only one ISD and core AS, the end-to-
    end path only includes an up-path and down-path segment.  The
-   forwarding logic is uniform across intra- and inter-ISD scenarios.
-   An scenario with more core ASes and/or ISDs would use an additional
-   core path segment or a peering link.
+   forwarding logic is uniform across intra- and inter-ISD scenarios.  A
+   scenario with more core ASes and/or ISDs would use an additional core
+   path segment or a peering link.
 
 3.2.  Source Endpoint: Path Lookup and Segment Combination
 
