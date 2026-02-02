@@ -10,9 +10,9 @@
 <meta content="Jean-Christophe Hugly" name="author">
 <meta content="Samuel Hitz" name="author">
 <meta content="
-       This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints. 
-       The SCION Control Plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION Data Plane is to combine these path segments into end-to-end paths, and forward data between endpoints according to the specified path. It fundamentally differs from an IP-based data plane in that it is  path-aware  and interdomain forwarding directives are embedded in the packet header. 
-       This document provides a detailed specification of the SCION data packet format as well as the structure of the SCION header, including extension headers. It also describes the life of a SCION packet while traversing a SCION network, followed by a specification of the SCION path authorization mechanisms and the packet processing at routers. 
+       This document describes the Data Plane of SCION (Scalability, Control, and Isolation On Next-generation networks), a path-aware, inter-domain network architecture. 
+       Unlike IP-based forwarding, SCION embeds inter-domain forwarding directives in the packet header, enabling endpoints to construct and select end-to-end paths from segments discovered by the Control Plane. The role of the Data Plane is to combine such segments into end-to-end paths, and to forward data according to the specified path. 
+       This document  describes the SCION packet format, header structure, and extension headers. It also describes the cryptographic mechanisms used for path authorization, processing at routers including a life of a packet example. 
        This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet. 
     " name="description">
 <meta content="xml2rfc 3.31.0" name="generator">
@@ -1054,7 +1054,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">de Kater, et al.</td>
-<td class="center">Expires 5 August 2026</td>
+<td class="center">Expires 6 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-dekater-scion-dataplane-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-01" class="published">1 February 2026</time>
+<time datetime="2026-02-02" class="published">2 February 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-05">5 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-06">6 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1097,9 +1097,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">SCION Data Plane</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document describes the data plane of the path-aware, inter-domain network architecture SCION (Scalability, Control, and Isolation On Next-generation networks). A fundamental characteristic of SCION is that it gives path control to SCION-capable endpoints.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">The SCION Control Plane is responsible for discovering these paths and making them available as path segments to the endpoints. The role of the SCION Data Plane is to combine these path segments into end-to-end paths, and forward data between endpoints according to the specified path. It fundamentally differs from an IP-based data plane in that it is <em>path-aware</em> and interdomain forwarding directives are embedded in the packet header.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
-<p id="section-abstract-3">This document provides a detailed specification of the SCION data packet format as well as the structure of the SCION header, including extension headers. It also describes the life of a SCION packet while traversing a SCION network, followed by a specification of the SCION path authorization mechanisms and the packet processing at routers.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes the Data Plane of SCION (Scalability, Control, and Isolation On Next-generation networks), a path-aware, inter-domain network architecture.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">Unlike IP-based forwarding, SCION embeds inter-domain forwarding directives in the packet header, enabling endpoints to construct and select end-to-end paths from segments discovered by the Control Plane. The role of the Data Plane is to combine such segments into end-to-end paths, and to forward data according to the specified path.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">This document  describes the SCION packet format, header structure, and extension headers. It also describes the cryptographic mechanisms used for path authorization, processing at routers including a life of a packet example.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 <p id="section-abstract-4">This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet.<a href="#section-abstract-4" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
@@ -1132,7 +1132,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 6 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1232,10 +1232,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-life-of-a-scion-data-packet" class="internal xref">Life of a SCION Data Packet</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-path-lookup-and-segment-com" class="internal xref">Path Lookup and Segment Combination at Source</a></p>
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-example-topology" class="internal xref">Example Topology</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-steps-at-intermediate-route" class="internal xref">Steps at Intermediate Routers</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-source-endpoint-path-lookup" class="internal xref">Source Endpoint: Path Lookup and Segment Combination</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-intermediate-routers-forwar" class="internal xref">Intermediate Routers: Forwarding and Header Snapshots</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-destination-endpoint" class="internal xref">Destination Endpoint</a></p>
 </li>
             </ul>
 </li>
@@ -1359,31 +1365,34 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-change-log" class="internal xref">Change Log</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-C.1" class="auto internal xref"></a><a href="#name-draft-dekater-scion-datapla" class="internal xref">draft-dekater-scion-dataplane-10</a></p>
+                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-C.1" class="auto internal xref"></a><a href="#name-draft-dekater-scion-datapla" class="internal xref">draft-dekater-scion-dataplane-11</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#appendix-C.2" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplan" class="internal xref">draft-dekater-scion-dataplane-09</a></p>
+                <p id="section-toc.1-1.12.2.2.1"><a href="#appendix-C.2" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplan" class="internal xref">draft-dekater-scion-dataplane-10</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
-                <p id="section-toc.1-1.12.2.3.1"><a href="#appendix-C.3" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane" class="internal xref">draft-dekater-scion-dataplane-08</a></p>
+                <p id="section-toc.1-1.12.2.3.1"><a href="#appendix-C.3" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane" class="internal xref">draft-dekater-scion-dataplane-09</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4">
-                <p id="section-toc.1-1.12.2.4.1"><a href="#appendix-C.4" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-" class="internal xref">draft-dekater-scion-dataplane-07</a></p>
+                <p id="section-toc.1-1.12.2.4.1"><a href="#appendix-C.4" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-" class="internal xref">draft-dekater-scion-dataplane-08</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.5">
-                <p id="section-toc.1-1.12.2.5.1"><a href="#appendix-C.5" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-0" class="internal xref">draft-dekater-scion-dataplane-06</a></p>
+                <p id="section-toc.1-1.12.2.5.1"><a href="#appendix-C.5" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-0" class="internal xref">draft-dekater-scion-dataplane-07</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.6">
-                <p id="section-toc.1-1.12.2.6.1"><a href="#appendix-C.6" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-05" class="internal xref">draft-dekater-scion-dataplane-05</a></p>
+                <p id="section-toc.1-1.12.2.6.1"><a href="#appendix-C.6" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-06" class="internal xref">draft-dekater-scion-dataplane-06</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.7">
-                <p id="section-toc.1-1.12.2.7.1"><a href="#appendix-C.7" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-04" class="internal xref">draft-dekater-scion-dataplane-04</a></p>
+                <p id="section-toc.1-1.12.2.7.1"><a href="#appendix-C.7" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-05" class="internal xref">draft-dekater-scion-dataplane-05</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.8">
-                <p id="section-toc.1-1.12.2.8.1"><a href="#appendix-C.8" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-03" class="internal xref">draft-dekater-scion-dataplane-03</a></p>
+                <p id="section-toc.1-1.12.2.8.1"><a href="#appendix-C.8" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-04" class="internal xref">draft-dekater-scion-dataplane-04</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.9">
-                <p id="section-toc.1-1.12.2.9.1"><a href="#appendix-C.9" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-02" class="internal xref">draft-dekater-scion-dataplane-02</a></p>
+                <p id="section-toc.1-1.12.2.9.1"><a href="#appendix-C.9" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-03" class="internal xref">draft-dekater-scion-dataplane-03</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.10">
+                <p id="section-toc.1-1.12.2.10.1"><a href="#appendix-C.10" class="auto internal xref"></a><a href="#name-draft-dekater-scion-dataplane-02" class="internal xref">draft-dekater-scion-dataplane-02</a></p>
 </li>
             </ul>
 </li>
@@ -1402,13 +1411,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">SCION is a path-aware internetworking routing architecture as described in <span>[<a href="#RFC9217" class="cite xref">RFC9217</a>]</span>. It allows endpoints and applications to select paths across the network to use for traffic, based on trusted path properties. SCION is an inter-domain network architecture and is therefore not concerned with intra-domain forwarding.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">SCION is a path-aware internetworking routing architecture as described in <span>[<a href="#RFC9217" class="cite xref">RFC9217</a>]</span>. A more detailed introduction, motivation, and problem statement are provided in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>. Readers are encouraged to read the introduction in that document first.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">SCION relies on three main components:<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3"><em>PKI</em> - providing cryptographic material within an unique trust model. It is described in <span>[<a href="#I-D.dekater-scion-pki" class="cite xref">I-D.dekater-scion-pki</a>]</span>.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4"><em>Control Plane</em> - performing inter-domain routing by discovering and securely disseminating path information. It is described in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5"><em>Data Plane</em> - carrying out secure packet forwarding between SCION-enabled ASes over paths selected by endpoints. It is described in this document.<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6">A more detailed introduction, motivation, and problem statement are provided in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>. Readers are encouraged to read the introduction in that document first.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">The SCION architecture was initially developed outside of the IETF by ETH Zurich with significant contributions from Anapaya Systems. It is deployed in the Swiss finance sector to provide resilient connectivity between financial institutions. The aim of this document is to document the existing protocol specification as deployed, to encourage interoperability among implementations, and to introduce new concepts that can potentially be further improved to address particular problems with the current Internet architecture.<a href="#section-1-7" class="pilcrow">¶</a></p>
 <div id="terms">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -1452,16 +1459,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
         </h3>
 <p id="section-1.3-1">The SCION Data Plane forwards inter-domain packets between SCION ASes. SCION routers are normally deployed at the edge of an AS and peer with neighboring SCION routers. Inter-domain forwarding is based on end-to-end path information contained in the packet header, which consists of a sequence of Hop Fields (HFs). Each Hop Field corresponds to an AS on the path, and it includes an ingress Interface ID as well as an egress Interface ID which unequivocally identifies the ingress and egress interfaces within the AS. The information is authenticated with a Message Authentication Code (MAC) to prevent forgery.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
-<p id="section-1.3-2">This concept allows SCION routers to forward packets to a neighbor AS without inspecting the destination address and also without consulting an inter-domain forwarding table. A SCION border router reuses existing intra-domain infrastructure (e.g. IP) to communicate to other SCION routers or SCION endpoints within its AS. The last SCION router at the destination AS uses the destination address to forward the packet to the appropriate local endpoint.<a href="#section-1.3-2" class="pilcrow">¶</a></p>
-<p id="section-1.3-3">This SCION design choice has the following advantages:<a href="#section-1.3-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-1.3-4.1">
-            <p id="section-1.3-4.1.1">It provides control and transparency over forwarding paths to endpoints.<a href="#section-1.3-4.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-1.3-4.2">
-            <p id="section-1.3-4.2.1">It simplifies the packet processing at routers. Instead of having to perform longest prefix matching on IP addresses which requires dedicated hardware and substantial amounts of energy, a router can simply access the next hop from the packet header after having verified the authenticity of the Hop Field's MAC.<a href="#section-1.3-4.2.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<p id="section-1.3-2">This concept allows SCION routers to forward packets to a neighbor AS without inspecting the destination address and also without consulting an inter-domain forwarding table, removing the need for specialized hardware. A SCION border router reuses existing intra-domain infrastructure (e.g. IP) to communicate to other SCION routers or SCION endpoints within its AS. The last SCION router at the destination AS uses the destination address to forward the packet to the appropriate local endpoint.<a href="#section-1.3-2" class="pilcrow">¶</a></p>
 <div id="inter-and-intra-domain-forwarding">
 <section id="section-1.3.1">
           <h4 id="name-inter-and-intra-domain-forw">
@@ -1567,7 +1565,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           </ul>
 <p id="section-1.3.3-3">In order to forward traffic to a service endpoint address (<code>DT/DS</code> as per <a href="#_table-3" class="auto internal xref">Table 3</a>), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.<a href="#section-1.3.3-3" class="pilcrow">¶</a></p>
 <p id="section-1.3.3-4">In addition, routers require coarse time synchronization with control plane instances (see <a href="#clock-inaccuracy" class="auto internal xref">Section 4.2.2.3</a>).<a href="#section-1.3.3-4" class="pilcrow">¶</a></p>
-<p id="section-1.3.3-5"><strong>Note:</strong> The current SCION implementation runs over the UDP/IP protocol. However, the use of other lower layers protocols is possible.<a href="#section-1.3.3-5" class="pilcrow">¶</a></p>
+<p id="section-1.3.3-5">The current SCION implementation runs over the UDP/IP protocol, although the use of other lower layers protocols is possible.<a href="#section-1.3.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1776,7 +1774,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
             </ul>
 </li>
           <li class="normal" id="section-1.4-10.2">
-            <p id="section-1.4-10.2.1"><strong>Peering shortcut</strong> (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. Note that the up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.<a href="#section-1.4-10.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-10.2.1"><strong>Peering shortcut</strong> (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. The up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.<a href="#section-1.4-10.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.4-10.3">
             <p id="section-1.4-10.3.1"><strong>AS shortcut</strong> (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.<a href="#section-1.4-10.3.1" class="pilcrow">¶</a></p>
@@ -2489,7 +2487,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
           </tbody>
         </table>
 </div>
-<p id="section-2.2-9"><strong>Note:</strong> For more information on addressing, see the (<span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>).<a href="#section-2.2-9" class="pilcrow">¶</a></p>
+<p id="section-2.2-9">For more information on addressing, see <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-2.2-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="path-header">
@@ -3150,7 +3148,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 </li>
         </ul>
 <p id="section-2.4-3">If both headers are present, the Hop-by-Hop Options header <span class="bcp14">MUST</span> come before the End-to-End Options header.<a href="#section-2.4-3" class="pilcrow">¶</a></p>
-<p id="section-2.4-4"><strong>Note:</strong> The SCION extension headers are defined and used based on and similar to the IPv6 extensions as specified in Section 4 of <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>. The SCION Hop-by-Hop Options header and End-to-End Options header resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC) and Destination Options Header (section 4.6) respectively.<a href="#section-2.4-4" class="pilcrow">¶</a></p>
+<p id="section-2.4-4">The SCION extension headers are defined and used based on and similar to the IPv6 extensions as specified in Section 4 of <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>. The SCION Hop-by-Hop Options header and End-to-End Options header resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC) and Destination Options Header (section 4.6) respectively.<a href="#section-2.4-4" class="pilcrow">¶</a></p>
 <p id="section-2.4-5">The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 bytes and have the following format:<a href="#section-2.4-5" class="pilcrow">¶</a></p>
 <span id="name-extension-headers-options-h"></span><div id="_figure-11">
 <figure id="figure-13">
@@ -3617,132 +3615,155 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
       <h2 id="name-life-of-a-scion-data-packet">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-life-of-a-scion-data-packet" class="section-name selfRef">Life of a SCION Data Packet</a>
       </h2>
-<p id="section-3-1">This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint. It is assumed that both source and destination are native SCION endpoints (i.e. they both run a native SCION network stack).<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">This example illustrates an intra-ISD case - i.e. all communication happening within a single ISD. As the sample ISD only consists of one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. An inter-ISD scenario would use an additional core path segment or a peering link.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<span id="name-example-topology-as-ff0001-"></span><div id="_figure-16">
+<p id="section-3-1">This section describes the life of a SCION packet: how it is created at its source endpoint, passes through a number of SCION routers, and finally reaches its destination endpoint.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div id="example-topology">
+<section id="section-3.1">
+        <h3 id="name-example-topology">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-example-topology" class="section-name selfRef">Example Topology</a>
+        </h3>
+<span id="name-topology-used-in-examples-b"></span><div id="_figure-16">
 <figure id="figure-18">
-        <div id="section-3-3.1">
-          <div class="alignLeft art-svg artwork" id="section-3-3.1.1">
+          <div id="section-3.1-1.1">
+            <div class="alignLeft art-svg artwork" id="section-3.1-1.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="448" width="528" viewBox="0 0 528 448" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-              <path d="M 8,256 L 8,432" fill="none" stroke="black"></path>
-              <path d="M 56,320 L 56,352" fill="none" stroke="black"></path>
-              <path d="M 96,240 L 96,272" fill="none" stroke="black"></path>
-              <path d="M 112,160 L 112,240" fill="none" stroke="black"></path>
-              <path d="M 112,272 L 112,320" fill="none" stroke="black"></path>
-              <path d="M 128,240 L 128,272" fill="none" stroke="black"></path>
-              <path d="M 136,144 L 136,176" fill="none" stroke="black"></path>
-              <path d="M 152,32 L 152,144" fill="none" stroke="black"></path>
-              <path d="M 152,176 L 152,208" fill="none" stroke="black"></path>
-              <path d="M 160,320 L 160,352" fill="none" stroke="black"></path>
-              <path d="M 168,144 L 168,176" fill="none" stroke="black"></path>
-              <path d="M 216,256 L 216,432" fill="none" stroke="black"></path>
-              <path d="M 256,128 L 256,160" fill="none" stroke="black"></path>
-              <path d="M 296,256 L 296,432" fill="none" stroke="black"></path>
-              <path d="M 344,112 L 344,144" fill="none" stroke="black"></path>
-              <path d="M 352,320 L 352,352" fill="none" stroke="black"></path>
-              <path d="M 360,32 L 360,112" fill="none" stroke="black"></path>
-              <path d="M 360,144 L 360,208" fill="none" stroke="black"></path>
-              <path d="M 376,112 L 376,144" fill="none" stroke="black"></path>
-              <path d="M 384,240 L 384,272" fill="none" stroke="black"></path>
-              <path d="M 400,128 L 400,240" fill="none" stroke="black"></path>
-              <path d="M 400,272 L 400,320" fill="none" stroke="black"></path>
-              <path d="M 416,240 L 416,272" fill="none" stroke="black"></path>
-              <path d="M 456,320 L 456,352" fill="none" stroke="black"></path>
-              <path d="M 504,256 L 504,432" fill="none" stroke="black"></path>
-              <path d="M 152,32 L 360,32" fill="none" stroke="black"></path>
-              <path d="M 344,112 L 376,112" fill="none" stroke="black"></path>
-              <path d="M 256,128 L 344,128" fill="none" stroke="black"></path>
-              <path d="M 376,128 L 400,128" fill="none" stroke="black"></path>
-              <path d="M 136,144 L 168,144" fill="none" stroke="black"></path>
-              <path d="M 344,144 L 376,144" fill="none" stroke="black"></path>
-              <path d="M 112,160 L 136,160" fill="none" stroke="black"></path>
-              <path d="M 168,160 L 256,160" fill="none" stroke="black"></path>
-              <path d="M 136,176 L 168,176" fill="none" stroke="black"></path>
-              <path d="M 152,208 L 360,208" fill="none" stroke="black"></path>
-              <path d="M 96,240 L 128,240" fill="none" stroke="black"></path>
-              <path d="M 384,240 L 416,240" fill="none" stroke="black"></path>
-              <path d="M 8,256 L 96,256" fill="none" stroke="black"></path>
-              <path d="M 128,256 L 216,256" fill="none" stroke="black"></path>
-              <path d="M 296,256 L 384,256" fill="none" stroke="black"></path>
-              <path d="M 416,256 L 504,256" fill="none" stroke="black"></path>
-              <path d="M 96,272 L 128,272" fill="none" stroke="black"></path>
-              <path d="M 384,272 L 416,272" fill="none" stroke="black"></path>
-              <path d="M 56,320 L 160,320" fill="none" stroke="black"></path>
-              <path d="M 352,320 L 456,320" fill="none" stroke="black"></path>
-              <path d="M 56,352 L 160,352" fill="none" stroke="black"></path>
-              <path d="M 352,352 L 456,352" fill="none" stroke="black"></path>
-              <path d="M 8,432 L 216,432" fill="none" stroke="black"></path>
-              <path d="M 296,432 L 504,432" fill="none" stroke="black"></path>
-              <circle cx="112" cy="224" r="6" class="opendot" fill="white" stroke="black"></circle>
-              <circle cx="400" cy="224" r="6" class="opendot" fill="white" stroke="black"></circle>
-              <g class="text">
-                <text x="204" y="68">Core</text>
-                <text x="236" y="68">AS</text>
-                <text x="284" y="68">ff00:0:1</text>
-                <text x="420" y="84">(1-ff00:0:1,</text>
-                <text x="428" y="100">198.51.100.17)</text>
-                <text x="284" y="116">198.51.100.4</text>
-                <text x="400" y="116">i1b</text>
-                <text x="356" y="132">R3</text>
-                <text x="112" y="148">i1a</text>
-                <text x="148" y="164">R2</text>
-                <text x="228" y="180">198.51.100.1</text>
-                <text x="460" y="212">(1-ff00:0:3,</text>
-                <text x="468" y="228">198.51.100.18)</text>
-                <text x="72" y="244">i2a</text>
-                <text x="440" y="244">i3a</text>
-                <text x="108" y="260">R1</text>
-                <text x="396" y="260">R4</text>
-                <text x="164" y="292">203.0.113.17</text>
-                <text x="444" y="292">192.0.2.34</text>
-                <text x="100" y="340">Endpoint</text>
-                <text x="144" y="340">A</text>
-                <text x="396" y="340">Endpoint</text>
-                <text x="440" y="340">B</text>
-                <text x="108" y="372">1-ff00:0:2,203.0.113.6</text>
-                <text x="396" y="372">1-ff00:0:3,192.0.2.7</text>
-                <text x="76" y="404">AS</text>
-                <text x="124" y="404">ff00:0:2</text>
-                <text x="364" y="404">AS</text>
-                <text x="412" y="404">ff00:0:3</text>
-              </g>
-            </svg><a href="#section-3-3.1.1" class="pilcrow">¶</a>
+                <path d="M 8,256 L 8,432" fill="none" stroke="black"></path>
+                <path d="M 56,320 L 56,352" fill="none" stroke="black"></path>
+                <path d="M 96,240 L 96,272" fill="none" stroke="black"></path>
+                <path d="M 112,160 L 112,240" fill="none" stroke="black"></path>
+                <path d="M 112,272 L 112,320" fill="none" stroke="black"></path>
+                <path d="M 128,240 L 128,272" fill="none" stroke="black"></path>
+                <path d="M 136,144 L 136,176" fill="none" stroke="black"></path>
+                <path d="M 152,32 L 152,144" fill="none" stroke="black"></path>
+                <path d="M 152,176 L 152,208" fill="none" stroke="black"></path>
+                <path d="M 160,320 L 160,352" fill="none" stroke="black"></path>
+                <path d="M 168,144 L 168,176" fill="none" stroke="black"></path>
+                <path d="M 216,256 L 216,432" fill="none" stroke="black"></path>
+                <path d="M 256,128 L 256,160" fill="none" stroke="black"></path>
+                <path d="M 296,256 L 296,432" fill="none" stroke="black"></path>
+                <path d="M 344,112 L 344,144" fill="none" stroke="black"></path>
+                <path d="M 352,320 L 352,352" fill="none" stroke="black"></path>
+                <path d="M 360,32 L 360,112" fill="none" stroke="black"></path>
+                <path d="M 360,144 L 360,208" fill="none" stroke="black"></path>
+                <path d="M 376,112 L 376,144" fill="none" stroke="black"></path>
+                <path d="M 384,240 L 384,272" fill="none" stroke="black"></path>
+                <path d="M 400,128 L 400,240" fill="none" stroke="black"></path>
+                <path d="M 400,272 L 400,320" fill="none" stroke="black"></path>
+                <path d="M 416,240 L 416,272" fill="none" stroke="black"></path>
+                <path d="M 456,320 L 456,352" fill="none" stroke="black"></path>
+                <path d="M 504,256 L 504,432" fill="none" stroke="black"></path>
+                <path d="M 152,32 L 360,32" fill="none" stroke="black"></path>
+                <path d="M 344,112 L 376,112" fill="none" stroke="black"></path>
+                <path d="M 256,128 L 344,128" fill="none" stroke="black"></path>
+                <path d="M 376,128 L 400,128" fill="none" stroke="black"></path>
+                <path d="M 136,144 L 168,144" fill="none" stroke="black"></path>
+                <path d="M 344,144 L 376,144" fill="none" stroke="black"></path>
+                <path d="M 112,160 L 136,160" fill="none" stroke="black"></path>
+                <path d="M 168,160 L 256,160" fill="none" stroke="black"></path>
+                <path d="M 136,176 L 168,176" fill="none" stroke="black"></path>
+                <path d="M 152,208 L 360,208" fill="none" stroke="black"></path>
+                <path d="M 96,240 L 128,240" fill="none" stroke="black"></path>
+                <path d="M 384,240 L 416,240" fill="none" stroke="black"></path>
+                <path d="M 8,256 L 96,256" fill="none" stroke="black"></path>
+                <path d="M 128,256 L 216,256" fill="none" stroke="black"></path>
+                <path d="M 296,256 L 384,256" fill="none" stroke="black"></path>
+                <path d="M 416,256 L 504,256" fill="none" stroke="black"></path>
+                <path d="M 96,272 L 128,272" fill="none" stroke="black"></path>
+                <path d="M 384,272 L 416,272" fill="none" stroke="black"></path>
+                <path d="M 56,320 L 160,320" fill="none" stroke="black"></path>
+                <path d="M 352,320 L 456,320" fill="none" stroke="black"></path>
+                <path d="M 56,352 L 160,352" fill="none" stroke="black"></path>
+                <path d="M 352,352 L 456,352" fill="none" stroke="black"></path>
+                <path d="M 8,432 L 216,432" fill="none" stroke="black"></path>
+                <path d="M 296,432 L 504,432" fill="none" stroke="black"></path>
+                <circle cx="112" cy="224" r="6" class="opendot" fill="white" stroke="black"></circle>
+                <circle cx="400" cy="224" r="6" class="opendot" fill="white" stroke="black"></circle>
+                <g class="text">
+                  <text x="204" y="68">Core</text>
+                  <text x="236" y="68">AS</text>
+                  <text x="284" y="68">ff00:0:1</text>
+                  <text x="420" y="84">(1-ff00:0:1,</text>
+                  <text x="428" y="100">198.51.100.17)</text>
+                  <text x="284" y="116">198.51.100.4</text>
+                  <text x="400" y="116">i1b</text>
+                  <text x="356" y="132">R3</text>
+                  <text x="112" y="148">i1a</text>
+                  <text x="148" y="164">R2</text>
+                  <text x="228" y="180">198.51.100.1</text>
+                  <text x="460" y="212">(1-ff00:0:3,</text>
+                  <text x="468" y="228">198.51.100.18)</text>
+                  <text x="72" y="244">i2a</text>
+                  <text x="440" y="244">i3a</text>
+                  <text x="108" y="260">R1</text>
+                  <text x="396" y="260">R4</text>
+                  <text x="164" y="292">203.0.113.17</text>
+                  <text x="444" y="292">192.0.2.34</text>
+                  <text x="100" y="340">Endpoint</text>
+                  <text x="144" y="340">A</text>
+                  <text x="396" y="340">Endpoint</text>
+                  <text x="440" y="340">B</text>
+                  <text x="108" y="372">1-ff00:0:2,203.0.113.6</text>
+                  <text x="396" y="372">1-ff00:0:3,192.0.2.7</text>
+                  <text x="76" y="404">AS</text>
+                  <text x="124" y="404">ff00:0:2</text>
+                  <text x="364" y="404">AS</text>
+                  <text x="412" y="404">ff00:0:3</text>
+                </g>
+              </svg><a href="#section-3.1-1.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
-<a href="#name-example-topology-as-ff0001-" class="selfRef">Example topology. AS ff00:0:1 is the core AS of ISD 1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.</a>
-        </figcaption></figure>
+<a href="#name-topology-used-in-examples-b" class="selfRef">Topology used in examples below.</a>
+          </figcaption></figure>
 </div>
-<p id="section-3-4">Based on the above topology, this example shows the life of a SCION packet sent from source at Endpoint A to destination at Endpoint B. It also shows simplified snapshots of the packet header after each on-path router.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<div id="path-lookup-and-segment-combination-at-source">
-<section id="section-3.1">
-        <h3 id="name-path-lookup-and-segment-com">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-path-lookup-and-segment-com" class="section-name selfRef">Path Lookup and Segment Combination at Source</a>
-        </h3>
-<p id="section-3.1-1">In this example, Endpoint A in AS ff00:0:2 wants to send a data packet to Endpoint B in AS ff00:0:3 where both are part of ISD 1. To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as described in detail in <a href="#header" class="auto internal xref">Section 2</a> - (x,y) represents one Hop Field.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2"><strong>Note:</strong> For more details on the lookup of path segments, see 'Path Lookup' in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS ff00:0:2 control service.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">To obtain an end-to-end forwarding path from the source AS to the destination AS, Endpoint A combines the two path segments into the resulting SCION forwarding path, which contains the two Info Fields <em>IF1</em> and <em>IF2</em> and the Hop Fields (0,i2a), (i1a,0), (0,i1b), and (i3a,0).<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5"><strong>Note:</strong> As this brief sample path does not contain a core segment, the end-to-end path only consists of two path segments.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
-<p id="section-3.1-6">Endpoint A now adds this end-to-end forwarding path to the header of the packet that it wants to send to Endpoint B, and starts transferring the packet.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="steps-at-intermediate-routers">
-<section id="section-3.2">
-        <h3 id="name-steps-at-intermediate-route">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-steps-at-intermediate-route" class="section-name selfRef">Steps at Intermediate Routers</a>
-        </h3>
-<p id="section-3.2-1">This section contains simplified snapshots of the packet header at each hop. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">The current Info Field (with metadata on the current path segment) in the SCION header is depicted as <em>italic</em> in the tables. The current Hop Field, representing the current AS, is shown <strong>bold</strong>. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel the SCION packet.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-3.1">
-            <p id="section-3.2-3.1.1"><em>Step 1 -</em> <strong>A-&gt;R1</strong>: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is <em>IF1</em>. Upon receiving the packet, router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.<a href="#section-3.2-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.1-2.1">
+            <p id="section-3.1-2.1.1">R1, R2, R3, R4 are SCION routers, deployed at the edge of their AS. Their interface IDs are represented close to their interfaces (e.g., i2a for R1).<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-2.2">
+            <p id="section-3.1-2.2.1">AS ff00:0:1 is a core AS, ASes ff00:0:2 and ff00:0:3 are non-core. All ASes are part of ISD 1.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-2.3">
+            <p id="section-3.1-2.3.1">Endpoint A is the source endpoint and it is in AS ff00:0:2<a href="#section-3.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-2.4">
+            <p id="section-3.1-2.4.1">Endpoint B the destination endpoint and it is in AS ff00:0:3<a href="#section-3.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-2.5">
+            <p id="section-3.1-2.5.1">both endpoints run a native SCION network stack.<a href="#section-3.1-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-1-a-r1"></span><table class="center" id="table-6">
+<p id="section-3.1-3">Since this example consists of only one ISD and core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. A scenario with more core ASes and/or ISDs would use an additional core path segment or a peering link.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="source-endpoint-path-lookup-and-segment-combination">
+<section id="section-3.2">
+        <h3 id="name-source-endpoint-path-lookup">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-source-endpoint-path-lookup" class="section-name selfRef">Source Endpoint: Path Lookup and Segment Combination</a>
+        </h3>
+<p id="section-3.2-1">To create an end-to-end SCION forwarding path, Endpoint A first queries its own AS ff00:0:2 control service for up segments to the core AS in its ISD. The AS ff00:0:2 control service returns up segments from AS ff00:0:2 to the ISD core AS ff00:0:1. Endpoint A also queries its AS ff00:0:2 control service for a down segment from its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is located. The AS ff00:0:2 control service will return down segments from the ISD core down to AS ff00:0:3. The path segments consist of Hop Fields that carry the ingress and egress interfaces of each AS (e.g. i2a, i1a, ...), as described in detail in <a href="#header" class="auto internal xref">Section 2</a> - (x,y) represents one Hop Field.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">For more details on the lookup of path segments, see 'Path Lookup' in <span>[<a href="#I-D.dekater-scion-controlplane" class="cite xref">I-D.dekater-scion-controlplane</a>]</span>.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">Based on its own selection criteria, Endpoint A selects the up segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the path segments returned by its own AS ff00:0:2 control service.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">To obtain an end-to-end forwarding path from the source AS to the destination AS, Endpoint A combines the two path segments into the resulting SCION forwarding path, which contains the two Info Fields <em>IF1</em> and <em>IF2</em> and the Hop Fields (0,i2a), (i1a,0), (0,i1b), and (i3a,0).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.2-5"><strong>Note:</strong> As this brief sample path does not contain a core segment, the end-to-end path only consists of two path segments.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-6">Endpoint A now adds this end-to-end forwarding path to the header of the packet that it wants to send to Endpoint B, and starts transferring the packet.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="intermediate-routers-forwarding-and-header-snapshots">
+<section id="section-3.3">
+        <h3 id="name-intermediate-routers-forwar">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-intermediate-routers-forwar" class="section-name selfRef">Intermediate Routers: Forwarding and Header Snapshots</a>
+        </h3>
+<p id="section-3.3-1">This section shows simplified snapshots of the packet header at each hop of the example topology. These snapshots are depicted in tables and they show the most relevant information of the header, including the SCION path and underlay IP encapsulation for local communication.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">The current Info Field (with metadata on the current path segment) in the SCION header is depicted as <em>italic</em> in the tables. The current Hop Field, representing the current AS, is shown <strong>bold</strong>. The snapshot tables also include references to IP/UDP addresses. In this context, words "ingress" and "egress" refer to the direction of travel the SCION packet.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.3-3.1">
+            <p id="section-3.3-3.1.1"><em>Step 1 -</em> <strong>A-&gt;R1</strong>: <br> The SCION Endpoint A in AS ff00:0:2 creates a new SCION packet destined for destination Endpoint B in AS ff00:0:3. Endpoint A sends the packet (for the chosen forwarding path) to the next SCION router as provided by its control service, which is in this case router R1. Endpoint A encapsulates the SCION packet into an underlay UDP/IPv4 header for the local delivery to router R1, utilizing AS ff00:0:2's internal routing protocol. The current Info Field is <em>IF1</em>. Upon receiving the packet, router R1 will forward the packet on the egress interface that Endpoint A has included into the first Hop Field of the SCION header.<a href="#section-3.3-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-example-snapshot-header-ste"></span><table class="center" id="table-6">
           <caption>
 <a href="#table-6" class="selfRef">Table 6</a>:
-<a href="#name-snapshot-header-step-1-a-r1" class="selfRef">Snapshot header - step 1 - A-&gt;R1</a>
+<a href="#name-example-snapshot-header-ste" class="selfRef">Example: snapshot header - step 1 - A-&gt;R1</a>
           </caption>
 <thead>
             <tr>
@@ -3780,16 +3801,16 @@ Should any transport or other upper-layer protocols compute a checksum of the SC
           </tbody>
         </table>
 <ul class="normal">
-<li class="normal" id="section-3.2-5.1">
-            <p id="section-3.2-5.1.1"><em>Step 2 -</em> <strong>R1-&gt;R2</strong>: <br> Router R1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field <em>IF1</em>. The current Hop Field is the first Hop Field (0,i2a), which instructs router R1 to forward the packet on its interface i2a. After reading the current Hop Field, router R1 moves the pointer forward by one position to the second Hop Field (i1a,0).<a href="#section-3.2-5.1.1" class="pilcrow">¶</a></p>
-<p id="section-3.2-5.1.2">
-The link shown here is an example of not using a UDP/IP underlay. Although most implementations use such an encapsulation, SCION only requires link-layer connectivity. What is used for one given inter-AS link is a function of the available implementations at each end, the available infrastructure, and the joint preference of the two ASes administrators.<a href="#section-3.2-5.1.2" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3-5.1">
+            <p id="section-3.3-5.1.1"><em>Step 2 -</em> <strong>R1-&gt;R2</strong>: <br> Router R1 inspects the SCION header and considers the relevant Info Field of the specified SCION path, which is the Info Field indicated by the current Info Field pointer. In this case, it is the first Info Field <em>IF1</em>. The current Hop Field is the first Hop Field (0,i2a), which instructs router R1 to forward the packet on its interface i2a. After reading the current Hop Field, router R1 moves the pointer forward by one position to the second Hop Field (i1a,0).<a href="#section-3.3-5.1.1" class="pilcrow">¶</a></p>
+<p id="section-3.3-5.1.2">
+The link shown here is an example of not using a UDP/IP underlay. Although most implementations use such an encapsulation, SCION only requires link-layer connectivity. What is used for one given inter-AS link is a function of the available implementations at each end, the available infrastructure, and the joint preference of the two ASes administrators.<a href="#section-3.3-5.1.2" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-2-r1-r"></span><table class="center" id="table-7">
+<span id="name-example-snapshot-header-step"></span><table class="center" id="table-7">
           <caption>
 <a href="#table-7" class="selfRef">Table 7</a>:
-<a href="#name-snapshot-header-step-2-r1-r" class="selfRef">Snapshot header - step 2 - R1 -&gt; R2</a>
+<a href="#name-example-snapshot-header-step" class="selfRef">Example: snapshot header - step 2 - R1 -&gt; R2</a>
           </caption>
 <thead>
             <tr>
@@ -3817,14 +3838,14 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
           </tbody>
         </table>
 <ul class="normal">
-<li class="normal" id="section-3.2-7.1">
-            <p id="section-3.2-7.1.1"><em>Step 3 -</em> <strong>R2-&gt;R3</strong>: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field, otherwise the packet is dropped by router R2. The router notices that it has consumed the last Hop Field of the current path segment and then moves the pointer from the current Info Field to the next Info Field <em>IF2</em>. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. The router maps the i1b interface ID to egress router R3, and encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.<a href="#section-3.2-7.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3-7.1">
+            <p id="section-3.3-7.1.1"><em>Step 3 -</em> <strong>R2-&gt;R3</strong>: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field, otherwise the packet is dropped by router R2. The router notices that it has consumed the last Hop Field of the current path segment and then moves the pointer from the current Info Field to the next Info Field <em>IF2</em>. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. The router maps the i1b interface ID to egress router R3, and encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.<a href="#section-3.3-7.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-3-r2-r"></span><table class="center" id="table-8">
+<span id="name-example-snapshot-header-step-"></span><table class="center" id="table-8">
           <caption>
 <a href="#table-8" class="selfRef">Table 8</a>:
-<a href="#name-snapshot-header-step-3-r2-r" class="selfRef">Snapshot header - step 3 -  R2 -&gt; R3</a>
+<a href="#name-example-snapshot-header-step-" class="selfRef">Example: snapshot header - step 3 -  R2 -&gt; R3</a>
           </caption>
 <thead>
             <tr>
@@ -3862,14 +3883,14 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
           </tbody>
         </table>
 <ul class="normal">
-<li class="normal" id="section-3.2-9.1">
-            <p id="section-3.2-9.1.1"><em>Step 4 -</em> <strong>R3-&gt;R4</strong>: <br> router R3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION router R4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach router R4.<a href="#section-3.2-9.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3-9.1">
+            <p id="section-3.3-9.1.1"><em>Step 4 -</em> <strong>R3-&gt;R4</strong>: <br> router R3 inspects the current Hop Field in the SCION header, uses interface i1b to forward the packet to its neighbor SCION router R4 of AS ff00:0:3, and moves the current hop-field pointer forward. It adds an IP header to reach router R4.<a href="#section-3.3-9.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-4-r3-r"></span><table class="center" id="table-9">
+<span id="name-example-snapshot-header-step-4"></span><table class="center" id="table-9">
           <caption>
 <a href="#table-9" class="selfRef">Table 9</a>:
-<a href="#name-snapshot-header-step-4-r3-r" class="selfRef">Snapshot header - step 4 - R3 -&gt; R4</a>
+<a href="#name-example-snapshot-header-step-4" class="selfRef">Example: snapshot header - step 4 - R3 -&gt; R4</a>
           </caption>
 <thead>
             <tr>
@@ -3909,14 +3930,14 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
           </tbody>
         </table>
 <ul class="normal">
-<li class="normal" id="section-3.2-11.1">
-            <p id="section-3.2-11.1.1"><em>Step 5 -</em> <strong>R4-&gt;B</strong>: <br> SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. Router R4 will then also realize, based on the fields <code>CurrHF</code> and <code>SegLen</code> in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination and with itself as source. The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.<a href="#section-3.2-11.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3-11.1">
+            <p id="section-3.3-11.1.1"><em>Step 5 -</em> <strong>R4-&gt;B</strong>: <br> SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. Router R4 will then also realize, based on the fields <code>CurrHF</code> and <code>SegLen</code> in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination and with itself as source. The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.<a href="#section-3.3-11.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-snapshot-header-step-5-r4-b"></span><table class="center" id="table-10">
+<span id="name-example-snapshot-header-step-5"></span><table class="center" id="table-10">
           <caption>
 <a href="#table-10" class="selfRef">Table 10</a>:
-<a href="#name-snapshot-header-step-5-r4-b" class="selfRef">Snapshot header - step 5 - R4 -&gt; B</a>
+<a href="#name-example-snapshot-header-step-5" class="selfRef">Example: snapshot header - step 5 - R4 -&gt; B</a>
           </caption>
 <thead>
             <tr>
@@ -3955,7 +3976,14 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
             </tr>
           </tbody>
         </table>
-<p id="section-3.2-13">When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also <a href="#reverse" class="auto internal xref">Section 2.3.4</a>).<a href="#section-3.2-13" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="destination-endpoint">
+<section id="section-3.4">
+        <h3 id="name-destination-endpoint">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-destination-endpoint" class="section-name selfRef">Destination Endpoint</a>
+        </h3>
+<p id="section-3.4-1">When destination Endpoint B wants to respond to source Endpoint A, it can just swap the source and destination addresses in the SCION header, reverse the SCION path, and set the pointers to the Info Fields and Hop Fields at the beginning of the reversed path (see also <a href="#reverse" class="auto internal xref">Section 2.3.4</a>).<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4614,7 +4642,7 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
 <p id="section-7.4-1">An adversary can attempt to disrupt the connectivity of a network path by flooding a link with excessive traffic. In this case, the endpoint can switch to another non-congested path for subsequent packets.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
 <p id="section-7.4-2">SCION provides protection against certain reflection-based DoS attacks. Here, the adversary sends requests to a server with the source address set to the address of the victim, and the server will send a reply that is typically larger than the request to the victim. This can be prevented in SCION as long as the attacker and the victim are located in different ASes as the reply packets are simply returned along reversed path to the actual sender regardless of the source address information. Thus, the reply packets will be forwarded to the attacker's AS where they will be discarded because the destination AS does not match.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
 <p id="section-7.4-3">However, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with a relatively low send rate. The attacker can exploit the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.<a href="#section-7.4-3" class="pilcrow">¶</a></p>
-<p id="section-7.4-4"><strong>Note</strong> SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering - e.g. by ISD, AS or path length.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
+<p id="section-7.4-4">SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering - e.g. by ISD, AS or path length.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4864,232 +4892,247 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
 <a href="#name-change-log" class="section-name selfRef">Change Log</a>
       </h2>
 <p id="appendix-C-1">Changes made to drafts since ISE submission. This section is to be removed before publication.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
-<div id="draft-dekater-scion-dataplane-10">
+<div id="draft-dekater-scion-dataplane-11">
 <section id="appendix-C.1">
         <h3 id="name-draft-dekater-scion-datapla">
-<a href="#name-draft-dekater-scion-datapla" class="section-name selfRef">draft-dekater-scion-dataplane-10</a>
+<a href="#name-draft-dekater-scion-datapla" class="section-name selfRef">draft-dekater-scion-dataplane-11</a>
         </h3>
 <ul class="normal">
 <li class="normal" id="appendix-C.1-1.1">
-            <p id="appendix-C.1-1.1.1">Add normative reference to POSIX time and clarify timestamp behavior at wraparound<a href="#appendix-C.1-1.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.1.1">Abstract, Introduction: reworded and shortened, with reference to longer -controlplane introduction<a href="#appendix-C.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.2">
-            <p id="appendix-C.1-1.2.1">Clarify distinction between SCION ASes and BGP ASes through the text<a href="#appendix-C.1-1.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.2.1">Life of a SCION Data Packet: restructure section and clarify role of example topology<a href="#appendix-C.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.1-1.3">
-            <p id="appendix-C.1-1.3.1">Figure 1: split into two smaller figures to fit in a single page<a href="#appendix-C.1-1.3.1" class="pilcrow">¶</a></p>
+        </ul>
+</section>
+</div>
+<div id="draft-dekater-scion-dataplane-10">
+<section id="appendix-C.2">
+        <h3 id="name-draft-dekater-scion-dataplan">
+<a href="#name-draft-dekater-scion-dataplan" class="section-name selfRef">draft-dekater-scion-dataplane-10</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-C.2-1.1">
+            <p id="appendix-C.2-1.1.1">Add normative reference to POSIX time and clarify timestamp behavior at wraparound<a href="#appendix-C.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.1-1.4">
-            <p id="appendix-C.1-1.4.1">Figure 9 (Path construction example): shorten and remove superfluous AS chain<a href="#appendix-C.1-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.2-1.2">
+            <p id="appendix-C.2-1.2.1">Clarify distinction between SCION ASes and BGP ASes through the text<a href="#appendix-C.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.1-1.5">
-            <p id="appendix-C.1-1.5.1">Configuration: clarify text on intra vs inter-domain interface id mappings<a href="#appendix-C.1-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.2-1.3">
+            <p id="appendix-C.2-1.3.1">Figure 1: split into two smaller figures to fit in a single page<a href="#appendix-C.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.1-1.6">
-            <p id="appendix-C.1-1.6.1">Remove unused informative reference to I-D.dekater-panrg-scion-overview, to RFC5280, and to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026<a href="#appendix-C.1-1.6.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.2-1.4">
+            <p id="appendix-C.2-1.4.1">Figure 9 (Path construction example): shorten and remove superfluous AS chain<a href="#appendix-C.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.1-1.7">
-            <p id="appendix-C.1-1.7.1">Overall review and wording polish<a href="#appendix-C.1-1.7.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.2-1.5">
+            <p id="appendix-C.2-1.5.1">Configuration: clarify text on intra vs inter-domain interface id mappings<a href="#appendix-C.2-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.2-1.6">
+            <p id="appendix-C.2-1.6.1">Remove unused informative reference to I-D.dekater-panrg-scion-overview, to RFC5280, and to Anapaya's ISD assignments, since they are taken over by SCION Association in 2026<a href="#appendix-C.2-1.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.2-1.7">
+            <p id="appendix-C.2-1.7.1">Overall review and wording polish<a href="#appendix-C.2-1.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-dataplane-09">
-<section id="appendix-C.2">
-        <h3 id="name-draft-dekater-scion-dataplan">
-<a href="#name-draft-dekater-scion-dataplan" class="section-name selfRef">draft-dekater-scion-dataplane-09</a>
+<section id="appendix-C.3">
+        <h3 id="name-draft-dekater-scion-dataplane">
+<a href="#name-draft-dekater-scion-dataplane" class="section-name selfRef">draft-dekater-scion-dataplane-09</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-C.2-1.1">
-            <p id="appendix-C.2-1.1.1">Intro: remove duplicated motivation and component description and add a reference to the same text in -controlplane<a href="#appendix-C.2-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C.3-1.1">
+            <p id="appendix-C.3-1.1.1">Intro: remove duplicated motivation and component description and add a reference to the same text in -controlplane<a href="#appendix-C.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.2-1.2">
-            <p id="appendix-C.2-1.2.1">Clarify coarse time synchronization requirement between routers and control services and add reference to -controlplane security considerations<a href="#appendix-C.2-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.3-1.2">
+            <p id="appendix-C.3-1.2.1">Clarify coarse time synchronization requirement between routers and control services and add reference to -controlplane security considerations<a href="#appendix-C.3-1.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-dataplane-08">
-<section id="appendix-C.3">
-        <h3 id="name-draft-dekater-scion-dataplane">
-<a href="#name-draft-dekater-scion-dataplane" class="section-name selfRef">draft-dekater-scion-dataplane-08</a>
+<section id="appendix-C.4">
+        <h3 id="name-draft-dekater-scion-dataplane-">
+<a href="#name-draft-dekater-scion-dataplane-" class="section-name selfRef">draft-dekater-scion-dataplane-08</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-C.3-1.1">
-            <p id="appendix-C.3-1.1.1">Small clarifications and nits (e.g, replace RFC2460 reference with more recent RFC8200)<a href="#appendix-C.3-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C.4-1.1">
+            <p id="appendix-C.4-1.1.1">Small clarifications and nits (e.g, replace RFC2460 reference with more recent RFC8200)<a href="#appendix-C.4-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.3-1.2">
-            <p id="appendix-C.3-1.2.1">Life of a SCION Data Packet: improve clarity in text and tables<a href="#appendix-C.3-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.4-1.2">
+            <p id="appendix-C.4-1.2.1">Life of a SCION Data Packet: improve clarity in text and tables<a href="#appendix-C.4-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.3-1.3">
-            <p id="appendix-C.3-1.3.1">Remove use of decimal notation in tables 3 and 4<a href="#appendix-C.3-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.4-1.3">
+            <p id="appendix-C.4-1.3.1">Remove use of decimal notation in tables 3 and 4<a href="#appendix-C.4-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-dataplane-07">
-<section id="appendix-C.4">
-        <h3 id="name-draft-dekater-scion-dataplane-">
-<a href="#name-draft-dekater-scion-dataplane-" class="section-name selfRef">draft-dekater-scion-dataplane-07</a>
+<section id="appendix-C.5">
+        <h3 id="name-draft-dekater-scion-dataplane-0">
+<a href="#name-draft-dekater-scion-dataplane-0" class="section-name selfRef">draft-dekater-scion-dataplane-07</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-C.4-1.1">
-            <p id="appendix-C.4-1.1.1">Clarify MTU of reversed paths and MAC algorithm<a href="#appendix-C.4-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C.5-1.1">
+            <p id="appendix-C.5-1.1.1">Clarify MTU of reversed paths and MAC algorithm<a href="#appendix-C.5-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.4-1.2">
-            <p id="appendix-C.4-1.2.1">Fix and reduce nested indentations in "Steps at Ingress Border Router"<a href="#appendix-C.4-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.5-1.2">
+            <p id="appendix-C.5-1.2.1">Fix and reduce nested indentations in "Steps at Ingress Border Router"<a href="#appendix-C.5-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.4-1.3">
-            <p id="appendix-C.4-1.3.1">Reference formal verification work and acknowledge reviewers<a href="#appendix-C.4-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.5-1.3">
+            <p id="appendix-C.5-1.3.1">Reference formal verification work and acknowledge reviewers<a href="#appendix-C.5-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.4-1.4">
-            <p id="appendix-C.4-1.4.1">Nits, improve figure 2<a href="#appendix-C.4-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.5-1.4">
+            <p id="appendix-C.5-1.4.1">Nits, improve figure 2<a href="#appendix-C.5-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-dataplane-06">
-<section id="appendix-C.5">
-        <h3 id="name-draft-dekater-scion-dataplane-0">
-<a href="#name-draft-dekater-scion-dataplane-0" class="section-name selfRef">draft-dekater-scion-dataplane-06</a>
+<section id="appendix-C.6">
+        <h3 id="name-draft-dekater-scion-dataplane-06">
+<a href="#name-draft-dekater-scion-dataplane-06" class="section-name selfRef">draft-dekater-scion-dataplane-06</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-C.5-1.1">
-            <p id="appendix-C.5-1.1.1">Figures: redraw and add aasvg version when possible<a href="#appendix-C.5-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C.6-1.1">
+            <p id="appendix-C.6-1.1.1">Figures: redraw and add aasvg version when possible<a href="#appendix-C.6-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.5-1.2">
-            <p id="appendix-C.5-1.2.1">Clarify 0 as "unspecified" Interface ID<a href="#appendix-C.5-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.6-1.2">
+            <p id="appendix-C.6-1.2.1">Clarify 0 as "unspecified" Interface ID<a href="#appendix-C.6-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.5-1.3">
-            <p id="appendix-C.5-1.3.1">Use ASes within the documentation range in examples<a href="#appendix-C.5-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.6-1.3">
+            <p id="appendix-C.6-1.3.1">Use ASes within the documentation range in examples<a href="#appendix-C.6-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-C.5-1.4">
-            <p id="appendix-C.5-1.4.1">Remove one-hop path type figure<a href="#appendix-C.5-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="appendix-C.6-1.4">
+            <p id="appendix-C.6-1.4.1">Remove one-hop path type figure<a href="#appendix-C.6-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-dataplane-05">
-<section id="appendix-C.6">
+<section id="appendix-C.7">
         <h3 id="name-draft-dekater-scion-dataplane-05">
 <a href="#name-draft-dekater-scion-dataplane-05" class="section-name selfRef">draft-dekater-scion-dataplane-05</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-C.6-1.1">
-            <p id="appendix-C.6-1.1.1">Abstract: mention goal and that document is not an Internet Standard<a href="#appendix-C.6-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C.7-1.1">
+            <p id="appendix-C.7-1.1.1">Abstract: mention goal and that document is not an Internet Standard<a href="#appendix-C.7-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-dataplane-04">
-<section id="appendix-C.7">
+<section id="appendix-C.8">
         <h3 id="name-draft-dekater-scion-dataplane-04">
 <a href="#name-draft-dekater-scion-dataplane-04" class="section-name selfRef">draft-dekater-scion-dataplane-04</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-C.7-1.1">
-            <p id="appendix-C.7-1.1.1">Moved SCMP specification to draft-dekater-scion-controlplane<a href="#appendix-C.7-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C.8-1.1">
+            <p id="appendix-C.8-1.1.1">Moved SCMP specification to draft-dekater-scion-controlplane<a href="#appendix-C.8-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="draft-dekater-scion-dataplane-03">
-<section id="appendix-C.8">
+<section id="appendix-C.9">
         <h3 id="name-draft-dekater-scion-dataplane-03">
 <a href="#name-draft-dekater-scion-dataplane-03" class="section-name selfRef">draft-dekater-scion-dataplane-03</a>
-        </h3>
-<p id="appendix-C.8-1">Major changes:<a href="#appendix-C.8-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C.8-2.1">
-            <p id="appendix-C.8-2.1.1">Introduction: clarified document goal and added Figure showing SCION Header within the stack<a href="#appendix-C.8-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-2.2">
-            <p id="appendix-C.8-2.2.1">Added section with SCMP specification<a href="#appendix-C.8-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-2.3">
-            <p id="appendix-C.8-2.3.1">Added section on Handling Link Failures and BFD<a href="#appendix-C.8-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-2.4">
-            <p id="appendix-C.8-2.4.1">Added sections on MTU and fragmentation<a href="#appendix-C.8-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-2.5">
-            <p id="appendix-C.8-2.5.1">Clarified router checks in Processing at Routers<a href="#appendix-C.8-2.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-2.6">
-            <p id="appendix-C.8-2.6.1">Security Considerations: add section on Payload Modifications<a href="#appendix-C.8-2.6.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="appendix-C.8-3">Minor changes:<a href="#appendix-C.8-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C.8-4.1">
-            <p id="appendix-C.8-4.1.1">Added short section mentioning SCION IP Gateway<a href="#appendix-C.8-4.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-4.2">
-            <p id="appendix-C.8-4.2.1">Clarified the router alert flags and relationship to the ConsIngress/Egress fields.<a href="#appendix-C.8-4.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-4.3">
-            <p id="appendix-C.8-4.3.1">Clarifications in the SCION Header Specification section (router alert flags, service addresses, one-hop paths, text clarifications, validity of peering links)<a href="#appendix-C.8-4.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-4.4">
-            <p id="appendix-C.8-4.4.1">Added mention of why proof of transit is not needed.<a href="#appendix-C.8-4.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-4.5">
-            <p id="appendix-C.8-4.5.1">Rename flow ID to Flow Label and document by reference to <span>[<a href="#RFC6437" class="cite xref">RFC6437</a>]</span>.<a href="#appendix-C.8-4.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-4.6">
-            <p id="appendix-C.8-4.6.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-C.8-4.6.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-4.7">
-            <p id="appendix-C.8-4.7.1">Added J. C. Hugly as author.<a href="#appendix-C.8-4.7.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-4.8">
-            <p id="appendix-C.8-4.8.1">Introduced this change log<a href="#appendix-C.8-4.8.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="appendix-C.8-4.9">
-            <p id="appendix-C.8-4.9.1">Clarify addressing and avoid confusing claim of communication between two endpoints with the same IP (section 1.3.1)<a href="#appendix-C.8-4.9.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</section>
-</div>
-<div id="draft-dekater-scion-dataplane-02">
-<section id="appendix-C.9">
-        <h3 id="name-draft-dekater-scion-dataplane-02">
-<a href="#name-draft-dekater-scion-dataplane-02" class="section-name selfRef">draft-dekater-scion-dataplane-02</a>
         </h3>
 <p id="appendix-C.9-1">Major changes:<a href="#appendix-C.9-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C.9-2.1">
-            <p id="appendix-C.9-2.1.1">Added overview of SCION components to Introduction section.<a href="#appendix-C.9-2.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-2.1.1">Introduction: clarified document goal and added Figure showing SCION Header within the stack<a href="#appendix-C.9-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.9-2.2">
-            <p id="appendix-C.9-2.2.1">Introduced AES-CMAC as default MAC algorithm and elaborated on MAC chaining and path splicing.<a href="#appendix-C.9-2.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-2.2.1">Added section with SCMP specification<a href="#appendix-C.9-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.9-2.3">
-            <p id="appendix-C.9-2.3.1">Added section to describe Effects of Clock Inaccuracy / time synchronization requirements<a href="#appendix-C.9-2.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-2.3.1">Added section on Handling Link Failures and BFD<a href="#appendix-C.9-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.9-2.4">
-            <p id="appendix-C.9-2.4.1">Added section to describe required router Configuration<a href="#appendix-C.9-2.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-2.4.1">Added sections on MTU and fragmentation<a href="#appendix-C.9-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.9-2.5">
-            <p id="appendix-C.9-2.5.1">Added service field table.<a href="#appendix-C.9-2.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-2.5.1">Clarified router checks in Processing at Routers<a href="#appendix-C.9-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.9-2.6">
+            <p id="appendix-C.9-2.6.1">Security Considerations: add section on Payload Modifications<a href="#appendix-C.9-2.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="appendix-C.9-3">Minor changes:<a href="#appendix-C.9-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C.9-4.1">
-            <p id="appendix-C.9-4.1.1">Removed forward references.<a href="#appendix-C.9-4.1.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-4.1.1">Added short section mentioning SCION IP Gateway<a href="#appendix-C.9-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.9-4.2">
-            <p id="appendix-C.9-4.2.1">General edits to make terminology consistent, remove duplication and rationalize text.<a href="#appendix-C.9-4.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-4.2.1">Clarified the router alert flags and relationship to the ConsIngress/Egress fields.<a href="#appendix-C.9-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.9-4.3">
-            <p id="appendix-C.9-4.3.1">Added and capitalized RFC2119 compliant terminology.<a href="#appendix-C.9-4.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-4.3.1">Clarifications in the SCION Header Specification section (router alert flags, service addresses, one-hop paths, text clarifications, validity of peering links)<a href="#appendix-C.9-4.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.9-4.4">
-            <p id="appendix-C.9-4.4.1">Clarified implications of AS forwarding key compromise and path splicing in security considerations<a href="#appendix-C.9-4.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-4.4.1">Added mention of why proof of transit is not needed.<a href="#appendix-C.9-4.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.9-4.5">
-            <p id="appendix-C.9-4.5.1">Clarified the computation of ExtLen.<a href="#appendix-C.9-4.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.9-4.5.1">Rename flow ID to Flow Label and document by reference to <span>[<a href="#RFC6437" class="cite xref">RFC6437</a>]</span>.<a href="#appendix-C.9-4.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.9-4.6">
+            <p id="appendix-C.9-4.6.1">Added reference to SCIONLab as a testbed for implementors<a href="#appendix-C.9-4.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.9-4.7">
+            <p id="appendix-C.9-4.7.1">Added J. C. Hugly as author.<a href="#appendix-C.9-4.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.9-4.8">
+            <p id="appendix-C.9-4.8.1">Introduced this change log<a href="#appendix-C.9-4.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.9-4.9">
+            <p id="appendix-C.9-4.9.1">Clarify addressing and avoid confusing claim of communication between two endpoints with the same IP (section 1.3.1)<a href="#appendix-C.9-4.9.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="draft-dekater-scion-dataplane-02">
+<section id="appendix-C.10">
+        <h3 id="name-draft-dekater-scion-dataplane-02">
+<a href="#name-draft-dekater-scion-dataplane-02" class="section-name selfRef">draft-dekater-scion-dataplane-02</a>
+        </h3>
+<p id="appendix-C.10-1">Major changes:<a href="#appendix-C.10-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C.10-2.1">
+            <p id="appendix-C.10-2.1.1">Added overview of SCION components to Introduction section.<a href="#appendix-C.10-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.10-2.2">
+            <p id="appendix-C.10-2.2.1">Introduced AES-CMAC as default MAC algorithm and elaborated on MAC chaining and path splicing.<a href="#appendix-C.10-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.10-2.3">
+            <p id="appendix-C.10-2.3.1">Added section to describe Effects of Clock Inaccuracy / time synchronization requirements<a href="#appendix-C.10-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.10-2.4">
+            <p id="appendix-C.10-2.4.1">Added section to describe required router Configuration<a href="#appendix-C.10-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.10-2.5">
+            <p id="appendix-C.10-2.5.1">Added service field table.<a href="#appendix-C.10-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="appendix-C.10-3">Minor changes:<a href="#appendix-C.10-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C.10-4.1">
+            <p id="appendix-C.10-4.1.1">Removed forward references.<a href="#appendix-C.10-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.10-4.2">
+            <p id="appendix-C.10-4.2.1">General edits to make terminology consistent, remove duplication and rationalize text.<a href="#appendix-C.10-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.10-4.3">
+            <p id="appendix-C.10-4.3.1">Added and capitalized RFC2119 compliant terminology.<a href="#appendix-C.10-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.10-4.4">
+            <p id="appendix-C.10-4.4.1">Clarified implications of AS forwarding key compromise and path splicing in security considerations<a href="#appendix-C.10-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.10-4.5">
+            <p id="appendix-C.10-4.5.1">Clarified the computation of ExtLen.<a href="#appendix-C.10-4.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 5 August 2026                                 SCION Association
+Expires: 6 August 2026                                 SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         1 February 2026
+                                                         2 February 2026
 
 
                             SCION Data Plane
@@ -18,25 +18,21 @@ Expires: 5 August 2026                                 SCION Association
 
 Abstract
 
-   This document describes the data plane of the path-aware, inter-
-   domain network architecture SCION (Scalability, Control, and
-   Isolation On Next-generation networks).  A fundamental characteristic
-   of SCION is that it gives path control to SCION-capable endpoints.
+   This document describes the Data Plane of SCION (Scalability,
+   Control, and Isolation On Next-generation networks), a path-aware,
+   inter-domain network architecture.
 
-   The SCION Control Plane is responsible for discovering these paths
-   and making them available as path segments to the endpoints.  The
-   role of the SCION Data Plane is to combine these path segments into
-   end-to-end paths, and forward data between endpoints according to the
-   specified path.  It fundamentally differs from an IP-based data plane
-   in that it is _path-aware_ and interdomain forwarding directives are
-   embedded in the packet header.
+   Unlike IP-based forwarding, SCION embeds inter-domain forwarding
+   directives in the packet header, enabling endpoints to construct and
+   select end-to-end paths from segments discovered by the Control
+   Plane.  The role of the Data Plane is to combine such segments into
+   end-to-end paths, and to forward data according to the specified
+   path.
 
-   This document provides a detailed specification of the SCION data
-   packet format as well as the structure of the SCION header, including
-   extension headers.  It also describes the life of a SCION packet
-   while traversing a SCION network, followed by a specification of the
-   SCION path authorization mechanisms and the packet processing at
-   routers.
+   This document describes the SCION packet format, header structure,
+   and extension headers.  It also describes the cryptographic
+   mechanisms used for path authorization, processing at routers
+   including a life of a packet example.
 
    This document contains new approaches to secure path aware
    networking.  It is not an Internet Standard, has not received any
@@ -72,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 August 2026.
+   This Internet-Draft will expire on 6 August 2026.
 
 Copyright Notice
 
@@ -108,8 +104,10 @@ Table of Contents
        2.4.1.  Options Field
      2.5.  Pseudo Header for Upper-Layer Checksum
    3.  Life of a SCION Data Packet
-     3.1.  Path Lookup and Segment Combination at Source
-     3.2.  Steps at Intermediate Routers
+     3.1.  Example Topology
+     3.2.  Source Endpoint: Path Lookup and Segment Combination
+     3.3.  Intermediate Routers: Forwarding and Header Snapshots
+     3.4.  Destination Endpoint
    4.  Path Authorization
      4.1.  Authorizing Segments through Chained MACs
        4.1.1.  Hop Field MAC Overview
@@ -143,6 +141,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-11
      draft-dekater-scion-dataplane-10
      draft-dekater-scion-dataplane-09
      draft-dekater-scion-dataplane-08
@@ -158,10 +157,10 @@ Table of Contents
 1.  Introduction
 
    SCION is a path-aware internetworking routing architecture as
-   described in [RFC9217].  It allows endpoints and applications to
-   select paths across the network to use for traffic, based on trusted
-   path properties.  SCION is an inter-domain network architecture and
-   is therefore not concerned with intra-domain forwarding.
+   described in [RFC9217].  A more detailed introduction, motivation,
+   and problem statement are provided in
+   [I-D.dekater-scion-controlplane].  Readers are encouraged to read the
+   introduction in that document first.
 
    SCION relies on three main components:
 
@@ -175,19 +174,6 @@ Table of Contents
    _Data Plane_ - carrying out secure packet forwarding between SCION-
    enabled ASes over paths selected by endpoints.  It is described in
    this document.
-
-   A more detailed introduction, motivation, and problem statement are
-   provided in [I-D.dekater-scion-controlplane].  Readers are encouraged
-   to read the introduction in that document first.
-
-   The SCION architecture was initially developed outside of the IETF by
-   ETH Zurich with significant contributions from Anapaya Systems.  It
-   is deployed in the Swiss finance sector to provide resilient
-   connectivity between financial institutions.  The aim of this
-   document is to document the existing protocol specification as
-   deployed, to encourage interoperability among implementations, and to
-   introduce new concepts that can potentially be further improved to
-   address particular problems with the current Internet architecture.
 
 1.1.  Terminology
 
@@ -328,22 +314,12 @@ Table of Contents
 
    This concept allows SCION routers to forward packets to a neighbor AS
    without inspecting the destination address and also without
-   consulting an inter-domain forwarding table.  A SCION border router
-   reuses existing intra-domain infrastructure (e.g. IP) to communicate
-   to other SCION routers or SCION endpoints within its AS.  The last
-   SCION router at the destination AS uses the destination address to
-   forward the packet to the appropriate local endpoint.
-
-   This SCION design choice has the following advantages:
-
-   *  It provides control and transparency over forwarding paths to
-      endpoints.
-
-   *  It simplifies the packet processing at routers.  Instead of having
-      to perform longest prefix matching on IP addresses which requires
-      dedicated hardware and substantial amounts of energy, a router can
-      simply access the next hop from the packet header after having
-      verified the authenticity of the Hop Field's MAC.
+   consulting an inter-domain forwarding table, removing the need for
+   specialized hardware.  A SCION border router reuses existing intra-
+   domain infrastructure (e.g. IP) to communicate to other SCION routers
+   or SCION endpoints within its AS.  The last SCION router at the
+   destination AS uses the destination address to forward the packet to
+   the appropriate local endpoint.
 
 1.3.1.  Inter- and Intra-Domain Forwarding
 
@@ -480,9 +456,8 @@ Table of Contents
    In addition, routers require coarse time synchronization with control
    plane instances (see Section 4.2.2.3).
 
-   *Note:* The current SCION implementation runs over the UDP/IP
-   protocol.  However, the use of other lower layers protocols is
-   possible.
+   The current SCION implementation runs over the UDP/IP protocol,
+   although the use of other lower layers protocols is possible.
 
 1.4.  Path Construction (Segment Combinations)
 
@@ -590,9 +565,9 @@ Table of Contents
 
    *  *Peering shortcut* (Cases 3a and 3b): A peering link exists
       between the up and down segment, and extraneous path segments to
-      the core are cut off.  Note that the up and down segments do not
-      need to originate from the same core AS and the peering link could
-      also be traversing to a different ISD.
+      the core are cut off.  The up and down segments do not need to
+      originate from the same core AS and the peering link could also be
+      traversing to a different ISD.
 
    *  *AS shortcut* (Cases 4a and 4b): The up and down segments
       intersect at a non-core AS below the ISD core, thus creating a
@@ -883,8 +858,8 @@ Table of Contents
 
                       Table 4: Known Service Numbers
 
-   *Note:* For more information on addressing, see the
-   ([I-D.dekater-scion-controlplane]).
+   For more information on addressing, see
+   [I-D.dekater-scion-controlplane].
 
 2.3.  Path Header
 
@@ -1260,12 +1235,11 @@ Table of Contents
    If both headers are present, the Hop-by-Hop Options header MUST come
    before the End-to-End Options header.
 
-   *Note:* The SCION extension headers are defined and used based on and
-   similar to the IPv6 extensions as specified in Section 4 of
-   [RFC8200].  The SCION Hop-by-Hop Options header and End-to-End
-   Options header resemble the IPv6 Hop-by-Hop Options Header (section
-   4.3 in the RFC) and Destination Options Header (section 4.6)
-   respectively.
+   The SCION extension headers are defined and used based on and similar
+   to the IPv6 extensions as specified in Section 4 of [RFC8200].  The
+   SCION Hop-by-Hop Options header and End-to-End Options header
+   resemble the IPv6 Hop-by-Hop Options Header (section 4.3 in the RFC)
+   and Destination Options Header (section 4.6) respectively.
 
    The SCION Hop-by-Hop Options and End-to-End Options headers are
    aligned to 4 bytes and have the following format:
@@ -1459,16 +1433,9 @@ Table of Contents
 
    This section describes the life of a SCION packet: how it is created
    at its source endpoint, passes through a number of SCION routers, and
-   finally reaches its destination endpoint.  It is assumed that both
-   source and destination are native SCION endpoints (i.e. they both run
-   a native SCION network stack).
+   finally reaches its destination endpoint.
 
-   This example illustrates an intra-ISD case - i.e. all communication
-   happening within a single ISD.  As the sample ISD only consists of
-   one core AS, the end-to-end path only includes an up-path and down-
-   path segment.  The forwarding logic is uniform across intra- and
-   inter-ISD scenarios.  An inter-ISD scenario would use an additional
-   core path segment or a peering link.
+3.1.  Example Topology
 
                      +-------------------------+
                      |                         |
@@ -1497,32 +1464,43 @@ Table of Contents
    |                         |         |                         |
    +-------------------------+         +-------------------------+
 
-      Figure 18: Example topology.  AS ff00:0:1 is the core AS of ISD
-       1, and AS ff00:0:2 and AS ff00:0:3 are non-core ASes of ISD 1.
+                Figure 18: Topology used in examples below.
 
-   Based on the above topology, this example shows the life of a SCION
-   packet sent from source at Endpoint A to destination at Endpoint B.
-   It also shows simplified snapshots of the packet header after each
-   on-path router.
+   *  R1, R2, R3, R4 are SCION routers, deployed at the edge of their
+      AS.  Their interface IDs are represented close to their interfaces
+      (e.g., i2a for R1).
 
-3.1.  Path Lookup and Segment Combination at Source
+   *  AS ff00:0:1 is a core AS, ASes ff00:0:2 and ff00:0:3 are non-core.
+      All ASes are part of ISD 1.
 
-   In this example, Endpoint A in AS ff00:0:2 wants to send a data
-   packet to Endpoint B in AS ff00:0:3 where both are part of ISD 1.  To
-   create an end-to-end SCION forwarding path, Endpoint A first queries
-   its own AS ff00:0:2 control service for up segments to the core AS in
-   its ISD.  The AS ff00:0:2 control service returns up segments from AS
-   ff00:0:2 to the ISD core AS ff00:0:1.  Endpoint A also queries its AS
-   ff00:0:2 control service for a down segment from its ISD core AS
-   ff00:0:1 to AS ff00:0:3, in which Endpoint B is located.  The AS
-   ff00:0:2 control service will return down segments from the ISD core
-   down to AS ff00:0:3.  The path segments consist of Hop Fields that
-   carry the ingress and egress interfaces of each AS (e.g. i2a, i1a,
-   ...), as described in detail in Section 2 - (x,y) represents one Hop
-   Field.
+   *  Endpoint A is the source endpoint and it is in AS ff00:0:2
 
-   *Note:* For more details on the lookup of path segments, see 'Path
-   Lookup' in [I-D.dekater-scion-controlplane].
+   *  Endpoint B the destination endpoint and it is in AS ff00:0:3
+
+   *  both endpoints run a native SCION network stack.
+
+   Since this example consists of only one ISD and core AS, the end-to-
+   end path only includes an up-path and down-path segment.  The
+   forwarding logic is uniform across intra- and inter-ISD scenarios.  A
+   scenario with more core ASes and/or ISDs would use an additional core
+   path segment or a peering link.
+
+3.2.  Source Endpoint: Path Lookup and Segment Combination
+
+   To create an end-to-end SCION forwarding path, Endpoint A first
+   queries its own AS ff00:0:2 control service for up segments to the
+   core AS in its ISD.  The AS ff00:0:2 control service returns up
+   segments from AS ff00:0:2 to the ISD core AS ff00:0:1.  Endpoint A
+   also queries its AS ff00:0:2 control service for a down segment from
+   its ISD core AS ff00:0:1 to AS ff00:0:3, in which Endpoint B is
+   located.  The AS ff00:0:2 control service will return down segments
+   from the ISD core down to AS ff00:0:3.  The path segments consist of
+   Hop Fields that carry the ingress and egress interfaces of each AS
+   (e.g. i2a, i1a, ...), as described in detail in Section 2 - (x,y)
+   represents one Hop Field.
+
+   For more details on the lookup of path segments, see 'Path Lookup' in
+   [I-D.dekater-scion-controlplane].
 
    Based on its own selection criteria, Endpoint A selects the up
    segment (0,i2a)(i1a,0) and the down segment (0,i1b)(i3a,0) from the
@@ -1541,12 +1519,12 @@ Table of Contents
    the packet that it wants to send to Endpoint B, and starts
    transferring the packet.
 
-3.2.  Steps at Intermediate Routers
+3.3.  Intermediate Routers: Forwarding and Header Snapshots
 
-   This section contains simplified snapshots of the packet header at
-   each hop.  These snapshots are depicted in tables and they show the
-   most relevant information of the header, including the SCION path and
-   underlay IP encapsulation for local communication.
+   This section shows simplified snapshots of the packet header at each
+   hop of the example topology.  These snapshots are depicted in tables
+   and they show the most relevant information of the header, including
+   the SCION path and underlay IP encapsulation for local communication.
 
    The current Info Field (with metadata on the current path segment) in
    the SCION header is depicted as _italic_ in the tables.  The current
@@ -1586,7 +1564,7 @@ Table of Contents
        |             | DST=R1                       |             |
        +-------------+------------------------------+-------------+
 
-                Table 6: Snapshot header - step 1 - A->R1
+            Table 6: Example: snapshot header - step 1 - A->R1
 
    *  _Step 2 -_ *R1->R2*:
       Router R1 inspects the SCION header and considers the relevant
@@ -1618,7 +1596,7 @@ Table of Contents
        |             | DST=R2                       |             |
        +-------------+------------------------------+-------------+
 
-               Table 7: Snapshot header - step 2 - R1 -> R2
+          Table 7: Example: snapshot header - step 2 - R1 -> R2
 
    *  _Step 3 -_ *R2->R3*:
       When receiving the packet, router R2 of Core AS ff00:0:1 checks
@@ -1652,7 +1630,7 @@ Table of Contents
        |             | DST=R3                       |             |
        +-------------+------------------------------+-------------+
 
-               Table 8: Snapshot header - step 3 - R2 -> R3
+          Table 8: Example: snapshot header - step 3 - R2 -> R3
 
    *  _Step 4 -_ *R3->R4*:
       router R3 inspects the current Hop Field in the SCION header, uses
@@ -1679,7 +1657,7 @@ Table of Contents
        |             | DST=R4                       |             |
        +-------------+------------------------------+-------------+
 
-               Table 9: Snapshot header - step 4 - R3 -> R4
+          Table 9: Example: snapshot header - step 4 - R3 -> R4
 
    *  _Step 5 -_ *R4->B*:
       SCION router R4 first checks whether the packet has been received
@@ -1713,7 +1691,9 @@ Table of Contents
        |             | DST=B                        |             |
        +-------------+------------------------------+-------------+
 
-               Table 10: Snapshot header - step 5 - R4 -> B
+          Table 10: Example: snapshot header - step 5 - R4 -> B
+
+3.4.  Destination Endpoint
 
    When destination Endpoint B wants to respond to source Endpoint A, it
    can just swap the source and destination addresses in the SCION
@@ -2628,9 +2608,9 @@ Table of Contents
    available paths, sending at precisely timed intervals to cause short,
    synchronized bursts of packets near the victim.
 
-   *Note* SCION does not protect against two other types of DoS attacks,
-   namely transport protocol attacks and application layer attacks.
-   Such attacks are out of SCION's scope although additional information
+   SCION does not protect against two other types of DoS attacks, namely
+   transport protocol attacks and application layer attacks.  Such
+   attacks are out of SCION's scope although additional information
    contained in the SCION header enables more targeted filtering - e.g.
    by ISD, AS or path length.
 
@@ -2818,6 +2798,14 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-11
+
+   *  Abstract, Introduction: reworded and shortened, with reference to
+      longer -controlplane introduction
+
+   *  Life of a SCION Data Packet: restructure section and clarify role
+      of example topology
 
 draft-dekater-scion-dataplane-10
 
