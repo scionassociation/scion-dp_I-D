@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 7 August 2026                                 SCION Association
+Expires: 8 August 2026                                 SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         3 February 2026
+                                                         4 February 2026
 
 
                             SCION Data Plane
@@ -68,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 August 2026.
+   This Internet-Draft will expire on 8 August 2026.
 
 Copyright Notice
 
@@ -2240,8 +2240,8 @@ Table of Contents
    Field and the expiration time of Hop Fields to check Hop Field
    validity, see Section 4.2.2.1.
 
-   A segment's originating control service and the routers that the
-   segment refers to all have different clocks.  Their differences
+   A segment's originating core AS control service and the routers that
+   the segment refers to all have different clocks.  Their differences
    affect the validation process:
 
    *  A fast clock at origination or a slow clock at validation will
@@ -2252,18 +2252,9 @@ Table of Contents
       yield a shortened expiration time for hops, and possibly an
       expiration time in the past.
 
-   This bias comes in addition to a structural delay: PCBs are
-   propagated at a configurable interval (typically, one minute).  As a
-   result of this and the way they are iteratively constructed, PCBs
-   with N hops may become available for path construction up to N
-   intervals (so typically N minutes) after origination which creates a
-   constraint on the expiration of hops.  Hops of the minimal expiration
-   time (337.5 seconds - see Section 2.3.2.4) would render useless any
-   path segment longer than 5 hops.  For this reason, it is unadvisable
-   to create hops with a short expiration time, and the norm is 6 hours.
-
-   In comparison to these time scales, clock offsets in the order of
-   minutes are immaterial.
+   The minimal expiration time for a Hop Field is 337.5 seconds (see
+   Section 2.3.2.4).  Clock offsets between a router and core ASes in
+   the order of minutes can be therefore tolerated.
 
    Care should be taken to ensure that control plane instances and
    routers maintain coarse time synchronization.  The specific methods
@@ -2271,6 +2262,8 @@ Table of Contents
    document.
 
    Security considerations related to this issue are discussed in
+   [I-D.dekater-scion-controlplane].  Considerations on clock
+   inaccuracies and beaconing are discussed in the homonymous section in
    [I-D.dekater-scion-controlplane].
 
 5.  Deployment Considerations
