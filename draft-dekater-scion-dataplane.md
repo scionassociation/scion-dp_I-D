@@ -1358,7 +1358,7 @@ Clock offsets between the originating control service and the validating router 
 * A fast clock at origination or a slow clock at validation will yield a lengthened expiration time for hops, and possibly an origination time in the future.
 * A slow clock at origination or a fast clock at validation will yield a shortened expiration time for hops, and possibly an expiration time in the past.
 
-Given the minimum Hop Field expiration of 337.5 seconds (see [](#hopfld)), offsets between a router and core ASes on the order of minutes are tolerable.
+Given the minimum Hop Field expiration of 337.5 seconds (see [](#hopfld)), offsets between a router and core ASes in the order of minutes are tolerable.
 
 Operators should ensure that control plane instances and routers maintain coarse time synchronization, though the specific methods used to achieve this are outside the scope of this document.
 
