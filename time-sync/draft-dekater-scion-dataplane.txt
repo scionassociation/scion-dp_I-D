@@ -2797,6 +2797,10 @@ draft-dekater-scion-dataplane-11
    *  Life of a SCION Data Packet: restructure section and clarify role
       of example topology
 
+   *  Effects of Clock Inaccuracy: reword, clarify tolerable offset,
+      remove duplicated part about beacon propagation and point to
+      -controlplane
+
 draft-dekater-scion-dataplane-10
 
    *  Add normative reference to POSIX time and clarify timestamp
