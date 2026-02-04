@@ -1895,9 +1895,9 @@ Table of Contents
       Field.  Function is used in the mathematical sense that for for
       any values of these inputs there is exactly one result.
 
-   *  The algorithm returns an unforgable 48-bit value.  Unforgable
-      specifically means "existentially unforgable under a chosen
-      message attack" ([CRYPTOBOOK]).  Informally, this means an
+   *  The MAC algorithm returns a non-forgeable 48-bit value.  Non-
+      forgeable specifically means "existentially non-forgeable under a
+      chosen message attack" ([CRYPTOBOOK]).  Informally, this means an
       attacker without access to the secret key has no computationally
       efficient means to create a valid MAC for some attacker chosen
       input values, even if it has access to an "oracle" providing a
