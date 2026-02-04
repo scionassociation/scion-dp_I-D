@@ -2252,7 +2252,7 @@ Table of Contents
       expiration time in the past.
 
    Given the minimum Hop Field expiration of 337.5 seconds (see
-   Section 2.3.2.4), offsets between a router and core ASes on the order
+   Section 2.3.2.4), offsets between a router and core ASes in the order
    of minutes are tolerable.
 
    Operators should ensure that control plane instances and routers
