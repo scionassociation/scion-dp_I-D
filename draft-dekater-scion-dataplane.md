@@ -1553,6 +1553,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Abstract, Introduction: reworded and shortened, with reference to longer -controlplane introduction
 - Life of a SCION Data Packet: restructure section and clarify role of example topology
+- Effects of Clock Inaccuracy: reword, clarify tolerable offset, remove duplicated part about beacon propagation and point to -controlplane
 
 ## draft-dekater-scion-dataplane-10
 {:numbered="false"}
