@@ -248,7 +248,7 @@ SCION relies on three main components:
 
 **Endpoint**: An endpoint is the start or the end of a SCION path, as defined in {{RFC9473}}.
 
-**Forwarding Key**: A symmetric key that is shared between the control service (control plane) and the routers (data plane) of an AS. It is used to authenticate Hop Fields in the end-to-end SCION path. The forwarding key is an AS-local secret and is not shared with other ASes.
+**Forwarding Key**: A symmetric key that is shared between the control service (control plane) and the routers (data plane) of an AS. It authenticates Hop Fields in the end-to-end SCION path. The forwarding key is an AS-local secret and is not shared with other ASes.
 
 **Forwarding Path**: A complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. Endpoints can create one with a combination of up to three path segments (an up segment, a core segment, and a down segment).
 
@@ -291,7 +291,7 @@ This concept allows SCION routers to forward packets to a neighbor AS without in
 
 As SCION is an inter-domain network architecture, it is not concerned with intra-domain forwarding. This corresponds to the general practice today where BGP and IP are used for inter-domain routing and forwarding respectively, but ASes use an intra-domain protocol of their choice - e.g. OSPF or IS-IS for routing, and IP, MPLS, and various Layer 2 protocols for forwarding. In fact, even if ASes use IP forwarding internally, they typically encapsulate the original IP packet they receive at the edge of their network into another IP packet with the destination address set to the egress border router, in order to avoid full inter-domain forwarding tables on internal routers.
 
-SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; re-using the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION.
+SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; reusing the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION.
 
 In practice, in most existing SCION deployments the SCION routers communicate amongst themselves and with endpoints by enclosing the SCION header inside an UDP/IPv6 or UDP/IPv4 packet. The choice of using an UDP/IP as an intra-domain protocol between routers was driven by the need to maximize compatibility with existing networks. Id does not exclude that a SCION packet may be enclosed directly on top of a Layer 2 protocol, since the choice of intra-domain protocol is AS specific.
 
@@ -668,11 +668,11 @@ It consists of a path meta header, up to 3 Info Fields and up to 64 Hop Fields.
 
 - `PathMetaHdr` indicates the currently valid Info Field and Hop Field while the packet is traversing the network along the path, as well as the number of Hop Fields per segment.
 - `InfoField` equals the number of path segments that the path contains - there is one Info Field per path segment. Each Info Field contains basic information about the corresponding segment, such as a timestamp indicating the creation time. There are also two flags: one specifies whether the segment is to be traversed in construction direction, the other whether the first or last Hop Field in the segment represents a peering Hop Field.
-- `HopField` represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. This information is authenticated with a Message Authentication Code (MAC) to prevent forgery.
+- `HopField` represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. A Message Authentication Code (MAC) authenticates this information to prevent forgery.
 
 The SCION header is created by extracting the required Info Fields and Hop Fields from the corresponding path segments, and this process is illustrated in {{figure-6}} below. Note that ASes at the intersection of multiple segments are represented by two Hop Fields. Be aware that these Hop Fields are not equal!
 
-In the Hop Field that represents the last Hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
+The Hop Field that represents the last Hop in the first segment (seen in the direction of travel) specifies only the ingress interface. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
 
 ~~~aasvg
     Up-Segment           Core-Segment        Down-Segment
@@ -1154,7 +1154,7 @@ The aggregated 16-bit path segment identifier and preceding MACs prevent splicin
 
 #### Hop Field MAC - Calculation {#hf-mac-calc}
 
-Routers generally calculate the Hop Field MAC at a current AS<sub>i</sub> as follows:
+The Hop Field MAC is generally calculated at a current AS<sub>i</sub> as follows:
 
 - Consider a path segment with "n" hops, containing ASes AS<sub>0</sub>, ... , AS<sub>n-1</sub>, with forwarding keys K0, ... , K(n-1) in this order.
 - AS<sub>0</sub> is the core AS that created the PCB representing the path segment and that added a random initial 16-bit segment identifier `SegID` to the `Segment Info` field of the PCB.
