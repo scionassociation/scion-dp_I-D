@@ -248,7 +248,7 @@ SCION relies on three main components:
 
 **Endpoint**: An endpoint is the start or the end of a SCION path, as defined in {{RFC9473}}.
 
-**Forwarding Key**: A symmetric key that is shared between the control service (control plane) and the routers (data plane) of an AS. It is used to authenticate Hop Fields in the end-to-end SCION path. The forwarding key is an AS-local secret and is not shared with other ASes.
+**Forwarding Key**: A symmetric key that is shared between the control service (control plane) and the routers (data plane) of an AS. It authenticates Hop Fields in the end-to-end SCION path. The forwarding key is an AS-local secret and is not shared with other ASes.
 
 **Forwarding Path**: A complete end-to-end path between two SCION endpoints which is used to transmit packets in the data plane. Endpoints can create one with a combination of up to three path segments (an up segment, a core segment, and a down segment).
 
@@ -291,7 +291,7 @@ This concept allows SCION routers to forward packets to a neighbor AS without in
 
 As SCION is an inter-domain network architecture, it is not concerned with intra-domain forwarding. This corresponds to the general practice today where BGP and IP are used for inter-domain routing and forwarding respectively, but ASes use an intra-domain protocol of their choice - e.g. OSPF or IS-IS for routing, and IP, MPLS, and various Layer 2 protocols for forwarding. In fact, even if ASes use IP forwarding internally, they typically encapsulate the original IP packet they receive at the edge of their network into another IP packet with the destination address set to the egress border router, in order to avoid full inter-domain forwarding tables on internal routers.
 
-SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; re-using the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION.
+SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; reusing the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION.
 
 In practice, in most existing SCION deployments the SCION routers communicate amongst themselves and with endpoints by enclosing the SCION header inside an UDP/IPv6 or UDP/IPv4 packet. The choice of using an UDP/IP as an intra-domain protocol between routers was driven by the need to maximize compatibility with existing networks. Id does not exclude that a SCION packet may be enclosed directly on top of a Layer 2 protocol, since the choice of intra-domain protocol is AS specific.
 
@@ -668,11 +668,11 @@ It consists of a path meta header, up to 3 Info Fields and up to 64 Hop Fields.
 
 - `PathMetaHdr` indicates the currently valid Info Field and Hop Field while the packet is traversing the network along the path, as well as the number of Hop Fields per segment.
 - `InfoField` equals the number of path segments that the path contains - there is one Info Field per path segment. Each Info Field contains basic information about the corresponding segment, such as a timestamp indicating the creation time. There are also two flags: one specifies whether the segment is to be traversed in construction direction, the other whether the first or last Hop Field in the segment represents a peering Hop Field.
-- `HopField` represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. This information is authenticated with a Message Authentication Code (MAC) to prevent forgery.
+- `HopField` represents a hop through an AS on the path, with the ingress and egress interface identifiers for this AS. A Message Authentication Code (MAC) authenticates this information to prevent forgery.
 
 The SCION header is created by extracting the required Info Fields and Hop Fields from the corresponding path segments, and this process is illustrated in {{figure-6}} below. Note that ASes at the intersection of multiple segments are represented by two Hop Fields. Be aware that these Hop Fields are not equal!
 
-In the Hop Field that represents the last Hop in the first segment (seen in the direction of travel), only the ingress interface will be specified. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
+The Hop Field that represents the last Hop in the first segment (seen in the direction of travel) specifies only the ingress interface. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
 
 ~~~aasvg
     Up-Segment           Core-Segment        Down-Segment
@@ -853,8 +853,8 @@ Note that the destination endpoint, upon receiving a first packet, is not aware 
 
 SCION provides two types of extension headers:
 
-- The Hop-by-Hop Options header is used to carry OPTIONAL information that MAY be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
-- The End-to-End Options header is used to carry OPTIONAL information that MAY be examined and processed by the sender and/or the receiving endpoints of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The Hop-by-Hop Options header carries OPTIONAL information that MAY be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The End-to-End Options carries OPTIONAL information that MAY be examined and processed by the sender and/or the receiving endpoints of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
 
 If both headers are present, the Hop-by-Hop Options header MUST come before the End-to-End Options header.
 
@@ -939,7 +939,7 @@ Alignment requirement: none.
 
 **Note:** The format of the Pad1 option is a special case - it does not have length and value fields.
 
-The Pad1 option is used to insert 1 byte of padding into the `Options` field of an extension header. If more than one byte of padding is required, the PadN option MUST be used.
+The Pad1 option inserts 1 byte of padding into the `Options` field of an extension header. If more than one byte of padding is required, the PadN option MUST be used.
 
 #### PadN Option {#padn}
 
@@ -958,7 +958,7 @@ Alignment requirement: none.
 ~~~
 {: #figure-14 title="TLV-encoded options - PadN option"}
 
-The PadN option is used to insert two or more bytes of padding into the `Options` field of an extension header. For N bytes of padding, the `OptDataLen` field contains the value N-2, and the `OptData` consists of N-2 zero-valued bytes.
+The PadN option inserts two or more bytes of padding into the `Options` field of an extension header. For N bytes of padding, the `OptDataLen` field contains the value N-2, and the `OptData` consists of N-2 zero-valued bytes.
 
 
 ## Pseudo Header for Upper-Layer Checksum {#pseudo}
@@ -1085,7 +1085,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | Link layer  | SRC=R1 <br> DST=R2                                            |                             |
 {: title="Example: snapshot header - step 2 - R1 -> R2"}
 
-- *Step 3 -* **R2->R3**: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field, otherwise the packet is dropped by router R2. The router notices that it has consumed the last Hop Field of the current path segment and then moves the pointer from the current Info Field to the next Info Field *IF2*. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. The router maps the i1b interface ID to egress router R3, and encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.
+- *Step 3 -* **R2->R3**: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field, otherwise R2 drops the packet. The router notices that it has consumed the last Hop Field of the current path segment and then moves the pointer from the current Info Field to the next Info Field *IF2*. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. The router maps the i1b interface ID to egress router R3, and encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.
 
 |  Field      | Value                                                        | Description                |
 |-------------+--------------------------------------------------------------+----------------------------|
@@ -1487,7 +1487,7 @@ Moreover, packet integrity protection is not enough if there are two colluding a
 
 ### Payload Integrity {#payload-integrity}
 
-An on-path attacker can modify the payload of a SCION packet. Existing higher layer protocols can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. However, there exists a proposal for an experimental extension (SPAO) to authenticate addresses, provide integrity protection for payloads, and replay protection. This is still very experimental and it not used in the production network.
+An on-path attacker can modify the payload of a SCION packet. Existing higher layer protocols can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. However, there exists a proposal for an experimental extension (SPAO) to authenticate addresses, provide integrity protection for payloads, and replay protection. This is still experimental and it not used in the production network.
 
 ## Off-Path Attacks
 
@@ -1567,7 +1567,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Reduce use of passive tense and clarify subject
 - Abstract, Introduction: reworded and shortened, with reference to longer -controlplane introduction
-- Tables 1-4: move them to a dedicated subsection to increase readability
+- Tables 1-4: move them to dedicated subsections to increase readability
 - Figures 2, 3: move text to after figures
 - Life of a SCION Data Packet: restructure section and clarify role of example topology
 - Effects of Clock Inaccuracy: reword, clarify tolerable offset, remove duplicated part about beacon propagation and point to -controlplane
