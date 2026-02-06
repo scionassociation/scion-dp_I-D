@@ -211,8 +211,8 @@ Table of Contents
    defined in [RFC9473].
 
    *Forwarding Key*: A symmetric key that is shared between the control
-   service (control plane) and the routers (data plane) of an AS.  It is
-   used to authenticate Hop Fields in the end-to-end SCION path.  The
+   service (control plane) and the routers (data plane) of an AS.  It
+   authenticates Hop Fields in the end-to-end SCION path.  The
    forwarding key is an AS-local secret and is not shared with other
    ASes.
 
@@ -339,10 +339,10 @@ Table of Contents
    routers.
 
    SCION emphasizes this separation as it is used exclusively for inter-
-   domain forwarding; re-using the intra-domain network fabric to
-   provide connectivity amongst all SCION infrastructure services,
-   border routers, and endpoints.  As a consequence, minimal change to
-   the infrastructure is required for ISPs when deploying SCION.
+   domain forwarding; reusing the intra-domain network fabric to provide
+   connectivity amongst all SCION infrastructure services, border
+   routers, and endpoints.  As a consequence, minimal change to the
+   infrastructure is required for ISPs when deploying SCION.
 
    In practice, in most existing SCION deployments the SCION routers
    communicate amongst themselves and with endpoints by enclosing the
@@ -944,9 +944,9 @@ Table of Contents
       Field in the segment represents a peering Hop Field.
 
    *  HopField represents a hop through an AS on the path, with the
-      ingress and egress interface identifiers for this AS.  This
-      information is authenticated with a Message Authentication Code
-      (MAC) to prevent forgery.
+      ingress and egress interface identifiers for this AS.  A Message
+      Authentication Code (MAC) authenticates this information to
+      prevent forgery.
 
    The SCION header is created by extracting the required Info Fields
    and Hop Fields from the corresponding path segments, and this process
@@ -954,14 +954,13 @@ Table of Contents
    of multiple segments are represented by two Hop Fields.  Be aware
    that these Hop Fields are not equal!
 
-   In the Hop Field that represents the last Hop in the first segment
-   (seen in the direction of travel), only the ingress interface will be
-   specified.  However, in the hop Field that represents the first hop
-   in the second segment (also in the direction of travel), only the
-   egress interface will be defined.  Thus, the two Hop Fields for this
-   one AS build a full hop through the AS, specifying both the ingress
-   and egress interface.  As such, they bring the two adjacent segments
-   together.
+   The Hop Field that represents the last Hop in the first segment (seen
+   in the direction of travel) specifies only the ingress interface.
+   However, in the hop Field that represents the first hop in the second
+   segment (also in the direction of travel), only the egress interface
+   will be defined.  Thus, the two Hop Fields for this one AS build a
+   full hop through the AS, specifying both the ingress and egress
+   interface.  As such, they bring the two adjacent segments together.
 
        Up-Segment           Core-Segment        Down-Segment
       +---------+           +---------+         +---------+
@@ -1236,17 +1235,17 @@ Table of Contents
 
    SCION provides two types of extension headers:
 
-   *  The Hop-by-Hop Options header is used to carry OPTIONAL
-      information that MAY be examined and processed by every SCION
-      router along a packet's delivery path.  The Hop-by-Hop Options
-      header is identified by value "200" in the NextHdr field of the
-      SCION common header (see Section 2.1).
+   *  The Hop-by-Hop Options header carries OPTIONAL information that
+      MAY be examined and processed by every SCION router along a
+      packet's delivery path.  The Hop-by-Hop Options header is
+      identified by value "200" in the NextHdr field of the SCION common
+      header (see Section 2.1).
 
-   *  The End-to-End Options header is used to carry OPTIONAL
-      information that MAY be examined and processed by the sender and/
-      or the receiving endpoints of the packet.  The End-to-End Options
-      header is identified by value "201" in the NextHdr field of the
-      SCION common header (see Section 2.1).
+   *  The End-to-End Options carries OPTIONAL information that MAY be
+      examined and processed by the sender and/or the receiving
+      endpoints of the packet.  The End-to-End Options header is
+      identified by value "201" in the NextHdr field of the SCION common
+      header (see Section 2.1).
 
    If both headers are present, the Hop-by-Hop Options header MUST come
    before the End-to-End Options header.
@@ -1372,9 +1371,9 @@ Table of Contents
    *Note:* The format of the Pad1 option is a special case - it does not
    have length and value fields.
 
-   The Pad1 option is used to insert 1 byte of padding into the Options
-   field of an extension header.  If more than one byte of padding is
-   required, the PadN option MUST be used.
+   The Pad1 option inserts 1 byte of padding into the Options field of
+   an extension header.  If more than one byte of padding is required,
+   the PadN option MUST be used.
 
 2.5.1.2.  PadN Option
 
@@ -1390,10 +1389,10 @@ Table of Contents
 
                 Figure 16: TLV-encoded options - PadN option
 
-   The PadN option is used to insert two or more bytes of padding into
-   the Options field of an extension header.  For N bytes of padding,
-   the OptDataLen field contains the value N-2, and the OptData consists
-   of N-2 zero-valued bytes.
+   The PadN option inserts two or more bytes of padding into the Options
+   field of an extension header.  For N bytes of padding, the OptDataLen
+   field contains the value N-2, and the OptData consists of N-2 zero-
+   valued bytes.
 
 2.6.  Pseudo Header for Upper-Layer Checksum
 
@@ -1617,15 +1616,15 @@ Table of Contents
    *  _Step 3 -_ *R2->R3*:
       When receiving the packet, router R2 of Core AS ff00:0:1 checks
       whether the packet has been received through the ingress interface
-      i1a as specified by the current Hop Field, otherwise the packet is
-      dropped by router R2.  The router notices that it has consumed the
-      last Hop Field of the current path segment and then moves the
-      pointer from the current Info Field to the next Info Field _IF2_.
-      The corresponding current Hop Field is (0,i1b), which contains
-      egress interface i1b.  The router maps the i1b interface ID to
-      egress router R3, and encapsulates the SCION packet inside an
-      intra-AS underlay IP packet with the address of router R3 as the
-      underlay destination.
+      i1a as specified by the current Hop Field, otherwise R2 drops the
+      packet.  The router notices that it has consumed the last Hop
+      Field of the current path segment and then moves the pointer from
+      the current Info Field to the next Info Field _IF2_. The
+      corresponding current Hop Field is (0,i1b), which contains egress
+      interface i1b.  The router maps the i1b interface ID to egress
+      router R3, and encapsulates the SCION packet inside an intra-AS
+      underlay IP packet with the address of router R3 as the underlay
+      destination.
 
        +=============+==============================+=============+
        | Field       | Value                        | Description |
@@ -2577,8 +2576,8 @@ Table of Contents
    reason, payload integrity is not in scope for this specification.
    However, there exists a proposal for an experimental extension (SPAO)
    to authenticate addresses, provide integrity protection for payloads,
-   and replay protection.  This is still very experimental and it not
-   used in the production network.
+   and replay protection.  This is still experimental and it not used in
+   the production network.
 
 7.3.  Off-Path Attacks
 
@@ -2812,7 +2811,7 @@ draft-dekater-scion-dataplane-11
    *  Abstract, Introduction: reworded and shortened, with reference to
       longer -controlplane introduction
 
-   *  Tables 1-4: move them to a dedicated subsection to increase
+   *  Tables 1-4: move them to dedicated subsections to increase
       readability
 
    *  Figures 2, 3: move text to after figures
