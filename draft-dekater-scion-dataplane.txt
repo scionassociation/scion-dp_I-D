@@ -2426,10 +2426,11 @@ Table of Contents
 
    A more realistic risk to the secrecy of the forwarding key is
    exfiltration from a compromised router or control plane service.  An
-   AS can optionally rotate its forwarding key at regular intervals
-   using an out-of-band mechanism to limit the exposure after a
-   temporary device compromise.  However, such a key rotation scheme
-   cannot mitigate the impact of an undiscovered compromise of a device.
+   AS can optionally rotate its forwarding key at regular intervals to
+   limit the exposure after a temporary device compromise.  However,
+   such a key rotation scheme cannot mitigate the impact of an
+   undiscovered compromise of a device.  Key rotation is outside of the
+   scope of this document and may leverage an out-of-band mechanism.
 
    When an AS's forwarding key is compromised, an attacker can forge Hop
    Field MACs and undermine path authorization.  As path segments are
