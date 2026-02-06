@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 8 August 2026                                 SCION Association
+Expires: 10 August 2026                                SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         4 February 2026
+                                                         6 February 2026
 
 
                             SCION Data Plane
@@ -68,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 August 2026.
+   This Internet-Draft will expire on 10 August 2026.
 
 Copyright Notice
 
@@ -217,9 +217,9 @@ Table of Contents
    ASes.
 
    *Forwarding Path*: A complete end-to-end path between two SCION
-   endpoints which is used to transmit packets in the data plane.  It
-   can be created with a combination of up to three path segments (an up
-   segment, a core segment, and a down segment).
+   endpoints which is used to transmit packets in the data plane.
+   Endpoints can create one with a combination of up to three path
+   segments (an up segment, a core segment, and a down segment).
 
    *Hop Field (HF)*: As they traverse the network, Path-Segment
    Construction Beacons (PCBs) accumulate cryptographically protected
@@ -269,7 +269,7 @@ Table of Contents
    between a non-core AS and a core AS in the same ISD), (2) a down
    segment (i.e. the same as an up segment, but in the opposite
    direction), or (3) a core segment (i.e. a path between core ASes).
-   Up to three path segments can be used to create a forwarding path.
+   Endpoints use up to three path segments to create a forwarding path.
 
    *Path-Segment Construction Beacon (PCB)*: Core AS control planes
    generate PCBs to explore paths within their isolation domain (ISD)
@@ -1912,8 +1912,8 @@ Table of Contents
       Field.  Function is used in the mathematical sense that for for
       any values of these inputs there is exactly one result.
 
-   *  The algorithm returns an unforgable 48-bit value.  Unforgable
-      specifically means "existentially unforgable under a chosen
+   *  The algorithm returns an unforgeable 48-bit value.  Unforgeable
+      specifically means "existentially unforgeable under a chosen
       message attack" ([CRYPTOBOOK]).  Informally, this means an
       attacker without access to the secret key has no computationally
       efficient means to create a valid MAC for some attacker chosen
@@ -2635,9 +2635,9 @@ Table of Contents
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-14, 16 January 2026,
+              scion-controlplane-15, 4 February 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-14>.
+              scion-controlplane-15>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
@@ -2807,6 +2807,8 @@ Change Log
    removed before publication.
 
 draft-dekater-scion-dataplane-11
+
+   *  Reduce use of passive tense and clarify subject
 
    *  Abstract, Introduction: reworded and shortened, with reference to
       longer -controlplane introduction
