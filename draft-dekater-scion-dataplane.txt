@@ -1241,7 +1241,7 @@ Table of Contents
       identified by value "200" in the NextHdr field of the SCION common
       header (see Section 2.1).
 
-   *  The End-to-End Options carries OPTIONAL information that MAY be
+   *  The End-to-End Options carry OPTIONAL information that MAY be
       examined and processed by the sender and/or the receiving
       endpoints of the packet.  The End-to-End Options header is
       identified by value "201" in the NextHdr field of the SCION common
