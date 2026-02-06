@@ -1496,8 +1496,8 @@ Table of Contents
 
    *  both endpoints run a native SCION network stack.
 
-   Since this example consists of only one ISD and core AS, the end-to-
-   end path only includes an up-path and down-path segment.  The
+   Since this example consists of only one ISD and one core AS, the end-
+   to-end path only includes an up-path and down-path segment.  The
    forwarding logic is uniform across intra- and inter-ISD scenarios.  A
    scenario with more core ASes and/or ISDs would use an additional core
    path segment or a peering link.
