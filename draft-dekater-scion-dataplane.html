@@ -1774,24 +1774,7 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <p id="section-1.4-9">Valid path segment combinations:<a href="#section-1.4-9" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.4-10.1">
-            <p id="section-1.4-10.1.1"><strong>Communication through core ASes</strong>:<a href="#section-1.4-10.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-1.4-10.1.2.1">
-                <p id="section-1.4-10.1.2.1.1"><strong>Core segment combination</strong> (Cases 1a, 1b, 1c, 1d in <a href="#_figure-1" class="auto internal xref">Figure 2</a>): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is <span class="bcp14">REQUIRED</span> to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b), or both are core ASes (Cases 1c and 1d), then no up or down segments are <span class="bcp14">REQUIRED</span> to connect the respective ASes to the core segment.<a href="#section-1.4-10.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-1.4-10.1.2.2">
-                <p id="section-1.4-10.1.2.2.1"><strong>Immediate combination</strong> (Cases 2a, 2b in <a href="#_figure-1bis" class="auto internal xref">Figure 3</a>): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.<a href="#section-1.4-10.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li class="normal" id="section-1.4-10.2">
-            <p id="section-1.4-10.2.1"><strong>Peering shortcut</strong> (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. The up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.<a href="#section-1.4-10.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-1.4-10.3">
-            <p id="section-1.4-10.3.1"><strong>AS shortcut</strong> (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.<a href="#section-1.4-10.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-1.4-10.4">
-            <p id="section-1.4-10.4.1"><strong>On-path</strong> (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.<a href="#section-1.4-10.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.4-10.1.1"><strong>Communication through core ASes with core segment combination</strong> (Cases 1a, 1b, 1c, 1d in <a href="#_figure-1" class="auto internal xref">Figure 2</a>): The up and down segments of source and destination do not have an AS in common. In this case, a core segment is <span class="bcp14">REQUIRED</span> to connect the source's up segment and the destination's down segment (Case 1a). If either the source or the destination AS is a core AS (Case 1b), or both are core ASes (Cases 1c and 1d), then no up or down segments are <span class="bcp14">REQUIRED</span> to connect the respective ASes to the core segment.<a href="#section-1.4-10.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <span id="name-illustration-of-valid-path-s"></span><div id="_figure-1bis">
@@ -2034,6 +2017,20 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#name-illustration-of-valid-path-s" class="selfRef">Illustration of valid path segment combinations through one or no core ASes.</a>
           </figcaption></figure>
 </div>
+<ul class="normal">
+<li class="normal" id="section-1.4-12.1">
+            <p id="section-1.4-12.1.1"><strong>Communication through a core AS with immediate combination</strong> (Cases 2a, 2b in <a href="#_figure-1bis" class="auto internal xref">Figure 3</a>): The last AS on the up segment (which is necessarily a core AS) is the same as the first AS on the down segment. In this case, a simple combination of up and down segments creates a valid forwarding path. In Case 2b, only one segment is required.<a href="#section-1.4-12.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.4-12.2">
+            <p id="section-1.4-12.2.1"><strong>Peering shortcut</strong> (Cases 3a and 3b): A peering link exists between the up and down segment, and extraneous path segments to the core are cut off. The up and down segments do not need to originate from the same core AS and the peering link could also be traversing to a different ISD.<a href="#section-1.4-12.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.4-12.3">
+            <p id="section-1.4-12.3.1"><strong>AS shortcut</strong> (Cases 4a and 4b): The up and down segments intersect at a non-core AS below the ISD core, thus creating a shortcut. In this case, a shorter path is made possible by removing the extraneous part of the path to the core. Note that the up and down segments do not need to originate from the same core AS.<a href="#section-1.4-12.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.4-12.4">
+            <p id="section-1.4-12.4.1"><strong>On-path</strong> (Case 5): In the case where the source's up segment contains the destination AS or the destination's down segment contains the source AS, a single segment is sufficient to construct a forwarding path. Again, no core AS is on the final path.<a href="#section-1.4-12.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 <div id="path-authorization">
@@ -4941,10 +4938,13 @@ Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
             <p id="appendix-C.1-1.3.1">Tables 1-4: move them to a dedicated subsection to increase readability<a href="#appendix-C.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.4">
-            <p id="appendix-C.1-1.4.1">Life of a SCION Data Packet: restructure section and clarify role of example topology<a href="#appendix-C.1-1.4.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.4.1">Figures 2, 3: move text to after figures<a href="#appendix-C.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.5">
-            <p id="appendix-C.1-1.5.1">Effects of Clock Inaccuracy: reword, clarify tolerable offset, remove duplicated part about beacon propagation and point to -controlplane<a href="#appendix-C.1-1.5.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.5.1">Life of a SCION Data Packet: restructure section and clarify role of example topology<a href="#appendix-C.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-C.1-1.6">
+            <p id="appendix-C.1-1.6.1">Effects of Clock Inaccuracy: reword, clarify tolerable offset, remove duplicated part about beacon propagation and point to -controlplane<a href="#appendix-C.1-1.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
