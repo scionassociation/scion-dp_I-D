@@ -132,7 +132,7 @@ Table of Contents
        7.1.3.  Path Splicing
      7.2.  On-Path Attacks
        7.2.1.  Modification of the Path Header
-       7.2.2.  Payload Integrity
+       7.2.2.  Payload Integrity and Encryption
      7.3.  Off-Path Attacks
      7.4.  Volumetric Denial of Service Attacks
    8.  IANA Considerations
@@ -2569,16 +2569,16 @@ Table of Contents
    attack, has marginal benefit in the context of SCION and it is not in
    scope for this document.
 
-7.2.2.  Payload Integrity
+7.2.2.  Payload Integrity and Encryption
 
-   An on-path attacker can modify the payload of a SCION packet.
-   Existing higher layer protocols can easily defend against such an
-   attack without any cooperation by the SCION network.  For that
-   reason, payload integrity is not in scope for this specification.
-   However, there exists a proposal for an experimental extension (SPAO)
-   to authenticate addresses, provide integrity protection for payloads,
-   and replay protection.  This is still experimental and it not used in
-   the production network.
+   The SCION Data Plane does not natively provide payload integrity or
+   encryption.  An on-path attacker can inspect or alter the packet
+   payload.  Existing higher layer protocols can mitigate such attacks
+   independently of the network layer.  For that reason, payload
+   integrity is not in scope for this specification.  An experimental
+   extension, SPAO, exists to authenticate addresses, provide payload
+   integrity protection, and replay protection.  This is still
+   experimental and it not used in the production network.
 
 7.3.  Off-Path Attacks
 

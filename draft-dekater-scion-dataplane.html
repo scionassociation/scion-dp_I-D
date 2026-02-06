@@ -1332,7 +1332,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-modification-of-the-path-he" class="internal xref">Modification of the Path Header</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
-                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-payload-integrity" class="internal xref">Payload Integrity</a></p>
+                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-payload-integrity-and-encry" class="internal xref">Payload Integrity and Encryption</a></p>
 </li>
                 </ul>
 </li>
@@ -4649,10 +4649,10 @@ Key rotation is outside of the scope of this document and may leverage an out-of
 </div>
 <div id="payload-integrity">
 <section id="section-7.2.2">
-          <h4 id="name-payload-integrity">
-<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-payload-integrity" class="section-name selfRef">Payload Integrity</a>
+          <h4 id="name-payload-integrity-and-encry">
+<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-payload-integrity-and-encry" class="section-name selfRef">Payload Integrity and Encryption</a>
           </h4>
-<p id="section-7.2.2-1">An on-path attacker can modify the payload of a SCION packet. Existing higher layer protocols can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. However, there exists a proposal for an experimental extension (SPAO) to authenticate addresses, provide integrity protection for payloads, and replay protection. This is still experimental and it not used in the production network.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-1">The SCION Data Plane does not natively provide payload integrity or encryption. An on-path attacker can inspect or alter the packet payload. Existing higher layer protocols can mitigate such attacks independently of the network layer. For that reason, payload integrity is not in scope for this specification. An experimental extension, SPAO, exists to authenticate addresses, provide payload integrity protection, and replay protection. This is still experimental and it not used in the production network.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
