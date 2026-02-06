@@ -211,8 +211,8 @@ Table of Contents
    defined in [RFC9473].
 
    *Forwarding Key*: A symmetric key that is shared between the control
-   service (control plane) and the routers (data plane) of an AS.  It is
-   used to authenticate Hop Fields in the end-to-end SCION path.  The
+   service (control plane) and the routers (data plane) of an AS.  It
+   authenticates Hop Fields in the end-to-end SCION path.  The
    forwarding key is an AS-local secret and is not shared with other
    ASes.
 
@@ -339,10 +339,10 @@ Table of Contents
    routers.
 
    SCION emphasizes this separation as it is used exclusively for inter-
-   domain forwarding; re-using the intra-domain network fabric to
-   provide connectivity amongst all SCION infrastructure services,
-   border routers, and endpoints.  As a consequence, minimal change to
-   the infrastructure is required for ISPs when deploying SCION.
+   domain forwarding; reusing the intra-domain network fabric to provide
+   connectivity amongst all SCION infrastructure services, border
+   routers, and endpoints.  As a consequence, minimal change to the
+   infrastructure is required for ISPs when deploying SCION.
 
    In practice, in most existing SCION deployments the SCION routers
    communicate amongst themselves and with endpoints by enclosing the
@@ -944,9 +944,9 @@ Table of Contents
       Field in the segment represents a peering Hop Field.
 
    *  HopField represents a hop through an AS on the path, with the
-      ingress and egress interface identifiers for this AS.  This
-      information is authenticated with a Message Authentication Code
-      (MAC) to prevent forgery.
+      ingress and egress interface identifiers for this AS.  A Message
+      Authentication Code (MAC) authenticates this information to
+      prevent forgery.
 
    The SCION header is created by extracting the required Info Fields
    and Hop Fields from the corresponding path segments, and this process
@@ -954,14 +954,13 @@ Table of Contents
    of multiple segments are represented by two Hop Fields.  Be aware
    that these Hop Fields are not equal!
 
-   In the Hop Field that represents the last Hop in the first segment
-   (seen in the direction of travel), only the ingress interface will be
-   specified.  However, in the hop Field that represents the first hop
-   in the second segment (also in the direction of travel), only the
-   egress interface will be defined.  Thus, the two Hop Fields for this
-   one AS build a full hop through the AS, specifying both the ingress
-   and egress interface.  As such, they bring the two adjacent segments
-   together.
+   The Hop Field that represents the last Hop in the first segment (seen
+   in the direction of travel) specifies only the ingress interface.
+   However, in the hop Field that represents the first hop in the second
+   segment (also in the direction of travel), only the egress interface
+   will be defined.  Thus, the two Hop Fields for this one AS build a
+   full hop through the AS, specifying both the ingress and egress
+   interface.  As such, they bring the two adjacent segments together.
 
        Up-Segment           Core-Segment        Down-Segment
       +---------+           +---------+         +---------+
@@ -1790,7 +1789,7 @@ Table of Contents
 
 4.1.1.1.  Hop Field MAC - Calculation
 
-   Routers generally calculate the Hop Field MAC at a current AS_i as
+   The Hop Field MAC is generally calculated at a current AS_i as
    follows:
 
    *  Consider a path segment with "n" hops, containing ASes AS_0, ... ,
