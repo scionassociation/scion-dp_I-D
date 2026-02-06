@@ -1042,7 +1042,7 @@ This section describes the life of a SCION packet: how it is created at its sour
 * Endpoint B the destination endpoint and it is in AS ff00:0:3
 * both endpoints run a native SCION network stack.
 
-Since this example consists of only one ISD and core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. A scenario with more core ASes and/or ISDs would use an additional core path segment or a peering link.
+Since this example consists of only one ISD and one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. A scenario with more core ASes and/or ISDs would use an additional core path segment or a peering link.
 
 ## Source Endpoint: Path Lookup and Segment Combination
 
