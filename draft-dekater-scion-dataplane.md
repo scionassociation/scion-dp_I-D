@@ -853,8 +853,8 @@ Note that the destination endpoint, upon receiving a first packet, is not aware 
 
 SCION provides two types of extension headers:
 
-- The Hop-by-Hop Options header is used to carry OPTIONAL information that MAY be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
-- The End-to-End Options header is used to carry OPTIONAL information that MAY be examined and processed by the sender and/or the receiving endpoints of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The Hop-by-Hop Options header carries OPTIONAL information that MAY be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The End-to-End Options carries OPTIONAL information that MAY be examined and processed by the sender and/or the receiving endpoints of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
 
 If both headers are present, the Hop-by-Hop Options header MUST come before the End-to-End Options header.
 
@@ -939,7 +939,7 @@ Alignment requirement: none.
 
 **Note:** The format of the Pad1 option is a special case - it does not have length and value fields.
 
-The Pad1 option is used to insert 1 byte of padding into the `Options` field of an extension header. If more than one byte of padding is required, the PadN option MUST be used.
+The Pad1 option inserts 1 byte of padding into the `Options` field of an extension header. If more than one byte of padding is required, the PadN option MUST be used.
 
 #### PadN Option {#padn}
 
@@ -958,7 +958,7 @@ Alignment requirement: none.
 ~~~
 {: #figure-14 title="TLV-encoded options - PadN option"}
 
-The PadN option is used to insert two or more bytes of padding into the `Options` field of an extension header. For N bytes of padding, the `OptDataLen` field contains the value N-2, and the `OptData` consists of N-2 zero-valued bytes.
+The PadN option inserts two or more bytes of padding into the `Options` field of an extension header. For N bytes of padding, the `OptDataLen` field contains the value N-2, and the `OptData` consists of N-2 zero-valued bytes.
 
 
 ## Pseudo Header for Upper-Layer Checksum {#pseudo}
@@ -1085,7 +1085,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | Link layer  | SRC=R1 <br> DST=R2                                            |                             |
 {: title="Example: snapshot header - step 2 - R1 -> R2"}
 
-- *Step 3 -* **R2->R3**: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field, otherwise the packet is dropped by router R2. The router notices that it has consumed the last Hop Field of the current path segment and then moves the pointer from the current Info Field to the next Info Field *IF2*. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. The router maps the i1b interface ID to egress router R3, and encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.
+- *Step 3 -* **R2->R3**: <br> When receiving the packet, router R2 of Core AS ff00:0:1 checks whether the packet has been received through the ingress interface i1a as specified by the current Hop Field, otherwise R2 drops the packet. The router notices that it has consumed the last Hop Field of the current path segment and then moves the pointer from the current Info Field to the next Info Field *IF2*. The corresponding current Hop Field is (0,i1b), which contains egress interface i1b. The router maps the i1b interface ID to egress router R3, and encapsulates the SCION packet inside an intra-AS underlay IP packet with the address of router R3 as the underlay destination.
 
 |  Field      | Value                                                        | Description                |
 |-------------+--------------------------------------------------------------+----------------------------|
@@ -1154,7 +1154,7 @@ The aggregated 16-bit path segment identifier and preceding MACs prevent splicin
 
 #### Hop Field MAC - Calculation {#hf-mac-calc}
 
-The Hop Field MAC is generally calculated at a current AS<sub>i</sub> as follows:
+Routers generally calculate the Hop Field MAC at a current AS<sub>i</sub> as follows:
 
 - Consider a path segment with "n" hops, containing ASes AS<sub>0</sub>, ... , AS<sub>n-1</sub>, with forwarding keys K0, ... , K(n-1) in this order.
 - AS<sub>0</sub> is the core AS that created the PCB representing the path segment and that added a random initial 16-bit segment identifier `SegID` to the `Segment Info` field of the PCB.
@@ -1487,7 +1487,7 @@ Moreover, packet integrity protection is not enough if there are two colluding a
 
 ### Payload Integrity {#payload-integrity}
 
-An on-path attacker can modify the payload of a SCION packet. Existing higher layer protocols can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. However, there exists a proposal for an experimental extension (SPAO) to authenticate addresses, provide integrity protection for payloads, and replay protection. This is still very experimental and it not used in the production network.
+An on-path attacker can modify the payload of a SCION packet. Existing higher layer protocols can easily defend against such an attack without any cooperation by the SCION network. For that reason, payload integrity is not in scope for this specification. However, there exists a proposal for an experimental extension (SPAO) to authenticate addresses, provide integrity protection for payloads, and replay protection. This is still experimental and it not used in the production network.
 
 ## Off-Path Attacks
 
@@ -1567,7 +1567,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Reduce use of passive tense and clarify subject
 - Abstract, Introduction: reworded and shortened, with reference to longer -controlplane introduction
-- Tables 1-4: move them to a dedicated subsection to increase readability
+- Tables 1-4: move them to dedicated subsections to increase readability
 - Figures 2, 3: move text to after figures
 - Life of a SCION Data Packet: restructure section and clarify role of example topology
 - Effects of Clock Inaccuracy: reword, clarify tolerable offset, remove duplicated part about beacon propagation and point to -controlplane
