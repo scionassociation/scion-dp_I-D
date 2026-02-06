@@ -1568,6 +1568,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 - Reduce use of passive tense and clarify subject
 - Abstract, Introduction: reworded and shortened, with reference to longer -controlplane introduction
 - Tables 1-4: move them to a dedicated subsection to increase readability
+- Figures 2, 3: move text to after figures
 - Life of a SCION Data Packet: restructure section and clarify role of example topology
 - Effects of Clock Inaccuracy: reword, clarify tolerable offset, remove duplicated part about beacon propagation and point to -controlplane
 
