@@ -94,15 +94,18 @@ Table of Contents
      1.5.  Path Authorization
    2.  SCION Header Specification
      2.1.  Common Header
+       2.1.1.  Path Type Field
+       2.1.2.  Address Type And Length Fields
      2.2.  Address Header
-     2.3.  Path Header
-       2.3.1.  Empty Path Type
-       2.3.2.  SCION Path Type
-       2.3.3.  One-Hop Path Type
-       2.3.4.  Path Reversal
-     2.4.  Extension Headers
-       2.4.1.  Options Field
-     2.5.  Pseudo Header for Upper-Layer Checksum
+     2.3.  Service Addresses
+     2.4.  Path Header
+       2.4.1.  Empty Path Type
+       2.4.2.  SCION Path Type
+       2.4.3.  One-Hop Path Type
+       2.4.4.  Path Reversal
+     2.5.  Extension Headers
+       2.5.1.  Options Field
+     2.6.  Pseudo Header for Upper-Layer Checksum
    3.  Life of a SCION Data Packet
      3.1.  Example Topology
      3.2.  Source Endpoint: Path Lookup and Segment Combination
@@ -238,7 +241,7 @@ Table of Contents
    egress interfaces in the direction of path construction (beaconing).
    Each Interface ID MUST be unique within each AS. 0 is a reserved
    value that indicates the lack of an Interface ID and is used as the
-   unspecified Interface ID (see Section 2.3.3).
+   unspecified Interface ID (see Section 2.4.3).
 
    *Isolation Domain (ISD)*: SCION ASes are organized into logical
    groups called Isolation Domains or ISDs.  Each ISD consists of ASes
@@ -667,11 +670,11 @@ Table of Contents
 
    The _path header_ contains the full AS-level forwarding path of the
    packet.  A path type field in the common header specifies the path
-   format used in the path header.  For more details, see Section 2.3.
+   format used in the path header.  For more details, see Section 2.4.
 
    The OPTIONAL _extension_ header contains a variable number of hop-by-
    hop and end-to-end options, similar to extensions in the IPv6 header
-   [RFC8200].  For more details, see Section 2.4.
+   [RFC8200].  For more details, see Section 2.5.
 
 2.1.  Common Header
 
@@ -723,13 +726,15 @@ Table of Contents
       This field is 16 bits long, supporting a maximum payload size of
       65'535 bytes.
 
-   *  PathType: Specifies the type of the SCION path and is 8 bits long.
-      The format of one path type is independent of all other path
-      types.  The currently defined SCION path types are Empty (0),
-      SCION (1), OneHopPath (2), EPIC (3) and COLIBRI (4).  This
-      document only specifies the Empty, SCION and OneHopPath path types
-      and the other path types are currently experimental.  For more
-      details, see Section 2.3.
+   *  PathType: Specifies the type of the SCION path.  It is described
+      in Section 2.1.1.
+
+   *  DT/DL/ST/SL (Address Type And Length): Define the endpoint address
+      type and length.  They are described in Section 2.1.2.
+
+   *  RSV: These bits are currently reserved for future use.
+
+2.1.1.  Path Type Field
 
                   +=======+=============================+
                   | Value | Path Type                   |
@@ -745,23 +750,22 @@ Table of Contents
                   | 4     | COLIBRI path (experimental) |
                   +-------+-----------------------------+
 
-                         Table 1: SCION path types
+                      Table 1: Currently defined SCION
+                                 path types
 
-   *  DT/DL/ST/SL: These fields define the endpoint address type and
-      endpoint address length for the source and destination endpoint.
-      DT and DL stand for Destination Type and Destination Length,
-      whereas ST and SL stand for Source Type and Source Length.  The
-      possible endpoint address length values are 4 bytes, 8 bytes, 12
-      bytes, and 16 bytes.  If an address has a length different from
-      the supported values, the next larger size SHALL be used and the
-      address can be padded with zeros.  Table 2 below lists the
-      currently used values for address length.  The "type" identifier
-      is only defined in combination with a specific address length -
-      e.g. address type "0" is defined as IPv4 in combination with
-      address length 4, but is defined as IPv6 in combination with
-      address length 16.  Per address length, several sub-types are
-      possible and Table 3 shows the currently assigned combinations of
-      lengths and types.
+   The Path Type field determines the type of the SCION path and it is 8
+   bits long.  The format of one path type is independent of all other
+   path types.  This document only specifies the Empty, SCION and
+   OneHopPath path types and the other path types are currently
+   experimental.  For more details, see Section 2.4.
+
+2.1.2.  Address Type And Length Fields
+
+   These fields, also abbreviated DT/DL/ST/SL, define the endpoint
+   address type and endpoint address length for the source and
+   destination endpoint.
+
+   The possible endpoint address length values are:
 
                      +=============+================+
                      | DL/SL Value | Address Length |
@@ -775,7 +779,18 @@ Table of Contents
                      | 3           | 16 bytes       |
                      +-------------+----------------+
 
-                      Table 2: Address length values
+                         Table 2: Address length
+                       values. `DL` and `SL` stand
+                        for Destination Length and
+                              Source Length.
+
+   If an address has a length different from the supported values, the
+   next larger size SHALL be used and the address can be padded with
+   zeros.
+
+   The "type" identifier is only defined in combination with a specific
+   address length.  Per address length, several sub-types are possible.
+   The currently assigned combinations of lengths and types are:
 
            +==============+================+==================+
            | Type (DT/ST) | Length (DL/SL) | Conventional Use |
@@ -789,14 +804,11 @@ Table of Contents
            | other        | other          | Unassigned       |
            +--------------+----------------+------------------+
 
-           Table 3: Allocations of length and type combinations
+                 Table 3: Allocations of length and type
+                  combinations. `DT` and `ST` stand for
+                    Destination Type and Source Type.
 
-   A service address designates a set of endpoint addresses rather than
-   a single one.  A packet addressed to a service is redirected to any
-   one endpoint address that is known to be part of the set.  Table 4
-   lists the known services.
-
-   *  RSV: These bits are currently reserved for future use.
+   Service addresses are described in Section 2.3.
 
 2.2.  Address Header
 
@@ -830,9 +842,14 @@ Table of Contents
       address of the destination/source.  The accepted type and length
       are defined in the DT/DL/ST/SL fields of the common header.
 
-   If a service address is implied by the DT/DL or ST/SL field of the
-   common header according to Table 3, the corresponding address field
-   has the following format:
+2.3.  Service Addresses
+
+   A service address designates a set of endpoint addresses rather than
+   a single one.  A packet addressed to a service is redirected to any
+   one endpoint address that is known to be part of the set.  If a
+   service address is implied by the DT/DL or ST/SL field of the common
+   header according to Table 3, the corresponding address field has the
+   following format:
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -861,7 +878,7 @@ Table of Contents
    For more information on addressing, see
    [I-D.dekater-scion-controlplane].
 
-2.3.  Path Header
+2.4.  Path Header
 
    The path header of a SCION packet differs for each SCION path type.
    The path type is set in the PathType field of the SCION common
@@ -869,7 +886,7 @@ Table of Contents
 
    SCION supports three path types:
 
-2.3.1.  Empty Path Type
+2.4.1.  Empty Path Type
 
    The Empty path type (PathType=0) is used to send traffic within an
    AS.  It has no additional fields - i.e. it consumes 0 bytes on the
@@ -878,7 +895,7 @@ Table of Contents
    One use case of the Empty path type lies in the context of
    link-failure detection (Section 6.1).
 
-2.3.2.  SCION Path Type
+2.4.2.  SCION Path Type
 
    The SCION path type (PathType=1) is the standard path type.  A SCION
    path has the following layout:
@@ -988,7 +1005,7 @@ Table of Contents
 
                     Figure 9: Path construction example
 
-2.3.2.1.  Path Meta Header Field
+2.4.2.1.  Path Meta Header Field
 
    The 4-byte Path Meta Header field (PathMetaHdr) defines meta
    information about the SCION path that is contained in the path
@@ -1004,11 +1021,11 @@ Table of Contents
 
    *  CurrINF (shown as CI above): Specifies a 2-bits index (0-based)
       pointing to the current Info Field for the packet on its way
-      through the network.  For details, see Section 2.3.2.2 below.
+      through the network.  For details, see Section 2.4.2.2 below.
 
    *  CurrHF: Specifies a 6-bits index (0-based) pointing to the current
       Hop Field for the packet on its way through the network.  For
-      details, see Section 2.3.2.2 below.  Note that the CurrHF index
+      details, see Section 2.4.2.2 below.  Note that the CurrHF index
       MUST point to a Hop Field that is part of the current path
       segment, as indicated by the CurrINF index.
 
@@ -1033,7 +1050,7 @@ Table of Contents
 
    *  RSV: Unused and reserved for future use.
 
-2.3.2.2.  Path Offset Calculations
+2.4.2.2.  Path Offset Calculations
 
    Path offset calculations enable SCION border routers to locate the
    currently active Info Field and Hop Field during packet processing.
@@ -1056,7 +1073,7 @@ Table of Contents
    Info Field, the CurrHF needs to be compared to the SegLen fields of
    the current and preceding Info Fields.
 
-2.3.2.3.  Info Field
+2.4.2.3.  Info Field
 
    The 8-byte Info Field (InfoField) has the following format:
 
@@ -1101,7 +1118,7 @@ Table of Contents
       wraparound occurring in year 2106.  Care should be taken by
       implementations while computing validity during a wraparound.
 
-2.3.2.4.  Hop Field
+2.4.2.4.  Hop Field
 
    The 12-byte Hop Field (HopField) has the following format:
 
@@ -1163,9 +1180,9 @@ Table of Contents
    flag is set to "1" may process the request without further forwarding
    it along the path.  Use cases that require multiple routers/hops on
    the path to process a packet SHOULD rely on a hop-by-hop extension
-   (see Section 2.4).
+   (see Section 2.5).
 
-2.3.3.  One-Hop Path Type
+2.4.3.  One-Hop Path Type
 
    Bootstrapping beaconing between neighboring ASes relies on the
    OneHopPath path type (PathType=2).  This is necessary as neighbor
@@ -1173,7 +1190,7 @@ Table of Contents
 
    A one-hop path has exactly one Info Field and two Hop Fields.  Any
    entity with access to the AS forwarding key can create a valid info
-   and Hop Field as described in Section 2.3.2.3 and Section 2.3.2.4
+   and Hop Field as described in Section 2.4.2.3 and Section 2.4.2.4
    respectively.  The second Hop Field is created by the ingress SCION
    border router of the neighboring AS while processing the one-hop
    path.  The appropriate Hop Field can be processed by a border router
@@ -1191,7 +1208,7 @@ Table of Contents
    path cannot be used beyond the destination AS.  Then it calculates
    and appends the appropriate MAC for the Hop Field.
 
-2.3.4.  Path Reversal
+2.4.4.  Path Reversal
 
    When a destination endpoint receives a SCION packet, it MAY use the
    path information in the SCION header for sending the reply packets.
@@ -1216,7 +1233,7 @@ Table of Contents
    a mechanism to estimate its MTU (e.g. MTU discovery or estimate MTU
    from the largest packet received).
 
-2.4.  Extension Headers
+2.5.  Extension Headers
 
    SCION provides two types of extension headers:
 
@@ -1270,9 +1287,9 @@ Table of Contents
       to-End Options header is an integer multiple of 4 bytes.  This can
       be achieved by using options of type 0 or 1 (see Table 4).  The
       Options field contains one or more Type-Length-Value (TLV) encoded
-      options.  For details, see Section 2.4.1.
+      options.  For details, see Section 2.5.1.
 
-2.4.1.  Options Field
+2.5.1.  Options Field
 
    The Options field of the Hop-by-Hop Options and the End-to-End
    Options headers carries a variable number of options that are type-
@@ -1295,9 +1312,9 @@ Table of Contents
              +=========+====================================+
              | Decimal | Option Type                        |
              +=========+====================================+
-             | 0       | Pad1 (see Section 2.4.1.1)         |
+             | 0       | Pad1 (see Section 2.5.1.1)         |
              +---------+------------------------------------+
-             | 1       | PadN (see Section 2.4.1.2)         |
+             | 1       | PadN (see Section 2.5.1.2)         |
              +---------+------------------------------------+
              | 2       | SCION Packet Authenticator Option. |
              |         | Only used by the End-to-End        |
@@ -1341,7 +1358,7 @@ Table of Contents
    details, see below.  All SCION implementations MUST recognize these
    padding options.
 
-2.4.1.1.  Pad1 Option
+2.5.1.1.  Pad1 Option
 
    Alignment requirement: none.
 
@@ -1360,7 +1377,7 @@ Table of Contents
    field of an extension header.  If more than one byte of padding is
    required, the PadN option MUST be used.
 
-2.4.1.2.  PadN Option
+2.5.1.2.  PadN Option
 
    Alignment requirement: none.
 
@@ -1379,7 +1396,7 @@ Table of Contents
    the OptDataLen field contains the value N-2, and the OptData consists
    of N-2 zero-valued bytes.
 
-2.5.  Pseudo Header for Upper-Layer Checksum
+2.6.  Pseudo Header for Upper-Layer Checksum
 
    The SCION Data Plane does not provide payload integrity protection,
    as further clarified in Section 7.2.2.  Should any transport or other
@@ -1699,7 +1716,7 @@ Table of Contents
    can just swap the source and destination addresses in the SCION
    header, reverse the SCION path, and set the pointers to the Info
    Fields and Hop Fields at the beginning of the reversed path (see also
-   Section 2.3.4).
+   Section 2.4.4).
 
 4.  Path Authorization
 
@@ -1823,7 +1840,7 @@ Table of Contents
    authorization.  This is achieved by incrementally tracking the XOR-
    sum of the previous MACs as a separate, updatable accumulator field
    Acc which is part of the path segment's Info Field InfoField in the
-   packet header (see also Section 2.3.2.3).  Routers update this field
+   packet header (see also Section 2.4.2.3).  Routers update this field
    by adding/subtracting only a single 16-bit value each.
 
    Section 4.1.1.1 provides a general formula to compute MAC_i, but at
@@ -1976,7 +1993,7 @@ Table of Contents
 
    3.  Each 8-byte InfoField in the packet header contains the updatable
        Acc field as well as a Peering flag P and a Construction
-       Direction flag C (see also Section 2.3.2.3).  As a next step in
+       Direction flag C (see also Section 2.4.2.3).  As a next step in
        the path initialization process, the source MUST correctly set
        the flags and the Acc field of all InfoFields included in the
        path, according to the following rules:
@@ -2034,7 +2051,7 @@ Table of Contents
 
    4.  Besides setting the flags and the Acc field, the source endpoint
        MUST also set the pointers in the CurrInf and CurrHF fields of
-       the Path Meta Header PathMetaHdr (see Section 2.3.2.1).  As the
+       the Path Meta Header PathMetaHdr (see Section 2.4.2.1).  As the
        source endpoint builds the starting point of the forwarding, both
        pointers MUST be set to "0".
 
@@ -2084,7 +2101,7 @@ Table of Contents
 
    3.  Check if the current Hop Field is expired or originated in the
        future - i.e. the current Info Field MUST NOT have a timestamp in
-       the future, as defined in Section 2.3.2.3.  If either is true,
+       the future, as defined in Section 2.4.2.3.  If either is true,
        the router MUST drop the packet.
 
    4.  If the packet traverses the path segment *against construction
@@ -2233,16 +2250,15 @@ Table of Contents
 
 4.2.2.3.  Effects of Clock Inaccuracy
 
-   Coarse time synchronization between an AS’s control service and its
-   SCION routers is necessary because path segments are generated by
-   control service instances and later used to construct data plane
-   paths.  Specifically, the timestamp in the Info Field and the
-   expiration time of Hop Fields are used for Hop Field MAC computation
-   at each on-path SCION router, see Section 4.1.1.1.
+   Coarse time synchronization between core AS control services and
+   SCION routers is required because path segments are generated by core
+   AS control services and subsequently validated by routers in the data
+   plane.  Specifically, routers rely on the timestamp in the Info Field
+   and the expiration time of Hop Fields to verify Hop Field validity,
+   see Section 4.2.2.1.
 
-   A segment's originating control service and the routers that the
-   segment refers to all have different clocks.  Their differences
-   affect the validation process:
+   Clock offsets between the originating control service and the
+   validating router impact this process:
 
    *  A fast clock at origination or a slow clock at validation will
       yield a lengthened expiration time for hops, and possibly an
@@ -2252,25 +2268,16 @@ Table of Contents
       yield a shortened expiration time for hops, and possibly an
       expiration time in the past.
 
-   This bias comes in addition to a structural delay: PCBs are
-   propagated at a configurable interval (typically, one minute).  As a
-   result of this and the way they are iteratively constructed, PCBs
-   with N hops may become available for path construction up to N
-   intervals (so typically N minutes) after origination which creates a
-   constraint on the expiration of hops.  Hops of the minimal expiration
-   time (337.5 seconds - see Section 2.3.2.4) would render useless any
-   path segment longer than 5 hops.  For this reason, it is unadvisable
-   to create hops with a short expiration time, and the norm is 6 hours.
+   Given the minimum Hop Field expiration of 337.5 seconds (see
+   Section 2.4.2.4), offsets between a router and core ASes in the order
+   of minutes are tolerable.
 
-   In comparison to these time scales, clock offsets in the order of
-   minutes are immaterial.
+   Operators should ensure that control plane instances and routers
+   maintain coarse time synchronization, though the specific methods
+   used to achieve this are outside the scope of this document.
 
-   Care should be taken to ensure that control plane instances and
-   routers maintain coarse time synchronization.  The specific methods
-   used to achieve this synchronization are outside the scope of this
-   document.
-
-   Security considerations related to this issue are discussed in
+   For details on clock inaccuracies relative to beaconing, and for
+   related security considerations, see
    [I-D.dekater-scion-controlplane].
 
 5.  Deployment Considerations
@@ -2354,7 +2361,7 @@ Table of Contents
    intra-AS links) or 2 (OneHopPath - used on inter-AS links).  The BFD
    header itself is a BFD Control Header as described in [RFC5880].
    More information on one-hop and empty paths is available in
-   Section 2.3.3 and Section 2.3.1.
+   Section 2.4.3 and Section 2.4.1.
 
    A SCION router SHOULD accept BFD connections from its peers and
    SHOULD attempt to establish BFD connections to its peers.  While a
@@ -2806,8 +2813,15 @@ draft-dekater-scion-dataplane-11
    *  Abstract, Introduction: reworded and shortened, with reference to
       longer -controlplane introduction
 
+   *  Tables 1-4: move them to a dedicated subsection to increase
+      readability
+
    *  Life of a SCION Data Packet: restructure section and clarify role
       of example topology
+
+   *  Effects of Clock Inaccuracy: reword, clarify tolerable offset,
+      remove duplicated part about beacon propagation and point to
+      -controlplane
 
 draft-dekater-scion-dataplane-10
 
