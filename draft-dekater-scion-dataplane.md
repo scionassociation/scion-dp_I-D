@@ -512,7 +512,11 @@ The SCION common header has the following packet format:
 - `NextHdr`: Encodes the type of the first header after the SCION header, which can be either a SCION extension or a Layer 4 protocol such as TCP or UDP. Values of this field respect the Assigned SCION Protocol Numbers (see [](#protnum)).
 - `HdrLen`: Specifies the entire length of the SCION header in bytes - i.e. the sum of the lengths of the common header, the address header, and the path header. The SCION header is aligned to a multiple of 4 bytes. The SCION header length is computed as `HdrLen` * 4 bytes. The 8 bits of the `HdrLen` field limit the SCION header to a maximum of 255 * 4 = 1020 bytes.
 - `PayloadLen`: Specifies the length of the payload in bytes. The payload includes (SCION) extension headers and the L4 payload. This field is 16 bits long, supporting a maximum payload size of 65'535 bytes.
-- `PathType`: Specifies the type of the SCION path and is 8 bits long. The format of one path type is independent of all other path types. The currently defined SCION path types are Empty (0), SCION (1), OneHopPath (2), EPIC (3) and COLIBRI (4). This document only specifies the Empty, SCION and OneHopPath path types and the other path types are currently experimental. For more details, see [](#path-header).
+- `PathType`: Specifies the type of the SCION path. It is described in [](#path-type-field).
+- `DT/DL/ST/SL` (Address Type And Length): Define the endpoint address type and length. They are described in [](#addr-type-length-field).
+- `RSV`: These bits are currently reserved for future use.
+
+### Path Type Field {#path-type-field}
 
 | Value | Path Type                      |
 |-------+--------------------------------|
@@ -521,9 +525,15 @@ The SCION common header has the following packet format:
 | 2     | One-hop path (`OneHopPath`)    |
 | 3     | EPIC path (experimental)       |
 | 4     | COLIBRI path (experimental)    |
-{: #table-1 title="SCION path types"}
+{: #table-1 title="Currently defined SCION path types"}
 
-- `DT/DL/ST/SL`: These fields define the endpoint address type and endpoint address length for the source and destination endpoint. `DT` and `DL` stand for Destination Type and Destination Length, whereas `ST` and `SL` stand for Source Type and Source Length. The possible endpoint address length values are 4 bytes, 8 bytes, 12 bytes, and 16 bytes. If an address has a length different from the supported values, the next larger size SHALL be used and the address can be padded with zeros. {{table-2}} below lists the currently used values for address length. The "type" identifier is only defined in combination with a specific address length - e.g. address type "0" is defined as IPv4 in combination with address length 4, but is defined as IPv6 in combination with address length 16. Per address length, several sub-types are possible and {{table-3}} shows the currently assigned combinations of lengths and types.
+The Path Type field determines the type of the SCION path and it is 8 bits long. The format of one path type is independent of all other path types. This document only specifies the Empty, SCION and OneHopPath path types and the other path types are currently experimental. For more details, see [](#path-header).
+
+### Address Type And Length Fields {#addr-type-length-field}
+
+These fields, also abbreviated `DT/DL/ST/SL`, define the endpoint address type and endpoint address length for the source and destination endpoint.
+
+The possible endpoint address length values are:
 
 | DL/SL Value | Address Length |
 |-------------+----------------|
@@ -531,7 +541,11 @@ The SCION common header has the following packet format:
 | 1           | 8 bytes        |
 | 2           | 12 bytes       |
 | 3           | 16 bytes       |
-{: #table-2 title="Address length values"}
+{: #table-2 title="Address length values. `DL` and `SL` stand for Destination Length and Source Length."}
+
+If an address has a length different from the supported values, the next larger size SHALL be used and the address can be padded with zeros.
+
+The "type" identifier is only defined in combination with a specific address length. Per address length, several sub-types are possible. The currently assigned combinations of lengths and types are:
 
 | Type (DT/ST) | Length (DL/SL) | Conventional Use |
 |--------------+----------------+------------------|
@@ -539,11 +553,10 @@ The SCION common header has the following packet format:
 | 0            | 3              | IPv6             |
 | 1            | 0              | Service          |
 | other        | other          | Unassigned       |
-{: #table-3 title="Allocations of length and type combinations"}
+{: #table-3 title="Allocations of length and type combinations. `DT` and `ST` stand for Destination Type and Source Type."}
 
-A service address designates a set of endpoint addresses rather than a single one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set. {{table-4}} lists the known services.
+Service addresses are described in [](#service-addresses).
 
-- `RSV`: These bits are currently reserved for future use.
 
 ## Address Header {#address-header}
 
@@ -574,6 +587,9 @@ The SCION address header has the following format:
 - `DstAS, SrcAS`: The 48-bit SCION AS identifier of the destination/source.
 - `DstHostAddr, SrcHostAddr`: Specifies the variable length endpoint address of the destination/source. The accepted type and length are defined in the `DT/DL/ST/SL` fields of the common header.
 
+## Service Addresses {#service-addresses}
+
+A service address designates a set of endpoint addresses rather than a single one. A packet addressed to a service is redirected to any one endpoint address that is known to be part of the set.
 If a service address is implied by the `DT/DL` or `ST/SL` field of the common header according to {{table-3}}, the corresponding address field has the following format:
 
 ~~~ aasvg
@@ -1351,20 +1367,18 @@ A SCION egress border router MUST perform the following steps when it receives a
 
 #### Effects of Clock Inaccuracy {#clock-inaccuracy}
 
-Coarse time synchronization between an AS’s control service and its SCION routers is necessary because path segments are generated by control service instances and later used to construct data plane paths. Specifically, the timestamp in the Info Field and the expiration time of Hop Fields are used for Hop Field MAC computation at each on-path SCION router, see [](#hf-mac-calc).
+Coarse time synchronization between core AS control services and SCION routers is required because path segments are generated by core AS control services and subsequently validated by routers in the data plane. Specifically, routers rely on the timestamp in the Info Field and the expiration time of Hop Fields to verify Hop Field validity, see [](#process-router-ingress).
 
-A segment's originating control service and the routers that the segment refers to all have different clocks. Their differences affect the validation process:
+Clock offsets between the originating control service and the validating router impact this process:
 
 * A fast clock at origination or a slow clock at validation will yield a lengthened expiration time for hops, and possibly an origination time in the future.
 * A slow clock at origination or a fast clock at validation will yield a shortened expiration time for hops, and possibly an expiration time in the past.
 
-This bias comes in addition to a structural delay: PCBs are propagated at a configurable interval (typically, one minute). As a result of this and the way they are iteratively constructed, PCBs with N hops may become available for path construction up to N intervals (so typically N minutes) after origination which creates a constraint on the expiration of hops. Hops of the minimal expiration time (337.5 seconds - see [](#hopfld)) would render useless any path segment longer than 5 hops. For this reason, it is unadvisable to create hops with a short expiration time, and the norm is 6 hours.
+Given the minimum Hop Field expiration of 337.5 seconds (see [](#hopfld)), offsets between a router and core ASes in the order of minutes are tolerable.
 
-In comparison to these time scales, clock offsets in the order of minutes are immaterial.
+Operators should ensure that control plane instances and routers maintain coarse time synchronization, though the specific methods used to achieve this are outside the scope of this document.
 
-Care should be taken to ensure that control plane instances and routers maintain coarse time synchronization. The specific methods used to achieve this synchronization are outside the scope of this document.
-
-Security considerations related to this issue are discussed in {{I-D.dekater-scion-controlplane}}.
+For details on clock inaccuracies relative to beaconing, and for related security considerations, see {{I-D.dekater-scion-controlplane}}.
 
 # Deployment Considerations
 
@@ -1555,7 +1569,9 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Reduce use of passive tense and clarify subject
 - Abstract, Introduction: reworded and shortened, with reference to longer -controlplane introduction
+- Tables 1-4: move them to a dedicated subsection to increase readability
 - Life of a SCION Data Packet: restructure section and clarify role of example topology
+- Effects of Clock Inaccuracy: reword, clarify tolerable offset, remove duplicated part about beacon propagation and point to -controlplane
 
 ## draft-dekater-scion-dataplane-10
 {:numbered="false"}
