@@ -854,7 +854,7 @@ Note that the destination endpoint, upon receiving a first packet, is not aware 
 SCION provides two types of extension headers:
 
 - The Hop-by-Hop Options header carries OPTIONAL information that MAY be examined and processed by every SCION router along a packet's delivery path. The Hop-by-Hop Options header is identified by value "200" in the `NextHdr` field of the SCION common header (see [](#common-header)).
-- The End-to-End Options carry OPTIONAL information that MAY be examined and processed by the sender and/or the receiving endpoints of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
+- The End-to-End Options header carries OPTIONAL information that MAY be examined and processed by the sender and/or the receiving endpoints of the packet. The End-to-End Options header is identified by value "201" in the `NextHdr` field of the SCION common header (see [](#common-header)).
 
 If both headers are present, the Hop-by-Hop Options header MUST come before the End-to-End Options header.
 
