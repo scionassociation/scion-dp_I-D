@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 10 August 2026                                SCION Association
+Expires: 14 August 2026                                SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                         6 February 2026
+                                                        10 February 2026
 
 
                             SCION Data Plane
@@ -68,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 August 2026.
+   This Internet-Draft will expire on 14 August 2026.
 
 Copyright Notice
 
@@ -1241,8 +1241,8 @@ Table of Contents
       identified by value "200" in the NextHdr field of the SCION common
       header (see Section 2.1).
 
-   *  The End-to-End Options carry OPTIONAL information that MAY be
-      examined and processed by the sender and/or the receiving
+   *  The End-to-End Options header carries OPTIONAL information that
+      MAY be examined and processed by the sender and/or the receiving
       endpoints of the packet.  The End-to-End Options header is
       identified by value "201" in the NextHdr field of the SCION common
       header (see Section 2.1).
