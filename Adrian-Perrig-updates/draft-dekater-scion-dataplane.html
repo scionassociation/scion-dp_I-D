@@ -1516,8 +1516,8 @@ appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">�
 <a href="#name-the-scion-header-within-the" class="selfRef">The SCION header within the protocol stack in a typical deployment</a>
             </figcaption></figure>
 </div>
-<p id="section-1.3.1-6">A complete SCION address is composed of the &lt;ISD, AS, endpoint address&gt; 3-tuple. The ISD-AS part is used for inter-domain routing, whilst the endpoint address part is only used for intra-domain forwarding at the source and destination ASes. This implies that endpoint addresses are only required to be globally unique within each SCION AS. An endpoint running a SCION stack using a <span>[<a href="#RFC1918" class="cite xref">RFC1918</a>]</span> could therefore directly communicate with another SCION endpoint using a <span>[<a href="#RFC1918" class="cite xref">RFC1918</a>]</span> endpoint address in a different SCION AS.<a href="#section-1.3.1-6" class="pilcrow">¶</a></p>
-<p id="section-1.3.1-7">The data transmission order for SCION is the same as for IPv6 as defined in Introduction of <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>.<a href="#section-1.3.1-7" class="pilcrow">¶</a></p>
+<p id="section-1.3.1-6">A complete SCION address is composed of the &lt;ISD, AS, endpoint address&gt; 3-tuple. The ISD-AS part is used for inter-domain routing, whilst the endpoint address part is only used for intra-domain forwarding at the destination AS. This implies that endpoint addresses are only required to be globally unique within a SCION AS. An endpoint running a SCION stack using a <span>[<a href="#RFC1918" class="cite xref">RFC1918</a>]</span> private address could therefore directly communicate with another SCION endpoint using a <span>[<a href="#RFC1918" class="cite xref">RFC1918</a>]</span> endpoint address in a different SCION AS.<a href="#section-1.3.1-6" class="pilcrow">¶</a></p>
+<p id="section-1.3.1-7">The data transmission order for SCION is the same whether using IPv4 (as defined in <span>[<a href="#RFC791" class="cite xref">RFC791</a>]</span>) or IPv6 (as defined in <span>[<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>).<a href="#section-1.3.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="intra-domain-forwarding-process">
@@ -4733,6 +4733,10 @@ Key rotation is outside of the scope of this document and may leverage an out-of
 <dt id="RFC6437">[RFC6437]</dt>
         <dd>
 <span class="refAuthor">Amante, S.</span>, <span class="refAuthor">Carpenter, B.</span>, <span class="refAuthor">Jiang, S.</span>, and <span class="refAuthor">J. Rajahalme</span>, <span class="refTitle">"IPv6 Flow Label Specification"</span>, <span class="seriesInfo">RFC 6437</span>, <span class="seriesInfo">DOI 10.17487/RFC6437</span>, <time datetime="2011-11" class="refDate">November 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6437">https://www.rfc-editor.org/rfc/rfc6437</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC791">[RFC791]</dt>
+        <dd>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Internet Protocol"</span>, <span class="seriesInfo">STD 5</span>, <span class="seriesInfo">RFC 791</span>, <span class="seriesInfo">DOI 10.17487/RFC0791</span>, <time datetime="1981-09" class="refDate">September 1981</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc791">https://www.rfc-editor.org/rfc/rfc791</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>

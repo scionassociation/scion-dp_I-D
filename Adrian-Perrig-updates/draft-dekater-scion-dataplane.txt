@@ -386,14 +386,14 @@ Table of Contents
    A complete SCION address is composed of the <ISD, AS, endpoint
    address> 3-tuple.  The ISD-AS part is used for inter-domain routing,
    whilst the endpoint address part is only used for intra-domain
-   forwarding at the source and destination ASes.  This implies that
-   endpoint addresses are only required to be globally unique within
-   each SCION AS.  An endpoint running a SCION stack using a [RFC1918]
+   forwarding at the destination AS.  This implies that endpoint
+   addresses are only required to be globally unique within a SCION AS.
+   An endpoint running a SCION stack using a [RFC1918] private address
    could therefore directly communicate with another SCION endpoint
    using a [RFC1918] endpoint address in a different SCION AS.
 
-   The data transmission order for SCION is the same as for IPv6 as
-   defined in Introduction of [RFC8200].
+   The data transmission order for SCION is the same whether using IPv4
+   (as defined in [RFC791]) or IPv6 (as defined in [RFC8200]).
 
 1.3.2.  Intra-Domain Forwarding Process
 
@@ -2680,6 +2680,10 @@ Table of Contents
               "IPv6 Flow Label Specification", RFC 6437,
               DOI 10.17487/RFC6437, November 2011,
               <https://www.rfc-editor.org/rfc/rfc6437>.
+
+   [RFC791]   Postel, J., "Internet Protocol", STD 5, RFC 791,
+              DOI 10.17487/RFC0791, September 1981,
+              <https://www.rfc-editor.org/rfc/rfc791>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
