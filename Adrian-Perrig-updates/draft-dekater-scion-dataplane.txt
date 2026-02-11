@@ -805,7 +805,7 @@ Table of Contents
 
                  Table 3: Allocations of length and type
                   combinations. `DT` and `ST` stand for
-                    Destination Type and Source Type.
+              Destination Type and Source Type respectively.
 
    Service addresses are described in Section 2.3.
 
@@ -1112,10 +1112,10 @@ Table of Contents
       invalid, and for the purpose of validation, a timestamp is
       considered "future" if it is later than the locally available
       current time plus 337.5 seconds (i.e., the minimum time to live of
-      a hop).  This timestamp wraps around every 2^32 seconds (roughly
-      136 years) with the next wraparound occurring in year 2106.  Care
-      should be taken by implementations while computing validity during
-      a wraparound.
+      a hop).  This timestamp wraps around every 2^32 seconds
+      (approximately 136 years) with the next wraparound occurring in
+      year 2106.  Care should be taken by implementations while
+      computing validity during a wraparound.
 
 2.4.2.4.  Hop Field
 
@@ -1829,7 +1829,7 @@ Table of Contents
    segment's SegID - i.e., the current MAC is _chained_ to all preceding
    MACs.  In order to effectively prevent path-splicing, the
    cryptographic checksum function used MUST ensure that the truncation
-   of the MACs is non-degenerate and roughly uniformly distributed (see
+   of the MACs is non-degenerate and uniformly distributed (see
    Section 4.1.1.3.2).
 
 4.1.1.2.  Accumulator Acc - Definition
@@ -1908,8 +1908,8 @@ Table of Contents
    *  The Hop Field MAC field is computed as a function of the secret
       forwarding key, the Acc and Timestamp fields of the Info Field,
       and the ExpTime, ConsIngress and ConsEgress fields of the Hop
-      Field.  Function is used in the mathematical sense that for for
-      any values of these inputs there is exactly one result.
+      Field.  The term function is used in the mathematical sense that
+      for for any values of these inputs there is exactly one result.
 
    *  The algorithm returns an unforgeable 48-bit value.  Unforgeable
       specifically means "existentially unforgeable under a chosen
@@ -1925,8 +1925,8 @@ Table of Contents
       -  is not degenerate - i.e., any small change in any input value
          SHOULD have an "avalanche effect" on these bits, and;
 
-      -  is roughly uniformly distributed when considering all possible
-         input values.
+      -  is uniformly distributed when considering all possible input
+         values.
 
    This additional requirement is naturally satisfied for MAC algorithms
    based on typical block ciphers or hash algorithms.  It ensures that
