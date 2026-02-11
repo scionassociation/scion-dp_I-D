@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 14 August 2026                                SCION Association
+Expires: 15 August 2026                                SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        10 February 2026
+                                                        11 February 2026
 
 
                             SCION Data Plane
@@ -68,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 August 2026.
+   This Internet-Draft will expire on 15 August 2026.
 
 Copyright Notice
 
@@ -1101,20 +1101,21 @@ Table of Contents
       calculating the MAC in the data plane.  For more details, see
       Section 4.1.
 
-   *  Timestamp: Timestamp created by the initiator of the corresponding
-      beacon.  The timestamp is defined as the seconds since Epoch
-      according to [POSIX.1-2024] Section 4.19, encoded as a 32-bit
-      unsigned integer.  This timestamp enables the validation of a Hop
-      Field in the segment represented by this Info Field, by verifying
-      the expiration time and MAC set in the Hop Field - the expiration
-      time of a Hop Field is calculated relative to the timestamp.  An
-      Info field with a timestamp in the future is invalid, and for the
-      purpose of validation, a timestamp is considered "future" if it is
-      later than the locally available current time plus 337.5 seconds
-      (i.e. the minimum time to live of a hop).  This timestamp wraps
-      around every 2^32 seconds (roughly 136 years) with the next
-      wraparound occurring in year 2106.  Care should be taken by
-      implementations while computing validity during a wraparound.
+   *  Timestamp: Timestamp created by the originator of the
+      corresponding beacon.  The timestamp is defined as the seconds
+      since Epoch according to [POSIX.1-2024] Section 4.19, encoded as a
+      32-bit unsigned integer.  This timestamp enables the validation of
+      a Hop Field in the segment represented by this Info Field, by
+      verifying the expiration time and MAC set in the Hop Field - the
+      expiration time of a Hop Field is calculated relative to the
+      timestamp.  An Info field with a timestamp in the future is
+      invalid, and for the purpose of validation, a timestamp is
+      considered "future" if it is later than the locally available
+      current time plus 337.5 seconds (i.e. the minimum time to live of
+      a hop).  This timestamp wraps around every 2^32 seconds (roughly
+      136 years) with the next wraparound occurring in year 2106.  Care
+      should be taken by implementations while computing validity during
+      a wraparound.
 
 2.4.2.4.  Hop Field
 
