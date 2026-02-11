@@ -293,9 +293,9 @@ As SCION is an inter-domain network architecture, it is not concerned with intra
 
 SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; reusing the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION.
 
-In practice, in most existing SCION deployments the SCION routers communicate amongst themselves and with endpoints by enclosing the SCION header inside an UDP/IPv6 or UDP/IPv4 packet. The choice of using an UDP/IP as an intra-domain protocol between routers was driven by the need to maximize compatibility with existing networks. Id does not exclude that a SCION packet may be enclosed directly on top of a Layer 2 protocol, since the choice of intra-domain protocol is AS specific.
+In practice, in most existing SCION deployments the SCION routers communicate amongst themselves and with endpoints by enclosing the SCION header inside an UDP/IPv6 or UDP/IPv4 packet. The choice of using an UDP/IP as an intra-domain protocol between routers was driven by the need to maximize compatibility with existing networks. This does not exclude that a SCION packet may be enclosed directly on top of a Layer 2 protocol, since the choice of intra-domain protocol is AS specific.
 
-{{figure-30}} shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is later presented in [](#life-of-a-packet). A list of currently used upper layer protocols on top of SCION is presented in [](#protnum).
+{{figure-30}} shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is presented in [](#life-of-a-packet). A list of currently used upper layer protocols on top of SCION is presented in [](#protnum).
 
 ~~~ aasvg
 
@@ -320,7 +320,7 @@ In practice, in most existing SCION deployments the SCION routers communicate am
 ~~~
 {: #figure-30 title="The SCION header within the protocol stack in a typical deployment"}
 
-A complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple. The ISD-AS part is used for inter-domain routing, whilst the endpoint address part is only used for intra-domain forwarding at the source and destination ASes. This implies that endpoint addresses are only required to be globally unique within each SCION AS. An endpoint running a SCION stack using a {{RFC1918}} could therefore directly communicate with another SCION endpoint using a {{RFC1918}} endpoint address in a different SCION AS.
+A complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple. The ISD-AS part is used for inter-domain routing, whilst the endpoint address part is only used for intra-domain forwarding at the source and destination ASes. This implies that endpoint addresses are only required to be unique within each SCION AS. An endpoint running a SCION stack using a {{RFC1918}} endpoint address could therefore directly communicate with another SCION endpoint using a {{RFC1918}} endpoint address in a different SCION AS.
 
 The data transmission order for SCION is the same as for IPv6 as defined in Introduction of {{RFC8200}}.
 
@@ -333,7 +333,8 @@ When transiting an intermediate SCION AS, a packet gets forwarded by at most two
 3. The SCION router maps the egress Interface ID in the current Hop Field of the SCION header to the destination address of the intra-domain protocol (e.g. MPLS or IP) of the egress border router.
 4. The packet is forwarded within the AS by SCION-unaware routers and switches based on the header of the intra-domain protocol.
 5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
-6. The last SCION router on the path forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
+
+In the destination AS, the SCION ingress router forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
 
 ### Configuration {#configuration}
 
@@ -346,7 +347,7 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - For intra-domain forwarding: mapping of the AS interface IDs to intra-domain protocol address of the corresponding routers.
 - The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) and forwarding key, which must be the same as that used by the Control Services within the AS.
 
-In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
+In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number ({{table-4}}) into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
 In addition, routers require coarse time synchronization with control plane instances (see [](#clock-inaccuracy)).
 
