@@ -552,7 +552,7 @@ The "type" identifier is only defined in combination with a specific address len
 | 0            | 3              | IPv6             |
 | 1            | 0              | Service          |
 | other        | other          | Unassigned       |
-{: #table-3 title="Allocations of length and type combinations. `DT` and `ST` stand for Destination Type and Source Type."}
+{: #table-3 title="Allocations of length and type combinations. `DT` and `ST` stand for Destination Type and Source Type respectively."}
 
 Service addresses are described in [](#service-addresses).
 
@@ -788,7 +788,7 @@ The 8-byte Info Field (`InfoField`) has the following format:
 - `P`: Peering flag. If the flag has value "1", the segment represented by this Info Field contains a peering Hop Field, which requires special processing in the data plane. For more details, see [](#peerlink) and [](#packet-verif).
 - `C`: Construction direction flag. If the flag has value "1", the Hop Fields in the segment represented by this Info Field are arranged in the direction they have been constructed during beaconing.
 - `Acc`: Accumulator. This updatable field/counter is REQUIRED for calculating the MAC in the data plane. For more details, see [](#auth-chained-macs).
-- `Timestamp`: Timestamp created by the originator of the corresponding beacon. The timestamp is defined as the seconds since Epoch according to {{POSIX.1-2024}} Section 4.19, encoded as a 32-bit unsigned integer. This timestamp enables the validation of a Hop Field in the segment represented by this Info Field, by verifying the expiration time and MAC set in the Hop Field - the expiration time of a Hop Field is calculated relative to the timestamp. An Info field with a timestamp in the future is invalid, and for the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e., the minimum time to live of a hop). This timestamp wraps around every 2^32 seconds (roughly 136 years) with the next wraparound occurring in year 2106. Care should be taken by implementations while computing validity during a wraparound.
+- `Timestamp`: Timestamp created by the originator of the corresponding beacon. The timestamp is defined as the seconds since Epoch according to {{POSIX.1-2024}} Section 4.19, encoded as a 32-bit unsigned integer. This timestamp enables the validation of a Hop Field in the segment represented by this Info Field, by verifying the expiration time and MAC set in the Hop Field - the expiration time of a Hop Field is calculated relative to the timestamp. An Info field with a timestamp in the future is invalid, and for the purpose of validation, a timestamp is considered "future" if it is later than the locally available current time plus 337.5 seconds (i.e., the minimum time to live of a hop). This timestamp wraps around every 2^32 seconds (approximately 136 years) with the next wraparound occurring in year 2106. Care should be taken by implementations while computing validity during a wraparound.
 
 #### Hop Field {#hopfld}
 
@@ -1172,7 +1172,7 @@ where
 - Timestamp = The timestamp set by the core AS when creating the corresponding PCB
 - ExpTime<sub>i</sub>, ConsIngress<sub>i</sub>, ConsEgress<sub>i</sub> = The content of the Hop Field HF<sub>i</sub>
 
-Thus, the current MAC is based on the XOR-sum of the truncated MACs of all preceding Hop Fields in the path segment as well as the path segment's `SegID` - i.e., the current MAC is *chained* to all preceding MACs. In order to effectively prevent path-splicing, the cryptographic checksum function used MUST ensure that the truncation of the MACs is non-degenerate and roughly uniformly distributed (see {{mac-requirements}}).
+Thus, the current MAC is based on the XOR-sum of the truncated MACs of all preceding Hop Fields in the path segment as well as the path segment's `SegID` - i.e., the current MAC is *chained* to all preceding MACs. In order to effectively prevent path-splicing, the cryptographic checksum function used MUST ensure that the truncation of the MACs is non-degenerate and uniformly distributed (see {{mac-requirements}}).
 
 #### Accumulator Acc - Definition {#def-acc}
 
@@ -1223,11 +1223,11 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
 
 For alternative MAC algorithms, the following requirements MUST all be met:
 
-- The Hop Field MAC field is computed as a function of the secret forwarding key, the `Acc` and `Timestamp` fields of the Info Field, and the `ExpTime`, `ConsIngress` and `ConsEgress` fields of the Hop Field. Function is used in the mathematical sense that for for any values of these inputs there is exactly one result.
+- The Hop Field MAC field is computed as a function of the secret forwarding key, the `Acc` and `Timestamp` fields of the Info Field, and the `ExpTime`, `ConsIngress` and `ConsEgress` fields of the Hop Field. The term function is used in the mathematical sense that for for any values of these inputs there is exactly one result.
 - The algorithm returns an unforgeable 48-bit value. Unforgeable specifically means "existentially unforgeable under a chosen message attack" ({{CRYPTOBOOK}}). Informally, this means an attacker without access to the secret key has no computationally efficient means to create a valid MAC for some attacker chosen input values, even if it has access to an "oracle" providing a valid MAC for any other input values.
 - The truncation of the result value to the first 16 bits of the result value:
     - is not degenerate - i.e., any small change in any input value SHOULD have an "avalanche effect" on these bits, and;
-    - is roughly uniformly distributed when considering all possible input values.
+    - is uniformly distributed when considering all possible input values.
 
 This additional requirement is naturally satisfied for MAC algorithms based on typical block ciphers or hash algorithms. It ensures that the MAC chaining via the `Acc` field is not degenerate.
 
