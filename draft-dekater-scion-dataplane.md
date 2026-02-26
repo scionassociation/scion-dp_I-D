@@ -293,7 +293,7 @@ As SCION is an inter-domain network architecture, it is not concerned with intra
 
 SCION emphasizes this separation as it is used exclusively for inter-domain forwarding; reusing the intra-domain network fabric to provide connectivity amongst all SCION infrastructure services, border routers, and endpoints. As a consequence, minimal change to the infrastructure is required for ISPs when deploying SCION.
 
-In practice, in most existing SCION deployments the SCION routers communicate amongst themselves and with endpoints by enclosing the SCION header inside an UDP/IPv6 or UDP/IPv4 packet. The choice of using an UDP/IP as an intra-domain protocol between routers was driven by the need to maximize compatibility with existing networks. This does not exclude that a SCION packet may be enclosed directly on top of a Layer 2 protocol, since the choice of intra-domain protocol is AS specific.
+In practice, in most existing SCION deployments the SCION routers communicate amongst themselves and with endpoints by enclosing the SCION header inside an UDP/IPv6 or UDP/IPv4 packet. The choice of using an UDP/IP as an intra-domain protocol between routers was driven by the need to maximize compatibility with existing networks. This does not exclude that a SCION packet may be enclosed directly on top of a Layer 2 protocol, since the choice of intra-domain protocol is AS-specific.
 
 {{figure-30}} shows the SCION header within the protocol stack, in an AS where the SCION deployment uses UDP/IP as an intra-domain protocol. A similar model may be used for inter-domain links, depending on the individual choice of the two interconnected SCION router operators. A full example of the life of a SCION packet is presented in [](#life-of-a-packet). A list of currently used upper layer protocols on top of SCION is presented in [](#protnum).
 
@@ -351,7 +351,7 @@ In order to forward traffic to a service endpoint address (`DT/DS` as per {{tabl
 
 In addition, routers require coarse time synchronization with control plane instances (see [](#clock-inaccuracy)).
 
-The current SCION implementation runs over the UDP/IP protocol, although the use of other lower layers protocols is possible.
+The current SCION implementation runs over the UDP/IP protocol, although the use of other lower layers protocols is possible. When using an UDP/IP underlay, routers and endpoints extract the destination port from the TCP/SCION or UDP/SCION payload and use the same destination port in the underlay.
 
 
 ## Path Construction (Segment Combinations) {#construction}
@@ -1338,7 +1338,7 @@ A SCION ingress border router MUST perform the following steps when it receives 
         - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.
         - Increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 5.
 
-5. Forward the packet to the egress border router (based on the egress Interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS.
+5. Forward the packet to the egress border router (based on the egress Interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS. If using an UDP/IP underlay, the destination port is extracted from the UDP/SCION or TCP/SCION destination port.
 
 #### Steps at Egress Border Router
 
@@ -1563,6 +1563,11 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-dataplane-12
+{:numbered="false"}
+
+- Clarify choice of destination port with UDP underlay
 
 ## draft-dekater-scion-dataplane-11
 {:numbered="false"}
