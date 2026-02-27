@@ -398,6 +398,11 @@ Table of Contents
 
 1.3.2.  Intra-Domain Forwarding Process
 
+   SCION routers within the source AS receive outbound traffic from
+   local endpoints.  The mechanisms used to configure these endpoints
+   with the router's address and port, particularly when utilizing a
+   UDP/IP underlay, are beyond the scope of this document.
+
    When transiting an intermediate SCION AS, a packet gets forwarded by
    at most two SCION routers.  The forwarding process consists of the
    following steps.
@@ -423,7 +428,10 @@ Table of Contents
 
    In the destination AS, the SCION ingress router forwards the packet
    to the packet's destination endpoint indicated by the field
-   DstHostAddr of the Address Header (Section 2.2).
+   DstHostAddr of the Address Header (Section 2.2).  When using an UDP/
+   IP underlay, the SCION ingress router extracts the destination port
+   from the TCP/SCION or UDP/SCION payload and uses it as a destination
+   port in the underlay.
 
 1.3.3.  Configuration
 
@@ -461,10 +469,7 @@ Table of Contents
    plane instances (see Section 4.2.2.3).
 
    The current SCION implementation runs over the UDP/IP protocol,
-   although the use of other lower layers protocols is possible.  When
-   using an UDP/IP underlay, routers extract the destination port from
-   the TCP/SCION or UDP/SCION payload and use it as destination port in
-   the underlay.
+   although the use of other lower layers protocols is possible.
 
 1.4.  Path Construction (Segment Combinations)
 
@@ -1493,11 +1498,16 @@ Table of Contents
    *  AS ff00:0:1 is a core AS, ASes ff00:0:2 and ff00:0:3 are non-core.
       All ASes are part of ISD 1.
 
-   *  Endpoint A is the source endpoint and it is in AS ff00:0:2
+   *  Endpoint A is the source endpoint and it is in AS ff00:0:2.
 
-   *  Endpoint B the destination endpoint and it is in AS ff00:0:3
+   *  Endpoint B the destination endpoint and it is in AS ff00:0:3.
 
-   *  both endpoints run a native SCION network stack.
+   *  both endpoints run a native SCION network stack.  They communicate
+      to their AS router on an UDP/IP underlay on destination UDP port
+      30100.
+
+   *  the example packet carries a TCP/SCION payload with destination
+      port 443.  This payload is omitted for brevity.
 
    Since this example consists of only one ISD and one core AS, the end-
    to-end path only includes an up-path and down-path segment.  The
@@ -1574,8 +1584,8 @@ Table of Contents
        | SCION path  | - _IF1_ *(0,i2a)* (i1a,0)    |             |
        |             | - IF2 (0,i1b) (i3a,0)        |             |
        +-------------+------------------------------+-------------+
-       | UDP port    | SRC = 30041                  |             |
-       |             | DST = 30041                  |             |
+       | UDP port    | SRC = 52475                  |             |
+       |             | DST = 30100                  |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 203.0.113.6            | Endpoint A  |
        |             | DST = 203.0.113.17           | Router R1   |
@@ -1640,8 +1650,8 @@ Table of Contents
        | SCION path  | - IF1 (0,i2a) (i1a,0)        |             |
        |             | - _IF2_ *(0,i1b)* (i3a,0)    |             |
        +-------------+------------------------------+-------------+
-       | UDP port    | SRC = 30041                  |             |
-       |             | DST = 30041                  |             |
+       | UDP port    | SRC = 31000                  |             |
+       |             | DST = 31000                  |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 198.51.100.1           | Router R2   |
        |             | DST = 198.51.100.4           | Router R3   |
@@ -1667,8 +1677,8 @@ Table of Contents
        | SCION path  | - IF1 (0,i2a) (i1a,0)        |             |
        |             | - _IF2_ (0,i1b) *(i3a,0)*    |             |
        +-------------+------------------------------+-------------+
-       | UDP port    | SRC = 30041                  |             |
-       |             | DST = 30041                  |             |
+       | UDP port    | SRC = 31022                  |             |
+       |             | DST = 31022                  |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 198.51.100.17          | Router R3   |
        |             | DST = 198.51.100.18          | Router R4   |
@@ -1688,7 +1698,8 @@ Table of Contents
       the pointers to the next Info Field or Hop Field, router R4
       inspects the SCION destination address and extracts the endpoint
       address 192.0.2.7.  It creates a fresh underlay UDP/IP header with
-      this address as destination and with itself as source.  The intra-
+      this address as destination, with itself as source, and with
+      destination port extracted from the TCP/SCION payload.  The intra-
       domain forwarding can now deliver the packet to its destination at
       Endpoint B.
 
@@ -1701,8 +1712,8 @@ Table of Contents
        | SCION path  | - IF1 (0,i2a) (i1a,0)        |             |
        |             | - _IF2_ (0,i1b) *(i3a,0)*    |             |
        +-------------+------------------------------+-------------+
-       | UDP port    | SRC = 30041                  |             |
-       |             | DST = 30041                  |             |
+       | UDP port    | SRC = 30100                  |             |
+       |             | DST = 443                    |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 192.0.2.34             | Router R4   |
        |             | DST = 192.0.2.7              | Endpoint B  |
@@ -2191,7 +2202,8 @@ Table of Contents
 
    5.  Forward the packet to the egress border router (based on the
        egress Interface ID in the current Hop Field) or to the
-       destination endpoint, if this is the destination AS.
+       destination endpoint, if this is the destination AS (see
+       Section 1.3.2).
 
 4.2.2.2.  Steps at Egress Border Router
 
