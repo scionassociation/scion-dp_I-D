@@ -1566,6 +1566,7 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+- Accumulator field: clarify that it is initialized to SegID
 - Security considerations: mention SPAO in Volumetric DoS section
 
 ## draft-dekater-scion-dataplane-11
