@@ -4670,7 +4670,7 @@ Key rotation is outside of the scope of this document and may leverage an out-of
 <a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-volumetric-denial-of-servic" class="section-name selfRef">Volumetric Denial of Service Attacks</a>
         </h3>
 <p id="section-7.4-1">An adversary can attempt to disrupt the connectivity of a network path by flooding a link with excessive traffic. In this case, the endpoint can switch to another non-congested path for subsequent packets.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
-<p id="section-7.4-2">SCION provides protection against certain reflection-based DoS attacks. Here, the adversary sends requests to a server with the source address set to the address of the victim, and the server will send a reply that is typically larger than the request to the victim. This can be prevented in SCION as long as the attacker and the victim are located in different ASes as the reply packets are simply returned along reversed path to the actual sender regardless of the source address information. Thus, the reply packets will be forwarded to the attacker's AS where they will be discarded because the destination AS does not match.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
+<p id="section-7.4-2">SCION provides protection against certain reflection-based DoS attacks. Here, the adversary sends requests to a server with the source address set to the address of the victim, and the server will send a reply that is typically larger than the request to the victim. This can be prevented in SCION as long as the attacker and the victim are located in different ASes as the reply packets are simply returned along reversed path to the actual sender regardless of the source address information. Thus, the reply packets will be forwarded to the attacker's AS where they will be discarded because the destination AS does not match. The SPAO experimental extension can further help mitigate such attacks through endpoint address authentication and replay protection.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
 <p id="section-7.4-3">However, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with a relatively low send rate. The attacker can exploit the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.<a href="#section-7.4-3" class="pilcrow">¶</a></p>
 <p id="section-7.4-4">SCION does not protect against two other types of DoS attacks, namely transport protocol attacks and application layer attacks. Such attacks are out of SCION's scope although additional information contained in the SCION header enables more targeted filtering - e.g., by ISD, AS or path length.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
 </section>
@@ -4922,6 +4922,11 @@ Key rotation is outside of the scope of this document and may leverage an out-of
 <a href="#name-change-log" class="section-name selfRef">Change Log</a>
       </h2>
 <p id="appendix-C-1">Changes made to drafts since ISE submission. This section is to be removed before publication.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-2.1">
+          <p id="appendix-C-2.1.1">Security considerations: mention SPAO in Volumetric DoS section<a href="#appendix-C-2.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 <div id="draft-dekater-scion-dataplane-11">
 <section id="appendix-C.1">
         <h3 id="name-draft-dekater-scion-datapla">

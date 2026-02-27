@@ -2607,7 +2607,9 @@ Table of Contents
    returned along reversed path to the actual sender regardless of the
    source address information.  Thus, the reply packets will be
    forwarded to the attacker's AS where they will be discarded because
-   the destination AS does not match.
+   the destination AS does not match.  The SPAO experimental extension
+   can further help mitigate such attacks through endpoint address
+   authentication and replay protection.
 
    However, the path choice of the endpoint may possibly be exploited by
    an attacker to create intermittent congestion with a relatively low
@@ -2805,6 +2807,8 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+   *  Security considerations: mention SPAO in Volumetric DoS section
 
 draft-dekater-scion-dataplane-11
 
