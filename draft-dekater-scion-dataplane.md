@@ -320,7 +320,7 @@ In practice, in most existing SCION deployments the SCION routers communicate am
 ~~~
 {: #figure-30 title="The SCION header within the protocol stack in a typical deployment"}
 
-A complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple. The ISD-AS part is used for inter-domain routing, whilst the endpoint address part is only used for intra-domain forwarding at the source and destination ASes. This implies that endpoint addresses are only required to be unique within each SCION AS. An endpoint running a SCION stack using a {{RFC1918}} endpoint address could therefore directly communicate with another SCION endpoint using a {{RFC1918}} endpoint address in a different SCION AS.
+A complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple. The ISD-AS part is used for inter-domain routing, whilst the endpoint address part is only used for intra-domain forwarding at the destination AS. This implies that endpoint addresses are only required to be unique within a SCION AS. An endpoint running a SCION stack using a {{RFC1918}} endpoint address could therefore directly communicate with another SCION endpoint using a {{RFC1918}} endpoint address in a different SCION AS.
 
 The data transmission order for SCION is the same as for IPv6 as defined in Introduction of {{RFC8200}}.
 
@@ -1223,7 +1223,7 @@ The default MAC algorithm is AES-CMAC ({{RFC4493}}) truncated to 48-bits, comput
 
 For alternative MAC algorithms, the following requirements MUST all be met:
 
-- The Hop Field MAC field is computed as a function of the secret forwarding key, the `Acc` and `Timestamp` fields of the Info Field, and the `ExpTime`, `ConsIngress` and `ConsEgress` fields of the Hop Field. The term function is used in the mathematical sense that for for any values of these inputs there is exactly one result.
+- The Hop Field MAC field is computed as a function of the secret forwarding key, the `Acc` and `Timestamp` fields of the Info Field, and the `ExpTime`, `ConsIngress` and `ConsEgress` fields of the Hop Field. The term "function" is used in the mathematical sense that for for any values of these inputs there is exactly one result.
 - The algorithm returns an unforgeable 48-bit value. Unforgeable specifically means "existentially unforgeable under a chosen message attack" ({{CRYPTOBOOK}}). Informally, this means an attacker without access to the secret key has no computationally efficient means to create a valid MAC for some attacker chosen input values, even if it has access to an "oracle" providing a valid MAC for any other input values.
 - The truncation of the result value to the first 16 bits of the result value:
     - is not degenerate - i.e., any small change in any input value SHOULD have an "avalanche effect" on these bits, and;
