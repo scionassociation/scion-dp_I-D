@@ -351,7 +351,7 @@ In order to forward traffic to a service endpoint address (`DT/DS` as per {{tabl
 
 In addition, routers require coarse time synchronization with control plane instances (see [](#clock-inaccuracy)).
 
-The current SCION implementation runs over the UDP/IP protocol, although the use of other lower layers protocols is possible. When using an UDP/IP underlay, routers and endpoints extract the destination port from the TCP/SCION or UDP/SCION payload and use it as destination port in the underlay.
+The current SCION implementation runs over the UDP/IP protocol, although the use of other lower layers protocols is possible. When using an UDP/IP underlay, routers extract the destination port from the TCP/SCION or UDP/SCION payload and use it as destination port in the underlay.
 
 
 ## Path Construction (Segment Combinations) {#construction}
