@@ -2186,9 +2186,7 @@ Table of Contents
 
    5.  Forward the packet to the egress border router (based on the
        egress Interface ID in the current Hop Field) or to the
-       destination endpoint, if this is the destination AS.  If using an
-       UDP/IP underlay, the destination port is extracted from the UDP/
-       SCION or TCP/SCION destination port.
+       destination endpoint, if this is the destination AS.
 
 4.2.2.2.  Steps at Egress Border Router
 
