@@ -2195,7 +2195,11 @@ Table of Contents
    A SCION egress border router MUST perform the following steps when it
    receives a SCION packet:
 
-   1.  Check the settings of the Construction Direction flag C and the
+   1.  If the packet path indicates an origin outside of the local AS,
+       verify that the packet underlay source address matches a known
+       border router in the local AS.
+
+   2.  Check the settings of the Construction Direction flag C and the
        Peering flag P in the currently valid Info Field.  The following
        cases are possible:
 
@@ -2249,9 +2253,9 @@ Table of Contents
           direction* (C = "0" and P = "0" or "1").  In this case,
           proceed with Step 3.
 
-   2.  Increment CurrHF in the path meta header.
+   3.  Increment CurrHF in the path meta header.
 
-   3.  Forward the packet to the neighbor AS.
+   4.  Forward the packet to the neighbor AS.
 
 4.2.2.3.  Effects of Clock Inaccuracy
 
@@ -2815,6 +2819,9 @@ Change Log
    removed before publication.
 
 draft-dekater-scion-dataplane-12
+
+   *  Processing at Egress Border Router: mention check that packet
+      comes from neighbor router
 
    *  Clarify choice of destination port with UDP underlay
 
