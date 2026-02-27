@@ -1577,7 +1577,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Accumulator field: clarify that it is initialized to SegID
 - Processing at Egress Border Router: mention check that packet comes from neighbor router
-- Clarify choice of destination port with UDP underlay
+- Clarify choice of destination port with UDP/IP underlay (sections inter-domain forwarding, life of a packet)
 - Security considerations: mention SPAO in Volumetric DoS section
 
 
