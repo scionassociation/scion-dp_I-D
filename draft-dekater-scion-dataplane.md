@@ -1338,7 +1338,7 @@ A SCION ingress border router MUST perform the following steps when it receives 
         - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.
         - Increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 5.
 
-5. Forward the packet to the egress border router (based on the egress Interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS. If using an UDP/IP underlay, the destination port is extracted from the UDP/SCION or TCP/SCION destination port.
+5. Forward the packet to the egress border router (based on the egress Interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS.
 
 #### Steps at Egress Border Router
 
