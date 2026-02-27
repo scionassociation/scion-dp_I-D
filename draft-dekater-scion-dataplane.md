@@ -1346,7 +1346,8 @@ A SCION ingress border router MUST perform the following steps when it receives 
 
 A SCION egress border router MUST perform the following steps when it receives a SCION packet:
 
-1. Check the settings of the Construction Direction flag `C` and the Peering flag `P` in the currently valid Info Field. The following cases are possible:
+1. If the packet path indicates an origin outside of the local AS, verify that the packet underlay source address matches a known border router in the local AS.
+2. Check the settings of the Construction Direction flag `C` and the Peering flag `P` in the currently valid Info Field. The following cases are possible:
 
    - **Case 1** <br> The packet traverses the path segment in **construction direction** (`C` = "1"). The path segment either includes **no peering Hop Field** (`P` = "0") or the path segment does include a **peering Hop Field** (`P` = "1"), but the current hop is not the peering hop (i.e., the current hop is **neither** the last hop of the first segment **nor** the first hop of the second segment). In this case, the egress border router MUST take the following step(s):
 
@@ -1567,6 +1568,7 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
 - Accumulator field: clarify that it is initialized to SegID
+- Processing at Egress Border Router: mention check that packet comes from neighbor router
 - Security considerations: mention SPAO in Volumetric DoS section
 
 ## draft-dekater-scion-dataplane-11
