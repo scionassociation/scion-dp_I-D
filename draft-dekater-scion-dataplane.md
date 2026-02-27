@@ -1499,7 +1499,7 @@ SCION's path awareness limits the abilities of an off-path adversary to influenc
 
 An adversary can attempt to disrupt the connectivity of a network path by flooding a link with excessive traffic. In this case, the endpoint can switch to another non-congested path for subsequent packets.
 
-SCION provides protection against certain reflection-based DoS attacks. Here, the adversary sends requests to a server with the source address set to the address of the victim, and the server will send a reply that is typically larger than the request to the victim. This can be prevented in SCION as long as the attacker and the victim are located in different ASes as the reply packets are simply returned along reversed path to the actual sender regardless of the source address information. Thus, the reply packets will be forwarded to the attacker's AS where they will be discarded because the destination AS does not match.
+SCION provides protection against certain reflection-based DoS attacks. Here, the adversary sends requests to a server with the source address set to the address of the victim, and the server will send a reply that is typically larger than the request to the victim. This can be prevented in SCION as long as the attacker and the victim are located in different ASes as the reply packets are simply returned along reversed path to the actual sender regardless of the source address information. Thus, the reply packets will be forwarded to the attacker's AS where they will be discarded because the destination AS does not match. The SPAO experimental extension can further help mitigate such attacks through endpoint address authentication and replay protection.
 
 However, the path choice of the endpoint may possibly be exploited by an attacker to create intermittent congestion with a relatively low send rate. The attacker can exploit the latency differences of the available paths, sending at precisely timed intervals to cause short, synchronized bursts of packets near the victim.
 
@@ -1563,6 +1563,8 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+- Security considerations: mention SPAO in Volumetric DoS section
 
 ## draft-dekater-scion-dataplane-11
 {:numbered="false"}
