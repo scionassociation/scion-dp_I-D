@@ -386,11 +386,11 @@ Table of Contents
    A complete SCION address is composed of the <ISD, AS, endpoint
    address> 3-tuple.  The ISD-AS part is used for inter-domain routing,
    whilst the endpoint address part is only used for intra-domain
-   forwarding at the source and destination ASes.  This implies that
-   endpoint addresses are only required to be unique within each SCION
-   AS.  An endpoint running a SCION stack using a [RFC1918] endpoint
-   address could therefore directly communicate with another SCION
-   endpoint using a [RFC1918] endpoint address in a different SCION AS.
+   forwarding at the destination AS.  This implies that endpoint
+   addresses are only required to be unique within a SCION AS.  An
+   endpoint running a SCION stack using a [RFC1918] endpoint address
+   could therefore directly communicate with another SCION endpoint
+   using a [RFC1918] endpoint address in a different SCION AS.
 
    The data transmission order for SCION is the same as for IPv6 as
    defined in Introduction of [RFC8200].
@@ -1908,7 +1908,7 @@ Table of Contents
    *  The Hop Field MAC field is computed as a function of the secret
       forwarding key, the Acc and Timestamp fields of the Info Field,
       and the ExpTime, ConsIngress and ConsEgress fields of the Hop
-      Field.  The term function is used in the mathematical sense that
+      Field.  The term "function" is used in the mathematical sense that
       for for any values of these inputs there is exactly one result.
 
    *  The algorithm returns an unforgeable 48-bit value.  Unforgeable
