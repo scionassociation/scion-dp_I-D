@@ -47,7 +47,6 @@ normative:
     title: "Standard for Information Technology--Portable Operating System Interface (POSIX™) Base Specifications, Issue 8"
     date: 2024
     target: https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html
-  RFC791:
   RFC8200:
   RFC2474:
   RFC3168:
@@ -323,7 +322,7 @@ In practice, in most existing SCION deployments the SCION routers communicate am
 
 A complete SCION address is composed of the <ISD, AS, endpoint address> 3-tuple. The ISD-AS part is used for inter-domain routing, whilst the endpoint address part is only used for intra-domain forwarding at the source and destination ASes. This implies that endpoint addresses are only required to be unique within each SCION AS. An endpoint running a SCION stack using a {{RFC1918}} endpoint address could therefore directly communicate with another SCION endpoint using a {{RFC1918}} endpoint address in a different SCION AS.
 
-The data transmission order for SCION is the same whether using IPv4 (as defined in {{RFC791}}) or IPv6 (as defined in {{RFC8200}}).
+The data transmission order for SCION is the same as for IPv6 as defined in Introduction of {{RFC8200}}.
 
 ### Intra-Domain Forwarding Process
 
