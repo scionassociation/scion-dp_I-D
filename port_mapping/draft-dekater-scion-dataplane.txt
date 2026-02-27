@@ -462,9 +462,9 @@ Table of Contents
 
    The current SCION implementation runs over the UDP/IP protocol,
    although the use of other lower layers protocols is possible.  When
-   using an UDP/IP underlay, routers and endpoints extract the
-   destination port from the TCP/SCION or UDP/SCION payload and use it
-   as destination port in the underlay.
+   using an UDP/IP underlay, routers extract the destination port from
+   the TCP/SCION or UDP/SCION payload and use it as destination port in
+   the underlay.
 
 1.4.  Path Construction (Segment Combinations)
 
