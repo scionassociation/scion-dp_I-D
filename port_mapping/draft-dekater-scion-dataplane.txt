@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 31 August 2026                                SCION Association
+Expires: 3 September 2026                              SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                        27 February 2026
+                                                            2 March 2026
 
 
                             SCION Data Plane
@@ -68,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2026.
+   This Internet-Draft will expire on 3 September 2026.
 
 Copyright Notice
 
@@ -1503,7 +1503,7 @@ Table of Contents
    *  Endpoint B the destination endpoint and it is in AS ff00:0:3.
 
    *  both endpoints run a native SCION network stack.  They communicate
-      to their AS router on an UDP/IP underlay on destination UDP port
+      with their AS router on an UDP/IP underlay on destination UDP port
       30100.
 
    *  the example packet carries a TCP/SCION payload with destination
