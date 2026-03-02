@@ -1042,7 +1042,7 @@ This section describes the life of a SCION packet: how it is created at its sour
 * AS ff00:0:1 is a core AS, ASes ff00:0:2 and ff00:0:3 are non-core. All ASes are part of ISD 1.
 * Endpoint A is the source endpoint and it is in AS ff00:0:2.
 * Endpoint B the destination endpoint and it is in AS ff00:0:3.
-* both endpoints run a native SCION network stack. They communicate to their AS router on an UDP/IP underlay on destination UDP port 30100.
+* both endpoints run a native SCION network stack. They communicate with their AS router on an UDP/IP underlay on destination UDP port 30100.
 * the example packet carries a TCP/SCION payload with destination port 443. This payload is omitted for brevity.
 
 Since this example consists of only one ISD and one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. A scenario with more core ASes and/or ISDs would use an additional core path segment or a peering link.
