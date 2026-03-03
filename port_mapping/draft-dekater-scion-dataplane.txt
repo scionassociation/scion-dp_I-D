@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 3 September 2026                              SCION Association
+Expires: 4 September 2026                              SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            2 March 2026
+                                                            3 March 2026
 
 
                             SCION Data Plane
@@ -68,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 September 2026.
+   This Internet-Draft will expire on 4 September 2026.
 
 Copyright Notice
 
@@ -1678,7 +1678,7 @@ Table of Contents
        |             | - _IF2_ (0,i1b) *(i3a,0)*    |             |
        +-------------+------------------------------+-------------+
        | UDP port    | SRC = 31022                  |             |
-       |             | DST = 31022                  |             |
+       |             | DST = 31044                  |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 198.51.100.17          | Router R3   |
        |             | DST = 198.51.100.18          | Router R4   |
