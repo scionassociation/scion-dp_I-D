@@ -1107,7 +1107,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 |-------------+----------------------------------------------------------------+-----------------------------|
 | SCION addr. | SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7   |  Endpoint A <br> Endpoint B |
 | SCION path  | - IF1 (0,i2a) (i1a,0) <br>   - *IF2* (0,i1b) **(i3a,0)**       |                             |
-| UDP port    | SRC = 31022 <br> DST = 31022 <br>                              |                             |
+| UDP port    | SRC = 31022 <br> DST = 31044 <br>                              |                             |
 | IP          | SRC = 198.51.100.17 <br> DST = 198.51.100.18                   | Router R3 <br> Router R4    |
 | Link layer  | SRC=R3 <br> DST=R4                                             |                             |
 {: title="Example: snapshot header - step 4 - R3 -> R4"}
