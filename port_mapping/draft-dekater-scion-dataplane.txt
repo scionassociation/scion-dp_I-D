@@ -1651,7 +1651,7 @@ Table of Contents
        |             | - _IF2_ *(0,i1b)* (i3a,0)    |             |
        +-------------+------------------------------+-------------+
        | UDP port    | SRC = 31000                  |             |
-       |             | DST = 31000                  |             |
+       |             | DST = 31002                  |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 198.51.100.1           | Router R2   |
        |             | DST = 198.51.100.4           | Router R3   |
@@ -1698,7 +1698,7 @@ Table of Contents
       the pointers to the next Info Field or Hop Field, router R4
       inspects the SCION destination address and extracts the endpoint
       address 192.0.2.7.  It creates a fresh underlay UDP/IP header with
-      this address as destination, with itself as source, and with
+      this address as destination, with itself as source, and with UDP
       destination port extracted from the TCP/SCION payload.  The intra-
       domain forwarding can now deliver the packet to its destination at
       Endpoint B.
@@ -2840,7 +2840,8 @@ draft-dekater-scion-dataplane-12
    *  Processing at Egress Border Router: mention check that packet
       comes from neighbor router
 
-   *  Clarify choice of destination port with UDP underlay
+   *  Clarify choice of destination port with UDP/IP underlay (sections
+      inter-domain forwarding, life of a packet)
 
    *  Security considerations: mention SPAO in Volumetric DoS section
 

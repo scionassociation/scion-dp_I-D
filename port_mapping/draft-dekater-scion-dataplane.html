@@ -3905,7 +3905,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">UDP port</td>
-              <td class="text-left" rowspan="1" colspan="1">SRC = 31000 <br> DST = 31000</td>
+              <td class="text-left" rowspan="1" colspan="1">SRC = 31000 <br> DST = 31002</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
@@ -3969,7 +3969,7 @@ The link shown here is an example of not using a UDP/IP underlay. Although most 
         </table>
 <ul class="normal">
 <li class="normal" id="section-3.3-11.1">
-            <p id="section-3.3-11.1.1"><em>Step 5 -</em> <strong>R4-&gt;B</strong>: <br> SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. Router R4 will then also realize, based on the fields <code>CurrHF</code> and <code>SegLen</code> in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination, with itself as source, and with destination port extracted from the TCP/SCION payload. The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.<a href="#section-3.3-11.1.1" class="pilcrow">¶</a></p>
+            <p id="section-3.3-11.1.1"><em>Step 5 -</em> <strong>R4-&gt;B</strong>: <br> SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. Router R4 will then also realize, based on the fields <code>CurrHF</code> and <code>SegLen</code> in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination, with itself as source, and with UDP destination port extracted from the TCP/SCION payload. The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.<a href="#section-3.3-11.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <span id="name-example-snapshot-header-step-5"></span><table class="center" id="table-10">
@@ -4947,7 +4947,7 @@ Key rotation is outside of the scope of this document and may leverage an out-of
             <p id="appendix-C.1-1.2.1">Processing at Egress Border Router: mention check that packet comes from neighbor router<a href="#appendix-C.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.3">
-            <p id="appendix-C.1-1.3.1">Clarify choice of destination port with UDP underlay<a href="#appendix-C.1-1.3.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.1-1.3.1">Clarify choice of destination port with UDP/IP underlay (sections inter-domain forwarding, life of a packet)<a href="#appendix-C.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="appendix-C.1-1.4">
             <p id="appendix-C.1-1.4.1">Security considerations: mention SPAO in Volumetric DoS section<a href="#appendix-C.1-1.4.1" class="pilcrow">¶</a></p>
