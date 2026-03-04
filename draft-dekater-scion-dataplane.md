@@ -230,7 +230,7 @@ This document describes the Data Plane of SCION (Scalability, Control, and Isola
 
 Unlike IP-based forwarding, SCION embeds inter-domain forwarding directives in the packet header, enabling endpoints to construct and select end-to-end paths from segments discovered by the Control Plane. The role of the Data Plane is to combine such segments into end-to-end paths, and to forward data according to the specified path.
 
-This document  describes the SCION packet format, header structure, and extension headers. It also describes the cryptographic mechanisms used for path authorization, processing at routers including a life of a packet example.
+This document describes the SCION packet format, header structure, and extension headers. It also describes the cryptographic mechanisms used for path authorization, processing at routers including a life of a packet example.
 
 This document contains new approaches to secure path aware networking. It is not an Internet Standard, has not received any formal review of the IETF, nor was the work developed through the rough consensus process. The approaches offered in this work are offered to the community for its consideration in the further evolution of the Internet.
 
@@ -351,7 +351,7 @@ When transiting an intermediate SCION AS, a packet gets forwarded by at most two
 5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
 
 In the destination AS, the SCION ingress router forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
-The encapsulation and behavior of SCION packets over a UDP/IP underlay fall outside the scope of this document  and are detailed in [](#SCION-UDP).
+The encapsulation and forwarding behavior of SCION packets over a UDP/IP underlay fall outside the scope of this document and are detailed in [](#SCION-UDP).
 
 ### Configuration {#configuration}
 
@@ -827,8 +827,8 @@ The 12-byte Hop Field (``HopField``) has the following format:
 {: #figure-9 title="SCION path type - Format of the Hop Field"}
 
 - `RSV`: Unused and reserved for future use.
-- `I`: The Ingress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of `ConsIngress`, the router SHOULD process the L4 payload in the packet.
-- `E`: The Egress Router Alert flag. If this has value "1" and the packet is received on the interface with ID  corresponding to the value of `ConsEgress`, the router SHOULD process the L4 payload in the packet.
+- `I`: The Ingress Router Alert flag. If this has value "1" and the packet is received on the interface with ID corresponding to the value of `ConsIngress`, the router SHOULD process the L4 payload in the packet.
+- `E`: The Egress Router Alert flag. If this has value "1" and the packet is received on the interface with ID corresponding to the value of `ConsEgress`, the router SHOULD process the L4 payload in the packet.
 - `ExpTime`: Expiration time of a Hop Field. This field is 1-byte long, and the expiration time specified in this field is relative and expressed in units of 256th of a day. An absolute expiration time in seconds is computed in combination with the `Timestamp` field (from the corresponding Info Field), as follows:
 
   - `Timestamp` + (1 + `ExpTime`) * (86400/256)
@@ -1126,7 +1126,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 | Link layer  | SRC=R3 <br> DST=R4                                             |                             |
 {: title="Example: snapshot header - step 4 - R3 -> R4"}
 
-- *Step 5 -* **R4->B**: <br> SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. Router R4 will then also realize, based on the fields `CurrHF` and `SegLen` in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination, with itself as source, and with UDP destination port extracted from the TCP/SCION payload. The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.
+- *Step 5 -* **R4->B**: <br> SCION router R4 first checks whether the packet has been received through the ingress interface i3a as specified by the current Hop Field. Router R4 will then also realize, based on the fields `CurrHF` and `SegLen` in the SCION header, that the packet has reached the last hop in its SCION path. Therefore, instead of stepping up the pointers to the next Info Field or Hop Field, router R4 inspects the SCION destination address and extracts the endpoint address 192.0.2.7. It creates a fresh underlay UDP/IP header with this address as destination with itself as source. The choice of destination port depends on the underlay, which is described in [](#SCION-UDP). The intra-domain forwarding can now deliver the packet to its destination at Endpoint B.
 
 |  Field      | Value                                                          | Description                 |
 |-------------+----------------------------------------------------------------+-----------------------------|
