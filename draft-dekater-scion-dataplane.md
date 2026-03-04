@@ -197,8 +197,22 @@ informative:
     target: https://www.scionlab.org/
   SIG:
     title: SCION IP Gateway Documentation
-    date: 2024
+    date: 2026
     target: https://docs.scion.org/en/latest/sig.html
+    author:
+      -
+        ins: Anapaya
+        org: Anapaya Systems
+      -
+        ins: ETH
+        org: ETH Zuerich
+      -
+        ins: SCION
+        org: SCION Association
+  SCION-UDP:
+    title: SCION IP/UDP underlay
+    date: 2026
+    target: https://docs.scion.org/en/latest/protocols/underlay.html
     author:
       -
         ins: Anapaya
@@ -337,7 +351,7 @@ When transiting an intermediate SCION AS, a packet gets forwarded by at most two
 5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
 
 In the destination AS, the SCION ingress router forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
-When using an UDP/IP underlay, the SCION ingress router extracts the destination port from the TCP/SCION or UDP/SCION payload and uses it as a destination port in the underlay.
+The encapsulation and behavior of SCION packets over a UDP/IP underlay fall outside the scope of this document  and are detailed in [](#SCION-UDP).
 
 ### Configuration {#configuration}
 
@@ -1577,7 +1591,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 
 - Accumulator field: clarify that it is initialized to SegID
 - Processing at Egress Border Router: mention check that packet comes from neighbor router
-- Clarify choice of destination port with UDP/IP underlay (sections inter-domain forwarding, life of a packet)
+- UDP/IP underlay: add informative reference, update ports in life of a packet section
 - Security considerations: mention SPAO in Volumetric DoS section
 
 
