@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 5 September 2026                              SCION Association
+Expires: 13 September 2026                             SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            4 March 2026
+                                                           12 March 2026
 
 
                             SCION Data Plane
@@ -68,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 September 2026.
+   This Internet-Draft will expire on 13 September 2026.
 
 Copyright Notice
 
@@ -1505,7 +1505,7 @@ Table of Contents
       with their AS router on an UDP/IP underlay on destination UDP port
       30100.
 
-   *  the example packet carries a TCP/SCION payload with destination
+   *  the example packet carries a UDP/SCION payload with destination
       port 443.  This payload is omitted for brevity.
 
    Since this example consists of only one ISD and one core AS, the end-
