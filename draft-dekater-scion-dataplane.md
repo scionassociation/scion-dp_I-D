@@ -351,7 +351,7 @@ When transiting an intermediate SCION AS, a packet gets forwarded by at most two
 5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
 
 In the destination AS, the SCION ingress router forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
-The encapsulation and forwarding behavior of SCION packets over a UDP/IP underlay fall outside the scope of this document and are detailed in [](#SCION-UDP).
+The encapsulation and forwarding behavior of SCION packets over a UDP/IP underlay are detailed in [](#SCION-UDP).
 
 ### Configuration {#configuration}
 
