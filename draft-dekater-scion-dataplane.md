@@ -1589,10 +1589,10 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-dataplane-12
 {:numbered="false"}
 
+- 1.3.2.  Intra-Domain Forwarding Process: clarify relation to UDP/IP underlay, add informative reference. CLarify use of underlay ports in 3.  Life of a SCION Data Packet
 - Accumulator field: clarify that it is initialized to SegID
 - Processing at Egress Border Router: mention check that packet comes from neighbor router
-- UDP/IP underlay: add informative reference, update ports in life of a packet section
-- Security considerations: mention SPAO in Volumetric DoS section
+- Security considerations: clarify that forwarding key rotation may use OOB mechanisms, mention SPAO in Volumetric DoS section
 
 
 ## draft-dekater-scion-dataplane-11
