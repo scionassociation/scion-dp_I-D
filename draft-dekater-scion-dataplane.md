@@ -351,7 +351,7 @@ When transiting an intermediate SCION AS, a packet gets forwarded by at most two
 5. Upon receiving the packet, the SCION egress router strips off the header of the intra-domain protocol, again validates and updates the SCION header, and forwards the packet to the neighboring SCION router.
 
 In the destination AS, the SCION ingress router forwards the packet to the packet's destination endpoint indicated by the field `DstHostAddr` of [the Address Header](#address-header).
-The encapsulation and forwarding behavior of SCION packets over a UDP/IP underlay fall outside the scope of this document and are detailed in [](#SCION-UDP).
+The encapsulation and forwarding behavior of SCION packets over a UDP/IP underlay are detailed in [](#SCION-UDP).
 
 ### Configuration {#configuration}
 
@@ -1589,10 +1589,10 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-dataplane-12
 {:numbered="false"}
 
+- 1.3.2.  Intra-Domain Forwarding Process: clarify relation to UDP/IP underlay, add informative reference. CLarify use of underlay ports in 3.  Life of a SCION Data Packet
 - Accumulator field: clarify that it is initialized to SegID
 - Processing at Egress Border Router: mention check that packet comes from neighbor router
-- UDP/IP underlay: add informative reference, update ports in life of a packet section
-- Security considerations: mention SPAO in Volumetric DoS section
+- Security considerations: clarify that forwarding key rotation may use OOB mechanisms, mention SPAO in Volumetric DoS section
 
 
 ## draft-dekater-scion-dataplane-11
