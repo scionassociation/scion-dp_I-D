@@ -288,7 +288,7 @@ Table of Contents
    added to segment information during the intra-AS beaconing process
    and used to shorten paths while assembling them from segments.  A
    path can be sonstructed from a partial UP segment and a partial DOWN
-   segment if their top-most hops are joined by a peering link.  Two
+   segment if their top-most hops are joined by a peering link.  The two
    peering ASes may be in different ISDs and may be core ASes.
 
    *SCION Control Message Protocol (SCMP)*: A signaling protocol
