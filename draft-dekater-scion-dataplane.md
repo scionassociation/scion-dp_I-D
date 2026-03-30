@@ -286,7 +286,7 @@ SCION relies on three main components:
 
 **Path Transparency**: This is a property of a network architecture that gives endpoints full visibility over the network paths their packets are taking. Path transparency is weaker than path control.
 
-**Peering Link**: A link between two SCION border routers of different ASes that can be used as a shortcut. Peering link information is added to segment information during the beaconing process and used to shorten paths while assembling them from segments. It is possible to construct a path out of only two partial segments whose top-most hops are joined by a peering link. Two peering ASes may be in different ISDs and may exist between any ASes, including core ASes.
+**Peering Link**: A link between two SCION border routers of different ASes that can be used as a shortcut. Peering link information is added to segment information during the intra-AS beaconing process and used to shorten paths while assembling them from segments. A path can be sonstructed from a partial UP segment and a partial DOWN segment if their top-most hops are joined by a peering link. Two peering ASes may be in different ISDs and may be core ASes.
 
 **SCION Control Message Protocol (SCMP)**: A signaling protocol analogous to the Internet Control Message Protocol (ICMP), as described in {{I-D.dekater-scion-controlplane}}.
 
