@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 1 October 2026                                SCION Association
+Expires: 2 October 2026                                SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                           30 March 2026
+                                                           31 March 2026
 
 
                             SCION Data Plane
@@ -68,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 October 2026.
+   This Internet-Draft will expire on 2 October 2026.
 
 Copyright Notice
 
@@ -285,11 +285,11 @@ Table of Contents
 
    *Peering Link*: A link between two SCION border routers of different
    ASes that can be used as a shortcut.  Peering link information is
-   added to segment information during the intra-AS beaconing process
-   and used to shorten paths while assembling them from segments.  A
-   path can be sonstructed from a partial UP segment and a partial DOWN
-   segment if their top-most hops are joined by a peering link.  The two
-   peering ASes may be in different ISDs and may be core ASes.
+   added to segment information during the intra-ISD beaconing process
+   and used to shorten paths while assembling them from segments.  It is
+   possible to construct a path out of only two partial segments whose
+   top-most hops are joined by a peering link.  Two peering ASes may be
+   in different ISDs and may be core or non-core ASes.
 
    *SCION Control Message Protocol (SCMP)*: A signaling protocol
    analogous to the Internet Control Message Protocol (ICMP), as
