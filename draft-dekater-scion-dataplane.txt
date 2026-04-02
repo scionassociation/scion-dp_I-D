@@ -144,6 +144,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-13
      draft-dekater-scion-dataplane-12
      draft-dekater-scion-dataplane-11
      draft-dekater-scion-dataplane-10
@@ -1503,7 +1504,7 @@ Table of Contents
 
    *  both endpoints run a native SCION network stack.  They communicate
       with their AS router on an UDP/IP underlay on destination UDP port
-      30100.
+      50000.
 
    *  the example packet carries a UDP/SCION payload with destination
       port 443.  This payload is omitted for brevity.
@@ -1584,7 +1585,7 @@ Table of Contents
        |             | - IF2 (0,i1b) (i3a,0)        |             |
        +-------------+------------------------------+-------------+
        | UDP port    | SRC = 52475                  |             |
-       |             | DST = 30100                  |             |
+       |             | DST = 50000                  |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 203.0.113.6            | Endpoint A  |
        |             | DST = 203.0.113.17           | Router R1   |
@@ -1649,8 +1650,8 @@ Table of Contents
        | SCION path  | - IF1 (0,i2a) (i1a,0)        |             |
        |             | - _IF2_ *(0,i1b)* (i3a,0)    |             |
        +-------------+------------------------------+-------------+
-       | UDP port    | SRC = 31000                  |             |
-       |             | DST = 31002                  |             |
+       | UDP port    | SRC = 51000                  |             |
+       |             | DST = 51002                  |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 198.51.100.1           | Router R2   |
        |             | DST = 198.51.100.4           | Router R3   |
@@ -1676,8 +1677,8 @@ Table of Contents
        | SCION path  | - IF1 (0,i2a) (i1a,0)        |             |
        |             | - _IF2_ (0,i1b) *(i3a,0)*    |             |
        +-------------+------------------------------+-------------+
-       | UDP port    | SRC = 31022                  |             |
-       |             | DST = 31044                  |             |
+       | UDP port    | SRC = 51022                  |             |
+       |             | DST = 51044                  |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 198.51.100.17          | Router R3   |
        |             | DST = 198.51.100.18          | Router R4   |
@@ -1711,7 +1712,7 @@ Table of Contents
        | SCION path  | - IF1 (0,i2a) (i1a,0)        |             |
        |             | - _IF2_ (0,i1b) *(i3a,0)*    |             |
        +-------------+------------------------------+-------------+
-       | UDP port    | SRC = 30100                  |             |
+       | UDP port    | SRC = 50000                  |             |
        |             | DST = 443                    |             |
        +-------------+------------------------------+-------------+
        | IP          | SRC = 192.0.2.34             | Router R4   |
@@ -2836,6 +2837,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-13
+
+   *  Life of a packet: use private ports in examples
 
 draft-dekater-scion-dataplane-12
 
