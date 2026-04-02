@@ -1056,7 +1056,7 @@ This section describes the life of a SCION packet: how it is created at its sour
 * AS ff00:0:1 is a core AS, ASes ff00:0:2 and ff00:0:3 are non-core. All ASes are part of ISD 1.
 * Endpoint A is the source endpoint and it is in AS ff00:0:2.
 * Endpoint B the destination endpoint and it is in AS ff00:0:3.
-* both endpoints run a native SCION network stack. They communicate with their AS router on an UDP/IP underlay on destination UDP port 30100.
+* both endpoints run a native SCION network stack. They communicate with their AS router on an UDP/IP underlay on destination UDP port 50000.
 * the example packet carries a UDP/SCION payload with destination port 443. This payload is omitted for brevity.
 
 Since this example consists of only one ISD and one core AS, the end-to-end path only includes an up-path and down-path segment. The forwarding logic is uniform across intra- and inter-ISD scenarios. A scenario with more core ASes and/or ISDs would use an additional core path segment or a peering link.
@@ -1088,7 +1088,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 |-------------+---------------------------------------------------------------+-----------------------------|
 | SCION addr. | SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7  | Endpoint A <br> Endpoint B  |
 | SCION path  | - *IF1* **(0,i2a)** (i1a,0) <br> - IF2 (0,i1b) (i3a,0)        |                             |
-| UDP port    | SRC = 52475  <br> DST = 30100                                 |                             |
+| UDP port    | SRC = 52475  <br> DST = 50000                                 |                             |
 | IP          | SRC = 203.0.113.6 <br> DST = 203.0.113.17                     |  Endpoint A <br>  Router R1 |
 | Link layer  | SRC=A <br> DST=R1                                                 |                             |
 {: title="Example: snapshot header - step 1 - A->R1"}
@@ -1110,7 +1110,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 |-------------+--------------------------------------------------------------+----------------------------|
 | SCION addr. | SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7 | Endpoint A <br> Endpoint B |
 | SCION path  | - IF1 (0,i2a) (i1a,0) <br>   - *IF2* **(0,i1b)** (i3a,0)     |                            |
-| UDP port    | SRC = 31000 <br> DST = 31002                                 |                            |
+| UDP port    | SRC = 51000 <br> DST = 51002                                 |                            |
 | IP          | SRC = 198.51.100.1 <br> DST = 198.51.100.4                   | Router R2 <br> Router R3   |
 | Link layer  | SRC=R2 <br> DST=R3                                           |                            |
 {: title="Example: snapshot header - step 3 -  R2 -> R3"}
@@ -1121,7 +1121,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 |-------------+----------------------------------------------------------------+-----------------------------|
 | SCION addr. | SRC = 1-ff00:0:2,203.0.113.6 <br> DST = 1-ff00:0:3,192.0.2.7   |  Endpoint A <br> Endpoint B |
 | SCION path  | - IF1 (0,i2a) (i1a,0) <br>   - *IF2* (0,i1b) **(i3a,0)**       |                             |
-| UDP port    | SRC = 31022 <br> DST = 31044 <br>                              |                             |
+| UDP port    | SRC = 51022 <br> DST = 51044 <br>                              |                             |
 | IP          | SRC = 198.51.100.17 <br> DST = 198.51.100.18                   | Router R3 <br> Router R4    |
 | Link layer  | SRC=R3 <br> DST=R4                                             |                             |
 {: title="Example: snapshot header - step 4 - R3 -> R4"}
@@ -1132,7 +1132,7 @@ The current Info Field (with metadata on the current path segment) in the SCION 
 |-------------+----------------------------------------------------------------+-----------------------------|
 | SCION addr. | SRC = 1-ff00:0:2,203.0.113.6  <br> DST = 1-ff00:0:3,192.0.2.7  | Endpoint A <br> Endpoint B  |
 | SCION path  | - IF1 (0,i2a) (i1a,0) <br>  - *IF2* (0,i1b) **(i3a,0)** <br>   |                             |
-| UDP port    | SRC = 30100  <br> DST = 443 <br>                             |                             |
+| UDP port    | SRC = 50000  <br> DST = 443 <br>                             |                             |
 | IP          | SRC = 192.0.2.34 <br> DST = 192.0.2.7                          | Router R4 <br> Endpoint B   |
 | Link layer  | SRC=R4 <br> DST=B                                              |                             |
 {: title="Example: snapshot header - step 5 - R4 -> B"}
@@ -1585,6 +1585,10 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-dataplane-13
+{:numbered="false"}
+
+- Life of a packet: use private ports in examples
 
 ## draft-dekater-scion-dataplane-12
 {:numbered="false"}
