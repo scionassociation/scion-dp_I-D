@@ -1588,6 +1588,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 {:numbered="false"}
 
 - Life of a packet: clarify that private ports are not registered
+
 ## draft-dekater-scion-dataplane-13
 {:numbered="false"}
 
