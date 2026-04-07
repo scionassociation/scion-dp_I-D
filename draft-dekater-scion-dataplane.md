@@ -1584,6 +1584,10 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
 
+## draft-dekater-scion-dataplane-14
+{:numbered="false"}
+
+- Life of a packet: clarify that private ports are not registered
 ## draft-dekater-scion-dataplane-13
 {:numbered="false"}
 
