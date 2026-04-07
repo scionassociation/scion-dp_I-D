@@ -144,6 +144,7 @@ Table of Contents
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-14
      draft-dekater-scion-dataplane-13
      draft-dekater-scion-dataplane-12
      draft-dekater-scion-dataplane-11
@@ -2839,6 +2840,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-14
+
+   *  Life of a packet: clarify that private ports are not registered
 
 draft-dekater-scion-dataplane-13
 
