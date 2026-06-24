@@ -140,6 +140,7 @@ Table of Contents
      9.1.  Normative References
      9.2.  Informative References
    Appendix A.  Assigned SCION Protocol Numbers
+     Considerations
      Assignment
    Change Log
      draft-dekater-scion-dataplane-15
@@ -2771,6 +2772,8 @@ Table of Contents
 Appendix A.  Assigned SCION Protocol Numbers
 
    This appendix lists the assigned SCION protocol numbers.
+
+Considerations
 
    SCION attempts to take the IANA's assigned Internet protocol numbers
    into consideration.  Widely employed protocols have the same protocol
