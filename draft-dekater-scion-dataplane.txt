@@ -5,12 +5,12 @@
 Network Working Group                                        C. de Kater
 Internet-Draft                                               Independent
 Intended status: Informational                             N. Rustignoli
-Expires: 9 October 2026                                SCION Association
+Expires: 26 December 2026                              SCION Association
                                                              J. C. Hugly
                                                              Independent
                                                                  S. Hitz
                                                          Anapaya Systems
-                                                            7 April 2026
+                                                            24 June 2026
 
 
                             SCION Data Plane
@@ -68,7 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 October 2026.
+   This Internet-Draft will expire on 26 December 2026.
 
 Copyright Notice
 
@@ -139,11 +139,11 @@ Table of Contents
    9.  References
      9.1.  Normative References
      9.2.  Informative References
-   Deployment Testing: SCIONLab
-   Assigned SCION Protocol Numbers
+   Appendix A.  Assigned SCION Protocol Numbers
      Considerations
      Assignment
    Change Log
+     draft-dekater-scion-dataplane-15
      draft-dekater-scion-dataplane-14
      draft-dekater-scion-dataplane-13
      draft-dekater-scion-dataplane-12
@@ -362,7 +362,7 @@ Table of Contents
    individual choice of the two interconnected SCION router operators.
    A full example of the life of a SCION packet is presented in
    Section 3.  A list of currently used upper layer protocols on top of
-   SCION is presented in Appendix "Assigned SCION Protocol Numbers".
+   SCION is presented in Appendix A.
 
    +-----------------------------+
    |                             |
@@ -720,8 +720,7 @@ Table of Contents
    *  NextHdr: Encodes the type of the first header after the SCION
       header, which can be either a SCION extension or a Layer 4
       protocol such as TCP or UDP.  Values of this field respect the
-      Assigned SCION Protocol Numbers (see Appendix "Assigned SCION
-      Protocol Numbers").
+      Assigned SCION Protocol Numbers (see Appendix A).
 
    *  HdrLen: Specifies the entire length of the SCION header in bytes -
       i.e., the sum of the lengths of the common header, the address
@@ -1283,7 +1282,7 @@ Table of Contents
    *  NextHdr: Unsigned 8-bit integer.  Identifies the type of header
       immediately following the Hop-by-Hop/End-to-End Options header.
       Values of this field respect the Assigned SCION Protocol Numbers
-      (see also Appendix "Assigned SCION Protocol Numbers").
+      (see also Appendix A).
 
    *  ExtLen: 8-bit unsigned integer.  The length of the Hop-by-hop or
       End-to-end options header in 4-octet units, not including the
@@ -1447,9 +1446,9 @@ Table of Contents
       header lengths.
 
    *  Next Header: The protocol identifier associated with the upper-
-      layer protocol (e.g., 17 for UDP - see also Appendix "Assigned
-      SCION Protocol Numbers").  This field can differ from the NextHdr
-      field in the SCION common header, if extensions are present.
+      layer protocol (e.g., 17 for UDP - see also Appendix A).  This
+      field can differ from the NextHdr field in the SCION common
+      header, if extensions are present.
 
    This pseudo-header is used in current implementations of UDP on top
    of SCION.  However, as checksums across layers are not recommended
@@ -2665,16 +2664,16 @@ Table of Contents
    [I-D.dekater-scion-controlplane]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane", Work in Progress, Internet-Draft, draft-dekater-
-              scion-controlplane-17, 2 April 2026,
+              scion-controlplane-18, 30 April 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-controlplane-17>.
+              scion-controlplane-18>.
 
    [I-D.dekater-scion-pki]
               de Kater, C., Rustignoli, N., and S. Hitz, "SCION Control
               Plane PKI", Work in Progress, Internet-Draft, draft-
-              dekater-scion-pki-11, 16 January 2026,
+              dekater-scion-pki-15, 23 June 2026,
               <https://datatracker.ietf.org/doc/html/draft-dekater-
-              scion-pki-11>.
+              scion-pki-15>.
 
    [POSIX.1-2024]
               "Standard for Information Technology--Portable Operating
@@ -2767,28 +2766,10 @@ Table of Contents
               <https://docs.scion.org/en/latest/protocols/
               underlay.html>.
 
-   [SCIONLAB] Kown, J., García-Pardo, J., Legner, M., Wirz, F., Frei,
-              M., Hausheer, D., and A. Perrig, "SCIONLAB - A Next-
-              Generation Internet Testbed", 2020,
-              <https://ieeexplore.ieee.org/abstract/document/9259355>.
-
-   [SCIONLAB_WEBSITE]
-              "SCIONLab website", 2024, <https://www.scionlab.org/>.
-
    [SIG]      Anapaya, ETH, and SCION, "SCION IP Gateway Documentation",
               2026, <https://docs.scion.org/en/latest/sig.html>.
 
-Deployment Testing: SCIONLab
-
-   SCIONLab is a global research network that is available to test the
-   SCION architecture.  You can create and use your ASes using your own
-   computation resources which allows you to gain real-world experience
-   of deploying and managing a SCION network.
-
-   More information can be found at [SCIONLAB_WEBSITE] and in the
-   [SCIONLAB] paper.
-
-Assigned SCION Protocol Numbers
+Appendix A.  Assigned SCION Protocol Numbers
 
    This appendix lists the assigned SCION protocol numbers.
 
@@ -2840,6 +2821,10 @@ Change Log
 
    Changes made to drafts since ISE submission.  This section is to be
    removed before publication.
+
+draft-dekater-scion-dataplane-15
+
+   *  Remove SCIONLab appendix, make appendix numbered
 
 draft-dekater-scion-dataplane-14
 
