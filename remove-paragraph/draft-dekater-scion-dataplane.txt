@@ -2821,7 +2821,7 @@ Change Log
 
 draft-dekater-scion-dataplane-15
 
-   *  Remove SCIONLab appendix
+   *  Remove SCIONLab appendix, make appendix numbered
 
 draft-dekater-scion-dataplane-14
 
