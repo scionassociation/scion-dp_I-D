@@ -1538,7 +1538,7 @@ Changes made to drafts since ISE submission. This section is to be removed befor
 ## draft-dekater-scion-dataplane-15
 {:numbered="false"}
 
-- Remove SCIONLab appendix
+- Remove SCIONLab appendix, make appendix numbered
 
 
 ## draft-dekater-scion-dataplane-14
