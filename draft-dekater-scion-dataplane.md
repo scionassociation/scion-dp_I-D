@@ -157,43 +157,6 @@ informative:
         ins:  A. Perrig
         name:  Adrian Perrig
         org: ETH Zürich
-  SCIONLAB:
-    title: SCIONLAB - A Next-Generation Internet Testbed
-    date: 2020
-    target: https://ieeexplore.ieee.org/abstract/document/9259355
-    author:
-        -
-         ins: J. Kown
-         name: Jonghoon Kwon
-         org: ETH Zuerich
-        -
-         ins: J. García-Pardo
-         name: Juan A. García-Pardo
-         org: ETH Zuerich
-        -
-         ins: M. Legner
-         name: Markus Legner
-         org: ETH Zuerich
-        -
-         ins: F. Wirz
-         name: François Wirz
-         org: ETH Zuerich
-        -
-         ins: M. Frei
-         name: Matthias Frei
-         org: ETH Zuerich
-        -
-         ins: D. Hausheer
-         name: David Hausheer
-         org: Otto von Guericke University Magdeburg
-        -
-         ins: A. Perrig
-         name: Adrian Perrig
-         org: ETH Zuerich
-  SCIONLAB_WEBSITE:
-    title: SCIONLab website
-    date: 2024
-    target: https://www.scionlab.org/
   SIG:
     title: SCION IP Gateway Documentation
     date: 2026
@@ -1536,22 +1499,10 @@ The ISD and SCION AS number are SCION-specific numbers. They are allocated by th
 --- back
 
 
-# Deployment Testing: SCIONLab
-{:numbered="false"}
-
-SCIONLab is a global research network that is available to test the SCION architecture. You can create and use your ASes using your own computation resources which allows you to gain real-world experience of deploying and managing a SCION network.
-
-More information can be found at {{SCIONLAB_WEBSITE}} and in the {{SCIONLAB}} paper.
-
-
 # Assigned SCION Protocol Numbers {#protnum}
-{:numbered="false"}
 
 This appendix lists the assigned SCION protocol numbers.
 
-
-## Considerations
-{:numbered="false"}
 
 SCION attempts to take the IANA's assigned Internet protocol numbers into consideration. Widely employed protocols have the same protocol number as the one assigned by IANA. SCION specific protocol numbers start at 200.
 
@@ -1583,6 +1534,12 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-dataplane-15
+{:numbered="false"}
+
+- Remove SCIONLab appendix
+
 
 ## draft-dekater-scion-dataplane-14
 {:numbered="false"}
