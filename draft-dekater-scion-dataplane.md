@@ -1503,6 +1503,8 @@ The ISD and SCION AS number are SCION-specific numbers. They are allocated by th
 
 This appendix lists the assigned SCION protocol numbers.
 
+## Considerations
+{:numbered="false"}
 
 SCION attempts to take the IANA's assigned Internet protocol numbers into consideration. Widely employed protocols have the same protocol number as the one assigned by IANA. SCION specific protocol numbers start at 200.
 
