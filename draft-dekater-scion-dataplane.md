@@ -326,7 +326,7 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - For intra-domain forwarding: mapping of the AS interface IDs to intra-domain protocol address of the corresponding routers.
 - The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) and forwarding key, which must be the same as that used by the Control Services within the AS.
 
-In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number ({{table-4}}) into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
+In order to forward traffic to a service endpoint address (`DT/DL` as per {{table-3}}), a border router translates the service number ({{table-4}}) into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
 In addition, routers require coarse time synchronization with control plane instances (see [](#clock-inaccuracy)).
 
@@ -654,6 +654,8 @@ The SCION header is created by extracting the required Info Fields and Hop Field
 
 The Hop Field that represents the last Hop in the first segment (seen in the direction of travel) specifies only the ingress interface. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
 
+Segments joined by a peering link are an exception: each of the two peering ASes is represented by a single peering Hop Field, and the segments are joined across the peering link. For details, see [](#process-router).
+
 ~~~aasvg
     Up-Segment           Core-Segment        Down-Segment
    +---------+           +---------+         +---------+
@@ -741,7 +743,7 @@ The offsets of the current Info Field and current Hop Field (relative to the end
 ~~~~
    B = byte
    InfoFieldOffset = 4B + 8B * CurrINF
-   HopFieldOffset = 4B + 8B.NumINF + 12B * CurrHF
+   HopFieldOffset = 4B + 8B * NumINF + 12B * CurrHF
 ~~~~
 
 To check that the current Hop Field is in the segment of the current Info Field, the `CurrHF` needs to be compared to the `SegLen` fields of the current and preceding Info Fields.
@@ -808,12 +810,14 @@ Setting multiple router alert flags on a path SHOULD be avoided. This is because
 
 Bootstrapping beaconing between neighboring ASes relies on the `OneHopPath` path type (`PathType=2`). This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.
 
-A one-hop path has exactly one Info Field and two Hop Fields. Any entity with access to the AS forwarding key can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld) respectively. The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
+A one-hop path has exactly one Info Field and two Hop Fields. The path header consists of the Info Field followed by the two Hop Fields, and it has no `PathMetaHdr`. Any entity with access to the AS forwarding key can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld) respectively. The sender sets the Construction Direction flag `C` to "1" and the Peering flag `P` to "0". The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
 
-- At the source endpoint AS, *CurrHF := 0*.
-- At the destination endpoint AS, *CurrHF := 1*.
+- The source AS processes the first Hop Field: its egress border router verifies the MAC of the first Hop Field using the value of the `Acc` field as set by the sender, and then replaces the value of the `Acc` field with Acc<sub>1</sub> = Acc<sub>0</sub> XOR MAC<sub>0</sub> \[:2] (see [](#def-acc)).
+- The destination AS fills in the second Hop Field.
 
-Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to the unspecified value 0, ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.
+Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to the unspecified value 0, ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field, using the value of the `Acc` field as updated by the source AS.
+
+A router that forwards a one-hop path MUST drop it if `C` = "0". This does not apply to BFD packets (see [](#scion-bfd)), which terminate at the router.
 
 ### Path Reversal {#reverse}
 
@@ -826,6 +830,8 @@ When a destination endpoint receives a SCION packet, it MAY use the path informa
 
    - Set the `CurrINF` and `CurrHF` to "0".
    - Reverse the order of the non-zero `SegLen` fields.
+
+A one-hop path (see [](#onehop)) has no `PathMetaHdr` and is therefore not reversed directly. Instead, a one-hop path with both Hop Fields filled in is first converted to a SCION path (`PathType=1`) with a single path segment of two Hop Fields, a `PathMetaHdr` with `Seg0Len` = 2 and `CurrHF` pointing to the second Hop Field, and an Info Field with `C` = "1" and `P` = "0". The `Acc` field, the `Timestamp`, and the Hop Fields are unchanged. This SCION path is then reversed as described above, so that the reversed path has the SCION path type. A one-hop path whose second Hop Field has `ConsIngress` = 0 (i.e., has not been filled in by the destination AS) cannot be reversed.
 
 Note that the destination endpoint, upon receiving a first packet, is not aware of the path MTU. When using a reversed path, it should use a mechanism to estimate its MTU (e.g., MTU discovery or estimate MTU from the largest packet received).
 
@@ -858,7 +864,7 @@ The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 byt
 
 - `NextHdr`: Unsigned 8-bit integer. Identifies the type of header immediately following the Hop-by-Hop/End-to-End Options header. Values of this field respect the Assigned SCION Protocol Numbers (see also [](#protnum)).
 - `ExtLen`: 8-bit unsigned integer. The length of the Hop-by-hop or End-to-end options header in 4-octet units, not including the first 4 octets. That is: `ExtLen = uint8(((L + 2) / 4) - 1)`, where `L` is the size of the header in bytes, assuming that `L + 2` is a multiple of 4.
-- `Options`: This is a variable-length field. The length of this field MUST be such that the complete length of the Hop-by-Hop/End-to-End Options header is an integer multiple of 4 bytes. This can be achieved by using options of type 0 or 1 (see {{table-4}}). The `Options` field contains one or more Type-Length-Value (TLV) encoded options. For details, see [](#optfld).
+- `Options`: This is a variable-length field. The length of this field MUST be such that the complete length of the Hop-by-Hop/End-to-End Options header is an integer multiple of 4 bytes. This can be achieved by using options of type 0 or 1 (see {{table-5}}). The `Options` field contains one or more Type-Length-Value (TLV) encoded options. For details, see [](#optfld).
 
 
 ### Options Field {#optfld}
@@ -1284,13 +1290,20 @@ The following sections describe the tasks to be performed by the ingress and egr
 A SCION ingress border router MUST perform the following steps when it receives a SCION packet:
 
 1. Check that the interface through which the packet was received is equal to the ingress interface in the current Hop Field. If not, the router MUST drop the packet.
-2. If there is a segment switch at the current router, check that the ingress and egress interface links are either:
+2. Check that the link types of the ingress and egress interfaces are a valid combination. Link types are defined in 'Paths and Links' in {{I-D.dekater-scion-controlplane}}.
 
-    - Both core
-    - Parent-child or vice-versa
-    - Peering-child or vice-versa
+    - If there is a segment switch at the current router, the ingress interface is the one in the last Hop Field of the current path segment, and the egress interface is the one in the first Hop Field of the following path segment. Check that the links are either:
 
-    Link types above are defined in 'Path and Links' in {{I-D.dekater-scion-controlplane}}. This check prevents valley use of peering links or hair-pin segments.
+        - Core-child or vice-versa
+        - Child-child
+
+    - At a hop inside a path segment and at a peering Hop Field, check that the links are either:
+
+        - Both core
+        - Parent-child or vice-versa
+        - Peering-child or vice-versa
+
+    This check prevents valley use of peering links or hair-pin segments.
 
 3. Check if the current Hop Field is expired or originated in the future - i.e., the current Info Field MUST NOT have a timestamp in the future, as defined in [](#inffield). If either is true, the router MUST drop the packet.
 
@@ -1300,7 +1313,7 @@ A SCION ingress border router MUST perform the following steps when it receives 
 
         - Compute the value of the Accumulator Acc as follows:
 
-            Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> <br>
+            Acc = Acc<sub>i+1</sub> XOR MAC<sub>i</sub> \[:2] <br>
             where <br>
             Acc<sub>i+1</sub> = the current value of the field `Acc` in the current Info Field <br>
             MAC<sub>i</sub> = the value of MAC<sub>i</sub> in the current Hop Field representing AS<sub>i</sub>
@@ -1310,19 +1323,39 @@ A SCION ingress border router MUST perform the following steps when it receives 
         - Replace the current value of the field `Acc` in the current Info Field with the newly calculated value of Acc.
         - Compute the MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub>. For this, use the formula in [](#hf-mac-calc) but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of Acc as just set in the `Acc` field in the current Info Field.
         - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Verify</sup><sub>i</sub>, drop the packet.
-        - If the current Hop Field is the last Hop Field in the path segment as determined by the value of the current `SegLen` and other metadata in the path meta header, increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 5.
+        - If the current Hop Field is the last Hop Field in the path segment as determined by the value of the current `SegLen` and other metadata in the path meta header, and a following path segment exists, increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 6.
 
-    - **Case 2** <br> The path segment includes a **peering Hop Field** (`P` = "1"), but the current hop is **not** the peering hop (i.e., the current hop is **neither** the last hop of the first segment **nor** the first hop of the second segment). In this case, the ingress border router needs to perform the steps previously described for the path segment without peering Hop Field, but the border router MUST NOT increment `CurrInf` and MUST NOT increment `CurrHF` in the path meta header. Proceed with step 5.
+    - **Case 2** <br> The path segment includes a **peering Hop Field** (`P` = "1"), but the current hop is **not** the peering hop (i.e., the current hop is **neither** the last hop of the first segment **nor** the first hop of the second segment). In this case, the ingress border router needs to perform the steps previously described for the path segment without peering Hop Field, but the border router MUST NOT increment `CurrInf` and MUST NOT increment `CurrHF` in the path meta header. Proceed with step 7.
 
     - **Case 3** <br> The path segment includes a **peering Hop Field** (`P` = "1"), and the current Hop Field *is* the peering Hop Field (i.e., the current hop is **either** the last hop of the first segment **or** the first hop of the second segment). In this case, the ingress border router MUST take the following step(s):
 
         - Compute MAC<sup>Peer</sup><sub>i</sub>. For this, use the formula in [](#peerlink), but replace `SegID XOR MAC_0[:2] ... XOR MAC_i [:2]` in the formula with the value of Acc as set in the `Acc` field in the current Info Field (this is the value of Acc as it comes with the packet).
         - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Peer</sup><sub>i</sub>, drop the packet.
-        - Increment both `CurrInf` and `CurrHF` in the path meta header. Proceed with step 5.
+        - Do not change `CurrInf` or `CurrHF` in the path meta header. The egress border router increments them (see [](#process-router-egress)). Proceed with step 7.
 
-5. Forward the packet to the egress border router (based on the egress Interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS (see [](#intra-domain-forwarding)).
+5. If the path type is SCION, the packet traverses the path segment **in construction direction** (Construction Direction flag `C` = "1"), and the current Hop Field is the last Hop Field in the path segment as determined by the value of the current `SegLen` and other metadata in the path meta header, perform this step:
 
-#### Steps at Egress Border Router
+    - **Case 1** <br> A following path segment exists. In this case, the ingress border router MUST take the following step(s):
+
+        - Compute MAC<sup>Verify</sup><sub>i</sub> over the Hop Field of the current AS<sub>i</sub> as described in [](#process-router-egress), step 2, Case 1.
+        - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC<sup>Verify</sup><sub>i</sub>, drop the packet.
+        - Increment both `CurrInf` and `CurrHF` in the path meta header. Do not change the value of the `Acc` field in the Info Field of the path segment just completed. Proceed with step 6.
+
+    - **Case 2** <br> No following path segment exists, i.e., this is the destination AS. In this case, the ingress border router MUST take the following step(s):
+
+        - If the current Hop Field is the peering Hop Field (`P` = "1" and the current Hop Field is the first Hop Field of the path segment), compute MAC<sup>Peer</sup><sub>i</sub> as described in [](#process-router-egress), step 2, Case 2. Otherwise, compute MAC<sup>Verify</sup><sub>i</sub> as described in [](#process-router-egress), step 2, Case 1.
+        - If the MAC<sub>i</sub> in the current Hop Field does not match the just calculated MAC, drop the packet.
+        - Do not change the `Acc` field, `CurrInf`, or `CurrHF`. Proceed with step 7.
+
+6. If there was a segment switch in step 4 or step 5, the current Info Field and the current Hop Field now belong to the following path segment. Perform the following checks on them:
+
+    - Apply step 3 to the new Hop Field and Info Field.
+    - Compute MAC<sup>Verify</sup><sub>i</sub> over the new Hop Field. For this, use the formula in [](#hf-mac-calc) but replace `SegID XOR MAC_0[:2] ... XOR MAC_i-1 [:2]` in the formula with the value of the `Acc` field in the new Info Field, unchanged.
+    - If a check fails, or if the MAC<sub>i</sub> in the new Hop Field does not match the just calculated MAC<sup>Verify</sup><sub>i</sub>, drop the packet.
+
+7. Forward the packet to the egress border router (based on the egress Interface ID in the current Hop Field) or to the destination endpoint, if this is the destination AS (see [](#intra-domain-forwarding)).
+
+#### Steps at Egress Border Router {#process-router-egress}
 
 A SCION egress border router MUST perform the following steps when it receives a SCION packet:
 
@@ -1343,7 +1376,7 @@ A SCION egress border router MUST perform the following steps when it receives a
 
    - **Case 3** <br> The packet traverses the path segment **against construction direction** (`C` = "0" and `P` = "0" or "1"). In this case, proceed with Step 3.
 
-3. Increment `CurrHF` in the path meta header.
+3. Increment `CurrHF` in the path meta header. If `CurrHF` now points to a Hop Field of the following path segment, as determined by the `SegLen` fields (see [](#PathMetaHdr)), also increment `CurrInf`. This is the case after a peering Hop Field traversed against construction direction (see step 4, Case 3 in [](#process-router-ingress)), including when the source AS is at the peering link and its up segment consists of only the peering Hop Field.
 4. Forward the packet to the neighbor AS.
 
 
@@ -1536,6 +1569,21 @@ The protocol numbers are used in the SCION header to identify the upper layer pr
 {:numbered="false"}
 
 Changes made to drafts since ISE submission. This section is to be removed before publication.
+
+## draft-dekater-scion-dataplane-16
+{:numbered="false"}
+
+- One-Hop Path Type: specify the layout (no Path Meta Header), the `C` and `P` flags, how the `Acc` field is updated, and that routers drop one-hop paths with `C` = "0"
+- Path Reversal: specify how to reverse a one-hop path
+- SCION Path Type: point to router processing for segments joined by a peering link
+- Steps at Ingress Border Router:
+  - list allowed link type combinations at a segment switch separately from those inside a segment and at a peering Hop Field
+  - only increment `CurrInf` and `CurrHF` at the end of a segment if a following segment exists
+  - do not increment `CurrInf` and `CurrHF` at a peering Hop Field, to avoid a double increment
+  - add a step for the last Hop Field of a segment traversed in construction direction: verify its MAC and either switch to the following segment or, in the destination AS, deliver
+  - check expiry, timestamp and MAC of the new Hop Field after a segment switch
+- Steps at Egress Border Router: `CurrInf` follows `CurrHF` and the `SegLen` fields
+- Editorial fixes: `DT/DL` reference, Hop Field offset formula, option types table reference, `Acc` formula truncation, title of the referenced control plane section
 
 ## draft-dekater-scion-dataplane-15
 {:numbered="false"}
