@@ -326,7 +326,7 @@ Border routers require mappings from SCION Interface IDs to underlay addresses a
 - For intra-domain forwarding: mapping of the AS interface IDs to intra-domain protocol address of the corresponding routers.
 - The algorithm used to compute the [Hop Field MAC](#hf-mac-overview) and forwarding key, which must be the same as that used by the Control Services within the AS.
 
-In order to forward traffic to a service endpoint address (`DT/DS` as per {{table-3}}), a border router translates the service number ({{table-4}}) into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
+In order to forward traffic to a service endpoint address (`DT/DL` as per {{table-3}}), a border router translates the service number ({{table-4}}) into a specific destination address. The method used to accomplish the translation is not defined by this document and is only dependent on the implementation and the choices of each AS's administrator. In current practice this is accomplished by way of a configuration file.
 
 In addition, routers require coarse time synchronization with control plane instances (see [](#clock-inaccuracy)).
 
@@ -654,6 +654,8 @@ The SCION header is created by extracting the required Info Fields and Hop Field
 
 The Hop Field that represents the last Hop in the first segment (seen in the direction of travel) specifies only the ingress interface. However, in the hop Field that represents the first hop in the second segment (also in the direction of travel), only the egress interface will be defined. Thus, the two Hop Fields for this one AS build a full hop through the AS, specifying both the ingress and egress interface. As such, they bring the two adjacent segments together.
 
+Segments joined by a peering link are an exception: each of the two peering ASes is represented by a single peering Hop Field, and the segments are joined across the peering link. For details, see [](#process-router).
+
 ~~~aasvg
     Up-Segment           Core-Segment        Down-Segment
    +---------+           +---------+         +---------+
@@ -741,7 +743,7 @@ The offsets of the current Info Field and current Hop Field (relative to the end
 ~~~~
    B = byte
    InfoFieldOffset = 4B + 8B * CurrINF
-   HopFieldOffset = 4B + 8B.NumINF + 12B * CurrHF
+   HopFieldOffset = 4B + 8B * NumINF + 12B * CurrHF
 ~~~~
 
 To check that the current Hop Field is in the segment of the current Info Field, the `CurrHF` needs to be compared to the `SegLen` fields of the current and preceding Info Fields.
@@ -808,12 +810,14 @@ Setting multiple router alert flags on a path SHOULD be avoided. This is because
 
 Bootstrapping beaconing between neighboring ASes relies on the `OneHopPath` path type (`PathType=2`). This is necessary as neighbor ASes do not have a forwarding path before beaconing is started.
 
-A one-hop path has exactly one Info Field and two Hop Fields. Any entity with access to the AS forwarding key can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld) respectively. The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
+A one-hop path has exactly one Info Field and two Hop Fields. The path header consists of the Info Field followed by the two Hop Fields, and it has no `PathMetaHdr`. Any entity with access to the AS forwarding key can create a valid info and Hop Field as described in [](#inffield) and [](#hopfld) respectively. The sender sets the Construction Direction flag `C` to "1" and the Peering flag `P` to "0". The second Hop Field is created by the ingress SCION border router of the neighboring AS while processing the one-hop path. The appropriate Hop Field can be processed by a border router based on the source and destination address. In this context, the following rules apply:
 
-- At the source endpoint AS, *CurrHF := 0*.
-- At the destination endpoint AS, *CurrHF := 1*.
+- The source AS processes the first Hop Field: its egress border router verifies the MAC of the first Hop Field using the value of the `Acc` field as set by the sender, and then replaces the value of the `Acc` field with Acc<sub>1</sub> = Acc<sub>0</sub> XOR MAC<sub>0</sub> \[:2] (see [](#def-acc)).
+- The destination AS fills in the second Hop Field.
 
-Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to the unspecified value 0, ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field.
+Upon receiving a packet containing a one-hop path, the ingress border router of the destination AS fills in the `ConsIngress` field in the second Hop Field of the one-hop path with the ingress interface ID. It sets the `ConsEgress` field to the unspecified value 0, ensuring the path cannot be used beyond the destination AS. Then it calculates and appends the appropriate MAC for the Hop Field, using the value of the `Acc` field as updated by the source AS.
+
+A router that forwards a one-hop path MUST drop it if `C` = "0". This does not apply to BFD packets (see [](#scion-bfd)), which terminate at the router.
 
 ### Path Reversal {#reverse}
 
@@ -826,6 +830,8 @@ When a destination endpoint receives a SCION packet, it MAY use the path informa
 
    - Set the `CurrINF` and `CurrHF` to "0".
    - Reverse the order of the non-zero `SegLen` fields.
+
+A one-hop path (see [](#onehop)) has no `PathMetaHdr` and is therefore not reversed directly. Instead, a one-hop path with both Hop Fields filled in is first converted to a SCION path (`PathType=1`) with a single path segment of two Hop Fields, a `PathMetaHdr` with `Seg0Len` = 2 and `CurrHF` pointing to the second Hop Field, and an Info Field with `C` = "1" and `P` = "0". The `Acc` field, the `Timestamp`, and the Hop Fields are unchanged. This SCION path is then reversed as described above, so that the reversed path has the SCION path type. A one-hop path whose second Hop Field has `ConsIngress` = 0 (i.e., has not been filled in by the destination AS) cannot be reversed.
 
 Note that the destination endpoint, upon receiving a first packet, is not aware of the path MTU. When using a reversed path, it should use a mechanism to estimate its MTU (e.g., MTU discovery or estimate MTU from the largest packet received).
 
@@ -858,7 +864,7 @@ The SCION Hop-by-Hop Options and End-to-End Options headers are aligned to 4 byt
 
 - `NextHdr`: Unsigned 8-bit integer. Identifies the type of header immediately following the Hop-by-Hop/End-to-End Options header. Values of this field respect the Assigned SCION Protocol Numbers (see also [](#protnum)).
 - `ExtLen`: 8-bit unsigned integer. The length of the Hop-by-hop or End-to-end options header in 4-octet units, not including the first 4 octets. That is: `ExtLen = uint8(((L + 2) / 4) - 1)`, where `L` is the size of the header in bytes, assuming that `L + 2` is a multiple of 4.
-- `Options`: This is a variable-length field. The length of this field MUST be such that the complete length of the Hop-by-Hop/End-to-End Options header is an integer multiple of 4 bytes. This can be achieved by using options of type 0 or 1 (see {{table-4}}). The `Options` field contains one or more Type-Length-Value (TLV) encoded options. For details, see [](#optfld).
+- `Options`: This is a variable-length field. The length of this field MUST be such that the complete length of the Hop-by-Hop/End-to-End Options header is an integer multiple of 4 bytes. This can be achieved by using options of type 0 or 1 (see {{table-5}}). The `Options` field contains one or more Type-Length-Value (TLV) encoded options. For details, see [](#optfld).
 
 
 ### Options Field {#optfld}
